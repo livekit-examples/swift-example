@@ -1,16 +1,17 @@
-//
-//  ContentView.swift
-//  Shared
-//
-//  Created by Hiroshi Horie on 2021/10/19.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+
+    @EnvironmentObject var appCtrl: AppCtrl
+
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+//        NavigationView {
+            if (appCtrl.connectionState == .connected) {
+                RoomView()
+            } else {
+                ConnectView()
+            }
+//        }
     }
 }
 

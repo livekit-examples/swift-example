@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		681E3F39271FC772007BB547 /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F38271FC772007BB547 /* States.swift */; };
+		681E3F3A271FC772007BB547 /* States.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F38271FC772007BB547 /* States.swift */; };
+		681E3F3C271FC78A007BB547 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F3B271FC78A007BB547 /* Globals.swift */; };
+		681E3F3D271FC78A007BB547 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F3B271FC78A007BB547 /* Globals.swift */; };
+		681E3F3F271FC795007BB547 /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F3E271FC795007BB547 /* Custom.swift */; };
+		681E3F40271FC795007BB547 /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F3E271FC795007BB547 /* Custom.swift */; };
+		681E3F43271FC7AD007BB547 /* RoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F41271FC7AC007BB547 /* RoomView.swift */; };
+		681E3F44271FC7AD007BB547 /* RoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F41271FC7AC007BB547 /* RoomView.swift */; };
+		681E3F45271FC7AD007BB547 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F42271FC7AD007BB547 /* ConnectView.swift */; };
+		681E3F46271FC7AD007BB547 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F42271FC7AD007BB547 /* ConnectView.swift */; };
+		681E3F49271FCB40007BB547 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 681E3F48271FCB40007BB547 /* LiveKit */; };
+		681E3F4B271FCB46007BB547 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 681E3F4A271FCB46007BB547 /* LiveKit */; };
+		681E3F4D271FE075007BB547 /* MultiplatformUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F4C271FE075007BB547 /* MultiplatformUI.swift */; };
+		681E3F4E271FE075007BB547 /* MultiplatformUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F4C271FE075007BB547 /* MultiplatformUI.swift */; };
 		68B3854C271E780700711D5F /* Multiplatform_SwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* Multiplatform_SwiftUIApp.swift */; };
 		68B3854D271E780700711D5F /* Multiplatform_SwiftUIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* Multiplatform_SwiftUIApp.swift */; };
 		68B3854E271E780700711D5F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853D271E780600711D5F /* ContentView.swift */; };
@@ -16,6 +30,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		681E3F37271FC552007BB547 /* client-sdk-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "client-sdk-ios"; path = "../client-sdk-ios"; sourceTree = "<group>"; };
+		681E3F38271FC772007BB547 /* States.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = States.swift; sourceTree = "<group>"; };
+		681E3F3B271FC78A007BB547 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		681E3F3E271FC795007BB547 /* Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
+		681E3F41271FC7AC007BB547 /* RoomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomView.swift; sourceTree = "<group>"; };
+		681E3F42271FC7AD007BB547 /* ConnectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
+		681E3F4C271FE075007BB547 /* MultiplatformUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplatformUI.swift; sourceTree = "<group>"; };
 		68B3853C271E780600711D5F /* Multiplatform_SwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Multiplatform_SwiftUIApp.swift; sourceTree = "<group>"; };
 		68B3853D271E780600711D5F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		68B3853E271E780700711D5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -29,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				681E3F4B271FCB46007BB547 /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -36,27 +58,43 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				681E3F49271FCB40007BB547 /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		681E3F47271FCB40007BB547 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		68B38536271E780600711D5F = {
 			isa = PBXGroup;
 			children = (
+				681E3F37271FC552007BB547 /* client-sdk-ios */,
 				68B3853B271E780600711D5F /* Shared */,
 				68B3854A271E780700711D5F /* macOS */,
 				68B38544271E780700711D5F /* Products */,
+				681E3F47271FCB40007BB547 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		68B3853B271E780600711D5F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				681E3F38271FC772007BB547 /* States.swift */,
+				681E3F3E271FC795007BB547 /* Custom.swift */,
+				681E3F3B271FC78A007BB547 /* Globals.swift */,
+				681E3F42271FC7AD007BB547 /* ConnectView.swift */,
+				681E3F41271FC7AC007BB547 /* RoomView.swift */,
 				68B3853C271E780600711D5F /* Multiplatform_SwiftUIApp.swift */,
 				68B3853D271E780600711D5F /* ContentView.swift */,
 				68B3853E271E780700711D5F /* Assets.xcassets */,
+				681E3F4C271FE075007BB547 /* MultiplatformUI.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -94,6 +132,9 @@
 			dependencies = (
 			);
 			name = "Multiplatform-SwiftUI (iOS)";
+			packageProductDependencies = (
+				681E3F4A271FCB46007BB547 /* LiveKit */,
+			);
 			productName = "Multiplatform-SwiftUI (iOS)";
 			productReference = 68B38543271E780700711D5F /* Multiplatform-SwiftUI.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +152,9 @@
 			dependencies = (
 			);
 			name = "Multiplatform-SwiftUI (macOS)";
+			packageProductDependencies = (
+				681E3F48271FCB40007BB547 /* LiveKit */,
+			);
 			productName = "Multiplatform-SwiftUI (macOS)";
 			productReference = 68B38549271E780700711D5F /* Multiplatform-SwiftUI.app */;
 			productType = "com.apple.product-type.application";
@@ -176,8 +220,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				681E3F3C271FC78A007BB547 /* Globals.swift in Sources */,
+				681E3F45271FC7AD007BB547 /* ConnectView.swift in Sources */,
+				681E3F39271FC772007BB547 /* States.swift in Sources */,
 				68B3854E271E780700711D5F /* ContentView.swift in Sources */,
+				681E3F43271FC7AD007BB547 /* RoomView.swift in Sources */,
 				68B3854C271E780700711D5F /* Multiplatform_SwiftUIApp.swift in Sources */,
+				681E3F4D271FE075007BB547 /* MultiplatformUI.swift in Sources */,
+				681E3F3F271FC795007BB547 /* Custom.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,8 +235,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				681E3F3D271FC78A007BB547 /* Globals.swift in Sources */,
+				681E3F46271FC7AD007BB547 /* ConnectView.swift in Sources */,
+				681E3F3A271FC772007BB547 /* States.swift in Sources */,
 				68B3854F271E780700711D5F /* ContentView.swift in Sources */,
+				681E3F44271FC7AD007BB547 /* RoomView.swift in Sources */,
 				68B3854D271E780700711D5F /* Multiplatform_SwiftUIApp.swift in Sources */,
+				681E3F4E271FE075007BB547 /* MultiplatformUI.swift in Sources */,
+				681E3F40271FC795007BB547 /* Custom.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +284,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -287,6 +344,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -452,6 +510,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		681E3F48271FCB40007BB547 /* LiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LiveKit;
+		};
+		681E3F4A271FCB46007BB547 /* LiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LiveKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 68B38537271E780600711D5F /* Project object */;
 }
