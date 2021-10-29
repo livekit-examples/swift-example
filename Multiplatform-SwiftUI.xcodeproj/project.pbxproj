@@ -42,6 +42,7 @@
 		681E3F42271FC7AD007BB547 /* ConnectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
 		681E3F4C271FE075007BB547 /* MultiplatformUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplatformUI.swift; sourceTree = "<group>"; };
 		682FB284272C673B00522494 /* ObservableParticipant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableParticipant.swift; sourceTree = "<group>"; };
+		682FB287272C7BE000522494 /* Multiplatform-SwiftUI--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Multiplatform-SwiftUI--iOS--Info.plist"; sourceTree = "<group>"; };
 		684A3AF2272B0BAB005E46F0 /* SwiftUISupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUISupport.swift; sourceTree = "<group>"; };
 		68B3853C271E780600711D5F /* Multiplatform_SwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Multiplatform_SwiftUIApp.swift; sourceTree = "<group>"; };
 		68B3853D271E780600711D5F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -81,6 +82,7 @@
 		68B38536271E780600711D5F = {
 			isa = PBXGroup;
 			children = (
+				682FB287272C7BE000522494 /* Multiplatform-SwiftUI--iOS--Info.plist */,
 				681E3F37271FC552007BB547 /* client-sdk-ios */,
 				68B3853B271E780600711D5F /* Shared */,
 				68B3854A271E780700711D5F /* macOS */,
@@ -386,6 +388,7 @@
 				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Multiplatform-SwiftUI--iOS--Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -416,6 +419,7 @@
 				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Multiplatform-SwiftUI--iOS--Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
