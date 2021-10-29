@@ -16,7 +16,7 @@ struct Multiplatform_SwiftUIApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(appState)
-//                .foregroundColor(Color.white)
+            //                .foregroundColor(Color.white)
         }
     }
 }

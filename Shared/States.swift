@@ -20,8 +20,7 @@ final class AppCtrl: ObservableObject {
 
     @Published var shouldShowError: Bool = false
 
-    @Published private(set) var connectionState: ConnectionState = .disconnected()
-    {
+    @Published private(set) var connectionState: ConnectionState = .disconnected() {
         didSet {
             if case .disconnected(let error) = connectionState, error != nil {
                 // error is not nil, show an alert

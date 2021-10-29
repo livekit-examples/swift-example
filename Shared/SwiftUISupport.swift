@@ -16,7 +16,7 @@ struct SwiftUIVideoView: NativeViewRepresentable {
     /// Pass a ``VideoTrack`` of a ``Participant``.
     let track: VideoTrack
 
-#if !os(macOS)
+    #if !os(macOS)
     // iOS
 
     func makeUIView(context: Context) -> VideoView {
@@ -32,7 +32,7 @@ struct SwiftUIVideoView: NativeViewRepresentable {
     static func dismantleUIView(_ videoView: VideoView, coordinator: ()) {
         videoView.track = nil
     }
-#else
+    #else
     // macOS
 
     func makeNSView(context: Context) -> VideoView {
@@ -49,5 +49,5 @@ struct SwiftUIVideoView: NativeViewRepresentable {
         videoView.track = nil
     }
 
-#endif
+    #endif
 }

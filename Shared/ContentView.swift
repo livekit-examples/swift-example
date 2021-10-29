@@ -5,13 +5,16 @@ struct ContentView: View {
     @EnvironmentObject var appCtrl: AppCtrl
 
     var body: some View {
-//        NavigationView {
-            if (appCtrl.connectionState == .connected) {
+        ZStack {
+            Color.black
+                .ignoresSafeArea()
+
+            if appCtrl.connectionState == .connected {
                 RoomView()
             } else {
                 ConnectView()
             }
-//        }
+        }.foregroundColor(Color.white)
     }
 }
 
