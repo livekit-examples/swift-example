@@ -1,19 +1,9 @@
 import SwiftUI
 
 final class ConnectViewCtrl: ObservableObject {
-
-    let id = UUID()
-
     @AppStorage("url") var url: String = ""
     @AppStorage("token") var token: String = ""
-
-    init() {
-        print("ConnectViewCtrl init \(id)")
-    }
-
-    deinit {
-        print("ConnectViewCtrl deinit \(id)")
-    }
+    @AppStorage("simulcast") var simulcast: Bool = true
 }
 
 struct ConnectView: View {
@@ -36,13 +26,19 @@ struct ConnectView: View {
                     VStack(spacing: 30) {
                         LKTextField(title: "Server URL", text: $ctrl.url, type: .URL)
                         LKTextField(title: "Token", text: $ctrl.token, type: .ascii)
+                        Toggle(isOn: $ctrl.simulcast) {
+                            Text("Simulcast")
+                                .fontWeight(.bold)
+                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
                     }.frame(maxWidth: 350)
 
                     if case .connecting = appCtrl.connectionState {
                         ProgressView()
                     } else {
                         LKButton(title: "Connect") {
-                            appCtrl.connect(url: ctrl.url, token: ctrl.token)
+                            appCtrl.connect(url: ctrl.url,
+                                            token: ctrl.token,
+                                            simulcast: ctrl.simulcast)
                         }
                     }
                 }

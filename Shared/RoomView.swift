@@ -13,7 +13,7 @@ struct RoomView: View {
     @ObservedObject var observableRoom: ObservableRoom
 
     init(_ room: Room) {
-        observableRoom = ObservableRoom(room: room)
+        observableRoom = ObservableRoom(room)
     }
 
     var columns = [

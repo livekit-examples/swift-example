@@ -12,7 +12,7 @@ final class ObservableRoom: ObservableObject {
     @Published private(set) var localVideo: LocalTrackPublication?
     @Published private(set) var localAudio: LocalTrackPublication?
 
-    init(room: Room) {
+    init(_ room: Room) {
         self.room = room
         room.add(delegate: self)
 

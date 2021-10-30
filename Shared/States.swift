@@ -34,11 +34,13 @@ final class AppCtrl: ObservableObject {
 
     @Published private(set) var room: Room?
 
-    func connect(url: String, token: String) {
+    func connect(url: String, token: String, simulcast: Bool = true) {
 
         print("connecting...")
 
-        let options = ConnectOptions(url: url, token: token)
+        let options = ConnectOptions(url: url,
+                                     token: token,
+                                     defaultVideoPublishOptions: LocalVideoTrackPublishOptions(simulcast: simulcast))
 
         LiveKit.connect(options: options, delegate: self).then { room in
             print("did connect! \(room)")
