@@ -27,9 +27,13 @@ final class ObservableRoom: ObservableObject {
         self.room = room
         room.add(delegate: self)
 
-        // create initial participants
-        for element in room.remoteParticipants {
-            self.participants[element.key] = ObservableParticipant(element.value)
+        if room.remoteParticipants.isEmpty {
+            self.participants = [:]
+        } else {
+            // create initial participants
+            for element in room.remoteParticipants {
+                self.participants[element.key] = ObservableParticipant(element.value)
+            }
         }
     }
 
@@ -121,12 +125,5 @@ extension ObservableRoom: RoomDelegate {
         DispatchQueue.main.async {
             self.participants.removeValue(forKey: participant.sid)
         }
-    }
-
-    func room(_ room: Room,
-              participant: RemoteParticipant,
-              didSubscribe trackPublication: RemoteTrackPublication,
-              track: Track) {
-        print("RoomViewCtrl didSubscribe \(track)")
     }
 }
