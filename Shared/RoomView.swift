@@ -30,7 +30,7 @@ struct RoomView: View {
             .padding()
         }
         .toolbar {
-            ToolbarItem {
+            ToolbarItem(placement: .bottomBar) {
                 HStack {
                     Button(action: {
                         observableRoom.togglePublishCamera()
