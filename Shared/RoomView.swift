@@ -1,6 +1,12 @@
 import SwiftUI
 import LiveKit
 
+#if !os(macOS)
+let toolbarPlacement: ToolbarItemPlacement = .bottomBar
+#else
+let toolbarPlacement: ToolbarItemPlacement = .primaryAction
+#endif
+
 struct RoomView: View {
 
     @EnvironmentObject var appCtrl: AppCtrl
@@ -30,7 +36,7 @@ struct RoomView: View {
             .padding()
         }
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
+            ToolbarItem(placement: toolbarPlacement) {
                 HStack {
                     Button(action: {
                         observableRoom.togglePublishCamera()
