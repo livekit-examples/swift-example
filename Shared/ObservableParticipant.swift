@@ -6,13 +6,13 @@ extension ObservableParticipant: ParticipantDelegate {
     func participant(_ participant: RemoteParticipant,
                      didSubscribe trackPublication: RemoteTrackPublication,
                      track: Track) {
-        recomputeFirstVideoTrack()
+        recomputeFirstTracks()
     }
 
     func participant(_ participant: RemoteParticipant,
                      didUnsubscribe trackPublication: RemoteTrackPublication,
                      track: Track) {
-        recomputeFirstVideoTrack()
+        recomputeFirstTracks()
     }
 
     func participant(_ participant: Participant, didUpdate speaking: Bool) {
@@ -28,6 +28,17 @@ extension ObservableParticipant: Identifiable {
     }
 }
 
+extension ObservableParticipant: Equatable & Hashable {
+
+    static func == (lhs: ObservableParticipant, rhs: ObservableParticipant) -> Bool {
+        lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
 extension ObservableParticipant {
     var identity: String? {
         participant.identity
@@ -38,22 +49,45 @@ final class ObservableParticipant: ObservableObject {
 
     let participant: Participant
 
-    @Published var firstVideoTrack: VideoTrack?
-    @Published var isSpeaking: Bool = false
+    @Published private(set) var firstVideo: RemoteTrackPublication? {
+        didSet {
+            self.firstVideoTrack = firstVideo?.track as? VideoTrack
+        }
+    }
+
+    @Published private(set) var firstAudio: RemoteTrackPublication? {
+        didSet {
+            if let pub = firstAudio,
+               let _ = firstAudio?.track {
+                firstAudioAvailable = !pub.muted
+            } else {
+                firstAudioAvailable = false
+            }
+
+            self.firstAudioTrack = firstAudio?.track as? AudioTrack
+        }
+    }
+
+    @Published private(set) var firstVideoTrack: VideoTrack?
+    @Published private(set) var firstAudioTrack: AudioTrack?
+
+    @Published private(set) var firstAudioAvailable: Bool = false
+    @Published private(set) var isSpeaking: Bool = false
 
     init(_ participant: Participant) {
         self.participant = participant
         participant.add(delegate: self)
-        recomputeFirstVideoTrack()
+        recomputeFirstTracks()
     }
 
     deinit {
         participant.remove(delegate: self)
     }
 
-    private func recomputeFirstVideoTrack() {
+    private func recomputeFirstTracks() {
         DispatchQueue.main.async {
-            self.firstVideoTrack = self.participant.videoTracks.values.first?.track as? VideoTrack
+            self.firstVideo = self.participant.videoTracks.values.first as? RemoteTrackPublication
+            self.firstAudio = self.participant.audioTracks.values.first as? RemoteTrackPublication
         }
     }
 }

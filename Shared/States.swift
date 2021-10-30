@@ -22,22 +22,17 @@ final class AppCtrl: ObservableObject {
 
     @Published private(set) var connectionState: ConnectionState = .disconnected() {
         didSet {
-            if case .disconnected(let error) = connectionState, error != nil {
-                // error is not nil, show an alert
-                shouldShowError = true
+            if case .disconnected(let error) = connectionState {
+                room = nil
+                if error != nil {
+                    // error is not nil, show an alert
+                    shouldShowError = true
+                }
             }
         }
     }
 
     @Published private(set) var room: Room?
-
-    private init() {
-        print("AppCtrl init")
-    }
-
-    deinit {
-        print("AppCtrl deinit")
-    }
 
     func connect(url: String, token: String) {
 
@@ -52,5 +47,9 @@ final class AppCtrl: ObservableObject {
             print("did throw error \(error)")
             self.connectionState = .disconnected(error)
         }
+    }
+
+    func disconnect() {
+        room?.disconnect()
     }
 }

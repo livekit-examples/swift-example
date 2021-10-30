@@ -9,11 +9,12 @@ struct ContentView: View {
             Color.black
                 .ignoresSafeArea()
 
-            if appCtrl.connectionState == .connected {
-                RoomView()
+            if let room = appCtrl.room {
+                RoomView(room)
             } else {
                 ConnectView()
             }
+
         }.foregroundColor(Color.white)
     }
 }

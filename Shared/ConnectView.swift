@@ -24,29 +24,32 @@ struct ConnectView: View {
     @State var isModalActive: Bool = true
 
     var body: some View {
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(alignment: .center, spacing: 60.0) {
 
-        ScrollView {
-            VStack(alignment: .center, spacing: 60.0) {
+                    Image("Logo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 40)
 
-                Image("logo")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 40)
+                    VStack(spacing: 30) {
+                        LKTextField(title: "Server URL", text: $ctrl.url, type: .URL)
+                        LKTextField(title: "Token", text: $ctrl.token, type: .ascii)
+                    }.frame(maxWidth: 350)
 
-                VStack(spacing: 30) {
-                    LKTextField(title: "Server URL", text: $ctrl.url, type: .URL)
-                    LKTextField(title: "Token", text: $ctrl.token, type: .ascii)
-                }.frame(maxWidth: 350)
-
-                if case .connecting = appCtrl.connectionState {
-                    ProgressView()
-                } else {
-                    LKButton(title: "Connect") {
-                        appCtrl.connect(url: ctrl.url, token: ctrl.token)
+                    if case .connecting = appCtrl.connectionState {
+                        ProgressView()
+                    } else {
+                        LKButton(title: "Connect") {
+                            appCtrl.connect(url: ctrl.url, token: ctrl.token)
+                        }
                     }
                 }
+                .padding()
+                .frame(width: geometry.size.width)      // Make the scroll view full-width
+                .frame(minHeight: geometry.size.height) // Set the content’s min height to the parent
             }
-            .padding()
         }
 
         .alert(isPresented: $appCtrl.shouldShowError) {

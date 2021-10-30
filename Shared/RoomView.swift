@@ -1,63 +1,14 @@
 import SwiftUI
 import LiveKit
 
-final class RoomViewCtrl: ObservableObject, RoomDelegate {
-
-    let id = UUID()
-    let room = AppCtrl.shared.room
-
-    var participants: [ObservableParticipant] = []
-
-    init() {
-        print("RoomViewCtrl init \(id)")
-
-        room?.add(delegate: self)
-
-        if let participants = room?.remoteParticipants {
-            for participant in participants {
-                self.participants.append(ObservableParticipant(participant.value))
-            }
-        }
-    }
-
-    deinit {
-        room?.remove(delegate: self)
-        print("RoomViewCtrl deinit \(id)")
-    }
-
-    func room(_ room: Room, participant: RemoteParticipant, didSubscribe trackPublication: RemoteTrackPublication, track: Track) {
-        print("RoomViewCtrl didSubscribe \(track)")
-    }
-}
-
-struct ParticipantView: View {
-
-    @ObservedObject var participant: ObservableParticipant
-
-    var body: some View {
-        ZStack(alignment: .bottom) {
-            // Background color
-            Color.white
-                .opacity(0.3)
-                .ignoresSafeArea()
-
-            // VideoView for the Participant
-            if let track = participant.firstVideoTrack {
-                SwiftUIVideoView(track: track)
-            }
-
-            Text(participant.identity ?? "-")
-                .lineLimit(1)
-                .truncationMode(.tail)
-        }
-        .border(Color.blue.opacity(0.5),
-                width: participant.isSpeaking ? 5.0 : 0.0)
-    }
-}
-
 struct RoomView: View {
 
-    @ObservedObject var ctrl = RoomViewCtrl()
+    @EnvironmentObject var appCtrl: AppCtrl
+    @ObservedObject var observableRoom: ObservableRoom
+
+    init(_ room: Room) {
+        observableRoom = ObservableRoom(room: room)
+    }
 
     var columns = [
         GridItem(.flexible()),
@@ -71,12 +22,43 @@ struct RoomView: View {
                       alignment: .center,
                       spacing: 10,
                       pinnedViews: .sectionFooters) {
-                ForEach(ctrl.participants) { participant in
+                ForEach(observableRoom.participants.values) { participant in
                     ParticipantView(participant: participant)
                         .aspectRatio(1, contentMode: .fit)
                 }
             }
             .padding()
+        }
+        .toolbar {
+            ToolbarItem {
+                HStack {
+                    Button(action: {
+                        observableRoom.togglePublishCamera()
+                    },
+                    label: {
+                        Image(systemName: "video.fill").foregroundColor(
+                            observableRoom.localVideo != nil ? Color.green : nil
+                        )
+                    })
+
+                    Button(action: {
+                        observableRoom.togglePublishMicrophone()
+                    },
+                    label: {
+                        Image(systemName: "mic.fill").foregroundColor(
+                            observableRoom.localAudio != nil ? Color.orange : nil
+                        )
+                    })
+
+                    Button(action: {
+                        appCtrl.disconnect()
+                    },
+                    label: {
+                        Image(systemName: "bolt.horizontal.circle.fill")
+                    })
+
+                }
+            }
         }
     }
 }
