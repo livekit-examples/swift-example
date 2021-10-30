@@ -60,7 +60,8 @@ struct RoomView: View {
                         appCtrl.disconnect()
                     },
                     label: {
-                        Image(systemName: "bolt.horizontal.circle.fill")
+                        Image(systemName: "xmark.circle")
+                            .foregroundColor(nil)
                     })
 
                 }
