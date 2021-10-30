@@ -2,8 +2,10 @@ import SwiftUI
 import LiveKit
 
 #if !os(macOS)
+let adaptiveMin = 170.0
 let toolbarPlacement: ToolbarItemPlacement = .bottomBar
 #else
+let adaptiveMin = 300.0
 let toolbarPlacement: ToolbarItemPlacement = .primaryAction
 #endif
 
@@ -17,8 +19,7 @@ struct RoomView: View {
     }
 
     var columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
+        GridItem(.adaptive(minimum: adaptiveMin)),
     ]
 
     var body: some View {
