@@ -45,9 +45,14 @@ struct ParticipantView: View {
                        maxWidth: .infinity)
                 .background(Color.black.opacity(0.5))
             }
+            .cornerRadius(8)
             // Glow the border when the participant is speaking
-            .border(Color.blue.opacity(0.5),
-                    width: participant.isSpeaking ? 5.0 : 0.0)
+            .overlay(
+                participant.isSpeaking ?
+                    RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.blue, lineWidth: 5.0)
+                    : nil
+            )
         }
     }
 }
