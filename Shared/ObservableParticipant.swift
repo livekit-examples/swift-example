@@ -15,6 +15,16 @@ extension ObservableParticipant: ParticipantDelegate {
         recomputeFirstTracks()
     }
 
+    func localParticipant(_ participant: LocalParticipant,
+                          didPublish trackPublication: LocalTrackPublication) {
+        recomputeFirstTracks()
+    }
+
+    func localParticipant(_ participant: LocalParticipant,
+                          didUnpublish trackPublication: LocalTrackPublication) {
+        recomputeFirstTracks()
+    }
+
     func participant(_ participant: Participant, didUpdate speaking: Bool) {
         DispatchQueue.main.async {
             self.isSpeaking = speaking
@@ -49,13 +59,13 @@ final class ObservableParticipant: ObservableObject {
 
     let participant: Participant
 
-    @Published private(set) var firstVideo: RemoteTrackPublication? {
+    @Published private(set) var firstVideo: TrackPublication? {
         didSet {
             self.firstVideoTrack = firstVideo?.track as? VideoTrack
         }
     }
 
-    @Published private(set) var firstAudio: RemoteTrackPublication? {
+    @Published private(set) var firstAudio: TrackPublication? {
         didSet {
             if let pub = firstAudio,
                let _ = firstAudio?.track {
@@ -86,8 +96,8 @@ final class ObservableParticipant: ObservableObject {
 
     private func recomputeFirstTracks() {
         DispatchQueue.main.async {
-            self.firstVideo = self.participant.videoTracks.values.first as? RemoteTrackPublication
-            self.firstAudio = self.participant.audioTracks.values.first as? RemoteTrackPublication
+            self.firstVideo = self.participant.videoTracks.values.first
+            self.firstAudio = self.participant.audioTracks.values.first
         }
     }
 }

@@ -28,7 +28,7 @@ struct RoomView: View {
                       alignment: .center,
                       spacing: 10,
                       pinnedViews: .sectionFooters) {
-                ForEach(observableRoom.participants.values) { participant in
+                ForEach(observableRoom.allParticipants.values) { participant in
                     ParticipantView(participant: participant)
                         .aspectRatio(1, contentMode: .fit)
                 }

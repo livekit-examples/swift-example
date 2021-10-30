@@ -7,7 +7,18 @@ final class ObservableRoom: ObservableObject {
 
     let room: Room
 
-    @Published private(set) var participants = OrderedDictionary<Sid, ObservableParticipant>()
+    @Published private(set) var participants = OrderedDictionary<Sid, ObservableParticipant>(){
+        didSet {
+            allParticipants = participants
+            if let localParticipant = room.localParticipant {
+                allParticipants.updateValue(ObservableParticipant(localParticipant),
+                                            forKey: localParticipant.sid,
+                                            insertingAt: 0)
+            }
+        }
+    }
+
+    @Published private(set) var allParticipants = OrderedDictionary<Sid, ObservableParticipant>()
 
     @Published private(set) var localVideo: LocalTrackPublication?
     @Published private(set) var localAudio: LocalTrackPublication?
@@ -18,7 +29,7 @@ final class ObservableRoom: ObservableObject {
 
         // create initial participants
         for element in room.remoteParticipants {
-            participants[element.key] = ObservableParticipant(element.value)
+            self.participants[element.key] = ObservableParticipant(element.value)
         }
     }
 
