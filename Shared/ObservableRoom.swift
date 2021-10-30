@@ -7,7 +7,7 @@ final class ObservableRoom: ObservableObject {
 
     let room: Room
 
-    @Published private(set) var participants = OrderedDictionary<Sid, ObservableParticipant>(){
+    @Published private(set) var participants = OrderedDictionary<Sid, ObservableParticipant>() {
         didSet {
             allParticipants = participants
             if let localParticipant = room.localParticipant {

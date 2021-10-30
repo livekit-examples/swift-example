@@ -19,7 +19,7 @@ struct RoomView: View {
     }
 
     var columns = [
-        GridItem(.adaptive(minimum: adaptiveMin)),
+        GridItem(.adaptive(minimum: adaptiveMin))
     ]
 
     var body: some View {
@@ -27,8 +27,7 @@ struct RoomView: View {
         ScrollView(.vertical, showsIndicators: true) {
             LazyVGrid(columns: columns,
                       alignment: .center,
-                      spacing: 10,
-                      pinnedViews: .sectionFooters) {
+                      spacing: 10) {
                 ForEach(observableRoom.allParticipants.values) { participant in
                     ParticipantView(participant: participant)
                         .aspectRatio(1, contentMode: .fit)
