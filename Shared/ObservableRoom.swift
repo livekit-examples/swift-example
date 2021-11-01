@@ -23,6 +23,14 @@ final class ObservableRoom: ObservableObject {
     @Published private(set) var localVideo: LocalTrackPublication?
     @Published private(set) var localAudio: LocalTrackPublication?
 
+    // This is an example of using VideoCaptureInterceptor for custom frame processing
+    let interceptor = VideoCaptureInterceptor { frame, capture in
+        print("Captured frame with size:\(frame.width)x\(frame.height) on \(frame.timeStampNs)")
+        // For this example, we are not doing anything here and just using the original frame.
+        // It's possible to construct a `RTCVideoFrame` and pass it to `capture`.
+        capture(frame)
+    }
+
     init(_ room: Room) {
         self.room = room
         room.add(delegate: self)
@@ -62,7 +70,8 @@ final class ObservableRoom: ObservableObject {
 
         } else {
             // Try to get the camera track
-            if let track = try? LocalVideoTrack.createCameraTrack(name: "camera") {
+            if let track = try? LocalVideoTrack.createCameraTrack(name: "camera",
+                                                                  interceptor: interceptor) {
                 // We got the camera track, now try to publish
                 localParticipant.publishVideoTrack(track: track).then { pub in
                     // Update UI
