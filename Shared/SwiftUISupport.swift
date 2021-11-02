@@ -15,18 +15,19 @@ public typealias NativeViewRepresentable = NSViewRepresentable
 struct SwiftUIVideoView: NativeViewRepresentable {
     /// Pass a ``VideoTrack`` of a ``Participant``.
     let track: VideoTrack
-
+    var mode: VideoView.Mode = .fill
     #if !os(macOS)
     // iOS
 
     func makeUIView(context: Context) -> VideoView {
         let view = VideoView()
-        view.track = track
+        updateUIView(view, context: context)
         return view
     }
 
     func updateUIView(_ videoView: VideoView, context: Context) {
         videoView.track = track
+        videoView.mode = mode
     }
 
     static func dismantleUIView(_ videoView: VideoView, coordinator: ()) {
@@ -37,12 +38,13 @@ struct SwiftUIVideoView: NativeViewRepresentable {
 
     func makeNSView(context: Context) -> VideoView {
         let view = VideoView()
-        view.track = track
+        updateNSView(view, context: context)
         return view
     }
 
     func updateNSView(_ videoView: VideoView, context: Context) {
         videoView.track = track
+        videoView.mode = mode
     }
 
     static func dismantleNSView(_ videoView: VideoView, coordinator: ()) {
