@@ -4,6 +4,7 @@ import LiveKit
 struct ParticipantView: View {
 
     @ObservedObject var participant: ObservableParticipant
+    var videoViewMode: VideoView.Mode = .fill
 
     var body: some View {
         GeometryReader { geometry in
@@ -15,7 +16,8 @@ struct ParticipantView: View {
 
                 // VideoView for the Participant
                 if let track = participant.firstVideoTrack {
-                    SwiftUIVideoView(track: track)
+                    SwiftUIVideoView(track: track, mode: videoViewMode)
+                        .background(Color.black)
                 } else {
                     // Show no camera icon
                     Image(systemName: "video.slash.fill")

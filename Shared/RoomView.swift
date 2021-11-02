@@ -14,6 +14,8 @@ struct RoomView: View {
     @EnvironmentObject var appCtrl: AppCtrl
     @ObservedObject var observableRoom: ObservableRoom
 
+    @State private var videoViewMode: VideoView.Mode = .fill
+
     init(_ room: Room) {
         observableRoom = ObservableRoom(room)
     }
@@ -29,7 +31,7 @@ struct RoomView: View {
                       alignment: .center,
                       spacing: 10) {
                 ForEach(observableRoom.allParticipants.values) { participant in
-                    ParticipantView(participant: participant)
+                    ParticipantView(participant: participant, videoViewMode: videoViewMode)
                         .aspectRatio(1, contentMode: .fit)
                 }
             }
@@ -38,6 +40,29 @@ struct RoomView: View {
         .toolbar {
             ToolbarItem(placement: toolbarPlacement) {
                 HStack {
+
+                    Picker("Mode", selection: $videoViewMode) {
+                        Text("Fit").tag(VideoView.Mode.fit)
+                        Text("Fill").tag(VideoView.Mode.fill)
+                    }
+                    .pickerStyle(.segmented)
+
+                    Spacer()
+                    
+                    if observableRoom.localVideo != nil {
+                        Menu {
+                            Button("Image 1") {
+                                observableRoom.backgroundImage = CIImage(data: NSImage(named: "bg-1")!.tiffRepresentation!)
+                            }
+                            Button("No background") {
+                                observableRoom.backgroundImage = nil
+                            }
+                        } label: {
+                            Image(systemName: "photo.artframe")
+                        }
+                    }
+
+
                     Button(action: {
                         observableRoom.togglePublishCamera()
                     },

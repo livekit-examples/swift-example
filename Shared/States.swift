@@ -38,17 +38,17 @@ final class AppCtrl: ObservableObject {
 
         print("connecting...")
 
-        let options = ConnectOptions(url: url,
-                                     token: token,
-                                     defaultVideoPublishOptions: LocalVideoTrackPublishOptions(simulcast: simulcast))
+        let options = ConnectOptions(defaultVideoPublishOptions: LocalVideoTrackPublishOptions(simulcast: simulcast))
 
-        LiveKit.connect(options: options, delegate: self).then { room in
-            print("did connect! \(room)")
-            self.room = room
-        }.catch { error in
-            print("did throw error \(error)")
-            self.connectionState = .disconnected(error)
-        }
+        LiveKit.connect(url,
+                        token,
+                        options: options, delegate: self).then { room in
+                            print("did connect! \(room)")
+                            self.room = room
+                        }.catch { error in
+                            print("did throw error \(error)")
+                            self.connectionState = .disconnected(error)
+                        }
     }
 
     func disconnect() {

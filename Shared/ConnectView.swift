@@ -52,6 +52,7 @@ struct ConnectView: View {
             var message: Text?
             if case .disconnected(let error) = appCtrl.connectionState, error != nil {
                 message = Text(error!.localizedDescription)
+                print("\(error?.localizedDescription)")
             }
             return Alert(title: Text("Error"), message: message)
         }

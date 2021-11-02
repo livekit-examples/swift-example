@@ -3,6 +3,9 @@ import LiveKit
 import OrderedCollections
 import AVFoundation
 
+import WebRTC
+import CoreImage.CIFilterBuiltins
+
 final class ObservableRoom: ObservableObject {
 
     let room: Room
@@ -23,12 +26,33 @@ final class ObservableRoom: ObservableObject {
     @Published private(set) var localVideo: LocalTrackPublication?
     @Published private(set) var localAudio: LocalTrackPublication?
 
+    @Published var backgroundImage: CIImage? {
+        didSet {
+            if #available(iOS 15, macOS 12, *) {
+                bgSwapper.image = backgroundImage
+            }
+        }
+    }
+
+    private var _bgSwapper: Any?
+    @available(iOS 15, macOS 12, *)
+    var bgSwapper: BackgroundSwapper {
+        get {
+            _bgSwapper = _bgSwapper ?? BackgroundSwapper()
+            return _bgSwapper as! BackgroundSwapper
+        }
+    }
+
     // This is an example of using VideoCaptureInterceptor for custom frame processing
-    let interceptor = VideoCaptureInterceptor { frame, capture in
+    lazy var interceptor = VideoCaptureInterceptor { frame, capture in
         print("Captured frame with size:\(frame.width)x\(frame.height) on \(frame.timeStampNs)")
         // For this example, we are not doing anything here and just using the original frame.
         // It's possible to construct a `RTCVideoFrame` and pass it to `capture`.
-        capture(frame)
+        if #available(iOS 15, macOS 12, *) {
+            self.bgSwapper.process(frame: frame, capture: capture)
+        } else {
+            capture(frame)
+        }
     }
 
     init(_ room: Room) {
