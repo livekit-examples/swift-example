@@ -42,6 +42,7 @@ class BackgroundSwapper {
 
         guard let pixelBuffer = (frame.buffer as? RTCCVPixelBuffer)?.pixelBuffer else {
             // buffer is not a RTCCVPixelBuffer
+            capture(frame)
             return
         }
 
