@@ -51,8 +51,14 @@ struct RoomView: View {
                     
                     if observableRoom.localVideo != nil {
                         Menu {
-                            Button("Image 1") {
+                            Button("Office 1") {
                                 observableRoom.backgroundImage = CIImage(data: NSImage(named: "bg-1")!.tiffRepresentation!)
+                            }
+                            Button("Space") {
+                                observableRoom.backgroundImage = CIImage(data: NSImage(named: "bg-2")!.tiffRepresentation!)
+                            }
+                            Button("Thailand") {
+                                observableRoom.backgroundImage = CIImage(data: NSImage(named: "bg-3")!.tiffRepresentation!)
                             }
                             Button("No background") {
                                 observableRoom.backgroundImage = nil

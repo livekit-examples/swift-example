@@ -31,9 +31,19 @@ class BackgroundSwapper {
 
     // the image used for background, if nil bg will not be swapped
     var image: CIImage?
+    
+    private(set) var busy: Bool = false
 
     func process(frame: RTCVideoFrame, capture: CaptureFunc) {
-
+        
+        guard !busy else {
+            print("Already busy, dropping this frame...")
+            return
+        }
+        
+        busy = true
+        defer { busy = false }
+        
         guard let image = image else {
             // if image is nil (no bg swapping), simply use the input frame
             capture(frame)
@@ -85,10 +95,11 @@ class BackgroundSwapper {
         maskImage = maskImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
 
         // Scale the bg image to fit the bounds of the video frame.
-        let scaleX2 = originalImage.extent.width / image.extent.width
-        let scaleY2 = originalImage.extent.height / image.extent.height
+        let maxExtent = max(originalImage.extent.width, originalImage.extent.height)
+        let scaleX2 = maxExtent / image.extent.width
+        let scaleY2 = maxExtent / image.extent.height
         let bgImage = image.transformed(by: .init(scaleX: scaleX2, y: scaleY2))
-
+        
         // Blend the original, background, and mask images.
         let blendFilter = CIFilter.blendWithRedMask()
         blendFilter.inputImage = originalImage

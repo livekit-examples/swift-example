@@ -18,7 +18,7 @@ struct ConnectView: View {
             ScrollView {
                 VStack(alignment: .center, spacing: 60.0) {
 
-                    Image("Logo")
+                    Image("logo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(height: 40)
