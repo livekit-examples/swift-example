@@ -45,7 +45,7 @@ final class ObservableRoom: ObservableObject {
 
     // This is an example of using VideoCaptureInterceptor for custom frame processing
     lazy var interceptor = VideoCaptureInterceptor { frame, capture in
-        print("Captured frame with size:\(frame.width)x\(frame.height) on \(frame.timeStampNs)")
+        // print("Captured frame with size:\(frame.width)x\(frame.height) on \(frame.timeStampNs)")
         // For this example, we are not doing anything here and just using the original frame.
         // It's possible to construct a `RTCVideoFrame` and pass it to `capture`.
         if #available(iOS 15, macOS 12, *) {

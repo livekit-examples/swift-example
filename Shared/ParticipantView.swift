@@ -5,7 +5,10 @@ struct ParticipantView: View {
 
     @ObservedObject var participant: ObservableParticipant
     var videoViewMode: VideoView.Mode = .fill
+    var videoViewVisible: Bool = true
 
+    @State private var dimensions: Dimensions?
+    
     var body: some View {
         GeometryReader { geometry in
 
@@ -16,8 +19,25 @@ struct ParticipantView: View {
 
                 // VideoView for the Participant
                 if let track = participant.firstVideoTrack {
-                    SwiftUIVideoView(track: track, mode: videoViewMode)
-                        .background(Color.black)
+                    if videoViewVisible {
+                        ZStack (alignment: .topLeading) {
+                        SwiftUIVideoView(track,
+                                     mode: videoViewMode,
+                                     dimensions: $dimensions)
+                            .background(Color.black)
+                            
+                            if let dimensions = dimensions {
+                                Text("RES. \(dimensions.width)x\(dimensions.height)")
+//                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.white)
+                                    .padding(3)
+                                    .background(Color.lkBlue)
+                                    .cornerRadius(8)
+                                    .padding()
+                            }
+                    
+                        }
+                    }
                 } else {
                     // Show no camera icon
                     Image(systemName: "video.slash.fill")

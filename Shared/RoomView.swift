@@ -9,12 +9,25 @@ let adaptiveMin = 300.0
 let toolbarPlacement: ToolbarItemPlacement = .primaryAction
 #endif
 
+extension CIImage {
+    convenience init(named name: String) {
+#if !os(macOS)
+        self.init(cgImage: UIImage(named: name)!.cgImage!)
+#else
+        self.init(data: NSImage(named: name)!.tiffRepresentation!)!
+#endif
+    }
+}
+
 struct RoomView: View {
 
     @EnvironmentObject var appCtrl: AppCtrl
     @ObservedObject var observableRoom: ObservableRoom
 
     @State private var videoViewMode: VideoView.Mode = .fill
+    
+    // Debug purpose
+    @State private var videoViewVisible: Bool = true
 
     init(_ room: Room) {
         observableRoom = ObservableRoom(room)
@@ -31,16 +44,17 @@ struct RoomView: View {
                       alignment: .center,
                       spacing: 10) {
                 ForEach(observableRoom.allParticipants.values) { participant in
-                    ParticipantView(participant: participant, videoViewMode: videoViewMode)
+                    ParticipantView(participant: participant,
+                                    videoViewMode: videoViewMode,
+                                    videoViewVisible: videoViewVisible)
                         .aspectRatio(1, contentMode: .fit)
                 }
             }
             .padding()
         }
         .toolbar {
-            ToolbarItem(placement: toolbarPlacement) {
-                HStack {
-
+            ToolbarItemGroup(placement: toolbarPlacement) {
+        
                     Picker("Mode", selection: $videoViewMode) {
                         Text("Fit").tag(VideoView.Mode.fit)
                         Text("Fill").tag(VideoView.Mode.fill)
@@ -52,13 +66,13 @@ struct RoomView: View {
                     if observableRoom.localVideo != nil {
                         Menu {
                             Button("Office 1") {
-                                observableRoom.backgroundImage = CIImage(data: NSImage(named: "bg-1")!.tiffRepresentation!)
+                                observableRoom.backgroundImage = CIImage(named: "bg-1")
                             }
                             Button("Space") {
-                                observableRoom.backgroundImage = CIImage(data: NSImage(named: "bg-2")!.tiffRepresentation!)
+                                observableRoom.backgroundImage = CIImage(named: "bg-2")
                             }
                             Button("Thailand") {
-                                observableRoom.backgroundImage = CIImage(data: NSImage(named: "bg-3")!.tiffRepresentation!)
+                                observableRoom.backgroundImage = CIImage(named: "bg-3")
                             }
                             Button("No background") {
                                 observableRoom.backgroundImage = nil
@@ -67,7 +81,6 @@ struct RoomView: View {
                             Image(systemName: "photo.artframe")
                         }
                     }
-
 
                     Button(action: {
                         observableRoom.togglePublishCamera()
@@ -86,7 +99,19 @@ struct RoomView: View {
                             observableRoom.localAudio != nil ? Color.orange : nil
                         )
                     })
-
+                    
+                    Spacer()
+                    
+                    Menu {
+                        Button("Toggle Video View") {
+                            videoViewVisible.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "ladybug.fill")
+                    }
+                
+                    Spacer()
+                    
                     Button(action: {
                         appCtrl.disconnect()
                     },
@@ -96,7 +121,7 @@ struct RoomView: View {
                     })
 
                 }
-            }
+           
         }
     }
 }
