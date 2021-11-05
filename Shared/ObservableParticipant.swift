@@ -30,6 +30,12 @@ extension ObservableParticipant: ParticipantDelegate {
             self.isSpeaking = speaking
         }
     }
+    
+    func participant(_ participant: Participant, didUpdate connectionQuality: ConnectionQuality) {
+        DispatchQueue.main.async {
+            self.connectionQuality = connectionQuality
+        }
+    }
 }
 
 extension ObservableParticipant: Identifiable {
@@ -83,6 +89,8 @@ final class ObservableParticipant: ObservableObject {
 
     @Published private(set) var firstAudioAvailable: Bool = false
     @Published private(set) var isSpeaking: Bool = false
+
+    @Published private(set) var connectionQuality: ConnectionQuality = .unknown
 
     init(_ participant: Participant) {
         self.participant = participant

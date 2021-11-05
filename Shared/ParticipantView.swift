@@ -3,9 +3,9 @@ import LiveKit
 
 struct ParticipantView: View {
 
+    @EnvironmentObject var debugCtrl: DebugCtrl
     @ObservedObject var participant: ObservableParticipant
     var videoViewMode: VideoView.Mode = .fill
-    var videoViewVisible: Bool = true
 
     @State private var dimensions: Dimensions?
     
@@ -19,14 +19,15 @@ struct ParticipantView: View {
 
                 // VideoView for the Participant
                 if let track = participant.firstVideoTrack {
-                    if videoViewVisible {
+                    if debugCtrl.videoViewVisible {
                         ZStack (alignment: .topLeading) {
                         SwiftUIVideoView(track,
                                      mode: videoViewMode,
                                      dimensions: $dimensions)
                             .background(Color.black)
                             
-                            if let dimensions = dimensions {
+                            if debugCtrl.showInformation,
+                               let dimensions = dimensions {
                                 Text("RES. \(dimensions.width)x\(dimensions.height)")
 //                                    .fontWeight(.bold)
                                     .foregroundColor(Color.white)
@@ -62,6 +63,18 @@ struct ParticipantView: View {
                         Image(systemName: "mic.slash.fill")
                             .foregroundColor(Color.red)
                     }
+                    
+                    if participant.connectionQuality == .excellent {
+                        Image(systemName: "wifi")
+                            .foregroundColor(.green)
+                    } else if participant.connectionQuality == .good {
+                        Image(systemName: "wifi")
+                            .foregroundColor(Color.orange)
+                    } else if participant.connectionQuality == .poor {
+                        Image(systemName: "wifi.exclamationmark")
+                            .foregroundColor(Color.red)
+                    }
+
                 }.padding(5)
                 .frame(minWidth: 0,
                        maxWidth: .infinity)

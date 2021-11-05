@@ -19,15 +19,19 @@ extension CIImage {
     }
 }
 
+final class DebugCtrl: ObservableObject {
+    // Debug purpose
+    @Published var videoViewVisible: Bool = true
+    @Published var showInformation: Bool = false
+}
+
 struct RoomView: View {
 
     @EnvironmentObject var appCtrl: AppCtrl
+    @EnvironmentObject var debugCtrl: DebugCtrl
     @ObservedObject var observableRoom: ObservableRoom
 
     @State private var videoViewMode: VideoView.Mode = .fill
-    
-    // Debug purpose
-    @State private var videoViewVisible: Bool = true
 
     init(_ room: Room) {
         observableRoom = ObservableRoom(room)
@@ -44,9 +48,7 @@ struct RoomView: View {
                       alignment: .center,
                       spacing: 10) {
                 ForEach(observableRoom.allParticipants.values) { participant in
-                    ParticipantView(participant: participant,
-                                    videoViewMode: videoViewMode,
-                                    videoViewVisible: videoViewVisible)
+                    ParticipantView(participant: participant, videoViewMode: videoViewMode)
                         .aspectRatio(1, contentMode: .fit)
                 }
             }
@@ -61,6 +63,15 @@ struct RoomView: View {
                     }
                     .pickerStyle(.segmented)
 
+//                    Button(action: {
+//                        showInformation.toggle()
+//                    },
+//                    label: {
+//                        Image(systemName: "info.circle.fill").foregroundColor(
+//                            showInformation ? Color.blue : nil
+//                        )
+//                    })
+                    
                     Spacer()
                     
                     if observableRoom.localVideo != nil {
@@ -103,9 +114,8 @@ struct RoomView: View {
                     Spacer()
                     
                     Menu {
-                        Button("Toggle Video View") {
-                            videoViewVisible.toggle()
-                        }
+                        Toggle("Video Information", isOn: $debugCtrl.showInformation)
+                        Toggle("Video View", isOn: $debugCtrl.videoViewVisible)
                     } label: {
                         Image(systemName: "ladybug.fill")
                     }
@@ -116,7 +126,7 @@ struct RoomView: View {
                         appCtrl.disconnect()
                     },
                     label: {
-                        Image(systemName: "xmark.circle")
+                        Image(systemName: "xmark.circle.fill")
                             .foregroundColor(nil)
                     })
 

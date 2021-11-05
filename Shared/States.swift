@@ -19,7 +19,7 @@ final class AppCtrl: ObservableObject {
     public static let shared = AppCtrl()
 
     @Published var shouldShowError: Bool = false
-
+        
     @Published private(set) var connectionState: ConnectionState = .disconnected() {
         didSet {
             if case .disconnected(let error) = connectionState {

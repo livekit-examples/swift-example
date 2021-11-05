@@ -11,6 +11,7 @@ struct ContentView: View {
 
             if let room = appCtrl.room {
                 RoomView(room)
+                    .environmentObject(DebugCtrl())
             } else {
                 ConnectView()
             }
