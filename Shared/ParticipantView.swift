@@ -8,7 +8,7 @@ struct ParticipantView: View {
     var videoViewMode: VideoView.Mode = .fill
 
     @State private var dimensions: Dimensions?
-    
+
     var body: some View {
         GeometryReader { geometry in
 
@@ -18,25 +18,25 @@ struct ParticipantView: View {
                     .ignoresSafeArea()
 
                 // VideoView for the Participant
-                if let track = participant.firstVideoTrack {
+                if let track = participant.firstVideoTrack, participant.firstVideoAvailable {
                     if debugCtrl.videoViewVisible {
-                        ZStack (alignment: .topLeading) {
-                        SwiftUIVideoView(track,
-                                     mode: videoViewMode,
-                                     dimensions: $dimensions)
-                            .background(Color.black)
-                            
+                        ZStack(alignment: .topLeading) {
+                            SwiftUIVideoView(track,
+                                             mode: videoViewMode,
+                                             dimensions: $dimensions)
+                                .background(Color.black)
+
                             if debugCtrl.showInformation,
                                let dimensions = dimensions {
                                 Text("RES. \(dimensions.width)x\(dimensions.height)")
-//                                    .fontWeight(.bold)
+                                    //                                    .fontWeight(.bold)
                                     .foregroundColor(Color.white)
                                     .padding(3)
                                     .background(Color.lkBlue)
                                     .cornerRadius(8)
                                     .padding()
                             }
-                    
+
                         }
                     }
                 } else {
@@ -63,7 +63,7 @@ struct ParticipantView: View {
                         Image(systemName: "mic.slash.fill")
                             .foregroundColor(Color.red)
                     }
-                    
+
                     if participant.connectionQuality == .excellent {
                         Image(systemName: "wifi")
                             .foregroundColor(.green)

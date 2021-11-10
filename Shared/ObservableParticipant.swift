@@ -25,12 +25,17 @@ extension ObservableParticipant: ParticipantDelegate {
         recomputeFirstTracks()
     }
 
+    func participant(_ participant: Participant,
+                     didUpdate trackPublication: TrackPublication, muted: Bool) {
+        recomputeFirstTracks()
+    }
+
     func participant(_ participant: Participant, didUpdate speaking: Bool) {
         DispatchQueue.main.async {
             self.isSpeaking = speaking
         }
     }
-    
+
     func participant(_ participant: Participant, didUpdate connectionQuality: ConnectionQuality) {
         DispatchQueue.main.async {
             self.connectionQuality = connectionQuality
@@ -67,15 +72,20 @@ final class ObservableParticipant: ObservableObject {
 
     @Published private(set) var firstVideo: TrackPublication? {
         didSet {
+            if let pub = firstVideo, !pub.muted, firstVideo?.track != nil {
+                firstVideoAvailable = true
+            } else {
+                firstVideoAvailable = false
+            }
+
             self.firstVideoTrack = firstVideo?.track as? VideoTrack
         }
     }
 
     @Published private(set) var firstAudio: TrackPublication? {
         didSet {
-            if let pub = firstAudio,
-               let _ = firstAudio?.track {
-                firstAudioAvailable = !pub.muted
+            if let pub = firstAudio, !pub.muted, firstAudio?.track != nil {
+                firstAudioAvailable = true
             } else {
                 firstAudioAvailable = false
             }
@@ -87,6 +97,7 @@ final class ObservableParticipant: ObservableObject {
     @Published private(set) var firstVideoTrack: VideoTrack?
     @Published private(set) var firstAudioTrack: AudioTrack?
 
+    @Published private(set) var firstVideoAvailable: Bool = false
     @Published private(set) var firstAudioAvailable: Bool = false
     @Published private(set) var isSpeaking: Bool = false
 

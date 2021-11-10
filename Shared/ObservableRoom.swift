@@ -82,31 +82,38 @@ final class ObservableRoom: ObservableObject {
             return
         }
 
-        if let localVideo = self.localVideo {
-            // Try to un-publish the camera
-            localParticipant.unpublish(publication: localVideo).then {
-                // Update UI
-                self.localVideo = nil
-            }.catch { error in
-                // Failed to un-publish
-                print(error)
-            }
-
-        } else {
-            // Try to get the camera track
-            if let track = try? LocalVideoTrack.createCameraTrack(name: "camera",
-                                                                  interceptor: interceptor) {
-                // We got the camera track, now try to publish
-                localParticipant.publishVideoTrack(track: track).then { pub in
-                    // Update UI
-                    self.localVideo = pub
-                }.catch { error in
-                    // If failed to publish, stop the track
-                    track.stop()
-                    print(error)
-                }
-            }
+        localParticipant.setCamera(enabled: !localParticipant.isCameraEnabled()).then { publication in
+            self.localVideo = publication
         }
+
+        //
+        // The following code is an example how to publish without using the simplified apis
+        //
+        //        if let localVideo = self.localVideo {
+        //            // Try to un-publish the camera
+        //            localParticipant.unpublish(publication: localVideo).then {
+        //                // Update UI
+        //                self.localVideo = nil
+        //            }.catch { error in
+        //                // Failed to un-publish
+        //                print(error)
+        //            }
+        //
+        //        } else {
+        //            // Try to get the camera track
+        //            if let track = try? LocalVideoTrack.createCameraTrack(name: "camera",
+        //                                                                  interceptor: interceptor) {
+        //                // We got the camera track, now try to publish
+        //                localParticipant.publishVideoTrack(track: track).then { pub in
+        //                    // Update UI
+        //                    self.localVideo = pub
+        //                }.catch { error in
+        //                    // If failed to publish, stop the track
+        //                    track.stop()
+        //                    print(error)
+        //                }
+        //            }
+        //        }
     }
 
     func togglePublishMicrophone() {
@@ -117,29 +124,36 @@ final class ObservableRoom: ObservableObject {
             return
         }
 
-        if let localAudio = self.localAudio {
-            // Try to un-publish the microphone
-            localParticipant.unpublish(publication: localAudio).then {
-                // Update UI
-                self.localAudio = nil
-            }.catch { error in
-                // Failed to un-publish
-                print(error)
-            }
-
-        } else {
-            // Try to get the camera track
-            let track = LocalAudioTrack.createTrack(name: "microphone")
-            // We got the camera track, now try to publish
-            localParticipant.publishAudioTrack(track: track).then { pub in
-                // Update UI
-                self.localAudio = pub
-            }.catch { error in
-                // If failed to publish, stop the track
-                track.stop()
-                print(error)
-            }
+        localParticipant.setMicrophone(enabled: !localParticipant.isMicrophoneEnabled()).then { publication in
+            self.localAudio = publication
         }
+
+        //
+        // The following code is an example how to publish without using the simplified apis
+        //
+        //        if let localAudio = self.localAudio {
+        //            // Try to un-publish the microphone
+        //            localParticipant.unpublish(publication: localAudio).then {
+        //                // Update UI
+        //                self.localAudio = nil
+        //            }.catch { error in
+        //                // Failed to un-publish
+        //                print(error)
+        //            }
+        //
+        //        } else {
+        //            // Try to get the camera track
+        //            let track = LocalAudioTrack.createTrack(name: "microphone")
+        //            // We got the camera track, now try to publish
+        //            localParticipant.publishAudioTrack(track: track).then { pub in
+        //                // Update UI
+        //                self.localAudio = pub
+        //            }.catch { error in
+        //                // If failed to publish, stop the track
+        //                track.stop()
+        //                print(error)
+        //            }
+        //        }
 
     }
 }

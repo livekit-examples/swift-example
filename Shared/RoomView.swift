@@ -11,11 +11,11 @@ let toolbarPlacement: ToolbarItemPlacement = .primaryAction
 
 extension CIImage {
     convenience init(named name: String) {
-#if !os(macOS)
+        #if !os(macOS)
         self.init(cgImage: UIImage(named: name)!.cgImage!)
-#else
+        #else
         self.init(data: NSImage(named: name)!.tiffRepresentation!)!
-#endif
+        #endif
     }
 }
 
@@ -56,82 +56,82 @@ struct RoomView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: toolbarPlacement) {
-        
-                    Picker("Mode", selection: $videoViewMode) {
-                        Text("Fit").tag(VideoView.Mode.fit)
-                        Text("Fill").tag(VideoView.Mode.fill)
-                    }
-                    .pickerStyle(.segmented)
 
-//                    Button(action: {
-//                        showInformation.toggle()
-//                    },
-//                    label: {
-//                        Image(systemName: "info.circle.fill").foregroundColor(
-//                            showInformation ? Color.blue : nil
-//                        )
-//                    })
-                    
-                    Spacer()
-                    
-                    if observableRoom.localVideo != nil {
-                        Menu {
-                            Button("Office 1") {
-                                observableRoom.backgroundImage = CIImage(named: "bg-1")
-                            }
-                            Button("Space") {
-                                observableRoom.backgroundImage = CIImage(named: "bg-2")
-                            }
-                            Button("Thailand") {
-                                observableRoom.backgroundImage = CIImage(named: "bg-3")
-                            }
-                            Button("No background") {
-                                observableRoom.backgroundImage = nil
-                            }
-                        } label: {
-                            Image(systemName: "photo.artframe")
-                        }
-                    }
-
-                    Button(action: {
-                        observableRoom.togglePublishCamera()
-                    },
-                    label: {
-                        Image(systemName: "video.fill").foregroundColor(
-                            observableRoom.localVideo != nil ? Color.green : nil
-                        )
-                    })
-
-                    Button(action: {
-                        observableRoom.togglePublishMicrophone()
-                    },
-                    label: {
-                        Image(systemName: "mic.fill").foregroundColor(
-                            observableRoom.localAudio != nil ? Color.orange : nil
-                        )
-                    })
-                    
-                    Spacer()
-                    
-                    Menu {
-                        Toggle("Video Information", isOn: $debugCtrl.showInformation)
-                        Toggle("Video View", isOn: $debugCtrl.videoViewVisible)
-                    } label: {
-                        Image(systemName: "ladybug.fill")
-                    }
-                
-                    Spacer()
-                    
-                    Button(action: {
-                        appCtrl.disconnect()
-                    },
-                    label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(nil)
-                    })
-
+                Picker("Mode", selection: $videoViewMode) {
+                    Text("Fit").tag(VideoView.Mode.fit)
+                    Text("Fill").tag(VideoView.Mode.fill)
                 }
-           
+                .pickerStyle(.segmented)
+
+                //                    Button(action: {
+                //                        showInformation.toggle()
+                //                    },
+                //                    label: {
+                //                        Image(systemName: "info.circle.fill").foregroundColor(
+                //                            showInformation ? Color.blue : nil
+                //                        )
+                //                    })
+
+                Spacer()
+
+                if observableRoom.localVideo != nil {
+                    Menu {
+                        Button("Office 1") {
+                            observableRoom.backgroundImage = CIImage(named: "bg-1")
+                        }
+                        Button("Space") {
+                            observableRoom.backgroundImage = CIImage(named: "bg-2")
+                        }
+                        Button("Thailand") {
+                            observableRoom.backgroundImage = CIImage(named: "bg-3")
+                        }
+                        Button("No background") {
+                            observableRoom.backgroundImage = nil
+                        }
+                    } label: {
+                        Image(systemName: "photo.artframe")
+                    }
+                }
+
+                Button(action: {
+                    observableRoom.togglePublishCamera()
+                },
+                label: {
+                    Image(systemName: "video.fill").foregroundColor(
+                        observableRoom.localVideo != nil ? Color.green : nil
+                    )
+                })
+
+                Button(action: {
+                    observableRoom.togglePublishMicrophone()
+                },
+                label: {
+                    Image(systemName: "mic.fill").foregroundColor(
+                        observableRoom.localAudio != nil ? Color.orange : nil
+                    )
+                })
+
+                Spacer()
+
+                Menu {
+                    Toggle("Video Information", isOn: $debugCtrl.showInformation)
+                    Toggle("Video View", isOn: $debugCtrl.videoViewVisible)
+                } label: {
+                    Image(systemName: "ladybug.fill")
+                }
+
+                Spacer()
+
+                Button(action: {
+                    appCtrl.disconnect()
+                },
+                label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(nil)
+                })
+
+            }
+
         }
     }
 }

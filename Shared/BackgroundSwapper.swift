@@ -20,7 +20,7 @@ public extension UIImage {
 @available(iOS 15, macOS 12, *)
 class BackgroundSwapper {
 
-    lazy var segmentationRequest : VNGeneratePersonSegmentationRequest = {
+    lazy var segmentationRequest: VNGeneratePersonSegmentationRequest = {
         let r = VNGeneratePersonSegmentationRequest()
         r.qualityLevel = .balanced
         r.outputPixelFormat = kCVPixelFormatType_OneComponent8
@@ -31,19 +31,19 @@ class BackgroundSwapper {
 
     // the image used for background, if nil bg will not be swapped
     var image: CIImage?
-    
+
     private(set) var busy: Bool = false
 
     func process(frame: RTCVideoFrame, capture: CaptureFunc) {
-        
+
         guard !busy else {
             print("Already busy, dropping this frame...")
             return
         }
-        
+
         busy = true
         defer { busy = false }
-        
+
         guard let image = image else {
             // if image is nil (no bg swapping), simply use the input frame
             capture(frame)
@@ -82,11 +82,11 @@ class BackgroundSwapper {
 
     // Performs the blend operation.
     func blend(original framePixelBuffer: CVPixelBuffer,
-                    mask maskPixelBuffer: CVPixelBuffer,
+               mask maskPixelBuffer: CVPixelBuffer,
                image: CIImage) -> CVPixelBuffer? {
 
         // Create CIImage objects for the video frame and the segmentation mask.
-        let originalImage = CIImage(cvPixelBuffer: framePixelBuffer)//.oriented(.right)
+        let originalImage = CIImage(cvPixelBuffer: framePixelBuffer)// .oriented(.right)
         var maskImage = CIImage(cvPixelBuffer: maskPixelBuffer)
 
         // Scale the mask image to fit the bounds of the video frame.
@@ -99,7 +99,7 @@ class BackgroundSwapper {
         let scaleX2 = maxExtent / image.extent.width
         let scaleY2 = maxExtent / image.extent.height
         let bgImage = image.transformed(by: .init(scaleX: scaleX2, y: scaleY2))
-        
+
         // Blend the original, background, and mask images.
         let blendFilter = CIFilter.blendWithRedMask()
         blendFilter.inputImage = originalImage
