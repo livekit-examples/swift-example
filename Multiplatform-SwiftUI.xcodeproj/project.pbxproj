@@ -23,8 +23,6 @@
 		681E3F46271FC7AD007BB547 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F42271FC7AD007BB547 /* ConnectView.swift */; };
 		681E3F49271FCB40007BB547 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 681E3F48271FCB40007BB547 /* LiveKit */; };
 		681E3F4B271FCB46007BB547 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 681E3F4A271FCB46007BB547 /* LiveKit */; };
-		681E3F4D271FE075007BB547 /* MultiplatformUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F4C271FE075007BB547 /* MultiplatformUI.swift */; };
-		681E3F4E271FE075007BB547 /* MultiplatformUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F4C271FE075007BB547 /* MultiplatformUI.swift */; };
 		682FB285272C673B00522494 /* ObservableParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682FB284272C673B00522494 /* ObservableParticipant.swift */; };
 		682FB286272C673B00522494 /* ObservableParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682FB284272C673B00522494 /* ObservableParticipant.swift */; };
 		684A3AF3272B0BAB005E46F0 /* SwiftUIVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684A3AF2272B0BAB005E46F0 /* SwiftUIVideoView.swift */; };
@@ -50,7 +48,6 @@
 		681E3F3E271FC795007BB547 /* Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
 		681E3F41271FC7AC007BB547 /* RoomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomView.swift; sourceTree = "<group>"; };
 		681E3F42271FC7AD007BB547 /* ConnectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
-		681E3F4C271FE075007BB547 /* MultiplatformUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplatformUI.swift; sourceTree = "<group>"; };
 		682FB284272C673B00522494 /* ObservableParticipant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableParticipant.swift; sourceTree = "<group>"; };
 		682FB287272C7BE000522494 /* Multiplatform-SwiftUI--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Multiplatform-SwiftUI--iOS--Info.plist"; sourceTree = "<group>"; };
 		684A3AF2272B0BAB005E46F0 /* SwiftUIVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIVideoView.swift; sourceTree = "<group>"; };
@@ -124,7 +121,6 @@
 				681E3F41271FC7AC007BB547 /* RoomView.swift */,
 				68B3853C271E780600711D5F /* Multiplatform_SwiftUIApp.swift */,
 				68B3853D271E780600711D5F /* ContentView.swift */,
-				681E3F4C271FE075007BB547 /* MultiplatformUI.swift */,
 				6816B1A7272D45DF005ADB85 /* ExampleObservableRoom.swift */,
 				6816B1AF272D9198005ADB85 /* ParticipantView.swift */,
 				6896820527305B2600E7E3A2 /* BackgroundSwapper.swift */,
@@ -266,7 +262,6 @@
 				681E3F43271FC7AD007BB547 /* RoomView.swift in Sources */,
 				6816B1B0272D9198005ADB85 /* ParticipantView.swift in Sources */,
 				68B3854C271E780700711D5F /* Multiplatform_SwiftUIApp.swift in Sources */,
-				681E3F4D271FE075007BB547 /* MultiplatformUI.swift in Sources */,
 				681E3F3F271FC795007BB547 /* Custom.swift in Sources */,
 				6816B1A8272D45DF005ADB85 /* ExampleObservableRoom.swift in Sources */,
 				684A3AF3272B0BAB005E46F0 /* SwiftUIVideoView.swift in Sources */,
@@ -287,7 +282,6 @@
 				681E3F44271FC7AD007BB547 /* RoomView.swift in Sources */,
 				6816B1B1272D9198005ADB85 /* ParticipantView.swift in Sources */,
 				68B3854D271E780700711D5F /* Multiplatform_SwiftUIApp.swift in Sources */,
-				681E3F4E271FE075007BB547 /* MultiplatformUI.swift in Sources */,
 				681E3F40271FC795007BB547 /* Custom.swift in Sources */,
 				6816B1A9272D45DF005ADB85 /* ExampleObservableRoom.swift in Sources */,
 				684A3AF4272B0BAB005E46F0 /* SwiftUIVideoView.swift in Sources */,
