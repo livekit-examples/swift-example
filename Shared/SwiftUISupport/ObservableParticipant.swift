@@ -1,5 +1,6 @@
 import SwiftUI
 import LiveKit
+import WebRTC
 
 extension ObservableParticipant: ParticipantDelegate {
 

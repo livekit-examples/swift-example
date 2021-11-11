@@ -6,25 +6,7 @@ import AVFoundation
 import WebRTC
 import CoreImage.CIFilterBuiltins
 
-final class ObservableRoom: ObservableObject {
-
-    let room: Room
-
-    @Published private(set) var participants = OrderedDictionary<Sid, ObservableParticipant>() {
-        didSet {
-            allParticipants = participants
-            if let localParticipant = room.localParticipant {
-                allParticipants.updateValue(ObservableParticipant(localParticipant),
-                                            forKey: localParticipant.sid,
-                                            insertingAt: 0)
-            }
-        }
-    }
-
-    @Published private(set) var allParticipants = OrderedDictionary<Sid, ObservableParticipant>()
-
-    @Published private(set) var localVideo: LocalTrackPublication?
-    @Published private(set) var localAudio: LocalTrackPublication?
+final class ExampleObservableRoom: ObservableRoom {
 
     @Published var backgroundImage: CIImage? {
         didSet {
@@ -53,25 +35,6 @@ final class ObservableRoom: ObservableObject {
         } else {
             capture(frame)
         }
-    }
-
-    init(_ room: Room) {
-        self.room = room
-        room.add(delegate: self)
-
-        if room.remoteParticipants.isEmpty {
-            self.participants = [:]
-        } else {
-            // create initial participants
-            for element in room.remoteParticipants {
-                self.participants[element.key] = ObservableParticipant(element.value)
-            }
-        }
-    }
-
-    deinit {
-        // cameraTrack?.stop()
-        room.remove(delegate: self)
     }
 
     func togglePublishCamera() {
@@ -155,22 +118,5 @@ final class ObservableRoom: ObservableObject {
         //            }
         //        }
 
-    }
-}
-
-extension ObservableRoom: RoomDelegate {
-
-    func room(_ room: Room,
-              participantDidJoin participant: RemoteParticipant) {
-        DispatchQueue.main.async {
-            self.participants[participant.sid] = ObservableParticipant(participant)
-        }
-    }
-
-    func room(_ room: Room,
-              participantDidLeave participant: RemoteParticipant) {
-        DispatchQueue.main.async {
-            self.participants.removeValue(forKey: participant.sid)
-        }
     }
 }

@@ -29,12 +29,12 @@ struct RoomView: View {
 
     @EnvironmentObject var appCtrl: AppCtrl
     @EnvironmentObject var debugCtrl: DebugCtrl
-    @ObservedObject var observableRoom: ObservableRoom
+    @ObservedObject var observableRoom: ExampleObservableRoom
 
     @State private var videoViewMode: VideoView.Mode = .fill
 
     init(_ room: Room) {
-        observableRoom = ObservableRoom(room)
+        observableRoom = ExampleObservableRoom(room)
     }
 
     var columns = [
