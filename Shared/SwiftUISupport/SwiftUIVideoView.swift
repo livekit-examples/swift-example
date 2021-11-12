@@ -26,8 +26,10 @@ class SwiftUIVideoViewDelegateReceiver: TrackDelegate {
     func track(_ track: VideoTrack,
                videoView: VideoView,
                didUpdate dimensions: Dimensions) {
-        self.dimensions = dimensions
         print("SwiftUIVideoView got dimensions \(dimensions)")
+        DispatchQueue.main.async {
+            self.dimensions = dimensions
+        }
     }
 
     func track(_ track: VideoTrack, videoView: VideoView, didUpdate size: CGSize) {

@@ -4,7 +4,7 @@ import WebRTC
 import OrderedCollections
 
 class ObservableRoom: ObservableObject {
-    
+
     let room: Room
 
     @Published private(set) var participants = OrderedDictionary<Sid, ObservableParticipant>() {

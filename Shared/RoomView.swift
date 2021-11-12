@@ -77,16 +77,16 @@ struct RoomView: View {
                 if observableRoom.localVideo != nil {
                     Menu {
                         Button("Office 1") {
-                            observableRoom.backgroundImage = CIImage(named: "bg-1")
+                            observableRoom.background = .office
                         }
                         Button("Space") {
-                            observableRoom.backgroundImage = CIImage(named: "bg-2")
+                            observableRoom.background = .space
                         }
                         Button("Thailand") {
-                            observableRoom.backgroundImage = CIImage(named: "bg-3")
+                            observableRoom.background = .thailand
                         }
                         Button("No background") {
-                            observableRoom.backgroundImage = nil
+                            observableRoom.background = .none
                         }
                     } label: {
                         Image(systemName: "photo.artframe")

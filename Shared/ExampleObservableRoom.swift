@@ -8,10 +8,27 @@ import CoreImage.CIFilterBuiltins
 
 final class ExampleObservableRoom: ObservableRoom {
 
-    @Published var backgroundImage: CIImage? {
+    let bgName: [Background: String] = [
+        .office: "bg-1",
+        .space: "bg-2",
+        .thailand: "bg-3"
+    ]
+
+    enum Background {
+        case none
+        case office
+        case space
+        case thailand
+    }
+
+    @Published var background: Background = .none {
         didSet {
             if #available(iOS 15, macOS 12, *) {
-                bgSwapper.image = backgroundImage
+                if let name = bgName[background] {
+                    bgSwapper.image = CIImage(named: name)
+                } else {
+                    bgSwapper.image = nil
+                }
             }
         }
     }
@@ -45,9 +62,10 @@ final class ExampleObservableRoom: ObservableRoom {
             return
         }
 
-        localParticipant.setCamera(enabled: !localParticipant.isCameraEnabled()).then { publication in
-            self.localVideo = publication
-        }
+        localParticipant.setCamera(enabled: !localParticipant.isCameraEnabled(),
+                                   interceptor: interceptor).then { publication in
+                                    self.localVideo = publication
+                                   }
 
         //
         // The following code is an example how to publish without using the simplified apis
