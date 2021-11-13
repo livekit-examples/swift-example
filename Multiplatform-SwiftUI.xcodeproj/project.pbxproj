@@ -28,6 +28,7 @@
 		683F05F5273F96B20080C7AC /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 683F05F4273F96B20080C7AC /* ReplayKit.framework */; platformFilter = maccatalyst; };
 		683F05F8273F96B20080C7AC /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683F05F7273F96B20080C7AC /* SampleHandler.swift */; };
 		683F05FC273F96B20080C7AC /* BroadcastExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		683F0602273F98CB0080C7AC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 683F0601273F98CB0080C7AC /* LiveKit */; };
 		684A3AF3272B0BAB005E46F0 /* SwiftUIVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684A3AF2272B0BAB005E46F0 /* SwiftUIVideoView.swift */; };
 		684A3AF4272B0BAB005E46F0 /* SwiftUIVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684A3AF2272B0BAB005E46F0 /* SwiftUIVideoView.swift */; };
 		6894C729273D4D6400E0133C /* ObservableRoom.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6894C728273D4D6400E0133C /* ObservableRoom.swift.swift */; };
@@ -98,6 +99,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				683F05F5273F96B20080C7AC /* ReplayKit.framework in Frameworks */,
+				683F0602273F98CB0080C7AC /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,6 +215,9 @@
 			dependencies = (
 			);
 			name = BroadcastExt;
+			packageProductDependencies = (
+				683F0601273F98CB0080C7AC /* LiveKit */,
+			);
 			productName = BroadcastExt;
 			productReference = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -734,6 +739,10 @@
 			productName = LiveKit;
 		};
 		681E3F4A271FCB46007BB547 /* LiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LiveKit;
+		};
+		683F0601273F98CB0080C7AC /* LiveKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LiveKit;
 		};

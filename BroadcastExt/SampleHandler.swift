@@ -21,24 +21,22 @@ class SampleHandler: RPBroadcastSampleHandler {
 
         os_log("connecting to room...", log: logger, type: .debug)
 
-        let opts = ConnectOptions(
-            url: "wss://rtc.unxpected.co.jp",
-            // swiftlint:disable:next line_length
-            token: "",
+        let options = ConnectOptions(
             // do not subscribe since this is for publish only
             autoSubscribe: false
         )
 
-        LiveKit.connect(options: opts, delegate: self).then { room in
+        LiveKit.connect("wss://rtc.unxpected.co.jp",
+                        "",
+                        options: options,
+                        delegate: self).then { room in
             self.room = room
             os_log("connected to room", log: logger, type: .debug)
             do {
                 let track = try LocalVideoTrack.createReplayKitTrack(name: "screen")
                 self.videoTrack = track
 
-                var opt = LocalVideoTrackPublishOptions()
-                opt.simulcast = true
-                room.localParticipant?.publishVideoTrack(track: track, options: opt).then({ _ in
+                room.localParticipant?.publishVideoTrack(track: track).then({ _ in
                     os_log("did publish video track", log: logger, type: .debug)
                 })
             } catch _ {
