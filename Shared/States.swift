@@ -1,5 +1,6 @@
 import SwiftUI
 import LiveKit
+import Logging
 
 extension AppCtrl: RoomDelegate {
 
@@ -33,6 +34,17 @@ final class AppCtrl: ObservableObject {
     }
 
     @Published private(set) var room: Room?
+    
+    init() {
+        
+        func logFactory(label: String) -> LogHandler {
+            var handler = StreamLogHandler.standardError(label: label)
+            handler.logLevel = .debug
+            return handler
+        }
+
+        LoggingSystem.bootstrap(logFactory)
+    }
 
     func connect(url: String, token: String, simulcast: Bool = true) {
 
