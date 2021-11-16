@@ -10,6 +10,7 @@ let toolbarPlacement: ToolbarItemPlacement = .primaryAction
 #endif
 
 extension CIImage {
+    // helper to create a `CIImage` for both platforms
     convenience init(named name: String) {
         #if !os(macOS)
         self.init(cgImage: UIImage(named: name)!.cgImage!)
@@ -17,12 +18,6 @@ extension CIImage {
         self.init(data: NSImage(named: name)!.tiffRepresentation!)!
         #endif
     }
-}
-
-final class DebugCtrl: ObservableObject {
-    // Debug purpose
-    @Published var videoViewVisible: Bool = true
-    @Published var showInformation: Bool = false
 }
 
 struct RoomView: View {
@@ -57,7 +52,6 @@ struct RoomView: View {
                         ForEach(observableRoom.allParticipants.values) { participant in
                             ParticipantView(participant: participant,
                                             videoViewMode: videoViewMode, onTap: ({ participant in
-                                                print("did tap!!")
                                                 self.focusParticipant = participant
                                             })).aspectRatio(1, contentMode: .fit)
                         }

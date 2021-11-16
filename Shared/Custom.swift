@@ -1,5 +1,10 @@
 import SwiftUI
 
+extension Color {
+    static let lkBlue = Color("LKBlue")
+    static let lkDarkBlue = Color("LKDarkBlue")
+}
+
 struct LazyView<Content: View>: View {
     let build: () -> Content
     init(_ build: @autoclosure @escaping () -> Content) {
@@ -10,6 +15,7 @@ struct LazyView<Content: View>: View {
     }
 }
 
+// Default button style for this example
 struct LKButton: View {
 
     let title: String
@@ -19,7 +25,6 @@ struct LKButton: View {
 
         Button(action: action,
                label: {
-
                 Text(title.uppercased())
                     .fontWeight(.bold)
                     .padding(.horizontal, 12)
@@ -43,7 +48,7 @@ extension LKTextField.`Type` {
 #endif
 
 #if os(macOS)
-// avoid showing focus border around textfield for macOS
+// Avoid showing focus border around textfield for macOS
 extension NSTextField {
     open override var focusRingType: NSFocusRingType {
         get { .none }
@@ -77,7 +82,9 @@ struct LKTextField: View {
                 .keyboardType(type.toiOSType())
                 #endif
                 .padding()
-                .overlay(RoundedRectangle(cornerRadius: 10.0).strokeBorder(Color.white.opacity(0.3), style: StrokeStyle(lineWidth: 1.0)))
+                .overlay(RoundedRectangle(cornerRadius: 10.0)
+                            .strokeBorder(Color.white.opacity(0.3),
+                                          style: StrokeStyle(lineWidth: 1.0)))
 
         }.frame(maxWidth: .infinity)
     }

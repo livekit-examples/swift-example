@@ -1,24 +1,17 @@
 import SwiftUI
 import LiveKit
 import Logging
+import WebRTC
 
-extension AppCtrl: RoomDelegate {
-
-    func room(_ room: Room, didUpdate connectionState: ConnectionState) {
-
-        print("connectionState didUpdate \(connectionState)")
-
-        // UI will update according to the connectionState
-        withAnimation {
-            self.connectionState = connectionState
-        }
-    }
-}
-
+// This class contains the logic to control behavior of the whole app.
+// The instance is attached to the root using `environmentObject`,
+// so it can be accessed anywhere by using `@EnvironmentObject`.
 final class AppCtrl: ObservableObject {
 
+    // Singleton pattern
     public static let shared = AppCtrl()
 
+    // Used to show connection error dialog
     @Published var shouldShowError: Bool = false
 
     @Published private(set) var connectionState: ConnectionState = .disconnected() {
@@ -33,9 +26,9 @@ final class AppCtrl: ObservableObject {
         }
     }
 
-    @Published private(set) var room: Room?
+    private(set) var room: Room?
 
-    init() {
+    private init() {
 
         func logFactory(label: String) -> LogHandler {
             var handler = StreamLogHandler.standardError(label: label)
@@ -48,22 +41,39 @@ final class AppCtrl: ObservableObject {
 
     func connect(url: String, token: String, simulcast: Bool = true) {
 
-        print("connecting...")
+        print("Connecting to Room...")
 
-        let options = ConnectOptions(defaultVideoPublishOptions: LocalVideoTrackPublishOptions(simulcast: simulcast))
+        let options = ConnectOptions(
+            // Pass the simulcast option
+            defaultVideoPublishOptions: LocalVideoTrackPublishOptions(simulcast: simulcast)
+        )
 
         LiveKit.connect(url,
                         token,
                         options: options, delegate: self).then { room in
-                            print("did connect! \(room)")
+                            print("Did connect to Room, name: \(room.name ?? "(no name)")")
                             self.room = room
                         }.catch { error in
-                            print("did throw error \(error)")
+                            print("\(String(describing: self)) Failed to connect to room with error: \(error)")
                             self.connectionState = .disconnected(error)
                         }
     }
 
     func disconnect() {
         room?.disconnect()
+        room = nil
+    }
+}
+
+extension AppCtrl: RoomDelegate {
+
+    func room(_ room: Room, didUpdate connectionState: ConnectionState) {
+
+        print("Did update connectionState \(connectionState)")
+
+        // UI will update according to the connectionState
+        withAnimation {
+            self.connectionState = connectionState
+        }
     }
 }

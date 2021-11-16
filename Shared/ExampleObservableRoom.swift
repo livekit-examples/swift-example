@@ -132,9 +132,9 @@ final class ExampleObservableRoom: ObservableRoom {
                                     self.localVideo = publication
                                    }
 
-        //        //
-        //        // The following code is an example how to publish without using the simplified apis
-        //        //
+        //
+        // The following code is an example how to publish without using the simplified apis
+        //
         //        if let localVideo = self.localVideo {
         //            // Try to un-publish the camera
         //            localParticipant.unpublish(publication: localVideo).then {

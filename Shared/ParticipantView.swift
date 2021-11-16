@@ -20,25 +20,24 @@ struct ParticipantView: View {
                     .ignoresSafeArea()
 
                 // VideoView for the Participant
-                if let track = participant.firstVideoTrack, participant.firstVideoAvailable {
-                    if debugCtrl.videoViewVisible {
-                        ZStack(alignment: .topLeading) {
-                            SwiftUIVideoView(track,
-                                             mode: videoViewMode,
-                                             dimensions: $dimensions)
-                                .background(Color.black)
+                if let track = participant.firstVideoTrack,
+                   participant.firstVideoAvailable,
+                   debugCtrl.videoViewVisible {
+                    ZStack(alignment: .topLeading) {
+                        SwiftUIVideoView(track,
+                                         mode: videoViewMode,
+                                         dimensions: $dimensions)
+                            .background(Color.black)
 
-                            if debugCtrl.showInformation,
-                               let dimensions = dimensions {
-                                Text("RES. \(dimensions.width)x\(dimensions.height)")
-                                    //                                    .fontWeight(.bold)
-                                    .foregroundColor(Color.white)
-                                    .padding(3)
-                                    .background(Color.lkBlue)
-                                    .cornerRadius(8)
-                                    .padding()
-                            }
-
+                        // Show the actual video dimensions (if enabled)
+                        if debugCtrl.showInformation,
+                           let dimensions = dimensions {
+                            Text("DIM. \(dimensions.width)x\(dimensions.height)")
+                                .foregroundColor(Color.white)
+                                .padding(3)
+                                .background(Color.lkBlue)
+                                .cornerRadius(8)
+                                .padding()
                         }
                     }
                 } else {
@@ -90,11 +89,10 @@ struct ParticipantView: View {
                     .stroke(Color.blue, lineWidth: 5.0)
                     : nil
             )
-        }            .gesture(
-            TapGesture()
-                .onEnded { _ in
-                    onTap?(participant)
-                }
-        )
+        }.gesture(TapGesture()
+                    .onEnded { _ in
+                        // Pass the tap event
+                        onTap?(participant)
+                    })
     }
 }

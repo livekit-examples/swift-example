@@ -3,46 +3,35 @@ import LiveKit
 import Vision
 import CoreImage.CIFilterBuiltins
 
-#if !os(macOS)
-public extension UIImage {
-    func toCIImage() -> CIImage? {
-        if let ciImage = self.ciImage {
-            return ciImage
-        }
-        if let cgImage = self.cgImage {
-            return CIImage(cgImage: cgImage)
-        }
-        return nil
-    }
-}
-#endif
-
+// A frame processing example class that swaps background to an image
 @available(iOS 15, macOS 12, *)
 class BackgroundSwapper {
 
-    lazy var segmentationRequest: VNGeneratePersonSegmentationRequest = {
-        let r = VNGeneratePersonSegmentationRequest()
-        r.qualityLevel = .balanced
-        r.outputPixelFormat = kCVPixelFormatType_OneComponent8
-        return r
+    private lazy var segmentationRequest: VNGeneratePersonSegmentationRequest = {
+        let request = VNGeneratePersonSegmentationRequest()
+        // if set too high, usually processing cannot be fast enough
+        // and frames will drop
+        request.qualityLevel = .balanced
+        request.outputPixelFormat = kCVPixelFormatType_OneComponent8
+        return request
     }()
 
-    lazy var requestHandler = VNSequenceRequestHandler()
+    private let requestHandler = VNSequenceRequestHandler()
 
     // the image used for background, if nil bg will not be swapped
-    var image: CIImage?
+    public var image: CIImage?
 
-    private(set) var busy: Bool = false
+    public private(set) var isBusy: Bool = false
 
-    func process(frame: RTCVideoFrame, capture: CaptureFunc) {
+    public func process(frame: RTCVideoFrame, capture: CaptureFunc) {
 
-        guard !busy else {
+        guard !isBusy else {
             print("Already busy, dropping this frame...")
             return
         }
 
-        busy = true
-        defer { busy = false }
+        isBusy = true
+        defer { isBusy = false }
 
         guard let image = image else {
             // if image is nil (no bg swapping), simply use the input frame
@@ -62,7 +51,7 @@ class BackgroundSwapper {
             try self.requestHandler.perform([segmentationRequest], on: pixelBuffer)
         } catch let error {
             // failed to create background mask
-            print("VNSequenceRequestHandler failed with \(error)")
+            print("Segmentation request failed with \(error)")
             return
         }
 
@@ -74,6 +63,7 @@ class BackgroundSwapper {
         guard let resultPixelBuffer = blend(original: pixelBuffer,
                                             mask: maskPixelBuffer,
                                             image: copiedImage) else {
+            print("Failed to blend mask and image")
             return
         }
 
@@ -82,9 +72,9 @@ class BackgroundSwapper {
     }
 
     // Performs the blend operation.
-    func blend(original framePixelBuffer: CVPixelBuffer,
-               mask maskPixelBuffer: CVPixelBuffer,
-               image: CIImage) -> CVPixelBuffer? {
+    private func blend(original framePixelBuffer: CVPixelBuffer,
+                       mask maskPixelBuffer: CVPixelBuffer,
+                       image: CIImage) -> CVPixelBuffer? {
 
         // Create CIImage objects for the video frame and the segmentation mask.
         let originalImage = CIImage(cvPixelBuffer: framePixelBuffer)// .oriented(.right)
