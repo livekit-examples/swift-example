@@ -34,9 +34,9 @@ final class AppCtrl: ObservableObject {
     }
 
     @Published private(set) var room: Room?
-    
+
     init() {
-        
+
         func logFactory(label: String) -> LogHandler {
             var handler = StreamLogHandler.standardError(label: label)
             handler.logLevel = .debug

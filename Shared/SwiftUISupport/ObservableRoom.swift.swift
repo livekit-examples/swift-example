@@ -22,6 +22,7 @@ class ObservableRoom: ObservableObject {
 
     @Published var localVideo: LocalTrackPublication?
     @Published var localAudio: LocalTrackPublication?
+    @Published var localScreen: LocalTrackPublication?
 
     init(_ room: Room) {
         self.room = room

@@ -5,7 +5,9 @@ struct ParticipantView: View {
 
     @EnvironmentObject var debugCtrl: DebugCtrl
     @ObservedObject var participant: ObservableParticipant
+
     var videoViewMode: VideoView.Mode = .fill
+    var onTap: ((_ participant: ObservableParticipant) -> Void)?
 
     @State private var dimensions: Dimensions?
 
@@ -88,6 +90,11 @@ struct ParticipantView: View {
                     .stroke(Color.blue, lineWidth: 5.0)
                     : nil
             )
-        }
+        }            .gesture(
+            TapGesture()
+                .onEnded { _ in
+                    onTap?(participant)
+                }
+        )
     }
 }

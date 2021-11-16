@@ -50,6 +50,8 @@ class BackgroundSwapper {
             return
         }
 
+        let copiedImage = image.copy() as! CIImage
+
         guard let pixelBuffer = (frame.buffer as? RTCCVPixelBuffer)?.pixelBuffer else {
             // buffer is not a RTCCVPixelBuffer
             capture(frame)
@@ -71,12 +73,11 @@ class BackgroundSwapper {
 
         guard let resultPixelBuffer = blend(original: pixelBuffer,
                                             mask: maskPixelBuffer,
-                                            image: image) else {
+                                            image: copiedImage) else {
             return
         }
 
         let newFrame = resultPixelBuffer.toRTCVideoFrame(timeStampNs: frame.timeStampNs)
-
         capture(newFrame)
     }
 

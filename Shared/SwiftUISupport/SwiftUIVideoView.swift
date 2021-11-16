@@ -19,21 +19,17 @@ class SwiftUIVideoViewDelegateReceiver: TrackDelegate {
         self._dimensions = dimensions
     }
 
-    deinit {
-        print("SwiftUIVideoViewDelegateReceiver deinit")
-    }
-
     func track(_ track: VideoTrack,
                videoView: VideoView,
                didUpdate dimensions: Dimensions) {
-        print("SwiftUIVideoView got dimensions \(dimensions)")
+        print("SwiftUIVideoView received video dimensions \(dimensions)")
         DispatchQueue.main.async {
             self.dimensions = dimensions
         }
     }
 
     func track(_ track: VideoTrack, videoView: VideoView, didUpdate size: CGSize) {
-        print("SwiftUIVideoView got size \(size)")
+        print("SwiftUIVideoView received view size \(size)")
     }
 }
 
@@ -55,7 +51,6 @@ struct SwiftUIVideoView: NativeViewRepresentable {
         self.mode = mode
         self._dimensions = dimensions
 
-        print("SwiftUIVideoView adding delegate")
         self.delegateReceiver = SwiftUIVideoViewDelegateReceiver(dimensions: dimensions)
         self.track.add(delegate: delegateReceiver)
     }
