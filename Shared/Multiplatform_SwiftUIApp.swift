@@ -9,6 +9,7 @@ struct Multiplatform_SwiftUIApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(appState)
+                .navigationTitle("LiveKit")
         }
     }
 }

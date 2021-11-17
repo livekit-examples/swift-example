@@ -26,7 +26,7 @@ final class AppCtrl: ObservableObject {
         }
     }
 
-    private(set) var room: Room?
+    @Published private(set) var room: Room?
 
     private init() {
 

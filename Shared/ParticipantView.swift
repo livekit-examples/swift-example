@@ -46,7 +46,8 @@ struct ParticipantView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(Color.lkBlue.opacity(0.7))
-                        .frame(width: geometry.size.width * 0.3)
+                        .frame(width: min(geometry.size.width, geometry.size
+                                            .height) * 0.3)
                         .frame(
                             maxWidth: .infinity,
                             maxHeight: .infinity
