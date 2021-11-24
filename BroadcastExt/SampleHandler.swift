@@ -84,8 +84,20 @@ class SampleHandler: RPBroadcastSampleHandler {
                 return
             }
 
+            // attempt to determine rotation information if buffer is coming from ReplayKit
+            var rotation: RTCVideoRotation?
+            if #available(macOS 11.0, *) {
+                // Check rotation tags. Extensions see these tags, but `RPScreenRecorder` does not appear to set them.
+                // On iOS 12.0 and 13.0 rotation tags (other than up) are set by extensions.
+                if let sampleOrientation = CMGetAttachment(sampleBuffer, key: RPVideoSampleOrientationKey as CFString, attachmentModeOut: nil),
+                   let coreSampleOrientation = sampleOrientation.uint32Value {
+                    rotation = CGImagePropertyOrientation(rawValue: coreSampleOrientation)?.toRTCRotation()
+                }
+            }
+
             let timeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
             let timeStampNs = UInt64(CMTimeGetSeconds(timeStamp) * Double(NSEC_PER_SEC))
+
             let pixelFormat = CVPixelBufferGetPixelFormatType(imageBuffer)
 
             let message = IPCMessage.with {
@@ -94,6 +106,7 @@ class SampleHandler: RPBroadcastSampleHandler {
                     $0.buffer = Data(pixelBuffer: imageBuffer)
                     $0.video = .with({
                         $0.format = pixelFormat
+                        $0.rotation = UInt32(rotation?.rawValue ?? 0)
                         $0.width = UInt32(CVPixelBufferGetWidth(imageBuffer))
                         $0.height = UInt32(CVPixelBufferGetHeight(imageBuffer))
                     })

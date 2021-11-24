@@ -5,6 +5,7 @@ import AVFoundation
 
 import WebRTC
 import CoreImage.CIFilterBuiltins
+import ReplayKit
 
 final class ExampleObservableRoom: ObservableRoom {
 
@@ -56,45 +57,10 @@ final class ExampleObservableRoom: ObservableRoom {
         }
     }
 
-    lazy var ipcServer = IPCServer(onReceivedData: { _, messageId, data in
-        print("IPC Received data \(messageId)")
-
-        //        guard let t = self.localVideo?.track as? LocalVideoTrack,
-        //              let capturer = t.capturer as? VideoBufferCapturer else {
-        //            print("Capturer not ready")
-        //            return
-        //        }
-
-        guard let message = try? IPCMessage(serializedData: data) else {
-            print("Failed to decode message")
-            return
-        }
-
-        if case let .buffer(bufferMessage) = message.type,
-           case let .video(videoMessage) = bufferMessage.type {
-
-            let pixelBuffer = CVPixelBuffer.from(bufferMessage.buffer,
-                                                 width: Int(videoMessage.width),
-                                                 height: Int(videoMessage.height),
-                                                 pixelFormat: videoMessage.format)
-
-            //            capturer.capture(pixelBuffer: pixelBuffer,
-            //                             timeStampNs: bufferMessage.timestampNs)
-        }
-
-    })
-
+    // the name to use for ipc
     static let ipcName = "group.livekit-example.broadcast.buffer-ipc"
 
-    override init(_ room: Room) {
-        super.init(room)
-
-        ipcServer.listen(ExampleObservableRoom.ipcName)
-        //        public var ipcClient = IPCClient()
-        //
-    }
-
-    //    var screenShareTrack: LocalVideoTrack?
+    var ipcPub: LocalTrackPublication?
 
     func toggleScreenEnabled() {
 
@@ -104,15 +70,39 @@ final class ExampleObservableRoom: ObservableRoom {
             return
         }
 
-        localParticipant.setScreen(enabled: !localParticipant.isScreenEnabled()).then { publication in
+        #if os(iOS)
+
+        if let pub = ipcPub {
+            //
+            localParticipant.unpublish(publication: pub).then {
+                self.ipcPub = nil
+            }
+
+        } else {
+            let track = LocalVideoTrack.createIPCTrack(ipcName: ExampleObservableRoom.ipcName)
+            localParticipant.publishVideoTrack(track: track).then { pub in
+                self.ipcPub = pub
+            }
+        }
+
+        RPSystemBroadcastPickerView.show(for: "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt",
+                                         showsMicrophoneButton: false)
+
+        #elseif os(macOS)
+        let displays = DesktopCapturer.displayIDs()
+        print("displays: \(displays), main: \(CGMainDisplayID())")
+
+        localParticipant.setScreen(enabled: !localParticipant.isScreenShareEnabled()).then { publication in
             self.localScreen = publication
         }
+        #endif
     }
 
     func toggleCameraPosition() {
         guard let publication = localVideo,
               let track = publication.track as? LocalVideoTrack,
               let cameraCapturer = track.capturer as? CameraCapturer else {
+            print("Track or Capturer doesn't exist")
             return
         }
 

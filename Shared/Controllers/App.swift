@@ -71,9 +71,11 @@ extension AppCtrl: RoomDelegate {
 
         print("Did update connectionState \(connectionState)")
 
-        // UI will update according to the connectionState
-        withAnimation {
-            self.connectionState = connectionState
+        DispatchQueue.main.async {
+            // UI will update according to the connectionState
+            withAnimation {
+                self.connectionState = connectionState
+            }
         }
     }
 }
