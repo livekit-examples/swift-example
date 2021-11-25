@@ -29,6 +29,8 @@ struct RoomView: View {
     @State private var videoViewMode: VideoView.Mode = .fill
     @State private var focusParticipant: ObservableParticipant?
 
+    @State private var screenPickerPresented = false
+
     init(_ room: Room) {
         observableRoom = ExampleObservableRoom(room)
     }
@@ -126,13 +128,19 @@ struct RoomView: View {
                     })
 
                     Button(action: {
-                        observableRoom.toggleScreenEnabled()
+                        // observableRoom.toggleScreenEnabled()
+                        screenPickerPresented = true
                     },
                     label: {
                         Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
                             observableRoom.localScreen != nil ? Color.green : nil
                         )
-                    })
+                    }).popover(isPresented: $screenPickerPresented) {
+                        ScreenPickerView { _ in
+                            observableRoom.toggleScreenEnabled()
+                            screenPickerPresented = false
+                        }.padding()
+                    }
 
                     Spacer()
 

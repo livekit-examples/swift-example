@@ -89,9 +89,6 @@ final class ExampleObservableRoom: ObservableRoom {
                                          showsMicrophoneButton: false)
 
         #elseif os(macOS)
-        let displays = DesktopCapturer.displayIDs()
-        print("displays: \(displays), main: \(CGMainDisplayID())")
-
         localParticipant.setScreen(enabled: !localParticipant.isScreenShareEnabled()).then { publication in
             self.localScreen = publication
         }
