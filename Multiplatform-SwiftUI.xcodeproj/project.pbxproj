@@ -79,15 +79,16 @@
 		681E3F41271FC7AC007BB547 /* RoomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomView.swift; sourceTree = "<group>"; };
 		681E3F42271FC7AD007BB547 /* ConnectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
 		682FB284272C673B00522494 /* ObservableParticipant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableParticipant.swift; sourceTree = "<group>"; };
-		682FB287272C7BE000522494 /* Multiplatform-SwiftUI--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Multiplatform-SwiftUI--iOS--Info.plist"; sourceTree = "<group>"; };
 		683F05F3273F96B20080C7AC /* BroadcastExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BroadcastExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		683F05F4273F96B20080C7AC /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		683F05F7273F96B20080C7AC /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
 		683F05F9273F96B20080C7AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		683F0603273FAD690080C7AC /* Multiplatform-SwiftUI (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Multiplatform-SwiftUI (iOS).entitlements"; sourceTree = "<group>"; };
+		683F0603273FAD690080C7AC /* iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS.entitlements; sourceTree = "<group>"; };
 		683F0604273FADC20080C7AC /* BroadcastExt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BroadcastExt.entitlements; sourceTree = "<group>"; };
 		684A3AF2272B0BAB005E46F0 /* SwiftUIVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIVideoView.swift; sourceTree = "<group>"; };
 		685271EB2744391D006B4D6A /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
+		6865EA2527513B4500FFAFC3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6865EA2D27513B6D00FFAFC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6884B77B2750507400732D47 /* ScreenPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenPickerView.swift; sourceTree = "<group>"; };
 		6894C728273D4D6400E0133C /* ObservableRoom.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableRoom.swift.swift; sourceTree = "<group>"; };
 		6896820527305B2600E7E3A2 /* BackgroundSwapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundSwapper.swift; sourceTree = "<group>"; };
@@ -156,6 +157,15 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		6865EA2427513B4500FFAFC3 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				6865EA2527513B4500FFAFC3 /* Info.plist */,
+				683F0603273FAD690080C7AC /* iOS.entitlements */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
 		6884B77A2750505B00732D47 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,10 +187,9 @@
 		68B38536271E780600711D5F = {
 			isa = PBXGroup;
 			children = (
-				683F0603273FAD690080C7AC /* Multiplatform-SwiftUI (iOS).entitlements */,
-				682FB287272C7BE000522494 /* Multiplatform-SwiftUI--iOS--Info.plist */,
 				681E3F37271FC552007BB547 /* client-sdk-ios */,
 				68B3853B271E780600711D5F /* Shared */,
+				6865EA2427513B4500FFAFC3 /* iOS */,
 				68B3854A271E780700711D5F /* macOS */,
 				683F05F6273F96B20080C7AC /* BroadcastExt */,
 				68B38544271E780700711D5F /* Products */,
@@ -220,6 +229,7 @@
 		68B3854A271E780700711D5F /* macOS */ = {
 			isa = PBXGroup;
 			children = (
+				6865EA2D27513B6D00FFAFC3 /* Info.plist */,
 				68B3854B271E780700711D5F /* macOS.entitlements */,
 			);
 			path = macOS;
@@ -430,7 +440,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J48VV6BZV9;
-				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastExt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -457,7 +466,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J48VV6BZV9;
-				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BroadcastExt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -599,13 +607,12 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Multiplatform-SwiftUI (iOS).entitlements";
+				CODE_SIGN_ENTITLEMENTS = iOS/iOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Multiplatform-SwiftUI--iOS--Info.plist";
+				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Please allow Microphone access";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -632,13 +639,12 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Multiplatform-SwiftUI (iOS).entitlements";
+				CODE_SIGN_ENTITLEMENTS = iOS/iOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Multiplatform-SwiftUI--iOS--Info.plist";
+				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Please allow Microphone access";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -673,7 +679,6 @@
 				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -704,7 +709,6 @@
 				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
