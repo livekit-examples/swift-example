@@ -679,6 +679,7 @@
 				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = macOS/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -709,6 +710,7 @@
 				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = macOS/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
