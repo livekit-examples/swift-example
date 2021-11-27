@@ -62,37 +62,51 @@ final class ExampleObservableRoom: ObservableRoom {
 
     var ipcPub: LocalTrackPublication?
 
-    func toggleScreenEnabled() {
+    func toggleScreenEnabled(_ source: ScreenShareSource? = nil) {
 
         guard let localParticipant = room.localParticipant else {
             // LocalParticipant should exist if alreadey connected to the room
             print("LocalParticipant doesn't exist")
             return
         }
-
-        #if os(iOS)
-
-        if let pub = ipcPub {
-            //
-            localParticipant.unpublish(publication: pub).then {
-                self.ipcPub = nil
-            }
-
-        } else {
-            let track = LocalVideoTrack.createIPCTrack(ipcName: ExampleObservableRoom.ipcName)
-            localParticipant.publishVideoTrack(track: track).then { pub in
-                self.ipcPub = pub
-            }
-        }
-
-        RPSystemBroadcastPickerView.show(for: "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt",
-                                         showsMicrophoneButton: false)
-
-        #elseif os(macOS)
-        localParticipant.setScreen(enabled: !localParticipant.isScreenShareEnabled()).then { publication in
+        
+        localParticipant.setScreenShare(enabled: !localParticipant.isScreenShareEnabled(), source: source).then { publication in
             self.localScreen = publication
         }
-        #endif
+        
+        //        #if os(iOS)
+        //
+        //        if let pub = ipcPub {
+        //            //
+        //            localParticipant.unpublish(publication: pub).then {
+        //                self.ipcPub = nil
+        //            }
+        //
+        //        } else {
+        //            let track = LocalVideoTrack.createIPCTrack(ipcName: ExampleObservableRoom.ipcName)
+        //            localParticipant.publishVideoTrack(track: track).then { pub in
+        //                self.ipcPub = pub
+        //            }
+        //        }
+        //
+        //        RPSystemBroadcastPickerView.show(for: "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt",
+        //                                         showsMicrophoneButton: false)
+        //
+        //        #elseif os(macOS)
+        //        if let pub = ipcPub {
+        //            //
+        //            localParticipant.unpublish(publication: pub).then {
+        //                self.ipcPub = nil
+        //            }
+        //
+        //        } else {
+        //
+        //            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: source)
+        //            localParticipant.publishVideoTrack(track: track).then { pub in
+        //                self.ipcPub = pub
+        //            }
+        //        }
+        //        #endif
     }
 
     func toggleCameraPosition() {

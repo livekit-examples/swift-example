@@ -29,8 +29,8 @@
 		685271E927407BBC006B4D6A /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 685271E827407BBC006B4D6A /* SwiftProtobuf */; };
 		685271EC2744391D006B4D6A /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685271EB2744391D006B4D6A /* Debug.swift */; };
 		685271ED2744391D006B4D6A /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685271EB2744391D006B4D6A /* Debug.swift */; };
-		6884B77C2750507400732D47 /* ScreenPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6884B77B2750507400732D47 /* ScreenPickerView.swift */; };
-		6884B77D2750507400732D47 /* ScreenPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6884B77B2750507400732D47 /* ScreenPickerView.swift */; };
+		6884B77C2750507400732D47 /* ScreenShareSourcePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6884B77B2750507400732D47 /* ScreenShareSourcePickerView.swift */; };
+		6884B77D2750507400732D47 /* ScreenShareSourcePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6884B77B2750507400732D47 /* ScreenShareSourcePickerView.swift */; };
 		6894C729273D4D6400E0133C /* ObservableRoom.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6894C728273D4D6400E0133C /* ObservableRoom.swift.swift */; };
 		6894C72A273D4D6400E0133C /* ObservableRoom.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6894C728273D4D6400E0133C /* ObservableRoom.swift.swift */; };
 		6896820627305B2600E7E3A2 /* BackgroundSwapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6896820527305B2600E7E3A2 /* BackgroundSwapper.swift */; };
@@ -89,7 +89,7 @@
 		685271EB2744391D006B4D6A /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		6865EA2527513B4500FFAFC3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6865EA2D27513B6D00FFAFC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6884B77B2750507400732D47 /* ScreenPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenPickerView.swift; sourceTree = "<group>"; };
+		6884B77B2750507400732D47 /* ScreenShareSourcePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenShareSourcePickerView.swift; sourceTree = "<group>"; };
 		6894C728273D4D6400E0133C /* ObservableRoom.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableRoom.swift.swift; sourceTree = "<group>"; };
 		6896820527305B2600E7E3A2 /* BackgroundSwapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundSwapper.swift; sourceTree = "<group>"; };
 		68B3853C271E780600711D5F /* Multiplatform_SwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Multiplatform_SwiftUIApp.swift; sourceTree = "<group>"; };
@@ -172,7 +172,7 @@
 		6884B77A2750505B00732D47 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6884B77B2750507400732D47 /* ScreenPickerView.swift */,
+				6884B77B2750507400732D47 /* ScreenShareSourcePickerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -399,7 +399,7 @@
 				68B3854C271E780700711D5F /* Multiplatform_SwiftUIApp.swift in Sources */,
 				681E3F3F271FC795007BB547 /* Custom.swift in Sources */,
 				6816B1A8272D45DF005ADB85 /* ExampleObservableRoom.swift in Sources */,
-				6884B77C2750507400732D47 /* ScreenPickerView.swift in Sources */,
+				6884B77C2750507400732D47 /* ScreenShareSourcePickerView.swift in Sources */,
 				684A3AF3272B0BAB005E46F0 /* SwiftUIVideoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -420,7 +420,7 @@
 				68B3854D271E780700711D5F /* Multiplatform_SwiftUIApp.swift in Sources */,
 				681E3F40271FC795007BB547 /* Custom.swift in Sources */,
 				6816B1A9272D45DF005ADB85 /* ExampleObservableRoom.swift in Sources */,
-				6884B77D2750507400732D47 /* ScreenPickerView.swift in Sources */,
+				6884B77D2750507400732D47 /* ScreenShareSourcePickerView.swift in Sources */,
 				684A3AF4272B0BAB005E46F0 /* SwiftUIVideoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -445,7 +445,6 @@
 				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				INFOPLIST_FILE = BroadcastExt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -453,7 +452,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS.BroadcastExt";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -471,7 +470,6 @@
 				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				INFOPLIST_FILE = BroadcastExt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -479,7 +477,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS.BroadcastExt";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -614,7 +612,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9Z5V633C2T;
+				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
@@ -629,7 +627,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
 				PRODUCT_NAME = "Multiplatform-SwiftUI";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -648,7 +646,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9Z5V633C2T;
+				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
@@ -663,7 +661,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
 				PRODUCT_NAME = "Multiplatform-SwiftUI";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -683,13 +681,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = 9Z5V633C2T;
+				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Please allow Microphone access";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -714,13 +711,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = 9Z5V633C2T;
+				DEVELOPMENT_TEAM = J48VV6BZV9;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Please allow Microphone access";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER).ext</string>
+	<string>LiveKit BroadcastExt</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,14 +22,14 @@
 	<string>1</string>
 	<key>NSExtension</key>
 	<dict>
+		<key>CFBundleDisplayName</key>
+		<string>LiveKit Example</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.broadcast-services-upload</string>
 		<key>NSExtensionPrincipalClass</key>
 		<string>$(PRODUCT_MODULE_NAME).SampleHandler</string>
 		<key>RPBroadcastProcessMode</key>
 		<string>RPBroadcastProcessModeSampleBuffer</string>
-		<key>CFBundleDisplayName</key>
-		<string>LiveKit Example</string>
 	</dict>
 </dict>
 </plist>

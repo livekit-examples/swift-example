@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "LiveKit",
-        "repositoryURL": "https://github.com/livekit/client-sdk-ios",
-        "state": {
-          "branch": null,
-          "revision": "326f3e5ad53d6c9f39478c599050e78a1c168793",
-          "version": "0.9.0"
-        }
-      },
-      {
         "package": "Promises",
         "repositoryURL": "https://github.com/google/promises.git",
         "state": {

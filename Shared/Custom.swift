@@ -35,7 +35,7 @@ struct LKButton: View {
     }
 }
 
-#if !os(macOS)
+#if os(iOS)
 extension LKTextField.`Type` {
     func toiOSType() -> UIKeyboardType {
         switch self {
@@ -77,10 +77,11 @@ struct LKTextField: View {
             TextField("", text: $text)
                 .textFieldStyle(PlainTextFieldStyle())
                 .disableAutocorrection(true)
-                #if !os(macOS)
-                .autocapitalization(.none)
-                .keyboardType(type.toiOSType())
-                #endif
+                // TODO: add iOS unique view modifiers
+                // #if os(iOS)
+                // .autocapitalization(.none)
+                // .keyboardType(type.toiOSType())
+                // #endif
                 .padding()
                 .overlay(RoundedRectangle(cornerRadius: 10.0)
                             .strokeBorder(Color.white.opacity(0.3),

@@ -36,7 +36,7 @@ struct RoomView: View {
     }
 
     var columns = [
-        GridItem(.adaptive(minimum: adaptiveMin))
+        GridItem(.adaptive(minimum: CGFloat(adaptiveMin)))
     ]
 
     func content() -> some View {
@@ -73,7 +73,7 @@ struct RoomView: View {
                         Text("Fit").tag(VideoView.Mode.fit)
                         Text("Fill").tag(VideoView.Mode.fill)
                     }
-                    .pickerStyle(.segmented)
+                    .pickerStyle(SegmentedPickerStyle())
 
                     Spacer()
 
@@ -127,18 +127,22 @@ struct RoomView: View {
                         )
                     })
 
-                    #if macOS
+                    #if os(macOS)
                     Button(action: {
-                        // observableRoom.toggleScreenEnabled()
-                        screenPickerPresented = true
+                        if observableRoom.localScreen != nil {
+                            // turn off screen share
+                            observableRoom.toggleScreenEnabled()
+                        } else {
+                            screenPickerPresented = true
+                        }
                     },
                     label: {
                         Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
                             observableRoom.localScreen != nil ? Color.green : nil
                         )
                     }).popover(isPresented: $screenPickerPresented) {
-                        ScreenPickerView { _ in
-                            observableRoom.toggleScreenEnabled()
+                        ScreenShareSourcePickerView { source in
+                            observableRoom.toggleScreenEnabled(source)
                             screenPickerPresented = false
                         }.padding()
                     }
