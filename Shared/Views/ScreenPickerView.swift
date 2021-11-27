@@ -1,6 +1,7 @@
 import SwiftUI
 import LiveKit
 
+#if macOS
 final class ScreenPickerCtrl: ObservableObject {
 
     private var tracks = [LocalVideoTrack]()
@@ -69,3 +70,4 @@ struct ScreenPickerView: View {
 
     }
 }
+#endif

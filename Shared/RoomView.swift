@@ -127,6 +127,7 @@ struct RoomView: View {
                         )
                     })
 
+                    #if macOS
                     Button(action: {
                         // observableRoom.toggleScreenEnabled()
                         screenPickerPresented = true
@@ -141,6 +142,7 @@ struct RoomView: View {
                             screenPickerPresented = false
                         }.padding()
                     }
+                    #endif
 
                     Spacer()
 

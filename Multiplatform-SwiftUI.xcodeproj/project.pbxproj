@@ -19,14 +19,11 @@
 		681E3F44271FC7AD007BB547 /* RoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F41271FC7AC007BB547 /* RoomView.swift */; };
 		681E3F45271FC7AD007BB547 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F42271FC7AD007BB547 /* ConnectView.swift */; };
 		681E3F46271FC7AD007BB547 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F42271FC7AD007BB547 /* ConnectView.swift */; };
-		681E3F49271FCB40007BB547 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 681E3F48271FCB40007BB547 /* LiveKit */; };
-		681E3F4B271FCB46007BB547 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 681E3F4A271FCB46007BB547 /* LiveKit */; };
 		682FB285272C673B00522494 /* ObservableParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682FB284272C673B00522494 /* ObservableParticipant.swift */; };
 		682FB286272C673B00522494 /* ObservableParticipant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682FB284272C673B00522494 /* ObservableParticipant.swift */; };
 		683F05F5273F96B20080C7AC /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 683F05F4273F96B20080C7AC /* ReplayKit.framework */; platformFilter = maccatalyst; };
 		683F05F8273F96B20080C7AC /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683F05F7273F96B20080C7AC /* SampleHandler.swift */; };
 		683F05FC273F96B20080C7AC /* BroadcastExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		683F0602273F98CB0080C7AC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 683F0601273F98CB0080C7AC /* LiveKit */; };
 		684A3AF3272B0BAB005E46F0 /* SwiftUIVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684A3AF2272B0BAB005E46F0 /* SwiftUIVideoView.swift */; };
 		684A3AF4272B0BAB005E46F0 /* SwiftUIVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684A3AF2272B0BAB005E46F0 /* SwiftUIVideoView.swift */; };
 		685271E927407BBC006B4D6A /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 685271E827407BBC006B4D6A /* SwiftProtobuf */; };
@@ -44,6 +41,10 @@
 		68B3854F271E780700711D5F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853D271E780600711D5F /* ContentView.swift */; };
 		68B38550271E780700711D5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68B3853E271E780700711D5F /* Assets.xcassets */; };
 		68B38551271E780700711D5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68B3853E271E780700711D5F /* Assets.xcassets */; };
+		9E7835E127519FFF00559DEC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7835E027519FFF00559DEC /* LiveKit */; };
+		9E7835E32751A01700559DEC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7835E22751A01700559DEC /* LiveKit */; };
+		9E7835E52751A6D900559DEC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7835E42751A6D900559DEC /* LiveKit */; };
+		9E7835E72751A71500559DEC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7835E62751A71500559DEC /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,7 +74,6 @@
 /* Begin PBXFileReference section */
 		6816B1A7272D45DF005ADB85 /* ExampleObservableRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleObservableRoom.swift; sourceTree = "<group>"; };
 		6816B1AF272D9198005ADB85 /* ParticipantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantView.swift; sourceTree = "<group>"; };
-		681E3F37271FC552007BB547 /* client-sdk-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "client-sdk-ios"; path = "../client-sdk-ios"; sourceTree = "<group>"; };
 		681E3F38271FC772007BB547 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		681E3F3E271FC795007BB547 /* Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
 		681E3F41271FC7AC007BB547 /* RoomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomView.swift; sourceTree = "<group>"; };
@@ -98,6 +98,7 @@
 		68B38543271E780700711D5F /* Multiplatform-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multiplatform-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		68B38549271E780700711D5F /* Multiplatform-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multiplatform-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		68B3854B271E780700711D5F /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
+		9E7835E62751A71500559DEC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,7 +107,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				683F05F5273F96B20080C7AC /* ReplayKit.framework in Frameworks */,
-				683F0602273F98CB0080C7AC /* LiveKit in Frameworks */,
+				9E7835E52751A6D900559DEC /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,8 +115,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				681E3F4B271FCB46007BB547 /* LiveKit in Frameworks */,
+				9E7835E72751A71500559DEC /* CoreGraphics.framework in Frameworks */,
 				685271E927407BBC006B4D6A /* SwiftProtobuf in Frameworks */,
+				9E7835E127519FFF00559DEC /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,7 +125,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				681E3F49271FCB40007BB547 /* LiveKit in Frameworks */,
+				9E7835E32751A01700559DEC /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +135,7 @@
 		681E3F47271FCB40007BB547 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9E7835E62751A71500559DEC /* CoreGraphics.framework */,
 				683F05F4273F96B20080C7AC /* ReplayKit.framework */,
 			);
 			name = Frameworks;
@@ -187,7 +190,6 @@
 		68B38536271E780600711D5F = {
 			isa = PBXGroup;
 			children = (
-				681E3F37271FC552007BB547 /* client-sdk-ios */,
 				68B3853B271E780600711D5F /* Shared */,
 				6865EA2427513B4500FFAFC3 /* iOS */,
 				68B3854A271E780700711D5F /* macOS */,
@@ -252,7 +254,7 @@
 			);
 			name = BroadcastExt;
 			packageProductDependencies = (
-				683F0601273F98CB0080C7AC /* LiveKit */,
+				9E7835E42751A6D900559DEC /* LiveKit */,
 			);
 			productName = BroadcastExt;
 			productReference = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */;
@@ -274,8 +276,8 @@
 			);
 			name = "Multiplatform-SwiftUI (iOS)";
 			packageProductDependencies = (
-				681E3F4A271FCB46007BB547 /* LiveKit */,
 				685271E827407BBC006B4D6A /* SwiftProtobuf */,
+				9E7835E027519FFF00559DEC /* LiveKit */,
 			);
 			productName = "Multiplatform-SwiftUI (iOS)";
 			productReference = 68B38543271E780700711D5F /* Multiplatform-SwiftUI.app */;
@@ -295,7 +297,7 @@
 			);
 			name = "Multiplatform-SwiftUI (macOS)";
 			packageProductDependencies = (
-				681E3F48271FCB40007BB547 /* LiveKit */,
+				9E7835E22751A01700559DEC /* LiveKit */,
 			);
 			productName = "Multiplatform-SwiftUI (macOS)";
 			productReference = 68B38549271E780700711D5F /* Multiplatform-SwiftUI.app */;
@@ -333,6 +335,7 @@
 			mainGroup = 68B38536271E780600711D5F;
 			packageReferences = (
 				685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */,
+				9E7835DF27519FFF00559DEC /* XCRemoteSwiftPackageReference "client-sdk-ios" */,
 			);
 			productRefGroup = 68B38544271E780700711D5F /* Products */;
 			projectDirPath = "";
@@ -439,7 +442,7 @@
 				CODE_SIGN_ENTITLEMENTS = BroadcastExt/BroadcastExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				INFOPLIST_FILE = BroadcastExt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -450,7 +453,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS.BroadcastExt";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -465,7 +468,7 @@
 				CODE_SIGN_ENTITLEMENTS = BroadcastExt/BroadcastExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				INFOPLIST_FILE = BroadcastExt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -476,7 +479,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS.BroadcastExt";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -608,9 +611,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/iOS.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
@@ -625,8 +629,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS";
 				PRODUCT_NAME = "Multiplatform-SwiftUI";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -640,9 +645,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/iOS.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
@@ -657,8 +663,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS";
 				PRODUCT_NAME = "Multiplatform-SwiftUI";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -676,9 +683,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -706,9 +714,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -776,25 +785,35 @@
 				minimumVersion = 1.18.0;
 			};
 		};
+		9E7835DF27519FFF00559DEC /* XCRemoteSwiftPackageReference "client-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/livekit/client-sdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		681E3F48271FCB40007BB547 /* LiveKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = LiveKit;
-		};
-		681E3F4A271FCB46007BB547 /* LiveKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = LiveKit;
-		};
-		683F0601273F98CB0080C7AC /* LiveKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = LiveKit;
-		};
 		685271E827407BBC006B4D6A /* SwiftProtobuf */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */;
 			productName = SwiftProtobuf;
+		};
+		9E7835E027519FFF00559DEC /* LiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9E7835DF27519FFF00559DEC /* XCRemoteSwiftPackageReference "client-sdk-ios" */;
+			productName = LiveKit;
+		};
+		9E7835E22751A01700559DEC /* LiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9E7835DF27519FFF00559DEC /* XCRemoteSwiftPackageReference "client-sdk-ios" */;
+			productName = LiveKit;
+		};
+		9E7835E42751A6D900559DEC /* LiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LiveKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
