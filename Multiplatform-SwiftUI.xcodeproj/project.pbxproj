@@ -43,6 +43,8 @@
 		68B38551271E780700711D5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68B3853E271E780700711D5F /* Assets.xcassets */; };
 		9E7835E127519FFF00559DEC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7835E027519FFF00559DEC /* LiveKit */; };
 		9E7835E32751A01700559DEC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7835E22751A01700559DEC /* LiveKit */; };
+		9E7835E52751A6D900559DEC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7835E42751A6D900559DEC /* LiveKit */; };
+		9E7835E72751A71500559DEC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7835E62751A71500559DEC /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +98,7 @@
 		68B38543271E780700711D5F /* Multiplatform-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multiplatform-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		68B38549271E780700711D5F /* Multiplatform-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multiplatform-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		68B3854B271E780700711D5F /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
+		9E7835E62751A71500559DEC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +107,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				683F05F5273F96B20080C7AC /* ReplayKit.framework in Frameworks */,
+				9E7835E52751A6D900559DEC /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E7835E72751A71500559DEC /* CoreGraphics.framework in Frameworks */,
 				685271E927407BBC006B4D6A /* SwiftProtobuf in Frameworks */,
 				9E7835E127519FFF00559DEC /* LiveKit in Frameworks */,
 			);
@@ -130,6 +135,7 @@
 		681E3F47271FCB40007BB547 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9E7835E62751A71500559DEC /* CoreGraphics.framework */,
 				683F05F4273F96B20080C7AC /* ReplayKit.framework */,
 			);
 			name = Frameworks;
@@ -248,6 +254,7 @@
 			);
 			name = BroadcastExt;
 			packageProductDependencies = (
+				9E7835E42751A6D900559DEC /* LiveKit */,
 			);
 			productName = BroadcastExt;
 			productReference = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */;
@@ -435,7 +442,7 @@
 				CODE_SIGN_ENTITLEMENTS = BroadcastExt/BroadcastExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				INFOPLIST_FILE = BroadcastExt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -446,7 +453,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS.BroadcastExt";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -461,7 +468,7 @@
 				CODE_SIGN_ENTITLEMENTS = BroadcastExt/BroadcastExt.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				INFOPLIST_FILE = BroadcastExt/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -472,7 +479,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS.BroadcastExt";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -604,9 +611,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/iOS.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
@@ -621,8 +629,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS";
 				PRODUCT_NAME = "Multiplatform-SwiftUI";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -636,9 +645,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/iOS.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
@@ -653,8 +663,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-iOS";
 				PRODUCT_NAME = "Multiplatform-SwiftUI";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -672,9 +683,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -702,9 +714,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				DEVELOPMENT_TEAM = 9Z5V633C2T;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -796,6 +809,10 @@
 		9E7835E22751A01700559DEC /* LiveKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9E7835DF27519FFF00559DEC /* XCRemoteSwiftPackageReference "client-sdk-ios" */;
+			productName = LiveKit;
+		};
+		9E7835E42751A6D900559DEC /* LiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = LiveKit;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:">
+      location = "group:../client-sdk-ios">
+   </FileRef>
+   <FileRef
+      location = "container:Multiplatform-SwiftUI.xcodeproj">
    </FileRef>
 </Workspace>
