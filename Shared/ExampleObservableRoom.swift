@@ -24,6 +24,7 @@ final class ExampleObservableRoom: ObservableRoom {
 
     @Published var background: Background = .none {
         didSet {
+            #if swift(>=5.5)
             if #available(iOS 15, macOS 12, *) {
                 DispatchQueue.main.async {
                     if let name = self.bgName[self.background] {
@@ -33,10 +34,12 @@ final class ExampleObservableRoom: ObservableRoom {
                     }
                 }
             }
+            #endif
         }
     }
 
     private var _bgSwapper: Any?
+    #if swift(>=5.5)
     @available(iOS 15, macOS 12, *)
     var bgSwapper: BackgroundSwapper {
         get {
@@ -44,17 +47,20 @@ final class ExampleObservableRoom: ObservableRoom {
             return _bgSwapper as! BackgroundSwapper
         }
     }
+    #endif
 
     // This is an example of using VideoCaptureInterceptor for custom frame processing
     lazy var interceptor = VideoCaptureInterceptor { frame, capture in
         // print("Captured frame with size:\(frame.width)x\(frame.height) on \(frame.timeStampNs)")
         // For this example, we are not doing anything here and just using the original frame.
         // It's possible to construct a `RTCVideoFrame` and pass it to `capture`.
+        #if swift(>=5.5)
         if #available(iOS 15, macOS 12, *) {
             self.bgSwapper.process(frame: frame, capture: capture)
         } else {
             capture(frame)
         }
+        #endif
     }
 
     // the name to use for ipc
@@ -69,11 +75,11 @@ final class ExampleObservableRoom: ObservableRoom {
             print("LocalParticipant doesn't exist")
             return
         }
-        
+
         localParticipant.setScreenShare(enabled: !localParticipant.isScreenShareEnabled(), source: source).then { publication in
             self.localScreen = publication
         }
-        
+
         //        #if os(iOS)
         //
         //        if let pub = ipcPub {

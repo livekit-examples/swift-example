@@ -4,6 +4,8 @@ import Vision
 import CoreImage.CIFilterBuiltins
 
 // A frame processing example class that swaps background to an image
+// Please compile with Xcode13+ to enable this feature.
+#if swift(>=5.5)
 @available(iOS 15, macOS 12, *)
 class BackgroundSwapper {
 
@@ -100,3 +102,4 @@ class BackgroundSwapper {
         return blendFilter.outputImage?.toPixelBuffer()
     }
 }
+#endif

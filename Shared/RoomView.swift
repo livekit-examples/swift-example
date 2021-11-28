@@ -77,24 +77,30 @@ struct RoomView: View {
 
                     Spacer()
 
-                    if observableRoom.localVideo != nil {
-                        Menu {
-                            Button("Office 1") {
-                                observableRoom.background = .office
+                    // Background swapping example
+                    // Compiling with Xcode13+ and iOS15+ or macOS12+ is required.
+                    #if swift(>=5.5)
+                    if #available(iOS 15, macOS 12, *) {
+                        if observableRoom.localVideo != nil {
+                            Menu {
+                                Button("Office 1") {
+                                    observableRoom.background = .office
+                                }
+                                Button("Space") {
+                                    observableRoom.background = .space
+                                }
+                                Button("Thailand") {
+                                    observableRoom.background = .thailand
+                                }
+                                Button("No background") {
+                                    observableRoom.background = .none
+                                }
+                            } label: {
+                                Image(systemName: "photo.artframe")
                             }
-                            Button("Space") {
-                                observableRoom.background = .space
-                            }
-                            Button("Thailand") {
-                                observableRoom.background = .thailand
-                            }
-                            Button("No background") {
-                                observableRoom.background = .none
-                            }
-                        } label: {
-                            Image(systemName: "photo.artframe")
                         }
                     }
+                    #endif
 
                     if !CameraCapturer.canTogglePosition() || observableRoom.localVideo == nil {
                         Button(action: {
