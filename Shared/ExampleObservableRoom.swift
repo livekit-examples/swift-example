@@ -7,7 +7,7 @@ import WebRTC
 import CoreImage.CIFilterBuiltins
 import ReplayKit
 
-final class ExampleObservableRoom: ObservableRoom {
+class ExampleObservableRoom: ObservableRoom {
 
     let bgName: [Background: String] = [
         .office: "bg-1",
@@ -123,7 +123,7 @@ final class ExampleObservableRoom: ObservableRoom {
             return
         }
 
-        cameraCapturer.toggleCameraPosition()
+        cameraCapturer.switchCameraPosition()
     }
 
     func toggleCameraEnabled() {

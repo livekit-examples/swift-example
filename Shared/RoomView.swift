@@ -102,7 +102,7 @@ struct RoomView: View {
                     }
                     #endif
 
-                    if !CameraCapturer.canTogglePosition() || observableRoom.localVideo == nil {
+                    if !CameraCapturer.canSwitchPosition() || observableRoom.localVideo == nil {
                         Button(action: {
                             observableRoom.toggleCameraEnabled()
                         },
@@ -133,7 +133,16 @@ struct RoomView: View {
                         )
                     })
 
-                    #if os(macOS)
+                    #if os(iOS)
+                    Button(action: {
+                        observableRoom.toggleScreenEnabled()
+                    },
+                    label: {
+                        Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
+                            observableRoom.localScreen != nil ? Color.green : nil
+                        )
+                    })
+                    #elseif os(macOS)
                     Button(action: {
                         if observableRoom.localScreen != nil {
                             // turn off screen share
