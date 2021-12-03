@@ -7,6 +7,17 @@ import WebRTC
 import CoreImage.CIFilterBuiltins
 import ReplayKit
 
+extension ObservableParticipant {
+
+    public var mainVideoTrack: VideoTrack? {
+        firstScreenShareVideoTrack ?? firstCameraVideoTrack
+    }
+
+    public var subVideoTrack: VideoTrack? {
+        firstScreenShareVideoTrack != nil ? firstCameraVideoTrack : nil
+    }
+}
+
 class ExampleObservableRoom: ObservableRoom {
 
     let bgName: [Background: String] = [
@@ -64,9 +75,9 @@ class ExampleObservableRoom: ObservableRoom {
     }
 
     // the name to use for ipc
-    static let ipcName = "group.livekit-example.broadcast.buffer-ipc"
+    //    static let ipcName = "group.livekit-example.broadcast.buffer-ipc"
 
-    var ipcPub: LocalTrackPublication?
+    //    var screenSharePublication: LocalTrackPublication?
 
     func toggleScreenEnabled(_ source: ScreenShareSource? = nil) {
 
@@ -76,9 +87,22 @@ class ExampleObservableRoom: ObservableRoom {
             return
         }
 
-        localParticipant.setScreenShare(enabled: !localParticipant.isScreenShareEnabled(), source: source).then { publication in
-            self.localScreen = publication
+        #if os(macOS)
+        if let publication = self.localScreen {
+            localParticipant.unpublish(publication: publication).then {
+                DispatchQueue.main.async {
+                    self.localScreen = nil
+                }
+            }
+        } else {
+            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: source ?? .mainDisplay)
+            localParticipant.publishVideoTrack(track: track).then { publication in
+                DispatchQueue.main.async {
+                    self.localScreen = publication
+                }
+            }
         }
+        #endif
 
         //        #if os(iOS)
         //
@@ -98,25 +122,11 @@ class ExampleObservableRoom: ObservableRoom {
         //        RPSystemBroadcastPickerView.show(for: "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt",
         //                                         showsMicrophoneButton: false)
         //
-        //        #elseif os(macOS)
-        //        if let pub = ipcPub {
-        //            //
-        //            localParticipant.unpublish(publication: pub).then {
-        //                self.ipcPub = nil
-        //            }
-        //
-        //        } else {
-        //
-        //            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: source)
-        //            localParticipant.publishVideoTrack(track: track).then { pub in
-        //                self.ipcPub = pub
-        //            }
-        //        }
-        //        #endif
+
     }
 
     func toggleCameraPosition() {
-        guard let publication = localVideo,
+        guard let publication = self.localVideo,
               let track = publication.track as? LocalVideoTrack,
               let cameraCapturer = track.capturer as? CameraCapturer else {
             print("Track or Capturer doesn't exist")
@@ -134,10 +144,11 @@ class ExampleObservableRoom: ObservableRoom {
             return
         }
 
-        localParticipant.setCamera(enabled: !localParticipant.isCameraEnabled(),
-                                   interceptor: interceptor).then { publication in
-                                    self.localVideo = publication
-                                   }
+        localParticipant.setCamera(enabled: !localParticipant.isCameraEnabled()).then { publication in
+            DispatchQueue.main.async {
+                self.localVideo = publication
+            }
+        }
 
         //
         // The following code is an example how to publish without using the simplified apis

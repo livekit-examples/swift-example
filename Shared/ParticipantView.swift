@@ -20,8 +20,7 @@ struct ParticipantView: View {
                     .ignoresSafeArea()
 
                 // VideoView for the Participant
-                if let track = participant.firstVideoTrack,
-                   participant.firstVideoAvailable,
+                if let track = participant.mainVideoTrack,
                    debugCtrl.videoViewVisible {
                     ZStack(alignment: .topLeading) {
                         SwiftUIVideoView(track,
@@ -46,41 +45,49 @@ struct ParticipantView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(Color.lkBlue.opacity(0.7))
-                        .frame(width: min(geometry.size.width, geometry.size
-                                            .height) * 0.3)
+                        .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
                         .frame(
                             maxWidth: .infinity,
                             maxHeight: .infinity
                         )
                 }
 
-                HStack {
-                    Text(participant.identity ?? "-")
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-
-                    if participant.firstAudioAvailable {
-                        Image(systemName: "mic.fill")
-                    } else {
-                        Image(systemName: "mic.slash.fill")
-                            .foregroundColor(Color.red)
+                VStack(alignment: .trailing, spacing: 0) {
+                    if let subVideoTrack = participant.subVideoTrack {
+                        SwiftUIVideoView(subVideoTrack, mode: .fill)
+                            .background(Color.black)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
+                            .cornerRadius(8)
+                            .padding()
                     }
+                    HStack {
+                        Text(participant.identity ?? "-")
+                            .lineLimit(1)
+                            .truncationMode(.tail)
 
-                    if participant.connectionQuality == .excellent {
-                        Image(systemName: "wifi")
-                            .foregroundColor(.green)
-                    } else if participant.connectionQuality == .good {
-                        Image(systemName: "wifi")
-                            .foregroundColor(Color.orange)
-                    } else if participant.connectionQuality == .poor {
-                        Image(systemName: "wifi.exclamationmark")
-                            .foregroundColor(Color.red)
-                    }
+                        if participant.firstAudioAvailable {
+                            Image(systemName: "mic.fill")
+                        } else {
+                            Image(systemName: "mic.slash.fill")
+                                .foregroundColor(Color.red)
+                        }
 
-                }.padding(5)
-                .frame(minWidth: 0,
-                       maxWidth: .infinity)
-                .background(Color.black.opacity(0.5))
+                        if participant.connectionQuality == .excellent {
+                            Image(systemName: "wifi")
+                                .foregroundColor(.green)
+                        } else if participant.connectionQuality == .good {
+                            Image(systemName: "wifi")
+                                .foregroundColor(Color.orange)
+                        } else if participant.connectionQuality == .poor {
+                            Image(systemName: "wifi.exclamationmark")
+                                .foregroundColor(Color.red)
+                        }
+
+                    }.padding(5)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .background(Color.black.opacity(0.5))
+                }
             }
             .cornerRadius(8)
             // Glow the border when the participant is speaking
