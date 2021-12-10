@@ -43,14 +43,15 @@ final class AppCtrl: ObservableObject {
 
         print("Connecting to Room...")
 
-        let options = ConnectOptions(
+        let roomOptions = RoomOptions(
             // Pass the simulcast option
-            defaultVideoPublishOptions: LocalVideoTrackPublishOptions(simulcast: simulcast)
+            defaultVideoPublishOptions: VideoPublishOptions(simulcast: simulcast)
         )
 
         LiveKit.connect(url,
                         token,
-                        options: options, delegate: self).then { room in
+                        delegate: self,
+                        roomOptions: roomOptions).then { room in
                             print("Did connect to Room, name: \(room.name ?? "(no name)")")
                             self.room = room
                         }.catch { error in
