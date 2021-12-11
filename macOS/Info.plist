@@ -24,5 +24,9 @@
 	<string>public.app-category.developer-tools</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>uses your camera for video chat</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>uses your microphone for video chat</string>
 </dict>
 </plist>
