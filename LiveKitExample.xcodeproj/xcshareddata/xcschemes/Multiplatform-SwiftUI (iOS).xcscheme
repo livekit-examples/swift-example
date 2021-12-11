@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "68B38548271E780700711D5F"
-               BuildableName = "Multiplatform-SwiftUI.app"
-               BlueprintName = "Multiplatform-SwiftUI (macOS)"
-               ReferencedContainer = "container:Multiplatform-SwiftUI.xcodeproj">
+               BlueprintIdentifier = "68B38542271E780700711D5F"
+               BuildableName = "LiveKitExample.app"
+               BlueprintName = "LiveKitExample (iOS)"
+               ReferencedContainer = "container:LiveKitExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,10 +44,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "68B38548271E780700711D5F"
-            BuildableName = "Multiplatform-SwiftUI.app"
-            BlueprintName = "Multiplatform-SwiftUI (macOS)"
-            ReferencedContainer = "container:Multiplatform-SwiftUI.xcodeproj">
+            BlueprintIdentifier = "68B38542271E780700711D5F"
+            BuildableName = "LiveKitExample.app"
+            BlueprintName = "LiveKitExample (iOS)"
+            ReferencedContainer = "container:LiveKitExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -61,10 +61,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "68B38548271E780700711D5F"
-            BuildableName = "Multiplatform-SwiftUI.app"
-            BlueprintName = "Multiplatform-SwiftUI (macOS)"
-            ReferencedContainer = "container:Multiplatform-SwiftUI.xcodeproj">
+            BlueprintIdentifier = "68B38542271E780700711D5F"
+            BuildableName = "LiveKitExample.app"
+            BlueprintName = "LiveKitExample (iOS)"
+            ReferencedContainer = "container:LiveKitExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

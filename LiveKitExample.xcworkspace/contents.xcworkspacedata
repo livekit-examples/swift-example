@@ -5,6 +5,6 @@
       location = "group:../client-sdk-ios">
    </FileRef>
    <FileRef
-      location = "container:Multiplatform-SwiftUI.xcodeproj">
+      location = "container:/Users/hiroshi/repos/livekit/multiplatform-swiftui-example/LiveKitExample.xcodeproj">
    </FileRef>
 </Workspace>

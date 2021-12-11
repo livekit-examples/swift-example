@@ -86,8 +86,8 @@
 		68B3853C271E780600711D5F /* Multiplatform_SwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Multiplatform_SwiftUIApp.swift; sourceTree = "<group>"; };
 		68B3853D271E780600711D5F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		68B3853E271E780700711D5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		68B38543271E780700711D5F /* Multiplatform-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multiplatform-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		68B38549271E780700711D5F /* Multiplatform-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Multiplatform-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		68B38543271E780700711D5F /* LiveKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		68B38549271E780700711D5F /* LiveKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68B3854B271E780700711D5F /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		9E7835E62751A71500559DEC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -201,8 +201,8 @@
 		68B38544271E780700711D5F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				68B38543271E780700711D5F /* Multiplatform-SwiftUI.app */,
-				68B38549271E780700711D5F /* Multiplatform-SwiftUI.app */,
+				68B38543271E780700711D5F /* LiveKitExample.app */,
+				68B38549271E780700711D5F /* LiveKitExample.app */,
 				683F05F3273F96B20080C7AC /* BroadcastExt.appex */,
 			);
 			name = Products;
@@ -240,9 +240,9 @@
 			productReference = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		68B38542271E780700711D5F /* Multiplatform-SwiftUI (iOS) */ = {
+		68B38542271E780700711D5F /* LiveKitExample (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 68B38554271E780700711D5F /* Build configuration list for PBXNativeTarget "Multiplatform-SwiftUI (iOS)" */;
+			buildConfigurationList = 68B38554271E780700711D5F /* Build configuration list for PBXNativeTarget "LiveKitExample (iOS)" */;
 			buildPhases = (
 				68B3853F271E780700711D5F /* Sources */,
 				68B38540271E780700711D5F /* Frameworks */,
@@ -254,18 +254,18 @@
 			dependencies = (
 				683F05FB273F96B20080C7AC /* PBXTargetDependency */,
 			);
-			name = "Multiplatform-SwiftUI (iOS)";
+			name = "LiveKitExample (iOS)";
 			packageProductDependencies = (
 				685271E827407BBC006B4D6A /* SwiftProtobuf */,
 				9E7835E027519FFF00559DEC /* LiveKit */,
 			);
 			productName = "Multiplatform-SwiftUI (iOS)";
-			productReference = 68B38543271E780700711D5F /* Multiplatform-SwiftUI.app */;
+			productReference = 68B38543271E780700711D5F /* LiveKitExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		68B38548271E780700711D5F /* Multiplatform-SwiftUI (macOS) */ = {
+		68B38548271E780700711D5F /* LiveKitExample (macOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 68B38557271E780700711D5F /* Build configuration list for PBXNativeTarget "Multiplatform-SwiftUI (macOS)" */;
+			buildConfigurationList = 68B38557271E780700711D5F /* Build configuration list for PBXNativeTarget "LiveKitExample (macOS)" */;
 			buildPhases = (
 				68B38545271E780700711D5F /* Sources */,
 				68B38546271E780700711D5F /* Frameworks */,
@@ -275,12 +275,12 @@
 			);
 			dependencies = (
 			);
-			name = "Multiplatform-SwiftUI (macOS)";
+			name = "LiveKitExample (macOS)";
 			packageProductDependencies = (
 				9E7835E22751A01700559DEC /* LiveKit */,
 			);
 			productName = "Multiplatform-SwiftUI (macOS)";
-			productReference = 68B38549271E780700711D5F /* Multiplatform-SwiftUI.app */;
+			productReference = 68B38549271E780700711D5F /* LiveKitExample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -304,7 +304,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 68B3853A271E780600711D5F /* Build configuration list for PBXProject "Multiplatform-SwiftUI" */;
+			buildConfigurationList = 68B3853A271E780600711D5F /* Build configuration list for PBXProject "LiveKitExample" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -321,8 +321,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				68B38542271E780700711D5F /* Multiplatform-SwiftUI (iOS) */,
-				68B38548271E780700711D5F /* Multiplatform-SwiftUI (macOS) */,
+				68B38542271E780700711D5F /* LiveKitExample (iOS) */,
+				68B38548271E780700711D5F /* LiveKitExample (macOS) */,
 				683F05F2273F96B20080C7AC /* BroadcastExt */,
 			);
 		};
@@ -602,7 +602,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
-				PRODUCT_NAME = "Multiplatform-SwiftUI";
+				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -636,7 +636,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
-				PRODUCT_NAME = "Multiplatform-SwiftUI";
+				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -669,7 +669,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
-				PRODUCT_NAME = "Multiplatform-SwiftUI";
+				PRODUCT_NAME = LiveKitExample;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
@@ -699,7 +699,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
-				PRODUCT_NAME = "Multiplatform-SwiftUI";
+				PRODUCT_NAME = LiveKitExample;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
@@ -717,7 +717,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		68B3853A271E780600711D5F /* Build configuration list for PBXProject "Multiplatform-SwiftUI" */ = {
+		68B3853A271E780600711D5F /* Build configuration list for PBXProject "LiveKitExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				68B38552271E780700711D5F /* Debug */,
@@ -726,7 +726,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		68B38554271E780700711D5F /* Build configuration list for PBXNativeTarget "Multiplatform-SwiftUI (iOS)" */ = {
+		68B38554271E780700711D5F /* Build configuration list for PBXNativeTarget "LiveKitExample (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				68B38555271E780700711D5F /* Debug */,
@@ -735,7 +735,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		68B38557271E780700711D5F /* Build configuration list for PBXNativeTarget "Multiplatform-SwiftUI (macOS)" */ = {
+		68B38557271E780700711D5F /* Build configuration list for PBXNativeTarget "LiveKitExample (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				68B38558271E780700711D5F /* Debug */,
