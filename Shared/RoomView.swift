@@ -39,28 +39,115 @@ struct RoomView: View {
         GridItem(.adaptive(minimum: CGFloat(adaptiveMin)))
     ]
 
+    func messageView(_ message: RoomMessage) -> some View {
+
+        let isMe = message.senderSid == observableRoom.room.localParticipant?.sid
+
+        return HStack {
+            if isMe {
+                Spacer()
+            }
+    
+//            VStack(alignment: isMe ? .trailing : .leading) {
+//                Text(message.identity)
+                Text(message.text)
+                    .padding(8)
+                    .background(isMe ? Color.lkBlue : Color.white)
+                    .foregroundColor(isMe ? Color.white : Color.black)
+                    .clipShape(Capsule())
+//            }
+        }
+    }
+
+    func messagesView() -> some View {
+        VStack {
+            ScrollViewReader { scrollView in
+                List {
+                    ForEach(observableRoom.messages) {
+                        messageView($0)
+                    }
+                }
+            .onChange(of: observableRoom.messages, perform: { newValue in
+                print("onChange! \(scrollView)")
+                guard let last = observableRoom.messages.last else { return }
+                withAnimation {
+                    scrollView.scrollTo(last.id)
+                }
+            })
+            .frame(
+                minWidth: 0,
+                maxWidth: .infinity,
+                minHeight: 0,
+                maxHeight: .infinity,
+                alignment: .topLeading
+            )
+            }
+            HStack(spacing: 10) {
+
+                TextField("Enter message", text: $observableRoom.textFieldString)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .disableAutocorrection(true)
+                // TODO: add iOS unique view modifiers
+                // #if os(iOS)
+                // .autocapitalization(.none)
+                // .keyboardType(type.toiOSType())
+                // #endif
+
+                //                    .overlay(RoundedRectangle(cornerRadius: 10.0)
+                //                                .strokeBorder(Color.white.opacity(0.3),
+                //                                              style: StrokeStyle(lineWidth: 1.0)))
+
+                Button(action: {
+                    observableRoom.sendMessage()
+                },
+                label: {
+                    Image(systemName: "paperplane.fill")
+                        .foregroundColor(observableRoom.textFieldString.isEmpty ? nil : Color.blue)
+                })
+
+            }.padding()
+            .background(Color.red)
+            .frame(height: 100)
+        }.background(Color.lkDarkBlue)
+        .frame(width: 320)
+    }
+
     func content() -> some View {
-        Group {
-            if let focusParticipant = focusParticipant {
-                ParticipantView(participant: focusParticipant,
-                                videoViewMode: videoViewMode, onTap: ({ _ in
-                                    self.focusParticipant = nil
-                                })).frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                ScrollView(.vertical, showsIndicators: true) {
-                    LazyVGrid(columns: columns,
-                              alignment: .center,
-                              spacing: 10) {
-                        ForEach(observableRoom.allParticipants.values) { participant in
-                            ParticipantView(participant: participant,
-                                            videoViewMode: videoViewMode, onTap: ({ participant in
-                                                self.focusParticipant = participant
-                                            })).aspectRatio(1, contentMode: .fit)
-                        }
-                    }.padding()
+
+        HStack {
+            Group {
+                if let focusParticipant = focusParticipant {
+                    ParticipantView(participant: focusParticipant,
+                                    videoViewMode: videoViewMode, onTap: ({ _ in
+                                        self.focusParticipant = nil
+                                    })).frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    ScrollView(.vertical, showsIndicators: true) {
+                        LazyVGrid(columns: columns,
+                                  alignment: .center,
+                                  spacing: 10) {
+                            ForEach(observableRoom.allParticipants.values) { participant in
+                                ParticipantView(participant: participant,
+                                                videoViewMode: videoViewMode, onTap: ({ participant in
+                                                    self.focusParticipant = participant
+                                                })).aspectRatio(1, contentMode: .fit)
+                            }
+                        }.padding()
+                    }
                 }
             }
+            .frame(
+                minWidth: 0,
+                maxWidth: .infinity,
+                minHeight: 0,
+                maxHeight: .infinity,
+                alignment: .topLeading
+            )
+            if observableRoom.showMessagesView {
+                messagesView()
+            }
         }
+
     }
 
     var body: some View {
@@ -174,14 +261,26 @@ struct RoomView: View {
 
                     Spacer()
 
-                    Button(action: {
-                        appCtrl.disconnect()
-                    },
-                    label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(nil)
-                    })
+                    Group {
 
+                        Button(action: {
+                            withAnimation {
+                                observableRoom.showMessagesView.toggle()
+                            }
+                        },
+                        label: {
+                            Image(systemName: "message.fill")
+                                .foregroundColor(nil)
+                        })
+
+                        Button(action: {
+                            appCtrl.disconnect()
+                        },
+                        label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(nil)
+                        })
+                    }
                 }
 
             }

@@ -18,7 +18,26 @@ extension ObservableParticipant {
     }
 }
 
+struct RoomMessage: Identifiable, Equatable, Hashable, Codable {
+    // message id
+    let id: String
+    let senderSid: String
+    let identity: String
+    let text: String
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
 class ExampleObservableRoom: ObservableRoom {
+
+    let jsonEncoder = JSONEncoder()
+    let jsonDecoder = JSONDecoder()
 
     let bgName: [Background: String] = [
         .office: "bg-1",
@@ -32,6 +51,15 @@ class ExampleObservableRoom: ObservableRoom {
         case space
         case thailand
     }
+
+    @Published var showMessagesView: Bool = false
+    @Published var messages: [RoomMessage] = [
+        RoomMessage(id: "1", senderSid: "x1", identity: "tommy", text: "Hello How are you"),
+        RoomMessage(id: "2", senderSid: "x2", identity: "hanagex", text: "Hello How are you 2"),
+        RoomMessage(id: "3", senderSid: "x3", identity: "momo", text: "Hello How are you 3")
+    ]
+
+    @Published var textFieldString: String = ""
 
     @Published var background: Background = .none {
         didSet {
@@ -47,6 +75,11 @@ class ExampleObservableRoom: ObservableRoom {
             }
             #endif
         }
+    }
+
+    override init(_ room: Room) {
+        super.init(room)
+        room.add(delegate: self)
     }
 
     private var _bgSwapper: Any?
@@ -72,6 +105,38 @@ class ExampleObservableRoom: ObservableRoom {
             capture(frame)
         }
         #endif
+    }
+
+    func sendMessage() {
+
+        guard let localParticipant = room.localParticipant else {
+            // LocalParticipant should exist if alreadey connected to the room
+            print("LocalParticipant doesn't exist")
+            return
+        }
+
+        // Make sure the message is not empty
+        guard !textFieldString.isEmpty else { return }
+
+        let roomMessage = RoomMessage(id: UUID().uuidString,
+                                      senderSid: localParticipant.sid,
+                                      identity: localParticipant.identity ?? "(\(localParticipant.sid)",
+                                      text: textFieldString)
+        textFieldString = ""
+        messages.append(roomMessage)
+
+        do {
+            let json = try jsonEncoder.encode(roomMessage)
+
+            localParticipant.publishData(data: json).then {
+                print("did send data")
+            }.catch { error in
+                print("failed to send data \(error)")
+            }
+
+        } catch let error {
+            print("Failed to encode data \(error)")
+        }
     }
 
     // the name to use for ipc
@@ -220,5 +285,20 @@ class ExampleObservableRoom: ObservableRoom {
         //            }
         //        }
 
+    }
+
+    override func room(_ room: Room, participant: RemoteParticipant?, didReceive data: Data) {
+
+        print("did receive data \(data)")
+
+        do {
+            let roomMessage = try jsonDecoder.decode(RoomMessage.self, from: data)
+            DispatchQueue.main.async {
+                self.messages.append(roomMessage)
+            }
+
+        } catch let error {
+            print("Failed to decode data \(error)")
+        }
     }
 }
