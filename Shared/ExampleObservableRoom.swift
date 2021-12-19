@@ -53,11 +53,7 @@ class ExampleObservableRoom: ObservableRoom {
     }
 
     @Published var showMessagesView: Bool = false
-    @Published var messages: [RoomMessage] = [
-        RoomMessage(id: "1", senderSid: "x1", identity: "tommy", text: "Hello How are you"),
-        RoomMessage(id: "2", senderSid: "x2", identity: "hanagex", text: "Hello How are you 2"),
-        RoomMessage(id: "3", senderSid: "x3", identity: "momo", text: "Hello How are you 3")
-    ]
+    @Published var messages: [RoomMessage] = []
 
     @Published var textFieldString: String = ""
 
