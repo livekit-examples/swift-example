@@ -22,6 +22,9 @@ extension CIImage {
 
 struct RoomView: View {
 
+    // Watch verticalSizeClass to make the UI adaptive
+    @Environment(\.verticalSizeClass) var sizeClass
+
     @EnvironmentObject var appCtrl: AppCtrl
     @EnvironmentObject var debugCtrl: DebugCtrl
     @ObservedObject var observableRoom: ExampleObservableRoom
@@ -118,14 +121,17 @@ struct RoomView: View {
 
             }.padding()
             .background(Color.lkBlue)
-            .frame(height: 100)
         }.background(Color.lkDarkBlue)
-        .frame(width: 320)
+        .frame(
+            minWidth: 0,
+            maxWidth: sizeClass == .regular ? .infinity : 320
+        )
     }
 
     func content() -> some View {
 
-        HStack {
+        AdaptiveStack(shouldBeVertical: sizeClass == .regular) {
+
             Group {
                 if let focusParticipant = focusParticipant {
                     ParticipantView(participant: focusParticipant,
@@ -154,11 +160,11 @@ struct RoomView: View {
                 maxHeight: .infinity,
                 alignment: .topLeading
             )
+            // Show messages view if enabled
             if observableRoom.showMessagesView {
                 messagesView()
             }
         }
-
     }
 
     var body: some View {
@@ -167,6 +173,7 @@ struct RoomView: View {
             .toolbar {
                 ToolbarItemGroup(placement: toolbarPlacement) {
 
+                    // VideoView mode switcher
                     Picker("Mode", selection: $videoViewMode) {
                         Text("Fit").tag(VideoView.Mode.fit)
                         Text("Fill").tag(VideoView.Mode.fill)
@@ -175,91 +182,108 @@ struct RoomView: View {
 
                     Spacer()
 
-                    // Background swapping example
-                    // Compiling with Xcode13+ and iOS15+ or macOS12+ is required.
-                    #if swift(>=5.5)
-                    if #available(iOS 15, macOS 12, *) {
-                        if observableRoom.localVideo != nil {
+                    Group {
+
+                        // Background swapping example
+                        // Compiling with Xcode13+ and iOS15+ or macOS12+ is required.
+                        #if swift(>=5.5)
+                        if #available(iOS 15, macOS 12, *) {
+                            if observableRoom.localVideo != nil {
+                                Menu {
+                                    Button("Office 1") {
+                                        observableRoom.background = .office
+                                    }
+                                    Button("Space") {
+                                        observableRoom.background = .space
+                                    }
+                                    Button("Thailand") {
+                                        observableRoom.background = .thailand
+                                    }
+                                    Button("No background") {
+                                        observableRoom.background = .none
+                                    }
+                                } label: {
+                                    Image(systemName: "photo.artframe")
+                                }
+                            }
+                        }
+                        #endif
+
+                        // Toggle camera enabled
+                        if !CameraCapturer.canSwitchPosition() || observableRoom.localVideo == nil {
+                            Button(action: {
+                                observableRoom.toggleCameraEnabled()
+                            },
+                            label: {
+                                Image(systemName: "video.fill").foregroundColor(
+                                    observableRoom.localVideo != nil ? Color.green : nil
+                                )
+                            })
+                        } else {
                             Menu {
-                                Button("Office 1") {
-                                    observableRoom.background = .office
+                                Button("Switch position") {
+                                    observableRoom.toggleCameraPosition()
                                 }
-                                Button("Space") {
-                                    observableRoom.background = .space
-                                }
-                                Button("Thailand") {
-                                    observableRoom.background = .thailand
-                                }
-                                Button("No background") {
-                                    observableRoom.background = .none
+                                Button("Disable") {
+                                    observableRoom.toggleCameraEnabled()
                                 }
                             } label: {
-                                Image(systemName: "photo.artframe")
+                                Image(systemName: "video.fill").foregroundColor(Color.green)
                             }
                         }
-                    }
-                    #endif
 
-                    if !CameraCapturer.canSwitchPosition() || observableRoom.localVideo == nil {
+                        // Toggle microphone enabled
                         Button(action: {
-                            observableRoom.toggleCameraEnabled()
+                            observableRoom.toggleMicrophoneEnabled()
                         },
                         label: {
-                            Image(systemName: "video.fill").foregroundColor(
-                                observableRoom.localVideo != nil ? Color.green : nil
+                            Image(systemName: "mic.fill").foregroundColor(
+                                observableRoom.localAudio != nil ? Color.orange : nil
                             )
                         })
-                    } else {
-                        Menu {
-                            Button("Switch position") {
-                                observableRoom.toggleCameraPosition()
-                            }
-                            Button("Disable") {
-                                observableRoom.toggleCameraEnabled()
-                            }
-                        } label: {
-                            Image(systemName: "video.fill").foregroundColor(Color.green)
-                        }
-                    }
 
-                    Button(action: {
-                        observableRoom.toggleMicrophoneEnabled()
-                    },
-                    label: {
-                        Image(systemName: "mic.fill").foregroundColor(
-                            observableRoom.localAudio != nil ? Color.orange : nil
-                        )
-                    })
-
-                    #if os(iOS)
-                    Button(action: {
-                        observableRoom.toggleScreenEnabled()
-                    },
-                    label: {
-                        Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
-                            observableRoom.localScreen != nil ? Color.green : nil
-                        )
-                    })
-                    #elseif os(macOS)
-                    Button(action: {
-                        if observableRoom.localScreen != nil {
-                            // turn off screen share
+                        #if os(iOS)
+                        Button(action: {
                             observableRoom.toggleScreenEnabled()
-                        } else {
-                            screenPickerPresented = true
+                        },
+                        label: {
+                            Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
+                                observableRoom.localScreen != nil ? Color.green : nil
+                            )
+                        })
+                        #elseif os(macOS)
+                        Button(action: {
+                            if observableRoom.localScreen != nil {
+                                // turn off screen share
+                                observableRoom.toggleScreenEnabled()
+                            } else {
+                                screenPickerPresented = true
+                            }
+                        },
+                        label: {
+                            Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
+                                observableRoom.localScreen != nil ? Color.green : nil
+                            )
+                        }).popover(isPresented: $screenPickerPresented) {
+                            ScreenShareSourcePickerView { source in
+                                observableRoom.toggleScreenEnabled(source)
+                                screenPickerPresented = false
+                            }.padding()
                         }
-                    },
-                    label: {
-                        Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
-                            observableRoom.localScreen != nil ? Color.green : nil
-                        )
-                    }).popover(isPresented: $screenPickerPresented) {
-                        ScreenShareSourcePickerView { source in
-                            observableRoom.toggleScreenEnabled(source)
-                            screenPickerPresented = false
-                        }.padding()
+                        #endif
+
+                        // Toggle messages view (chat example)
+                        Button(action: {
+                            withAnimation {
+                                observableRoom.showMessagesView.toggle()
+                            }
+                        },
+                        label: {
+                            Image(systemName: "message.fill")
+                                .foregroundColor(observableRoom.showMessagesView ? Color.blue : nil)
+                        })
+
                     }
-                    #endif
 
                     Spacer()
 
@@ -272,28 +296,47 @@ struct RoomView: View {
 
                     Spacer()
 
-                    Group {
-
-                        Button(action: {
-                            withAnimation {
-                                observableRoom.showMessagesView.toggle()
-                            }
-                        },
-                        label: {
-                            Image(systemName: "message.fill")
-                                .foregroundColor(nil)
-                        })
-
-                        Button(action: {
-                            appCtrl.disconnect()
-                        },
-                        label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(nil)
-                        })
-                    }
+                    // Disconnect
+                    Button(action: {
+                        appCtrl.disconnect()
+                    },
+                    label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(nil)
+                    })
                 }
 
             }
+    }
+}
+
+struct AdaptiveStack<Content: View>: View {
+    let shouldBeVertical: Bool
+    let horizontalAlignment: HorizontalAlignment
+    let verticalAlignment: VerticalAlignment
+    let spacing: CGFloat?
+    let content: () -> Content
+
+    init(shouldBeVertical: Bool,
+         horizontalAlignment: HorizontalAlignment = .center,
+         verticalAlignment: VerticalAlignment = .center,
+         spacing: CGFloat? = nil,
+         @ViewBuilder content: @escaping () -> Content) {
+
+        self.shouldBeVertical = shouldBeVertical
+        self.horizontalAlignment = horizontalAlignment
+        self.verticalAlignment = verticalAlignment
+        self.spacing = spacing
+        self.content = content
+    }
+
+    var body: some View {
+        Group {
+            if shouldBeVertical {
+                VStack(alignment: horizontalAlignment, spacing: spacing, content: content)
+            } else {
+                HStack(alignment: verticalAlignment, spacing: spacing, content: content)
+            }
+        }
     }
 }
