@@ -24,11 +24,11 @@ struct RoomMessage: Identifiable, Equatable, Hashable, Codable {
     let senderSid: String
     let identity: String
     let text: String
-    
+
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
@@ -293,8 +293,13 @@ class ExampleObservableRoom: ObservableRoom {
 
         do {
             let roomMessage = try jsonDecoder.decode(RoomMessage.self, from: data)
+            // Update UI from main queue
             DispatchQueue.main.async {
+                // Add messages to the @Published messages property
+                // which will trigger the UI to update
                 self.messages.append(roomMessage)
+                // Show the messages view when new messages arrive
+                self.showMessagesView = true
             }
 
         } catch let error {

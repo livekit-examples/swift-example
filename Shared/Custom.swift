@@ -3,6 +3,7 @@ import SwiftUI
 extension Color {
     static let lkBlue = Color("LKBlue")
     static let lkDarkBlue = Color("LKDarkBlue")
+    static let lightGray = Color(red: 0.949, green: 0.949, blue: 0.97, opacity: 1.0)
 }
 
 struct LazyView<Content: View>: View {

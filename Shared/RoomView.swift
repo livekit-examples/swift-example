@@ -47,42 +47,53 @@ struct RoomView: View {
             if isMe {
                 Spacer()
             }
-    
-//            VStack(alignment: isMe ? .trailing : .leading) {
-//                Text(message.identity)
-                Text(message.text)
-                    .padding(8)
-                    .background(isMe ? Color.lkBlue : Color.white)
-                    .foregroundColor(isMe ? Color.white : Color.black)
-                    .clipShape(Capsule())
-//            }
+
+            //            VStack(alignment: isMe ? .trailing : .leading) {
+            //                Text(message.identity)
+            Text(message.text)
+                .padding(8)
+                .background(isMe ? Color.lkBlue : Color.gray)
+                .foregroundColor(isMe ? Color.white : Color.black)
+                .cornerRadius(12)
+            //            }
+        }.padding(.vertical, 5)
+        .padding(.horizontal, 10)
+    }
+
+    func scrollToBottom(_ scrollView: ScrollViewProxy) {
+        guard let last = observableRoom.messages.last else { return }
+        withAnimation {
+            scrollView.scrollTo(last.id)
         }
     }
 
     func messagesView() -> some View {
-        VStack {
+        VStack(spacing: 0) {
             ScrollViewReader { scrollView in
-                List {
-                    ForEach(observableRoom.messages) {
-                        messageView($0)
+                ScrollView(.vertical, showsIndicators: true) {
+                    LazyVStack(alignment: .leading, spacing: 0) {
+                        ForEach(observableRoom.messages) {
+                            messageView($0)
+                        }
                     }
                 }
-            .onChange(of: observableRoom.messages, perform: { newValue in
-                print("onChange! \(scrollView)")
-                guard let last = observableRoom.messages.last else { return }
-                withAnimation {
-                    scrollView.scrollTo(last.id)
-                }
-            })
-            .frame(
-                minWidth: 0,
-                maxWidth: .infinity,
-                minHeight: 0,
-                maxHeight: .infinity,
-                alignment: .topLeading
-            )
+                .onAppear(perform: {
+                    // Scroll to bottom when first showing the messages list
+                    scrollToBottom(scrollView)
+                })
+                .onChange(of: observableRoom.messages, perform: { _ in
+                    // Scroll to bottom when there is a new message
+                    scrollToBottom(scrollView)
+                })
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity,
+                    minHeight: 0,
+                    maxHeight: .infinity,
+                    alignment: .topLeading
+                )
             }
-            HStack(spacing: 10) {
+            HStack(spacing: 0) {
 
                 TextField("Enter message", text: $observableRoom.textFieldString)
                     .textFieldStyle(PlainTextFieldStyle())
@@ -106,7 +117,7 @@ struct RoomView: View {
                 })
 
             }.padding()
-            .background(Color.red)
+            .background(Color.lkBlue)
             .frame(height: 100)
         }.background(Color.lkDarkBlue)
         .frame(width: 320)
