@@ -58,6 +58,8 @@ class ExampleObservableRoom: ObservableRoom {
         case thailand
     }
 
+    @Published var focusParticipant: ObservableParticipant?
+
     @Published var showMessagesView: Bool = false
     @Published var messages: [RoomMessage] = []
 
@@ -287,6 +289,17 @@ class ExampleObservableRoom: ObservableRoom {
         //            }
         //        }
 
+    }
+
+    override func room(_ room: Room,
+                       participantDidLeave participant: RemoteParticipant) {
+        DispatchQueue.main.async {
+            self.participants.removeValue(forKey: participant.sid)
+            if let focusParticipant = self.focusParticipant,
+               focusParticipant.sid == participant.sid {
+                self.focusParticipant = nil
+            }
+        }
     }
 
     override func room(_ room: Room, participant: RemoteParticipant?, didReceive data: Data) {

@@ -27,7 +27,6 @@ struct RoomView: View {
     @ObservedObject var observableRoom: ExampleObservableRoom
 
     @State private var videoViewMode: VideoView.Mode = .fill
-    @State private var focusParticipant: ObservableParticipant?
 
     @State private var screenPickerPresented = false
 
@@ -131,10 +130,10 @@ struct RoomView: View {
         HorVStack(axis: geometry.isWide ? .horizontal : .vertical) {
 
             Group {
-                if let focusParticipant = focusParticipant {
+                if let focusParticipant = observableRoom.focusParticipant {
                     ParticipantView(participant: focusParticipant,
                                     videoViewMode: videoViewMode, onTap: ({ _ in
-                                        self.focusParticipant = nil
+                                        observableRoom.focusParticipant = nil
                                     })).frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     ScrollView(.vertical, showsIndicators: true) {
@@ -144,7 +143,7 @@ struct RoomView: View {
                             ForEach(observableRoom.allParticipants.values) { participant in
                                 ParticipantView(participant: participant,
                                                 videoViewMode: videoViewMode, onTap: ({ participant in
-                                                    self.focusParticipant = participant
+                                                    observableRoom.focusParticipant = participant
                                                 })).aspectRatio(1, contentMode: .fit)
                             }
                         }.padding()
