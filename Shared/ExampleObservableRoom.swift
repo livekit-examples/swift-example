@@ -19,18 +19,24 @@ extension ObservableParticipant {
 }
 
 struct RoomMessage: Identifiable, Equatable, Hashable, Codable {
+    // Identifiable protocol needs param named id
+    var id: String {
+        messageId
+    }
+
     // message id
-    let id: String
+    let messageId: String
+
     let senderSid: String
-    let identity: String
+    let senderIdentity: String
     let text: String
 
     static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.id == rhs.id
+        lhs.messageId == rhs.messageId
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(messageId)
     }
 }
 
@@ -114,9 +120,9 @@ class ExampleObservableRoom: ObservableRoom {
         // Make sure the message is not empty
         guard !textFieldString.isEmpty else { return }
 
-        let roomMessage = RoomMessage(id: UUID().uuidString,
+        let roomMessage = RoomMessage(messageId: UUID().uuidString,
                                       senderSid: localParticipant.sid,
-                                      identity: localParticipant.identity ?? "(\(localParticipant.sid)",
+                                      senderIdentity: localParticipant.identity ?? "(\(localParticipant.sid)",
                                       text: textFieldString)
         textFieldString = ""
         messages.append(roomMessage)
