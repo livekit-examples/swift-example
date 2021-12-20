@@ -22,9 +22,6 @@ extension CIImage {
 
 struct RoomView: View {
 
-    // Watch verticalSizeClass to make the UI adaptive
-    @Environment(\.verticalSizeClass) var sizeClass
-
     @EnvironmentObject var appCtrl: AppCtrl
     @EnvironmentObject var debugCtrl: DebugCtrl
     @ObservedObject var observableRoom: ExampleObservableRoom
@@ -70,7 +67,8 @@ struct RoomView: View {
         }
     }
 
-    func messagesView() -> some View {
+    func messagesView(geometry: GeometryProxy) -> some View {
+
         VStack(spacing: 0) {
             ScrollViewReader { scrollView in
                 ScrollView(.vertical, showsIndicators: true) {
@@ -124,13 +122,13 @@ struct RoomView: View {
         }.background(Color.lkDarkBlue)
         .frame(
             minWidth: 0,
-            maxWidth: sizeClass == .regular ? .infinity : 320
+            maxWidth: geometry.isTall ? .infinity : 320
         )
     }
 
-    func content() -> some View {
+    func content(geometry: GeometryProxy) -> some View {
 
-        AdaptiveStack(shouldBeVertical: sizeClass == .regular) {
+        HorVStack(axis: geometry.isWide ? .horizontal : .vertical) {
 
             Group {
                 if let focusParticipant = focusParticipant {
@@ -162,168 +160,170 @@ struct RoomView: View {
             )
             // Show messages view if enabled
             if observableRoom.showMessagesView {
-                messagesView()
+                messagesView(geometry: geometry)
             }
         }
     }
 
     var body: some View {
 
-        content()
-            .toolbar {
-                ToolbarItemGroup(placement: toolbarPlacement) {
+        GeometryReader { geometry in
+            content(geometry: geometry)
+                .toolbar {
+                    ToolbarItemGroup(placement: toolbarPlacement) {
 
-                    // VideoView mode switcher
-                    Picker("Mode", selection: $videoViewMode) {
-                        Text("Fit").tag(VideoView.Mode.fit)
-                        Text("Fill").tag(VideoView.Mode.fill)
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
+                        // VideoView mode switcher
+                        Picker("Mode", selection: $videoViewMode) {
+                            Text("Fit").tag(VideoView.Mode.fit)
+                            Text("Fill").tag(VideoView.Mode.fill)
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
 
-                    Spacer()
+                        Spacer()
 
-                    Group {
+                        Group {
 
-                        // Background swapping example
-                        // Compiling with Xcode13+ and iOS15+ or macOS12+ is required.
-                        #if swift(>=5.5)
-                        if #available(iOS 15, macOS 12, *) {
-                            if observableRoom.localVideo != nil {
+                            // Background swapping example
+                            // Compiling with Xcode13+ and iOS15+ or macOS12+ is required.
+                            #if swift(>=5.5)
+                            if #available(iOS 15, macOS 12, *) {
+                                if observableRoom.localVideo != nil {
+                                    Menu {
+                                        Button("Office 1") {
+                                            observableRoom.background = .office
+                                        }
+                                        Button("Space") {
+                                            observableRoom.background = .space
+                                        }
+                                        Button("Thailand") {
+                                            observableRoom.background = .thailand
+                                        }
+                                        Button("No background") {
+                                            observableRoom.background = .none
+                                        }
+                                    } label: {
+                                        Image(systemName: "photo.artframe")
+                                    }
+                                }
+                            }
+                            #endif
+
+                            // Toggle camera enabled
+                            if !CameraCapturer.canSwitchPosition() || observableRoom.localVideo == nil {
+                                Button(action: {
+                                    observableRoom.toggleCameraEnabled()
+                                },
+                                label: {
+                                    Image(systemName: "video.fill").foregroundColor(
+                                        observableRoom.localVideo != nil ? Color.green : nil
+                                    )
+                                })
+                            } else {
                                 Menu {
-                                    Button("Office 1") {
-                                        observableRoom.background = .office
+                                    Button("Switch position") {
+                                        observableRoom.toggleCameraPosition()
                                     }
-                                    Button("Space") {
-                                        observableRoom.background = .space
-                                    }
-                                    Button("Thailand") {
-                                        observableRoom.background = .thailand
-                                    }
-                                    Button("No background") {
-                                        observableRoom.background = .none
+                                    Button("Disable") {
+                                        observableRoom.toggleCameraEnabled()
                                     }
                                 } label: {
-                                    Image(systemName: "photo.artframe")
+                                    Image(systemName: "video.fill").foregroundColor(Color.green)
                                 }
                             }
-                        }
-                        #endif
 
-                        // Toggle camera enabled
-                        if !CameraCapturer.canSwitchPosition() || observableRoom.localVideo == nil {
+                            // Toggle microphone enabled
                             Button(action: {
-                                observableRoom.toggleCameraEnabled()
+                                observableRoom.toggleMicrophoneEnabled()
                             },
                             label: {
-                                Image(systemName: "video.fill").foregroundColor(
-                                    observableRoom.localVideo != nil ? Color.green : nil
+                                Image(systemName: "mic.fill").foregroundColor(
+                                    observableRoom.localAudio != nil ? Color.orange : nil
                                 )
                             })
-                        } else {
-                            Menu {
-                                Button("Switch position") {
-                                    observableRoom.toggleCameraPosition()
-                                }
-                                Button("Disable") {
-                                    observableRoom.toggleCameraEnabled()
-                                }
-                            } label: {
-                                Image(systemName: "video.fill").foregroundColor(Color.green)
-                            }
-                        }
 
-                        // Toggle microphone enabled
-                        Button(action: {
-                            observableRoom.toggleMicrophoneEnabled()
-                        },
-                        label: {
-                            Image(systemName: "mic.fill").foregroundColor(
-                                observableRoom.localAudio != nil ? Color.orange : nil
-                            )
-                        })
-
-                        #if os(iOS)
-                        Button(action: {
-                            observableRoom.toggleScreenEnabled()
-                        },
-                        label: {
-                            Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
-                                observableRoom.localScreen != nil ? Color.green : nil
-                            )
-                        })
-                        #elseif os(macOS)
-                        Button(action: {
-                            if observableRoom.localScreen != nil {
-                                // turn off screen share
+                            #if os(iOS)
+                            Button(action: {
                                 observableRoom.toggleScreenEnabled()
-                            } else {
-                                screenPickerPresented = true
+                            },
+                            label: {
+                                Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
+                                    observableRoom.localScreen != nil ? Color.green : nil
+                                )
+                            })
+                            #elseif os(macOS)
+                            Button(action: {
+                                if observableRoom.localScreen != nil {
+                                    // turn off screen share
+                                    observableRoom.toggleScreenEnabled()
+                                } else {
+                                    screenPickerPresented = true
+                                }
+                            },
+                            label: {
+                                Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
+                                    observableRoom.localScreen != nil ? Color.green : nil
+                                )
+                            }).popover(isPresented: $screenPickerPresented) {
+                                ScreenShareSourcePickerView { source in
+                                    observableRoom.toggleScreenEnabled(source)
+                                    screenPickerPresented = false
+                                }.padding()
                             }
-                        },
-                        label: {
-                            Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
-                                observableRoom.localScreen != nil ? Color.green : nil
-                            )
-                        }).popover(isPresented: $screenPickerPresented) {
-                            ScreenShareSourcePickerView { source in
-                                observableRoom.toggleScreenEnabled(source)
-                                screenPickerPresented = false
-                            }.padding()
+                            #endif
+
+                            // Toggle messages view (chat example)
+                            Button(action: {
+                                withAnimation {
+                                    observableRoom.showMessagesView.toggle()
+                                }
+                            },
+                            label: {
+                                Image(systemName: "message.fill")
+                                    .foregroundColor(observableRoom.showMessagesView ? Color.blue : nil)
+                            })
+
                         }
-                        #endif
 
-                        // Toggle messages view (chat example)
+                        Spacer()
+
+                        Menu {
+                            Toggle("Video Information", isOn: $debugCtrl.showInformation)
+                            Toggle("Video View", isOn: $debugCtrl.videoViewVisible)
+                        } label: {
+                            Image(systemName: "ladybug.fill")
+                        }
+
+                        Spacer()
+
+                        // Disconnect
                         Button(action: {
-                            withAnimation {
-                                observableRoom.showMessagesView.toggle()
-                            }
+                            appCtrl.disconnect()
                         },
                         label: {
-                            Image(systemName: "message.fill")
-                                .foregroundColor(observableRoom.showMessagesView ? Color.blue : nil)
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(nil)
                         })
-
                     }
 
-                    Spacer()
-
-                    Menu {
-                        Toggle("Video Information", isOn: $debugCtrl.showInformation)
-                        Toggle("Video View", isOn: $debugCtrl.videoViewVisible)
-                    } label: {
-                        Image(systemName: "ladybug.fill")
-                    }
-
-                    Spacer()
-
-                    // Disconnect
-                    Button(action: {
-                        appCtrl.disconnect()
-                    },
-                    label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(nil)
-                    })
                 }
-
-            }
+        }
     }
 }
 
-struct AdaptiveStack<Content: View>: View {
-    let shouldBeVertical: Bool
+struct HorVStack<Content: View>: View {
+    let axis: Axis
     let horizontalAlignment: HorizontalAlignment
     let verticalAlignment: VerticalAlignment
     let spacing: CGFloat?
     let content: () -> Content
 
-    init(shouldBeVertical: Bool,
+    init(axis: Axis = .horizontal,
          horizontalAlignment: HorizontalAlignment = .center,
          verticalAlignment: VerticalAlignment = .center,
          spacing: CGFloat? = nil,
          @ViewBuilder content: @escaping () -> Content) {
 
-        self.shouldBeVertical = shouldBeVertical
+        self.axis = axis
         self.horizontalAlignment = horizontalAlignment
         self.verticalAlignment = verticalAlignment
         self.spacing = spacing
@@ -332,11 +332,22 @@ struct AdaptiveStack<Content: View>: View {
 
     var body: some View {
         Group {
-            if shouldBeVertical {
+            if axis == .vertical {
                 VStack(alignment: horizontalAlignment, spacing: spacing, content: content)
             } else {
                 HStack(alignment: verticalAlignment, spacing: spacing, content: content)
             }
         }
+    }
+}
+
+extension GeometryProxy {
+
+    var isTall: Bool {
+        size.height > size.width
+    }
+
+    var isWide: Bool {
+        size.width > size.height
     }
 }
