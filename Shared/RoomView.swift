@@ -186,7 +186,7 @@ struct RoomView: View {
                             // Compiling with Xcode13+ and iOS15+ or macOS12+ is required.
                             #if swift(>=5.5)
                             if #available(iOS 15, macOS 12, *) {
-                                if observableRoom.localVideo != nil {
+                                if case .published = observableRoom.cameraTrackState {
                                     Menu {
                                         Button("Office 1") {
                                             observableRoom.background = .office
@@ -208,19 +208,22 @@ struct RoomView: View {
                             #endif
 
                             // Toggle camera enabled
-                            if !CameraCapturer.canSwitchPosition() || observableRoom.localVideo == nil {
+                            if !observableRoom.cameraTrackState.isPublished || !CameraCapturer.canSwitchPosition() {
                                 Button(action: {
                                     observableRoom.toggleCameraEnabled()
                                 },
                                 label: {
-                                    Image(systemName: "video.fill").foregroundColor(
-                                        observableRoom.localVideo != nil ? Color.green : nil
-                                    )
+                                    Image(systemName: "video.fill")
+                                        .foregroundColor(
+                                            observableRoom.cameraTrackState.isPublished  ? Color.green : nil
+                                        )
                                 })
+                                // disable while publishing/un-publishing
+                                .disabled(observableRoom.cameraTrackState.isBusy)
                             } else {
                                 Menu {
                                     Button("Switch position") {
-                                        observableRoom.toggleCameraPosition()
+                                        observableRoom.switchCameraPosition()
                                     }
                                     Button("Disable") {
                                         observableRoom.toggleCameraEnabled()
@@ -236,9 +239,11 @@ struct RoomView: View {
                             },
                             label: {
                                 Image(systemName: "mic.fill").foregroundColor(
-                                    observableRoom.localAudio != nil ? Color.orange : nil
+                                    observableRoom.microphoneTrackState.isPublished ? Color.orange : nil
                                 )
                             })
+                            // disable while publishing/un-publishing
+                            .disabled(observableRoom.microphoneTrackState.isBusy)
 
                             #if os(iOS)
                             Button(action: {
