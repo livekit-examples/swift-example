@@ -53,10 +53,15 @@ final class AppCtrl: ObservableObject {
                         delegate: self,
                         roomOptions: roomOptions).then { room in
                             print("Did connect to Room, name: \(room.name ?? "(no name)")")
-                            self.room = room
+                            DispatchQueue.main.async {
+                                self.room = room
+                            }
+
                         }.catch { error in
                             print("\(String(describing: self)) Failed to connect to room with error: \(error)")
-                            self.connectionState = .disconnected(error)
+                            DispatchQueue.main.async {
+                                self.connectionState = .disconnected(error)
+                            }
                         }
     }
 
