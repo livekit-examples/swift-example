@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/livekit/client-sdk-ios",
         "state": {
           "branch": null,
-          "revision": "0a59e8c84d2a0f25d54d3beb1d48e399557ebddf",
-          "version": "0.9.1"
+          "revision": "e682b33d4f3c3047a50d233127d5fa362d7aff76",
+          "version": "0.9.4"
         }
       },
       {

@@ -124,7 +124,7 @@ class ExampleObservableRoom: ObservableRoom {
 
         let roomMessage = RoomMessage(messageId: UUID().uuidString,
                                       senderSid: localParticipant.sid,
-                                      senderIdentity: localParticipant.identity ?? "(\(localParticipant.sid)",
+                                      senderIdentity: localParticipant.identity,
                                       text: textFieldString)
         textFieldString = ""
         messages.append(roomMessage)
