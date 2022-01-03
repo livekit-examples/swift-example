@@ -182,31 +182,6 @@ struct RoomView: View {
 
                         Group {
 
-                            // Background swapping example
-                            // Compiling with Xcode13+ and iOS15+ or macOS12+ is required.
-                            #if swift(>=5.5)
-                            if #available(iOS 15, macOS 12, *) {
-                                if case .published = observableRoom.cameraTrackState {
-                                    Menu {
-                                        Button("Office 1") {
-                                            observableRoom.background = .office
-                                        }
-                                        Button("Space") {
-                                            observableRoom.background = .space
-                                        }
-                                        Button("Thailand") {
-                                            observableRoom.background = .thailand
-                                        }
-                                        Button("No background") {
-                                            observableRoom.background = .none
-                                        }
-                                    } label: {
-                                        Image(systemName: "photo.artframe")
-                                    }
-                                }
-                            }
-                            #endif
-
                             // Toggle camera enabled
                             if !observableRoom.cameraTrackState.isPublished || !CameraCapturer.canSwitchPosition() {
                                 Button(action: {

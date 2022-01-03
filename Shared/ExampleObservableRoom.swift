@@ -65,50 +65,9 @@ class ExampleObservableRoom: ObservableRoom {
 
     @Published var textFieldString: String = ""
 
-    @Published var background: Background = .none {
-        didSet {
-            #if swift(>=5.5)
-            if #available(iOS 15, macOS 12, *) {
-                DispatchQueue.main.async {
-                    if let name = self.bgName[self.background] {
-                        self.bgSwapper.image = CIImage(named: name)
-                    } else {
-                        self.bgSwapper.image = nil
-                    }
-                }
-            }
-            #endif
-        }
-    }
-
     override init(_ room: Room) {
         super.init(room)
         room.add(delegate: self)
-    }
-
-    private var _bgSwapper: Any?
-    #if swift(>=5.5)
-    @available(iOS 15, macOS 12, *)
-    var bgSwapper: BackgroundSwapper {
-        get {
-            _bgSwapper = _bgSwapper ?? BackgroundSwapper()
-            return _bgSwapper as! BackgroundSwapper
-        }
-    }
-    #endif
-
-    // This is an example of using VideoCaptureInterceptor for custom frame processing
-    lazy var interceptor = VideoCaptureInterceptor { frame, capture in
-        // print("Captured frame with size:\(frame.width)x\(frame.height) on \(frame.timeStampNs)")
-        // For this example, we are not doing anything here and just using the original frame.
-        // It's possible to construct a `RTCVideoFrame` and pass it to `capture`.
-        #if swift(>=5.5)
-        if #available(iOS 15, macOS 12, *) {
-            self.bgSwapper.process(frame: frame, capture: capture)
-        } else {
-            capture(frame)
-        }
-        #endif
     }
 
     func sendMessage() {
