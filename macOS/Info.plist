@@ -30,5 +30,10 @@
 	<string>uses your camera for video chat</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>uses your microphone for video chat</string>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
 </dict>
 </plist>
