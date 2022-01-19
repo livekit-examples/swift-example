@@ -6,7 +6,7 @@ This app demonstrates the basic usage of [LiveKit Swift SDK (iOS/macOS)](https:/
 
 ## Get the code
 
-1. Clone [LiveKit Swift Example](https://github.com/livekit/client-example-swift).
+1. Clone this [LiveKit Swift Example](https://github.com/livekit/client-example-swift) repo.
 2. Open `LiveKitExample.xcodeproj` (not the `-dev.xcworkspace`).
 3. Wait for packages to sync.
 
