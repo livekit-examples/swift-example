@@ -62,7 +62,7 @@ struct ParticipantView: View {
                             .padding()
                     }
                     HStack {
-                        Text(participant.identity ?? "-")
+                        Text("\(participant.identity)") //  (\(participant.publish ?? "-"))
                             .lineLimit(1)
                             .truncationMode(.tail)
 

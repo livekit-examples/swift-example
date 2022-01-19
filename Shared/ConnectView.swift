@@ -4,6 +4,7 @@ final class ConnectViewCtrl: ObservableObject {
     @AppStorage("url") var url: String = ""
     @AppStorage("token") var token: String = ""
     @AppStorage("simulcast") var simulcast: Bool = true
+    @AppStorage("publish") var publish: Bool = false
 }
 
 struct ConnectView: View {
@@ -30,6 +31,11 @@ struct ConnectView: View {
                             Text("Simulcast")
                                 .fontWeight(.bold)
                         }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
+                        // Not yet available
+//                        Toggle(isOn: $ctrl.publish) {
+//                            Text("Publish mode")
+//                                .fontWeight(.bold)
+//                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
                     }.frame(maxWidth: 350)
 
                     if case .connecting = appCtrl.connectionState {
@@ -38,7 +44,8 @@ struct ConnectView: View {
                         LKButton(title: "Connect") {
                             appCtrl.connect(url: ctrl.url,
                                             token: ctrl.token,
-                                            simulcast: ctrl.simulcast)
+                                            simulcast: ctrl.simulcast,
+                                            publish: ctrl.publish)
                         }
                     }
                 }
@@ -49,12 +56,10 @@ struct ConnectView: View {
         }
 
         .alert(isPresented: $appCtrl.shouldShowError) {
-            var message: Text?
-            if case .disconnected(let error) = appCtrl.connectionState, error != nil {
-                message = Text(error!.localizedDescription)
-                print("\(error!.localizedDescription)")
-            }
-            return Alert(title: Text("Error"), message: message)
+            Alert(title: Text("Error"),
+                  message: Text(appCtrl.latestError != nil
+                                    ? String(describing: appCtrl.latestError!)
+                                    : "Unknown error"))
         }
     }
 }

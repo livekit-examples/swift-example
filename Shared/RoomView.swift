@@ -222,29 +222,29 @@ struct RoomView: View {
 
                             #if os(iOS)
                             Button(action: {
-                                observableRoom.toggleScreenEnabled()
+                                observableRoom.toggleScreenShareEnabled()
                             },
                             label: {
                                 Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
-                                    observableRoom.localScreen != nil ? Color.green : nil
+                                    observableRoom.screenShareTrackState.isPublished ? Color.green : nil
                                 )
                             })
                             #elseif os(macOS)
                             Button(action: {
-                                if observableRoom.localScreen != nil {
+                                if observableRoom.screenShareTrackState.isPublished {
                                     // turn off screen share
-                                    observableRoom.toggleScreenEnabled()
+                                    observableRoom.toggleScreenShareEnabled(screenShareSource: nil)
                                 } else {
                                     screenPickerPresented = true
                                 }
                             },
                             label: {
                                 Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
-                                    observableRoom.localScreen != nil ? Color.green : nil
+                                    observableRoom.screenShareTrackState.isPublished ? Color.green : nil
                                 )
                             }).popover(isPresented: $screenPickerPresented) {
                                 ScreenShareSourcePickerView { source in
-                                    observableRoom.toggleScreenEnabled(source)
+                                    observableRoom.toggleScreenShareEnabled(screenShareSource: source)
                                     screenPickerPresented = false
                                 }.padding()
                             }

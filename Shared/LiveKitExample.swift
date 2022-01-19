@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct Multiplatform_SwiftUIApp: App {
+struct LiveKitExample: App {
 
     @StateObject private var appState = AppCtrl.shared
 

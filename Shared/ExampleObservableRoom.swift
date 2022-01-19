@@ -73,7 +73,6 @@ class ExampleObservableRoom: ObservableRoom {
     func sendMessage() {
 
         guard let localParticipant = room.localParticipant else {
-            // LocalParticipant should exist if alreadey connected to the room
             print("LocalParticipant doesn't exist")
             return
         }
@@ -102,65 +101,67 @@ class ExampleObservableRoom: ObservableRoom {
         }
     }
 
-    // the name to use for ipc
-    //    static let ipcName = "group.livekit-example.broadcast.buffer-ipc"
-
-    //    var screenSharePublication: LocalTrackPublication?
-
-    func toggleScreenEnabled(_ source: ScreenShareSource? = nil) {
+    func toggleScreenShareEnabled(screenShareSource: ScreenShareSource? = nil) {
 
         guard let localParticipant = room.localParticipant else {
-            // LocalParticipant should exist if alreadey connected to the room
             print("LocalParticipant doesn't exist")
             return
         }
 
-        #if os(macOS)
-        if let publication = self.localScreen {
-            localParticipant.unpublish(publication: publication).then {
-                DispatchQueue.main.async {
-                    self.localScreen = nil
-                }
-            }
-        } else {
-            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: source ?? .mainDisplay)
-            localParticipant.publishVideoTrack(track: track).then { publication in
-                DispatchQueue.main.async {
-                    self.localScreen = publication
-                }
-            }
+        guard !screenShareTrackState.isBusy else {
+            print("screenShareTrackState is .busy")
+            return
         }
-        #endif
-
-        //        #if os(iOS)
-        //
-        //        if let pub = ipcPub {
-        //            //
-        //            localParticipant.unpublish(publication: pub).then {
-        //                self.ipcPub = nil
-        //            }
-        //
-        //        } else {
-        //            let track = LocalVideoTrack.createIPCTrack(ipcName: ExampleObservableRoom.ipcName)
-        //            localParticipant.publishVideoTrack(track: track).then { pub in
-        //                self.ipcPub = pub
-        //            }
-        //        }
-        //
+        
+        // Experimental iOS screen share
+        // 
         //        RPSystemBroadcastPickerView.show(for: "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt",
         //                                         showsMicrophoneButton: false)
         //
+        //        if let ud = UserDefaults(suiteName: "group.livekit-example.broadcast") {
+        //            ud.set(room.url, forKey: "url")
+        //            ud.set(room.token, forKey: "token")
+        //        }
 
+        if case .published(let track) = screenShareTrackState {
+
+            DispatchQueue.main.async {
+                self.screenShareTrackState = .busy(isPublishing: false)
+            }
+
+            localParticipant.unpublish(publication: track).then { _ in
+                DispatchQueue.main.async {
+                    self.screenShareTrackState = .notPublished()
+                }
+            }
+        } else {
+
+            DispatchQueue.main.async {
+                self.screenShareTrackState = .busy(isPublishing: true)
+            }
+
+            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource ?? .mainDisplay)
+            localParticipant.publishVideoTrack(track: track).then { publication in
+                DispatchQueue.main.async {
+                    self.screenShareTrackState = .published(publication)
+                }
+            }.catch { error in
+                DispatchQueue.main.async {
+                    self.screenShareTrackState = .notPublished(error: error)
+                }
+            }
+        }
     }
 
     override func room(_ room: Room,
                        participantDidLeave participant: RemoteParticipant) {
         DispatchQueue.main.async {
-            self.participants.removeValue(forKey: participant.sid)
+            //            self.participants.removeValue(forKey: participant.sid)
             if let focusParticipant = self.focusParticipant,
                focusParticipant.sid == participant.sid {
                 self.focusParticipant = nil
             }
+            self.objectWillChange.send()
         }
     }
 

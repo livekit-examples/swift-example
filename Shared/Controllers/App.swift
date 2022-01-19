@@ -12,7 +12,9 @@ final class AppCtrl: ObservableObject {
     public static let shared = AppCtrl()
 
     // Used to show connection error dialog
+    // private var didClose: Bool = false
     @Published var shouldShowError: Bool = false
+    public var latestError: Error?
 
     @Published private(set) var connectionState: ConnectionState = .disconnected() {
         didSet {
@@ -21,8 +23,9 @@ final class AppCtrl: ObservableObject {
 
             if case .disconnected(let error) = connectionState {
                 room = nil
+
                 if error != nil {
-                    // error is not nil, show an alert
+                    latestError = error
                     shouldShowError = true
                 }
             }
@@ -42,9 +45,16 @@ final class AppCtrl: ObservableObject {
         LoggingSystem.bootstrap(logFactory)
     }
 
-    func connect(url: String, token: String, simulcast: Bool = true) {
+    func connect(url: String,
+                 token: String,
+                 simulcast: Bool = true,
+                 publish: Bool = false) {
 
         print("Connecting to Room...")
+
+        let connectOptions = ConnectOptions(
+            publish: publish ? "publish_\(UUID().uuidString)" : nil
+        )
 
         let roomOptions = RoomOptions(
             // Pass the simulcast option
@@ -54,6 +64,7 @@ final class AppCtrl: ObservableObject {
         LiveKit.connect(url,
                         token,
                         delegate: self,
+                        connectOptions: connectOptions,
                         roomOptions: roomOptions).then { room in
                             print("Did connect to Room, name: \(room.name ?? "(no name)")")
                             DispatchQueue.main.async {
