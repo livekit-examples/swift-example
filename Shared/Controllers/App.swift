@@ -35,14 +35,7 @@ final class AppCtrl: ObservableObject {
     @Published private(set) var room: Room?
 
     private init() {
-
-        func logFactory(label: String) -> LogHandler {
-            var handler = StreamLogHandler.standardError(label: label)
-            handler.logLevel = .debug
-            return handler
-        }
-
-        LoggingSystem.bootstrap(logFactory)
+        LoggingSystem.bootstrap({ LiveKitLogHandler(label: $0) })
     }
 
     func connect(url: String,
