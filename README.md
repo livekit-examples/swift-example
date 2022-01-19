@@ -1,6 +1,9 @@
-# LiveKit SDK Example App for iOS/macOS
+# LiveKit SDK Example App for iOS & macOS
 
 This app demonstrates the basic usage of [LiveKit Swift SDK (iOS/macOS)](https://github.com/livekit/client-sdk-ios).
+
+**macOS**
+![macOS](https://user-images.githubusercontent.com/548776/150068761-ce8f7d59-72e8-412a-9675-66a2eec9f04f.png)
 
 # How to run the example
 
