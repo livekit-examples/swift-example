@@ -103,6 +103,10 @@ class ExampleObservableRoom: ObservableRoom {
 
     func toggleScreenShareEnabled(screenShareSource: ScreenShareSource? = nil) {
 
+        #if os(iOS)
+        return toggleScreenShareEnabled()
+        #elseif os(macOS)
+
         guard let localParticipant = room.localParticipant else {
             print("LocalParticipant doesn't exist")
             return
@@ -112,9 +116,9 @@ class ExampleObservableRoom: ObservableRoom {
             print("screenShareTrackState is .busy")
             return
         }
-        
+
         // Experimental iOS screen share
-        // 
+        //
         //        RPSystemBroadcastPickerView.show(for: "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt",
         //                                         showsMicrophoneButton: false)
         //
@@ -151,6 +155,7 @@ class ExampleObservableRoom: ObservableRoom {
                 }
             }
         }
+        #endif
     }
 
     override func room(_ room: Room,
