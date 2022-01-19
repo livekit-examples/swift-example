@@ -4,17 +4,17 @@ This app demonstrates the basic usage of [LiveKit Swift SDK (iOS/macOS)](https:/
 
 # How to run the example
 
-## Get the code
+### Get the code
 
 1. Clone this [LiveKit Swift Example](https://github.com/livekit/client-example-swift) repo.
 2. Open `LiveKitExample.xcodeproj` (not the `-dev.xcworkspace`).
 3. Wait for packages to sync.
 
-## Change bundle id & code signing information
+### Change bundle id & code signing information
 1. Select the `LiveKitExample` project from the left Navigator.
 2. For each **Target**, select **Signing & Capabilities** tab and update your **Team** and **Bundle Identifier** to your preference.
 
-## 🚀 Run
+### 🚀 Run
 1. Select `LiveKitExample (iOS)` or `LiveKitExample (macOS)` from the **Scheme selector** at the top of Xcode.
 2. **Run** the project from the menu **Product** → **Run** or by ⌘R.
 
@@ -22,7 +22,7 @@ If you encounter code signing issues, make sure you change the **Team** and **bu
 
 # Troubleshooting
 
-## Package errors
+### Package errors
 
 If you get package syncing errors, try *resetting your package caches* by right clicking **Package Dependencies** and choosing **Reset Package Caches** from the **Navigator**.
 
