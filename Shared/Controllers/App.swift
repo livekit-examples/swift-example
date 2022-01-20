@@ -66,7 +66,7 @@ final class AppCtrl: ObservableObject {
                         }.catch { error in
                             print("\(String(describing: self)) Failed to connect to room with error: \(error)")
                             DispatchQueue.main.async {
-                                self.connectionState = .disconnected(error)
+                                self.connectionState = .disconnected(error: error)
                             }
                         }
     }
