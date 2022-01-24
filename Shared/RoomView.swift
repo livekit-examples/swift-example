@@ -127,39 +127,50 @@ struct RoomView: View {
 
     func content(geometry: GeometryProxy) -> some View {
 
-        HorVStack(axis: geometry.isWide ? .horizontal : .vertical) {
+        VStack {
 
-            Group {
-                if let focusParticipant = observableRoom.focusParticipant {
-                    ParticipantView(participant: focusParticipant,
-                                    videoViewMode: videoViewMode, onTap: ({ _ in
-                                        observableRoom.focusParticipant = nil
-                                    })).frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    ScrollView(.vertical, showsIndicators: true) {
-                        LazyVGrid(columns: columns,
-                                  alignment: .center,
-                                  spacing: 10) {
-                            ForEach(observableRoom.allParticipants.values) { participant in
-                                ParticipantView(participant: participant,
-                                                videoViewMode: videoViewMode, onTap: ({ participant in
-                                                    observableRoom.focusParticipant = participant
-                                                })).aspectRatio(1, contentMode: .fit)
-                            }
-                        }.padding()
+            if case .connecting(let isReconnecting) = appCtrl.connectionState,
+               isReconnecting {
+                Text("Re-connecting...")
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.white)
+                    .padding()
+            }
+
+            HorVStack(axis: geometry.isWide ? .horizontal : .vertical) {
+
+                Group {
+                    if let focusParticipant = observableRoom.focusParticipant {
+                        ParticipantView(participant: focusParticipant,
+                                        videoViewMode: videoViewMode, onTap: ({ _ in
+                                            observableRoom.focusParticipant = nil
+                                        })).frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        ScrollView(.vertical, showsIndicators: true) {
+                            LazyVGrid(columns: columns,
+                                      alignment: .center,
+                                      spacing: 10) {
+                                ForEach(observableRoom.allParticipants.values) { participant in
+                                    ParticipantView(participant: participant,
+                                                    videoViewMode: videoViewMode, onTap: ({ participant in
+                                                        observableRoom.focusParticipant = participant
+                                                    })).aspectRatio(1, contentMode: .fit)
+                                }
+                            }.padding()
+                        }
                     }
                 }
-            }
-            .frame(
-                minWidth: 0,
-                maxWidth: .infinity,
-                minHeight: 0,
-                maxHeight: .infinity,
-                alignment: .topLeading
-            )
-            // Show messages view if enabled
-            if observableRoom.showMessagesView {
-                messagesView(geometry: geometry)
+                .frame(
+                    minWidth: 0,
+                    maxWidth: .infinity,
+                    minHeight: 0,
+                    maxHeight: .infinity,
+                    alignment: .topLeading
+                )
+                // Show messages view if enabled
+                if observableRoom.showMessagesView {
+                    messagesView(geometry: geometry)
+                }
             }
         }
     }
@@ -266,8 +277,37 @@ struct RoomView: View {
                         Spacer()
 
                         Menu {
-                            Toggle("Video Information", isOn: $debugCtrl.showInformation)
-                            Toggle("Video View", isOn: $debugCtrl.videoViewVisible)
+                            Toggle("Show video information", isOn: $debugCtrl.showInformation)
+                            Toggle("Use video view", isOn: $debugCtrl.videoViewVisible)
+
+                            Menu {
+                                Button {
+                                    appCtrl.room?.sendSimulate(scenario: .nodeFailure)
+                                } label: {
+                                    Text("Node failure")
+                                }
+
+                                Button {
+                                    appCtrl.room?.sendSimulate(scenario: .serverLeave)
+                                } label: {
+                                    Text("Server leave")
+                                }
+
+                                Button {
+                                    appCtrl.room?.sendSimulate(scenario: .migration)
+                                } label: {
+                                    Text("Migration")
+                                }
+
+                                Button {
+                                    appCtrl.room?.sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                                } label: {
+                                    Text("Speaker update")
+                                }
+
+                            } label: {
+                                Text("Simulate scenario")
+                            }
                         } label: {
                             Image(systemName: "ladybug.fill")
                         }

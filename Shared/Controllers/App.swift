@@ -21,7 +21,8 @@ final class AppCtrl: ObservableObject {
             // Don't do anything if value is same
             guard oldValue != connectionState else { return }
 
-            if case .disconnected(let error) = connectionState {
+            if case .disconnected(let reason) = connectionState,
+               case .network(let error) = reason {
                 room = nil
 
                 if error != nil {
@@ -66,7 +67,7 @@ final class AppCtrl: ObservableObject {
                         }.catch { error in
                             print("\(String(describing: self)) Failed to connect to room with error: \(error)")
                             DispatchQueue.main.async {
-                                self.connectionState = .disconnected(error: error)
+                                self.connectionState = .disconnected()
                             }
                         }
     }
