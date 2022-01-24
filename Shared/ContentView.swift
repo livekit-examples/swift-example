@@ -9,8 +9,8 @@ struct ContentView: View {
             Color.black
                 .ignoresSafeArea()
 
-            if let room = appCtrl.room {
-                RoomView(room)
+            if case .connected = appCtrl.connectionState {
+                RoomView(appCtrl.room)
                     .environmentObject(DebugCtrl())
             } else {
                 ConnectView()

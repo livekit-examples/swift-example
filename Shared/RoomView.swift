@@ -129,8 +129,7 @@ struct RoomView: View {
 
         VStack {
 
-            if case .connecting(let isReconnecting) = appCtrl.connectionState,
-               isReconnecting {
+            if appCtrl.room.connectionState.isReconnecting {
                 Text("Re-connecting...")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
@@ -282,25 +281,25 @@ struct RoomView: View {
 
                             Menu {
                                 Button {
-                                    appCtrl.room?.sendSimulate(scenario: .nodeFailure)
+                                    appCtrl.room.sendSimulate(scenario: .nodeFailure)
                                 } label: {
                                     Text("Node failure")
                                 }
 
                                 Button {
-                                    appCtrl.room?.sendSimulate(scenario: .serverLeave)
+                                    appCtrl.room.sendSimulate(scenario: .serverLeave)
                                 } label: {
                                     Text("Server leave")
                                 }
 
                                 Button {
-                                    appCtrl.room?.sendSimulate(scenario: .migration)
+                                    appCtrl.room.sendSimulate(scenario: .migration)
                                 } label: {
                                     Text("Migration")
                                 }
 
                                 Button {
-                                    appCtrl.room?.sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                                    appCtrl.room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
                                 } label: {
                                     Text("Speaker update")
                                 }

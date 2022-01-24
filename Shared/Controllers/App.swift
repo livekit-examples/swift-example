@@ -9,42 +9,27 @@ import WebRTC
 final class AppCtrl: ObservableObject {
 
     // Singleton pattern
-    public static let shared = AppCtrl()
+    public static var shared = AppCtrl()
 
     // Used to show connection error dialog
     // private var didClose: Bool = false
     @Published var shouldShowError: Bool = false
     public var latestError: Error?
 
-    @Published private(set) var connectionState: ConnectionState = .disconnected() {
-        didSet {
-            // Don't do anything if value is same
-            guard oldValue != connectionState else { return }
-
-            if case .disconnected(let reason) = connectionState,
-               case .network(let error) = reason {
-                room = nil
-
-                if error != nil {
-                    latestError = error
-                    shouldShowError = true
-                }
-            }
-        }
+    public let room = Room()
+    public var connectionState: ConnectionState {
+        room.connectionState
     }
-
-    @Published private(set) var room: Room?
 
     private init() {
         LoggingSystem.bootstrap({ LiveKitLogHandler(label: $0) })
+        room.add(delegate: self)
     }
 
     func connect(url: String,
                  token: String,
                  simulcast: Bool = true,
                  publish: Bool = false) {
-
-        print("Connecting to Room...")
 
         let connectOptions = ConnectOptions(
             publish: publish ? "publish_\(UUID().uuidString)" : nil
@@ -55,39 +40,24 @@ final class AppCtrl: ObservableObject {
             defaultVideoPublishOptions: VideoPublishOptions(simulcast: simulcast)
         )
 
-        LiveKit.connect(url,
-                        token,
-                        delegate: self,
-                        connectOptions: connectOptions,
-                        roomOptions: roomOptions).then { room in
-                            print("Did connect to Room, name: \(room.name ?? "(no name)")")
-                            DispatchQueue.main.async {
-                                self.room = room
-                            }
-                        }.catch { error in
-                            print("\(String(describing: self)) Failed to connect to room with error: \(error)")
-                            DispatchQueue.main.async {
-                                self.connectionState = .disconnected()
-                            }
-                        }
+        room.connect(url,
+                     token,
+                     connectOptions: connectOptions,
+                     roomOptions: roomOptions)
     }
 
     func disconnect() {
-        room?.disconnect()
-        room = nil
+        room.disconnect()
     }
 }
 
 extension AppCtrl: RoomDelegate {
 
     func room(_ room: Room, didUpdate connectionState: ConnectionState) {
-
-        print("Did update connectionState \(connectionState)")
-
+        print("Did update connectionState \(connectionState) \(room.connectionState)")
         DispatchQueue.main.async {
-            // UI will update according to the connectionState
             withAnimation {
-                self.connectionState = connectionState
+                self.objectWillChange.send()
             }
         }
     }
