@@ -1,6 +1,6 @@
 # LiveKit SDK Example App for iOS & macOS
 
-This app demonstrates the basic usage of [LiveKit Swift SDK (iOS/macOS)](https://github.com/livekit/client-sdk-ios).
+This app demonstrates the basic usage of [LiveKit Swift SDK (iOS/macOS)](https://github.com/livekit/client-sdk-ios). See [LiveKit Docs](https://docs.livekit.io/) for more information.
 
 **macOS**
 ![macOS](https://user-images.githubusercontent.com/548776/150068761-ce8f7d59-72e8-412a-9675-66a2eec9f04f.png)
@@ -22,6 +22,14 @@ This app demonstrates the basic usage of [LiveKit Swift SDK (iOS/macOS)](https:/
 2. **Run** the project from the menu **Product** → **Run** or by ⌘R.
 
 If you encounter code signing issues, make sure you change the **Team** and **bundle id** from the previous step.
+
+### ⚡️ Connect
+
+1. Prepare & Start [LiveKit Server](https://github.com/livekit/livekit-server). See the [Getting Started page](https://docs.livekit.io/guides/getting-started) for more information.
+2. Generate an access token.
+3. Enter the **Server URL** and **Access token** to the example app and tap **Connect**.
+
+Server URL would typically look like `ws://localhost:7880` depending on your configuration. It should start with `ws://` for *non-secure* and `wss://` for *secure* connections.
 
 # Troubleshooting
 
