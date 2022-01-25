@@ -158,6 +158,22 @@ class ExampleObservableRoom: ObservableRoom {
         #endif
     }
 
+    // MARK: - RoomDelegate
+    
+    override func room(_ room: Room, didUpdate connectionState: ConnectionState) {
+        super.room(room, didUpdate: connectionState)
+        if case .disconnected = connectionState {
+            DispatchQueue.main.async {
+                // Reset state
+                self.focusParticipant = nil
+                self.showMessagesView = false
+                self.textFieldString = ""
+                self.messages.removeAll()
+                self.objectWillChange.send()
+            }
+        }
+    }
+    
     override func room(_ room: Room,
                        participantDidLeave participant: RemoteParticipant) {
         DispatchQueue.main.async {
