@@ -9,7 +9,9 @@ struct ContentView: View {
             Color.black
                 .ignoresSafeArea()
 
-            if case .connected = appCtrl.connectionState {
+            if appCtrl.connectionState.isConnected ||
+                appCtrl.connectionState.isReconnecting {
+                
                 RoomView(appCtrl.room)
                     .environmentObject(DebugCtrl())
             } else {

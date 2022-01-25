@@ -129,8 +129,9 @@ struct RoomView: View {
 
         VStack {
 
-            if appCtrl.room.connectionState.isReconnecting {
-                Text("Re-connecting...")
+            if case .connecting(let connectMode) = appCtrl.room.connectionState,
+               case .reconnect(let reconnectMode) = connectMode {
+                Text("Re-connecting(\(String(describing: reconnectMode)))...")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
                     .padding()
