@@ -11,7 +11,7 @@ struct ContentView: View {
 
             if appCtrl.connectionState.isConnected ||
                 appCtrl.connectionState.isReconnecting {
-                
+
                 RoomView(appCtrl.room)
                     .environmentObject(DebugCtrl())
             } else {
