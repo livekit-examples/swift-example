@@ -22,17 +22,12 @@ extension CIImage {
 
 struct RoomView: View {
 
-    @EnvironmentObject var appCtrl: AppCtrl
+    @EnvironmentObject var appCtrl: AppContextCtrl
+    @EnvironmentObject var room: ExampleObservableRoom
     @EnvironmentObject var debugCtrl: DebugCtrl
-    @ObservedObject var observableRoom: ExampleObservableRoom
 
     @State private var videoViewMode: VideoView.Mode = .fill
-
     @State private var screenPickerPresented = false
-
-    init(_ room: Room) {
-        observableRoom = ExampleObservableRoom(room)
-    }
 
     var columns = [
         GridItem(.adaptive(minimum: CGFloat(adaptiveMin)))
@@ -40,7 +35,7 @@ struct RoomView: View {
 
     func messageView(_ message: RoomMessage) -> some View {
 
-        let isMe = message.senderSid == observableRoom.room.localParticipant?.sid
+        let isMe = message.senderSid == room.room.localParticipant?.sid
 
         return HStack {
             if isMe {
@@ -60,7 +55,7 @@ struct RoomView: View {
     }
 
     func scrollToBottom(_ scrollView: ScrollViewProxy) {
-        guard let last = observableRoom.messages.last else { return }
+        guard let last = room.messages.last else { return }
         withAnimation {
             scrollView.scrollTo(last.id)
         }
@@ -72,7 +67,7 @@ struct RoomView: View {
             ScrollViewReader { scrollView in
                 ScrollView(.vertical, showsIndicators: true) {
                     LazyVStack(alignment: .leading, spacing: 0) {
-                        ForEach(observableRoom.messages) {
+                        ForEach(room.messages) {
                             messageView($0)
                         }
                     }
@@ -81,7 +76,7 @@ struct RoomView: View {
                     // Scroll to bottom when first showing the messages list
                     scrollToBottom(scrollView)
                 })
-                .onChange(of: observableRoom.messages, perform: { _ in
+                .onChange(of: room.messages, perform: { _ in
                     // Scroll to bottom when there is a new message
                     scrollToBottom(scrollView)
                 })
@@ -95,7 +90,7 @@ struct RoomView: View {
             }
             HStack(spacing: 0) {
 
-                TextField("Enter message", text: $observableRoom.textFieldString)
+                TextField("Enter message", text: $room.textFieldString)
                     .textFieldStyle(PlainTextFieldStyle())
                     .disableAutocorrection(true)
                 // TODO: add iOS unique view modifiers
@@ -109,11 +104,11 @@ struct RoomView: View {
                 //                                              style: StrokeStyle(lineWidth: 1.0)))
 
                 Button(action: {
-                    observableRoom.sendMessage()
+                    room.sendMessage()
                 },
                 label: {
                     Image(systemName: "paperplane.fill")
-                        .foregroundColor(observableRoom.textFieldString.isEmpty ? nil : Color.blue)
+                        .foregroundColor(room.textFieldString.isEmpty ? nil : Color.blue)
                 })
 
             }.padding()
@@ -129,7 +124,7 @@ struct RoomView: View {
 
         VStack {
 
-            if case .connecting(let connectMode) = appCtrl.room.connectionState,
+            if case .connecting(let connectMode) = appCtrl.connectionState,
                case .reconnect(let reconnectMode) = connectMode {
                 Text("Re-connecting(\(String(describing: reconnectMode)))...")
                     .multilineTextAlignment(.center)
@@ -140,25 +135,25 @@ struct RoomView: View {
             HorVStack(axis: geometry.isWide ? .horizontal : .vertical) {
 
                 Group {
-                    if let focusParticipant = observableRoom.focusParticipant {
-                        ParticipantView(participant: focusParticipant,
-                                        videoViewMode: videoViewMode, onTap: ({ _ in
-                                            observableRoom.focusParticipant = nil
-                                        })).frame(maxWidth: .infinity, maxHeight: .infinity)
-                    } else {
-                        ScrollView(.vertical, showsIndicators: true) {
-                            LazyVGrid(columns: columns,
-                                      alignment: .center,
-                                      spacing: 10) {
-                                ForEach(observableRoom.allParticipants.values) { participant in
-                                    ParticipantView(participant: participant,
-                                                    videoViewMode: videoViewMode, onTap: ({ participant in
-                                                        observableRoom.focusParticipant = participant
-                                                    })).aspectRatio(1, contentMode: .fit)
-                                }
-                            }.padding()
-                        }
+                    //                    if let focusParticipant = room.focusParticipant {
+                    //                        ParticipantView(participant: focusParticipant,
+                    //                                        videoViewMode: videoViewMode, onTap: ({ _ in
+                    //                                            room.focusParticipant = nil
+                    //                                        })).frame(maxWidth: .infinity, maxHeight: .infinity)
+                    //                    } else {
+                    ScrollView(.vertical, showsIndicators: true) {
+                        LazyVGrid(columns: columns,
+                                  alignment: .center,
+                                  spacing: 10) {
+                            ForEach(room.allParticipants.values) { participant in
+                                ParticipantView(participant: participant,
+                                                videoViewMode: videoViewMode, onTap: ({ participant in
+                                                    room.focusParticipant = participant
+                                                })).aspectRatio(1, contentMode: .fit)
+                            }
+                        }.padding()
                     }
+                    //                    }
                 }
                 .frame(
                     minWidth: 0,
@@ -168,7 +163,7 @@ struct RoomView: View {
                     alignment: .topLeading
                 )
                 // Show messages view if enabled
-                if observableRoom.showMessagesView {
+                if room.showMessagesView {
                     messagesView(geometry: geometry)
                 }
             }
@@ -194,25 +189,25 @@ struct RoomView: View {
                         Group {
 
                             // Toggle camera enabled
-                            if !observableRoom.cameraTrackState.isPublished || !CameraCapturer.canSwitchPosition() {
+                            if !room.cameraTrackState.isPublished || !CameraCapturer.canSwitchPosition() {
                                 Button(action: {
-                                    observableRoom.toggleCameraEnabled()
+                                    room.toggleCameraEnabled()
                                 },
                                 label: {
                                     Image(systemName: "video.fill")
                                         .foregroundColor(
-                                            observableRoom.cameraTrackState.isPublished  ? Color.green : nil
+                                            room.cameraTrackState.isPublished  ? Color.green : nil
                                         )
                                 })
                                 // disable while publishing/un-publishing
-                                .disabled(observableRoom.cameraTrackState.isBusy)
+                                .disabled(room.cameraTrackState.isBusy)
                             } else {
                                 Menu {
                                     Button("Switch position") {
-                                        observableRoom.switchCameraPosition()
+                                        room.switchCameraPosition()
                                     }
                                     Button("Disable") {
-                                        observableRoom.toggleCameraEnabled()
+                                        room.toggleCameraEnabled()
                                     }
                                 } label: {
                                     Image(systemName: "video.fill").foregroundColor(Color.green)
@@ -221,41 +216,41 @@ struct RoomView: View {
 
                             // Toggle microphone enabled
                             Button(action: {
-                                observableRoom.toggleMicrophoneEnabled()
+                                room.toggleMicrophoneEnabled()
                             },
                             label: {
                                 Image(systemName: "mic.fill").foregroundColor(
-                                    observableRoom.microphoneTrackState.isPublished ? Color.orange : nil
+                                    room.microphoneTrackState.isPublished ? Color.orange : nil
                                 )
                             })
                             // disable while publishing/un-publishing
-                            .disabled(observableRoom.microphoneTrackState.isBusy)
+                            .disabled(room.microphoneTrackState.isBusy)
 
                             #if os(iOS)
                             Button(action: {
-                                observableRoom.toggleScreenShareEnabled()
+                                room.toggleScreenShareEnabled()
                             },
                             label: {
                                 Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
-                                    observableRoom.screenShareTrackState.isPublished ? Color.green : nil
+                                    room.screenShareTrackState.isPublished ? Color.green : nil
                                 )
                             })
                             #elseif os(macOS)
                             Button(action: {
-                                if observableRoom.screenShareTrackState.isPublished {
+                                if room.screenShareTrackState.isPublished {
                                     // turn off screen share
-                                    observableRoom.toggleScreenShareEnabled(screenShareSource: nil)
+                                    room.toggleScreenShareEnabled(screenShareSource: nil)
                                 } else {
                                     screenPickerPresented = true
                                 }
                             },
                             label: {
                                 Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
-                                    observableRoom.screenShareTrackState.isPublished ? Color.green : nil
+                                    room.screenShareTrackState.isPublished ? Color.green : nil
                                 )
                             }).popover(isPresented: $screenPickerPresented) {
                                 ScreenShareSourcePickerView { source in
-                                    observableRoom.toggleScreenShareEnabled(screenShareSource: source)
+                                    room.toggleScreenShareEnabled(screenShareSource: source)
                                     screenPickerPresented = false
                                 }.padding()
                             }
@@ -264,12 +259,12 @@ struct RoomView: View {
                             // Toggle messages view (chat example)
                             Button(action: {
                                 withAnimation {
-                                    observableRoom.showMessagesView.toggle()
+                                    room.showMessagesView.toggle()
                                 }
                             },
                             label: {
                                 Image(systemName: "message.fill")
-                                    .foregroundColor(observableRoom.showMessagesView ? Color.blue : nil)
+                                    .foregroundColor(room.showMessagesView ? Color.blue : nil)
                             })
 
                         }
@@ -282,25 +277,25 @@ struct RoomView: View {
 
                             Menu {
                                 Button {
-                                    appCtrl.room.sendSimulate(scenario: .nodeFailure)
+                                    appCtrl.room.room.sendSimulate(scenario: .nodeFailure)
                                 } label: {
                                     Text("Node failure")
                                 }
 
                                 Button {
-                                    appCtrl.room.sendSimulate(scenario: .serverLeave)
+                                    appCtrl.room.room.sendSimulate(scenario: .serverLeave)
                                 } label: {
                                     Text("Server leave")
                                 }
 
                                 Button {
-                                    appCtrl.room.sendSimulate(scenario: .migration)
+                                    appCtrl.room.room.sendSimulate(scenario: .migration)
                                 } label: {
                                     Text("Migration")
                                 }
 
                                 Button {
-                                    appCtrl.room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                                    appCtrl.room.room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
                                 } label: {
                                     Text("Speaker update")
                                 }
@@ -362,7 +357,7 @@ struct HorVStack<Content: View>: View {
 
 extension GeometryProxy {
 
-    var isTall: Bool {
+    public var isTall: Bool {
         size.height > size.width
     }
 

@@ -1,29 +1,21 @@
 import SwiftUI
 import LiveKit
-import Logging
 import WebRTC
 
 // This class contains the logic to control behavior of the whole app.
-// The instance is attached to the root using `environmentObject`,
-// so it can be accessed anywhere by using `@EnvironmentObject`.
-final class AppCtrl: ObservableObject {
-
-    // Singleton pattern
-    public static var shared = AppCtrl()
-
+final class AppContextCtrl: ObservableObject {
     // Used to show connection error dialog
     // private var didClose: Bool = false
     @Published var shouldShowError: Bool = false
     public var latestError: Error?
 
-    public let room = Room()
+    public let room = ExampleObservableRoom()
     public var connectionState: ConnectionState {
-        room.connectionState
+        room.room.connectionState
     }
 
-    private init() {
-        LoggingSystem.bootstrap({ LiveKitLogHandler(label: $0) })
-        room.add(delegate: self)
+    public init() {
+        room.room.add(delegate: self)
     }
 
     func connect(url: String,
@@ -40,18 +32,18 @@ final class AppCtrl: ObservableObject {
             defaultVideoPublishOptions: VideoPublishOptions(simulcast: simulcast)
         )
 
-        room.connect(url,
-                     token,
-                     connectOptions: connectOptions,
-                     roomOptions: roomOptions)
+        room.room.connect(url,
+                          token,
+                          connectOptions: connectOptions,
+                          roomOptions: roomOptions)
     }
 
     func disconnect() {
-        room.disconnect()
+        room.room.disconnect()
     }
 }
 
-extension AppCtrl: RoomDelegate {
+extension AppContextCtrl: RoomDelegate {
 
     func room(_ room: Room, didUpdate connectionState: ConnectionState) {
         print("Did update connectionState \(connectionState) \(room.connectionState)")

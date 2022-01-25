@@ -3,8 +3,8 @@ import LiveKit
 
 struct ParticipantView: View {
 
-    @EnvironmentObject var debugCtrl: DebugCtrl
     @ObservedObject var participant: ObservableParticipant
+    @EnvironmentObject var debugCtrl: DebugCtrl
 
     var videoViewMode: VideoView.Mode = .fill
     var onTap: ((_ participant: ObservableParticipant) -> Void)?

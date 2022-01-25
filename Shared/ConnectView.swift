@@ -9,10 +9,8 @@ final class ConnectViewCtrl: ObservableObject {
 
 struct ConnectView: View {
 
-    @EnvironmentObject var appCtrl: AppCtrl
+    @EnvironmentObject var appCtrl: AppContextCtrl
     @ObservedObject var ctrl = ConnectViewCtrl()
-
-    @State var isModalActive: Bool = true
 
     var body: some View {
         GeometryReader { geometry in

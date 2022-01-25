@@ -65,7 +65,7 @@ class ExampleObservableRoom: ObservableRoom {
 
     @Published var textFieldString: String = ""
 
-    override init(_ room: Room) {
+    override init(_ room: Room = Room()) {
         super.init(room)
         room.add(delegate: self)
     }
