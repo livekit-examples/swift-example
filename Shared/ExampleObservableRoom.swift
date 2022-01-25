@@ -159,7 +159,7 @@ class ExampleObservableRoom: ObservableRoom {
     }
 
     // MARK: - RoomDelegate
-    
+
     override func room(_ room: Room, didUpdate connectionState: ConnectionState) {
         super.room(room, didUpdate: connectionState)
         if case .disconnected = connectionState {
@@ -173,7 +173,7 @@ class ExampleObservableRoom: ObservableRoom {
             }
         }
     }
-    
+
     override func room(_ room: Room,
                        participantDidLeave participant: RemoteParticipant) {
         DispatchQueue.main.async {

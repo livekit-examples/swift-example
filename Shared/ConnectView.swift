@@ -1,4 +1,5 @@
 import SwiftUI
+import LiveKit
 
 final class ConnectViewCtrl: ObservableObject {
     @AppStorage("url") var url: String = ""
@@ -15,14 +16,17 @@ struct ConnectView: View {
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
-                VStack(alignment: .center, spacing: 60.0) {
+                VStack(alignment: .center, spacing: 40.0) {
 
-                    Image("logo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 40)
+                    VStack(spacing: 20) {
+                        Image("logo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 40)
+                        Text("SDK Version \(LiveKit.version)")
+                    }
 
-                    VStack(spacing: 30) {
+                    VStack(spacing: 20) {
                         LKTextField(title: "Server URL", text: $ctrl.url, type: .URL)
                         LKTextField(title: "Token", text: $ctrl.token, type: .ascii)
                         Toggle(isOn: $ctrl.simulcast) {
