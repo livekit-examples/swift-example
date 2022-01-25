@@ -33,7 +33,7 @@ struct RoomView: View {
         GridItem(.adaptive(minimum: CGFloat(adaptiveMin)))
     ]
 
-    func messageView(_ message: RoomMessage) -> some View {
+    func messageView(_ message: ExampleRoomMessage) -> some View {
 
         let isMe = message.senderSid == room.room.localParticipant?.sid
 

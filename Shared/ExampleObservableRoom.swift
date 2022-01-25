@@ -18,7 +18,7 @@ extension ObservableParticipant {
     }
 }
 
-struct RoomMessage: Identifiable, Equatable, Hashable, Codable {
+struct ExampleRoomMessage: Identifiable, Equatable, Hashable, Codable {
     // Identifiable protocol needs param named id
     var id: String {
         messageId
@@ -61,7 +61,7 @@ class ExampleObservableRoom: ObservableRoom {
     @Published var focusParticipant: ObservableParticipant?
 
     @Published var showMessagesView: Bool = false
-    @Published var messages: [RoomMessage] = []
+    @Published var messages: [ExampleRoomMessage] = []
 
     @Published var textFieldString: String = ""
 
@@ -80,10 +80,10 @@ class ExampleObservableRoom: ObservableRoom {
         // Make sure the message is not empty
         guard !textFieldString.isEmpty else { return }
 
-        let roomMessage = RoomMessage(messageId: UUID().uuidString,
-                                      senderSid: localParticipant.sid,
-                                      senderIdentity: localParticipant.identity,
-                                      text: textFieldString)
+        let roomMessage = ExampleRoomMessage(messageId: UUID().uuidString,
+                                             senderSid: localParticipant.sid,
+                                             senderIdentity: localParticipant.identity,
+                                             text: textFieldString)
         textFieldString = ""
         messages.append(roomMessage)
 
@@ -161,7 +161,7 @@ class ExampleObservableRoom: ObservableRoom {
     override func room(_ room: Room,
                        participantDidLeave participant: RemoteParticipant) {
         DispatchQueue.main.async {
-            //            self.participants.removeValue(forKey: participant.sid)
+            // self.participants.removeValue(forKey: participant.sid)
             if let focusParticipant = self.focusParticipant,
                focusParticipant.sid == participant.sid {
                 self.focusParticipant = nil
@@ -170,12 +170,12 @@ class ExampleObservableRoom: ObservableRoom {
         }
     }
 
-    override func room(_ room: Room, participant: RemoteParticipant?, didReceive data: Data) {
+    func room(_ room: Room, participant: RemoteParticipant?, didReceive data: Data) {
 
         print("did receive data \(data)")
 
         do {
-            let roomMessage = try jsonDecoder.decode(RoomMessage.self, from: data)
+            let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
             // Update UI from main queue
             DispatchQueue.main.async {
                 // Add messages to the @Published messages property
