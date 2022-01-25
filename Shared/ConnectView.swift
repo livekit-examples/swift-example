@@ -44,7 +44,7 @@ struct ConnectView: View {
 
                             if !appCtx.connectionHistory.isEmpty {
                                 Menu {
-                                    ForEach(Array(appCtx.connectionHistory)) { entry in
+                                    ForEach(appCtx.connectionHistory.view) { entry in
                                         Button {
                                             appCtx.connect(entry: entry)
                                         } label: {

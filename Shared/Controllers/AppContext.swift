@@ -46,7 +46,7 @@ final class AppContextCtrl: ObservableObject {
                           roomOptions: roomOptions).then { room in
 
                             // add successful connection to history
-                            self.connectionHistory.add(room: room)
+                            self.connectionHistory.update(room: room)
                           }
     }
 
