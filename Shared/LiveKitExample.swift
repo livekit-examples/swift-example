@@ -6,15 +6,28 @@ struct AppContextView: View {
 
     @StateObject var appCtrl = AppContextCtrl()
 
+    var shouldShowRoomView: Bool {
+        appCtrl.connectionState.isConnected || appCtrl.connectionState.isReconnecting
+    }
+
+    func computeTitle() -> String {
+        if shouldShowRoomView {
+            let elements = [appCtrl.room.room.name,
+                            appCtrl.room.room.localParticipant?.name,
+                            appCtrl.room.room.localParticipant?.identity]
+            return elements.compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
+        }
+
+        return "LiveKit"
+    }
+
     var body: some View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
 
-            if appCtrl.connectionState.isConnected ||
-                appCtrl.connectionState.isReconnecting {
-                RoomView()
-                    .environmentObject(DebugCtrl())
+            if shouldShowRoomView {
+                RoomView().environmentObject(DebugCtrl())
             } else {
                 ConnectView()
             }
@@ -22,7 +35,7 @@ struct AppContextView: View {
         }.foregroundColor(Color.white)
         .environmentObject(appCtrl)
         .environmentObject(appCtrl.room)
-        .navigationTitle("LiveKit")
+        .navigationTitle(computeTitle())
     }
 }
 
