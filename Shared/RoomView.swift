@@ -135,25 +135,25 @@ struct RoomView: View {
             HorVStack(axis: geometry.isWide ? .horizontal : .vertical) {
 
                 Group {
-                    //                    if let focusParticipant = room.focusParticipant {
-                    //                        ParticipantView(participant: focusParticipant,
-                    //                                        videoViewMode: videoViewMode, onTap: ({ _ in
-                    //                                            room.focusParticipant = nil
-                    //                                        })).frame(maxWidth: .infinity, maxHeight: .infinity)
-                    //                    } else {
-                    ScrollView(.vertical, showsIndicators: true) {
-                        LazyVGrid(columns: columns,
-                                  alignment: .center,
-                                  spacing: 10) {
-                            ForEach(room.allParticipants.values) { participant in
-                                ParticipantView(participant: participant,
-                                                videoViewMode: videoViewMode, onTap: ({ participant in
-                                                    room.focusParticipant = participant
-                                                })).aspectRatio(1, contentMode: .fit)
-                            }
-                        }.padding()
+                    if let focusParticipant = room.focusParticipant {
+                        ParticipantView(participant: focusParticipant,
+                                        videoViewMode: videoViewMode, onTap: ({ _ in
+                                            room.focusParticipant = nil
+                                        })).frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        ScrollView(.vertical, showsIndicators: true) {
+                            LazyVGrid(columns: columns,
+                                      alignment: .center,
+                                      spacing: 10) {
+                                ForEach(room.allParticipants.values) { participant in
+                                    ParticipantView(participant: participant,
+                                                    videoViewMode: videoViewMode, onTap: ({ participant in
+                                                        room.focusParticipant = participant
+                                                    })).aspectRatio(1, contentMode: .fit)
+                                }
+                            }.padding()
+                        }
                     }
-                    //                    }
                 }
                 .frame(
                     minWidth: 0,
