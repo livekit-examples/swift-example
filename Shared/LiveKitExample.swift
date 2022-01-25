@@ -36,6 +36,10 @@ struct AppContextView: View {
         .environmentObject(appCtrl)
         .environmentObject(appCtrl.room)
         .navigationTitle(computeTitle())
+        .onDisappear {
+            print("\(String(describing: type(of: self))) onDisappear")
+            appCtrl.disconnect()
+        }
     }
 }
 
