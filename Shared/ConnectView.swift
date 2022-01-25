@@ -3,7 +3,7 @@ import LiveKit
 
 struct ConnectView: View {
 
-    @EnvironmentObject var appCtx: AppContextCtrl
+    @EnvironmentObject var appCtrl: AppContextCtrl
 
     var body: some View {
         GeometryReader { geometry in
@@ -19,9 +19,9 @@ struct ConnectView: View {
                     }
 
                     VStack(spacing: 20) {
-                        LKTextField(title: "Server URL", text: $appCtx.url, type: .URL)
-                        LKTextField(title: "Token", text: $appCtx.token, type: .ascii)
-                        Toggle(isOn: $appCtx.simulcast) {
+                        LKTextField(title: "Server URL", text: $appCtrl.url, type: .URL)
+                        LKTextField(title: "Token", text: $appCtrl.token, type: .ascii)
+                        Toggle(isOn: $appCtrl.simulcast) {
                             Text("Simulcast")
                                 .fontWeight(.bold)
                         }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
@@ -32,21 +32,21 @@ struct ConnectView: View {
                         //                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
                     }.frame(maxWidth: 350)
 
-                    if case .connecting = appCtx.connectionState {
+                    if case .connecting = appCtrl.connectionState {
                         ProgressView()
                     } else {
                         HStack(alignment: .center) {
                             Spacer()
 
                             LKButton(title: "Connect") {
-                                appCtx.connect()
+                                appCtrl.connect()
                             }
 
-                            if !appCtx.connectionHistory.isEmpty {
+                            if !appCtrl.connectionHistory.isEmpty {
                                 Menu {
-                                    ForEach(appCtx.connectionHistory.view) { entry in
+                                    ForEach(appCtrl.connectionHistory.view) { entry in
                                         Button {
-                                            appCtx.connect(entry: entry)
+                                            appCtrl.connect(entry: entry)
                                         } label: {
                                             Text([entry.roomName,
                                                   entry.participantIdentity,
@@ -78,10 +78,10 @@ struct ConnectView: View {
             }
         }
 
-        .alert(isPresented: $appCtx.shouldShowError) {
+        .alert(isPresented: $appCtrl.shouldShowError) {
             Alert(title: Text("Error"),
-                  message: Text(appCtx.latestError != nil
-                                    ? String(describing: appCtx.latestError!)
+                  message: Text(appCtrl.latestError != nil
+                                    ? String(describing: appCtrl.latestError!)
                                     : "Unknown error"))
         }
     }
