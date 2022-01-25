@@ -14,14 +14,22 @@ final class AppContextCtrl: ObservableObject {
         room.room.connectionState
     }
 
+    @AppStorage("url") var url: String = ""
+    @AppStorage("token") var token: String = ""
+    @AppStorage("simulcast") var simulcast: Bool = true
+    @AppStorage("publish") var publish: Bool = false
+    @AppStorage("connectionHistory") var connectionHistory = ConnectionHistory()
+
     public init() {
         room.room.add(delegate: self)
     }
 
-    func connect(url: String,
-                 token: String,
-                 simulcast: Bool = true,
-                 publish: Bool = false) {
+    func connect(entry: ConnectionHistoryEntry? = nil) {
+
+        if let entry = entry {
+            url = entry.url
+            token = entry.token
+        }
 
         let connectOptions = ConnectOptions(
             publish: publish ? "publish_\(UUID().uuidString)" : nil
@@ -35,7 +43,11 @@ final class AppContextCtrl: ObservableObject {
         room.room.connect(url,
                           token,
                           connectOptions: connectOptions,
-                          roomOptions: roomOptions)
+                          roomOptions: roomOptions).then { room in
+
+                            // add successful connection to history
+                            self.connectionHistory.add(room: room)
+                          }
     }
 
     func disconnect() {

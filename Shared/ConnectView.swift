@@ -1,17 +1,9 @@
 import SwiftUI
 import LiveKit
 
-final class ConnectViewCtrl: ObservableObject {
-    @AppStorage("url") var url: String = ""
-    @AppStorage("token") var token: String = ""
-    @AppStorage("simulcast") var simulcast: Bool = true
-    @AppStorage("publish") var publish: Bool = false
-}
-
 struct ConnectView: View {
 
-    @EnvironmentObject var appCtrl: AppContextCtrl
-    @ObservedObject var ctrl = ConnectViewCtrl()
+    @EnvironmentObject var appCtx: AppContextCtrl
 
     var body: some View {
         GeometryReader { geometry in
@@ -27,9 +19,9 @@ struct ConnectView: View {
                     }
 
                     VStack(spacing: 20) {
-                        LKTextField(title: "Server URL", text: $ctrl.url, type: .URL)
-                        LKTextField(title: "Token", text: $ctrl.token, type: .ascii)
-                        Toggle(isOn: $ctrl.simulcast) {
+                        LKTextField(title: "Server URL", text: $appCtx.url, type: .URL)
+                        LKTextField(title: "Token", text: $appCtx.token, type: .ascii)
+                        Toggle(isOn: $appCtx.simulcast) {
                             Text("Simulcast")
                                 .fontWeight(.bold)
                         }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
@@ -40,15 +32,44 @@ struct ConnectView: View {
                         //                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
                     }.frame(maxWidth: 350)
 
-                    if case .connecting = appCtrl.connectionState {
+                    if case .connecting = appCtx.connectionState {
                         ProgressView()
                     } else {
-                        LKButton(title: "Connect") {
-                            appCtrl.connect(url: ctrl.url,
-                                            token: ctrl.token,
-                                            simulcast: ctrl.simulcast,
-                                            publish: ctrl.publish)
+                        HStack(alignment: .center) {
+                            Spacer()
+
+                            LKButton(title: "Connect") {
+                                appCtx.connect()
+                            }
+
+                            if !appCtx.connectionHistory.isEmpty {
+                                Menu {
+                                    ForEach(Array(appCtx.connectionHistory)) { entry in
+                                        Button {
+                                            appCtx.connect(entry: entry)
+                                        } label: {
+                                            Text([entry.roomName,
+                                                  entry.participantIdentity,
+                                                  entry.url].compactMap { $0 }.joined(separator: " "))
+                                            Image(systemName: "bolt.horizontal.circle")
+                                        }
+                                    }
+
+                                } label: {
+                                    Image(systemName: "clock.fill")
+                                    Text("Recent")
+                                }
+                                .menuStyle(.borderedButton)
+                                .frame(minWidth: nil,
+                                       maxWidth: 200,
+                                       minHeight: nil,
+                                       maxHeight: nil)
+                            }
+
+                            Spacer()
+
                         }
+
                     }
                 }
                 .padding()
@@ -57,10 +78,10 @@ struct ConnectView: View {
             }
         }
 
-        .alert(isPresented: $appCtrl.shouldShowError) {
+        .alert(isPresented: $appCtx.shouldShowError) {
             Alert(title: Text("Error"),
-                  message: Text(appCtrl.latestError != nil
-                                    ? String(describing: appCtrl.latestError!)
+                  message: Text(appCtx.latestError != nil
+                                    ? String(describing: appCtx.latestError!)
                                     : "Unknown error"))
         }
     }
