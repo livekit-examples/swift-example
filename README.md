@@ -31,6 +31,14 @@ If you encounter code signing issues, make sure you change the **Team** and **bu
 
 Server URL would typically look like `ws://localhost:7880` depending on your configuration. It should start with `ws://` for *non-secure* and `wss://` for *secure* connections.
 
+### ✅ Permissions
+
+iOS/macOS will ask you to grant permission when enabling **Camera**, **Microphone** and/or **Screen Share**. Simply allow this to continue publishing the track.
+
+#### macOS Screen Share
+
+Open **Settings** → **Security & Privacy** → **Screen Recording** and make sure **LiveKitExample** has a ✔️ mark. You will need to restart the app.
+
 # Troubleshooting
 
 ### Package errors
