@@ -3,7 +3,7 @@
     "pins": [
       {
         "package": "LiveKit",
-        "repositoryURL": "https://github.com/livekit/client-sdk-ios",
+        "repositoryURL": "https://github.com/livekit/client-sdk-swift",
         "state": {
           "branch": null,
           "revision": "bb07c5ced350874296a2f3126f9f2e1d2b6fdda7",

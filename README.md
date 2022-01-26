@@ -1,6 +1,6 @@
 # LiveKit SDK Example App for iOS & macOS
 
-This app demonstrates the basic usage of [LiveKit Swift SDK (iOS/macOS)](https://github.com/livekit/client-sdk-ios). See [LiveKit Docs](https://docs.livekit.io/) for more information.
+This app demonstrates the basic usage of [LiveKit Swift SDK (iOS/macOS)](https://github.com/livekit/client-sdk-swift). See [LiveKit Docs](https://docs.livekit.io/) for more information.
 
 **macOS**
 ![macOS](https://user-images.githubusercontent.com/548776/150068761-ce8f7d59-72e8-412a-9675-66a2eec9f04f.png)
@@ -51,4 +51,4 @@ Please join us on [Slack](https://join.slack.com/t/livekit-users/shared_invite/z
 
 # Development
 
-For development, open `LiveKitExample-dev.xcworkspace` instead. This workspace will compile with the local `../client-sdk-ios`.
+For development, open `LiveKitExample-dev.xcworkspace` instead. This workspace will compile with the local `../client-sdk-swift`.

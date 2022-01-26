@@ -24,19 +24,17 @@
 		683F05F5273F96B20080C7AC /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 683F05F4273F96B20080C7AC /* ReplayKit.framework */; platformFilter = maccatalyst; };
 		683F05F8273F96B20080C7AC /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683F05F7273F96B20080C7AC /* SampleHandler.swift */; };
 		683F05FC273F96B20080C7AC /* BroadcastExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		685271E927407BBC006B4D6A /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = 685271E827407BBC006B4D6A /* SwiftProtobuf */; };
 		685271EC2744391D006B4D6A /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685271EB2744391D006B4D6A /* Debug.swift */; };
 		685271ED2744391D006B4D6A /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685271EB2744391D006B4D6A /* Debug.swift */; };
+		6866E93C27A196C4008AD2DF /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6866E93B27A196C4008AD2DF /* LiveKit */; };
+		6866E93E27A1974B008AD2DF /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6866E93D27A1974B008AD2DF /* LiveKit */; };
 		6884B77C2750507400732D47 /* ScreenShareSourcePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6884B77B2750507400732D47 /* ScreenShareSourcePickerView.swift */; };
 		6884B77D2750507400732D47 /* ScreenShareSourcePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6884B77B2750507400732D47 /* ScreenShareSourcePickerView.swift */; };
 		68B3854C271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
 		68B3854D271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
 		68B38550271E780700711D5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68B3853E271E780700711D5F /* Assets.xcassets */; };
 		68B38551271E780700711D5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68B3853E271E780700711D5F /* Assets.xcassets */; };
-		9E7835E127519FFF00559DEC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7835E027519FFF00559DEC /* LiveKit */; };
-		9E7835E32751A01700559DEC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7835E22751A01700559DEC /* LiveKit */; };
 		9E7835E52751A6D900559DEC /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9E7835E42751A6D900559DEC /* LiveKit */; };
-		9E7835E72751A71500559DEC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E7835E62751A71500559DEC /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,9 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E7835E72751A71500559DEC /* CoreGraphics.framework in Frameworks */,
-				685271E927407BBC006B4D6A /* SwiftProtobuf in Frameworks */,
-				9E7835E127519FFF00559DEC /* LiveKit in Frameworks */,
+				6866E93C27A196C4008AD2DF /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,7 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E7835E32751A01700559DEC /* LiveKit in Frameworks */,
+				6866E93E27A1974B008AD2DF /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,8 +256,7 @@
 			);
 			name = "LiveKitExample (iOS)";
 			packageProductDependencies = (
-				685271E827407BBC006B4D6A /* SwiftProtobuf */,
-				9E7835E027519FFF00559DEC /* LiveKit */,
+				6866E93B27A196C4008AD2DF /* LiveKit */,
 			);
 			productName = "Multiplatform-SwiftUI (iOS)";
 			productReference = 68B38543271E780700711D5F /* LiveKitExample.app */;
@@ -281,7 +276,7 @@
 			);
 			name = "LiveKitExample (macOS)";
 			packageProductDependencies = (
-				9E7835E22751A01700559DEC /* LiveKit */,
+				6866E93D27A1974B008AD2DF /* LiveKit */,
 			);
 			productName = "Multiplatform-SwiftUI (macOS)";
 			productReference = 68B38549271E780700711D5F /* LiveKitExample.app */;
@@ -319,7 +314,7 @@
 			mainGroup = 68B38536271E780600711D5F;
 			packageReferences = (
 				685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */,
-				9E7835DF27519FFF00559DEC /* XCRemoteSwiftPackageReference "client-sdk-ios" */,
+				6866E93A27A196C4008AD2DF /* XCRemoteSwiftPackageReference "client-sdk-swift" */,
 			);
 			productRefGroup = 68B38544271E780700711D5F /* Products */;
 			projectDirPath = "";
@@ -757,9 +752,9 @@
 				minimumVersion = 1.18.0;
 			};
 		};
-		9E7835DF27519FFF00559DEC /* XCRemoteSwiftPackageReference "client-sdk-ios" */ = {
+		6866E93A27A196C4008AD2DF /* XCRemoteSwiftPackageReference "client-sdk-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/livekit/client-sdk-ios";
+			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
 				kind = exactVersion;
 				version = 0.9.5;
@@ -768,19 +763,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		685271E827407BBC006B4D6A /* SwiftProtobuf */ = {
+		6866E93B27A196C4008AD2DF /* LiveKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */;
-			productName = SwiftProtobuf;
-		};
-		9E7835E027519FFF00559DEC /* LiveKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 9E7835DF27519FFF00559DEC /* XCRemoteSwiftPackageReference "client-sdk-ios" */;
+			package = 6866E93A27A196C4008AD2DF /* XCRemoteSwiftPackageReference "client-sdk-swift" */;
 			productName = LiveKit;
 		};
-		9E7835E22751A01700559DEC /* LiveKit */ = {
+		6866E93D27A1974B008AD2DF /* LiveKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 9E7835DF27519FFF00559DEC /* XCRemoteSwiftPackageReference "client-sdk-ios" */;
+			package = 6866E93A27A196C4008AD2DF /* XCRemoteSwiftPackageReference "client-sdk-swift" */;
 			productName = LiveKit;
 		};
 		9E7835E42751A6D900559DEC /* LiveKit */ = {
