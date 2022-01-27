@@ -74,6 +74,6 @@ extension ConnectionHistory: RawRepresentable {
             participantName: localParticipant.name
         )
 
-        self.insert(element)
+        self.update(with: element)
     }
 }
