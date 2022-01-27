@@ -54,9 +54,9 @@ struct ConnectView: View {
                                                   entry.url].compactMap { $0 }.joined(separator: " "))
                                         }
                                     }
-                                    
+
                                     Divider()
-                                    
+
                                     Button {
                                         appCtrl.connectionHistory.removeAll()
                                     } label: {

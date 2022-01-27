@@ -59,6 +59,14 @@ extension AppContextCtrl: RoomDelegate {
 
     func room(_ room: Room, didUpdate connectionState: ConnectionState) {
         print("Did update connectionState \(connectionState) \(room.connectionState)")
+
+        if let error = connectionState.disconnectedWithError {
+            latestError = error
+            DispatchQueue.main.async {
+                self.shouldShowError = true
+            }
+        }
+
         DispatchQueue.main.async {
             withAnimation {
                 self.objectWillChange.send()
