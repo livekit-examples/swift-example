@@ -45,19 +45,6 @@ class ExampleObservableRoom: ObservableRoom {
     let jsonEncoder = JSONEncoder()
     let jsonDecoder = JSONDecoder()
 
-    let bgName: [Background: String] = [
-        .office: "bg-1",
-        .space: "bg-2",
-        .thailand: "bg-3"
-    ]
-
-    enum Background {
-        case none
-        case office
-        case space
-        case thailand
-    }
-
     @Published var focusParticipant: ObservableParticipant?
 
     @Published var showMessagesView: Bool = false
@@ -186,7 +173,8 @@ class ExampleObservableRoom: ObservableRoom {
         }
     }
 
-    func room(_ room: Room, participant: RemoteParticipant?, didReceive data: Data) {
+    override func room(_ room: Room,
+                       participant: RemoteParticipant?, didReceive data: Data) {
 
         print("did receive data \(data)")
 
@@ -194,11 +182,13 @@ class ExampleObservableRoom: ObservableRoom {
             let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
             // Update UI from main queue
             DispatchQueue.main.async {
-                // Add messages to the @Published messages property
-                // which will trigger the UI to update
-                self.messages.append(roomMessage)
-                // Show the messages view when new messages arrive
-                self.showMessagesView = true
+                withAnimation {
+                    // Add messages to the @Published messages property
+                    // which will trigger the UI to update
+                    self.messages.append(roomMessage)
+                    // Show the messages view when new messages arrive
+                    self.showMessagesView = true
+                }
             }
 
         } catch let error {

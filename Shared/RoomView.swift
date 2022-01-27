@@ -103,13 +103,13 @@ struct RoomView: View {
                 //                                .strokeBorder(Color.white.opacity(0.3),
                 //                                              style: StrokeStyle(lineWidth: 1.0)))
 
-                Button(action: {
+                Button {
                     room.sendMessage()
-                },
-                label: {
+                } label: {
                     Image(systemName: "paperplane.fill")
                         .foregroundColor(room.textFieldString.isEmpty ? nil : Color.blue)
-                })
+                }
+                .buttonStyle(.borderless)
 
             }.padding()
             .background(Color.lkBlue)
