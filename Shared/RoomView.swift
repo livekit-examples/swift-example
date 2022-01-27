@@ -301,6 +301,7 @@ struct RoomView: View {
                             }
                         } label: {
                             Image(systemName: "ladybug.fill")
+                                .renderingMode(.original)
                         }
 
                         Spacer()
@@ -311,7 +312,7 @@ struct RoomView: View {
                         },
                         label: {
                             Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(nil)
+                                .renderingMode(.original)
                         })
                     }
 

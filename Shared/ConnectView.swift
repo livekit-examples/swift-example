@@ -49,6 +49,7 @@ struct ConnectView: View {
                                             appCtrl.connect(entry: entry)
                                         } label: {
                                             Image(systemName: "bolt.horizontal.circle")
+                                                .renderingMode(.original)
                                             Text([entry.roomName,
                                                   entry.participantIdentity,
                                                   entry.url].compactMap { $0 }.joined(separator: " "))
@@ -67,6 +68,7 @@ struct ConnectView: View {
 
                                 } label: {
                                     Image(systemName: "clock.fill")
+                                        .renderingMode(.original)
                                     Text("Recent")
                                 }
                                 .frame(minWidth: nil,
