@@ -54,7 +54,9 @@ struct LiveKitExample: App {
         WindowGroup {
             AppContextView()
         }
+        #if os(macOS)
         .windowStyle(.automatic)
         .windowToolbarStyle(.automatic)
+        #endif
     }
 }

@@ -195,9 +195,7 @@ struct RoomView: View {
                                 },
                                 label: {
                                     Image(systemName: "video.fill")
-                                        .foregroundColor(
-                                            room.cameraTrackState.isPublished  ? Color.green : nil
-                                        )
+                                        .renderingMode(room.cameraTrackState.isPublished ? .original : .template)
                                 })
                                 // disable while publishing/un-publishing
                                 .disabled(room.cameraTrackState.isBusy)
@@ -210,7 +208,8 @@ struct RoomView: View {
                                         room.toggleCameraEnabled()
                                     }
                                 } label: {
-                                    Image(systemName: "video.fill").foregroundColor(Color.green)
+                                    Image(systemName: "video.fill")
+                                        .renderingMode(.original)
                                 }
                             }
 
@@ -219,9 +218,8 @@ struct RoomView: View {
                                 room.toggleMicrophoneEnabled()
                             },
                             label: {
-                                Image(systemName: "mic.fill").foregroundColor(
-                                    room.microphoneTrackState.isPublished ? Color.orange : nil
-                                )
+                                Image(systemName: "mic.fill")
+                                    .renderingMode(room.microphoneTrackState.isPublished ? .original : .template)
                             })
                             // disable while publishing/un-publishing
                             .disabled(room.microphoneTrackState.isBusy)
@@ -231,9 +229,8 @@ struct RoomView: View {
                                 room.toggleScreenShareEnabled()
                             },
                             label: {
-                                Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
-                                    room.screenShareTrackState.isPublished ? Color.green : nil
-                                )
+                                Image(systemName: "rectangle.fill.on.rectangle.fill")
+                                    .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
                             })
                             #elseif os(macOS)
                             Button(action: {
@@ -245,9 +242,8 @@ struct RoomView: View {
                                 }
                             },
                             label: {
-                                Image(systemName: "rectangle.fill.on.rectangle.fill").foregroundColor(
-                                    room.screenShareTrackState.isPublished ? Color.green : nil
-                                )
+                                Image(systemName: "rectangle.fill.on.rectangle.fill")
+                                    .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
                             }).popover(isPresented: $screenPickerPresented) {
                                 ScreenShareSourcePickerView { source in
                                     room.toggleScreenShareEnabled(screenShareSource: source)
@@ -264,7 +260,7 @@ struct RoomView: View {
                             },
                             label: {
                                 Image(systemName: "message.fill")
-                                    .foregroundColor(room.showMessagesView ? Color.blue : nil)
+                                    .renderingMode(room.showMessagesView ? .original : .template)
                             })
 
                         }

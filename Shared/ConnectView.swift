@@ -69,7 +69,6 @@ struct ConnectView: View {
                                     Image(systemName: "clock.fill")
                                     Text("Recent")
                                 }
-                                .menuStyle(.borderedButton)
                                 .frame(minWidth: nil,
                                        maxWidth: 200,
                                        minHeight: nil,
