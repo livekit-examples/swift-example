@@ -48,11 +48,21 @@ struct ConnectView: View {
                                         Button {
                                             appCtrl.connect(entry: entry)
                                         } label: {
+                                            Image(systemName: "bolt.horizontal.circle")
                                             Text([entry.roomName,
                                                   entry.participantIdentity,
                                                   entry.url].compactMap { $0 }.joined(separator: " "))
-                                            Image(systemName: "bolt.horizontal.circle")
                                         }
+                                    }
+                                    
+                                    Divider()
+                                    
+                                    Button {
+                                        appCtrl.connectionHistory.removeAll()
+                                    } label: {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .renderingMode(.original)
+                                        Text("Clear history")
                                     }
 
                                 } label: {
