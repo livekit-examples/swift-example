@@ -2,19 +2,19 @@ import SwiftUI
 import Logging
 import LiveKit
 
-struct AppContextView: View {
+struct RoomContextView: View {
 
-    @StateObject var appCtrl = AppContextCtrl()
+    @StateObject var roomCtx = RoomContext()
 
     var shouldShowRoomView: Bool {
-        appCtrl.connectionState.isConnected || appCtrl.connectionState.isReconnecting
+        roomCtx.connectionState.isConnected || roomCtx.connectionState.isReconnecting
     }
 
     func computeTitle() -> String {
         if shouldShowRoomView {
-            let elements = [appCtrl.room.room.name,
-                            appCtrl.room.room.localParticipant?.name,
-                            appCtrl.room.room.localParticipant?.identity]
+            let elements = [roomCtx.room.room.name,
+                            roomCtx.room.room.localParticipant?.name,
+                            roomCtx.room.room.localParticipant?.identity]
             return elements.compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
         }
 
@@ -27,18 +27,18 @@ struct AppContextView: View {
                 .ignoresSafeArea()
 
             if shouldShowRoomView {
-                RoomView().environmentObject(DebugCtrl())
+                RoomView()
             } else {
                 ConnectView()
             }
 
         }.foregroundColor(Color.white)
-        .environmentObject(appCtrl)
-        .environmentObject(appCtrl.room)
+        .environmentObject(roomCtx)
+        .environmentObject(roomCtx.room)
         .navigationTitle(computeTitle())
         .onDisappear {
             print("\(String(describing: type(of: self))) onDisappear")
-            appCtrl.disconnect()
+            roomCtx.disconnect()
         }
     }
 }
@@ -46,13 +46,16 @@ struct AppContextView: View {
 @main
 struct LiveKitExample: App {
 
+    @StateObject var appCtx = AppContext()
+
     init() {
         LoggingSystem.bootstrap({ LiveKitLogHandler(label: $0) })
     }
 
     var body: some Scene {
         WindowGroup {
-            AppContextView()
+            RoomContextView()
+                .environmentObject(appCtx)
         }
         #if os(macOS)
         .windowStyle(.automatic)

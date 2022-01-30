@@ -22,11 +22,10 @@ extension CIImage {
 
 struct RoomView: View {
 
-    @EnvironmentObject var appCtrl: AppContextCtrl
+    @EnvironmentObject var appCtx: AppContext
+    @EnvironmentObject var roomCtx: RoomContext
     @EnvironmentObject var room: ExampleObservableRoom
-    @EnvironmentObject var debugCtrl: DebugCtrl
 
-    @State private var videoViewMode: VideoView.Mode = .fill
     @State private var screenPickerPresented = false
 
     var columns = [
@@ -124,7 +123,7 @@ struct RoomView: View {
 
         VStack {
 
-            if case .connecting(let connectMode) = appCtrl.connectionState,
+            if case .connecting(let connectMode) = roomCtx.connectionState,
                case .reconnect(let reconnectMode) = connectMode {
                 Text("Re-connecting(\(String(describing: reconnectMode)))...")
                     .multilineTextAlignment(.center)
@@ -137,7 +136,7 @@ struct RoomView: View {
                 Group {
                     if let focusParticipant = room.focusParticipant {
                         ParticipantView(participant: focusParticipant,
-                                        videoViewMode: videoViewMode, onTap: ({ _ in
+                                        videoViewMode: appCtx.videoViewMode, onTap: ({ _ in
                                             room.focusParticipant = nil
                                         })).frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
@@ -147,7 +146,7 @@ struct RoomView: View {
                                       spacing: 10) {
                                 ForEach(room.allParticipants.values) { participant in
                                     ParticipantView(participant: participant,
-                                                    videoViewMode: videoViewMode, onTap: ({ participant in
+                                                    videoViewMode: appCtx.videoViewMode, onTap: ({ participant in
                                                         room.focusParticipant = participant
                                                     })).aspectRatio(1, contentMode: .fit)
                                 }
@@ -178,7 +177,7 @@ struct RoomView: View {
                     ToolbarItemGroup(placement: toolbarPlacement) {
 
                         // VideoView mode switcher
-                        Picker("Mode", selection: $videoViewMode) {
+                        Picker("Mode", selection: $appCtx.videoViewMode) {
                             Text("Fit").tag(VideoView.Mode.fit)
                             Text("Fill").tag(VideoView.Mode.fill)
                         }
@@ -229,7 +228,7 @@ struct RoomView: View {
                                 room.toggleScreenShareEnabled()
                             },
                             label: {
-                                Image(systemName: "rectangle.fill.on.rectangle.fill")
+                                Image(systemName: "video.square.fill")
                                     .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
                             })
                             #elseif os(macOS)
@@ -242,7 +241,7 @@ struct RoomView: View {
                                 }
                             },
                             label: {
-                                Image(systemName: "rectangle.fill.on.rectangle.fill")
+                                Image(systemName: "video.square.fill")
                                     .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
                             }).popover(isPresented: $screenPickerPresented) {
                                 ScreenShareSourcePickerView { source in
@@ -268,30 +267,31 @@ struct RoomView: View {
                         Spacer()
 
                         Menu {
-                            Toggle("Show video information", isOn: $debugCtrl.showInformation)
-                            Toggle("Use video view", isOn: $debugCtrl.videoViewVisible)
+                            Toggle("Show video information", isOn: $appCtx.showInformationOverlay)
+                            Toggle("Use video view", isOn: $appCtx.videoViewVisible)
+                            Toggle("Prefer Metal", isOn: $appCtx.preferMetal)
 
                             Menu {
                                 Button {
-                                    appCtrl.room.room.sendSimulate(scenario: .nodeFailure)
+                                    roomCtx.room.room.sendSimulate(scenario: .nodeFailure)
                                 } label: {
                                     Text("Node failure")
                                 }
 
                                 Button {
-                                    appCtrl.room.room.sendSimulate(scenario: .serverLeave)
+                                    roomCtx.room.room.sendSimulate(scenario: .serverLeave)
                                 } label: {
                                     Text("Server leave")
                                 }
 
                                 Button {
-                                    appCtrl.room.room.sendSimulate(scenario: .migration)
+                                    roomCtx.room.room.sendSimulate(scenario: .migration)
                                 } label: {
                                     Text("Migration")
                                 }
 
                                 Button {
-                                    appCtrl.room.room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                                    roomCtx.room.room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
                                 } label: {
                                     Text("Speaker update")
                                 }
@@ -308,7 +308,7 @@ struct RoomView: View {
 
                         // Disconnect
                         Button(action: {
-                            appCtrl.disconnect()
+                            roomCtx.disconnect()
                         },
                         label: {
                             Image(systemName: "xmark.circle.fill")

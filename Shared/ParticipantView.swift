@@ -4,7 +4,7 @@ import LiveKit
 struct ParticipantView: View {
 
     @ObservedObject var participant: ObservableParticipant
-    @EnvironmentObject var debugCtrl: DebugCtrl
+    @EnvironmentObject var appCtx: AppContext
 
     var videoViewMode: VideoView.Mode = .fill
     var onTap: ((_ participant: ObservableParticipant) -> Void)?
@@ -21,22 +21,33 @@ struct ParticipantView: View {
 
                 // VideoView for the Participant
                 if let track = participant.mainVideoTrack,
-                   debugCtrl.videoViewVisible {
+                   appCtx.videoViewVisible {
                     ZStack(alignment: .topLeading) {
                         SwiftUIVideoView(track,
                                          mode: videoViewMode,
-                                         dimensions: $dimensions)
+                                         dimensions: $dimensions,
+                                         preferMetal: appCtx.preferMetal)
                             .background(Color.black)
 
                         // Show the actual video dimensions (if enabled)
-                        if debugCtrl.showInformation,
-                           let dimensions = dimensions {
-                            Text("DIM. \(dimensions.width)x\(dimensions.height)")
-                                .foregroundColor(Color.white)
-                                .padding(3)
-                                .background(Color.lkBlue)
-                                .cornerRadius(8)
-                                .padding()
+                        if appCtx.showInformationOverlay {
+                            VStack(alignment: .leading) {
+                                if  let dimensions = dimensions {
+                                    Text("DIM. \(dimensions.width)x\(dimensions.height)")
+                                        .foregroundColor(Color.white)
+                                        .padding(3)
+                                        .background(Color.lkBlue)
+                                        .cornerRadius(8)
+
+                                }
+                                Text("Metal: \(String(describing: appCtx.preferMetal))")
+                                    .foregroundColor(Color.white)
+                                    .padding(3)
+                                    .background(Color.green)
+                                    .cornerRadius(8)
+
+                            }
+                            .padding()
                         }
                     }
                 } else {
@@ -54,7 +65,8 @@ struct ParticipantView: View {
 
                 VStack(alignment: .trailing, spacing: 0) {
                     if let subVideoTrack = participant.subVideoTrack {
-                        SwiftUIVideoView(subVideoTrack, mode: .fill)
+                        SwiftUIVideoView(subVideoTrack, mode: .fill,
+                                         preferMetal: appCtx.preferMetal)
                             .background(Color.black)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)

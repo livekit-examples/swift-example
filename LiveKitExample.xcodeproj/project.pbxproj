@@ -11,8 +11,8 @@
 		6816B1A9272D45DF005ADB85 /* ExampleObservableRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816B1A7272D45DF005ADB85 /* ExampleObservableRoom.swift */; };
 		6816B1B0272D9198005ADB85 /* ParticipantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816B1AF272D9198005ADB85 /* ParticipantView.swift */; };
 		6816B1B1272D9198005ADB85 /* ParticipantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816B1AF272D9198005ADB85 /* ParticipantView.swift */; };
-		681E3F39271FC772007BB547 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F38271FC772007BB547 /* AppContext.swift */; };
-		681E3F3A271FC772007BB547 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F38271FC772007BB547 /* AppContext.swift */; };
+		681E3F39271FC772007BB547 /* RoomContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F38271FC772007BB547 /* RoomContext.swift */; };
+		681E3F3A271FC772007BB547 /* RoomContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F38271FC772007BB547 /* RoomContext.swift */; };
 		681E3F3F271FC795007BB547 /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F3E271FC795007BB547 /* Custom.swift */; };
 		681E3F40271FC795007BB547 /* Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F3E271FC795007BB547 /* Custom.swift */; };
 		681E3F43271FC7AD007BB547 /* RoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F41271FC7AC007BB547 /* RoomView.swift */; };
@@ -24,10 +24,10 @@
 		683F05F5273F96B20080C7AC /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 683F05F4273F96B20080C7AC /* ReplayKit.framework */; platformFilter = maccatalyst; };
 		683F05F8273F96B20080C7AC /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683F05F7273F96B20080C7AC /* SampleHandler.swift */; };
 		683F05FC273F96B20080C7AC /* BroadcastExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		685271EC2744391D006B4D6A /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685271EB2744391D006B4D6A /* Debug.swift */; };
-		685271ED2744391D006B4D6A /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 685271EB2744391D006B4D6A /* Debug.swift */; };
 		6866E93C27A196C4008AD2DF /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6866E93B27A196C4008AD2DF /* LiveKit */; };
 		6866E93E27A1974B008AD2DF /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6866E93D27A1974B008AD2DF /* LiveKit */; };
+		6867533B27A65652003707B9 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6867533A27A65652003707B9 /* AppContext.swift */; };
+		6867533C27A65652003707B9 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6867533A27A65652003707B9 /* AppContext.swift */; };
 		6884B77C2750507400732D47 /* ScreenShareSourcePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6884B77B2750507400732D47 /* ScreenShareSourcePickerView.swift */; };
 		6884B77D2750507400732D47 /* ScreenShareSourcePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6884B77B2750507400732D47 /* ScreenShareSourcePickerView.swift */; };
 		68B3854C271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
@@ -64,7 +64,7 @@
 /* Begin PBXFileReference section */
 		6816B1A7272D45DF005ADB85 /* ExampleObservableRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleObservableRoom.swift; sourceTree = "<group>"; };
 		6816B1AF272D9198005ADB85 /* ParticipantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantView.swift; sourceTree = "<group>"; };
-		681E3F38271FC772007BB547 /* AppContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
+		681E3F38271FC772007BB547 /* RoomContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomContext.swift; sourceTree = "<group>"; };
 		681E3F3E271FC795007BB547 /* Custom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
 		681E3F41271FC7AC007BB547 /* RoomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomView.swift; sourceTree = "<group>"; };
 		681E3F42271FC7AD007BB547 /* ConnectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
@@ -75,9 +75,9 @@
 		683F05F9273F96B20080C7AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		683F0603273FAD690080C7AC /* iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS.entitlements; sourceTree = "<group>"; };
 		683F0604273FADC20080C7AC /* BroadcastExt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BroadcastExt.entitlements; sourceTree = "<group>"; };
-		685271EB2744391D006B4D6A /* Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		6865EA2527513B4500FFAFC3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6865EA2D27513B6D00FFAFC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6867533A27A65652003707B9 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		6884B77B2750507400732D47 /* ScreenShareSourcePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenShareSourcePickerView.swift; sourceTree = "<group>"; };
 		68B3853C271E780600711D5F /* LiveKitExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveKitExample.swift; sourceTree = "<group>"; };
 		68B3853E271E780700711D5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -146,8 +146,8 @@
 		685271EA27443907006B4D6A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				681E3F38271FC772007BB547 /* AppContext.swift */,
-				685271EB2744391D006B4D6A /* Debug.swift */,
+				681E3F38271FC772007BB547 /* RoomContext.swift */,
+				6867533A27A65652003707B9 /* AppContext.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -367,9 +367,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				681E3F45271FC7AD007BB547 /* ConnectView.swift in Sources */,
-				681E3F39271FC772007BB547 /* AppContext.swift in Sources */,
+				6867533B27A65652003707B9 /* AppContext.swift in Sources */,
+				681E3F39271FC772007BB547 /* RoomContext.swift in Sources */,
 				683720D227A06404007DA986 /* ConnectionHistory.swift in Sources */,
-				685271EC2744391D006B4D6A /* Debug.swift in Sources */,
 				681E3F43271FC7AD007BB547 /* RoomView.swift in Sources */,
 				6816B1B0272D9198005ADB85 /* ParticipantView.swift in Sources */,
 				68B3854C271E780700711D5F /* LiveKitExample.swift in Sources */,
@@ -384,9 +384,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				681E3F46271FC7AD007BB547 /* ConnectView.swift in Sources */,
-				681E3F3A271FC772007BB547 /* AppContext.swift in Sources */,
+				6867533C27A65652003707B9 /* AppContext.swift in Sources */,
+				681E3F3A271FC772007BB547 /* RoomContext.swift in Sources */,
 				683720D327A06404007DA986 /* ConnectionHistory.swift in Sources */,
-				685271ED2744391D006B4D6A /* Debug.swift in Sources */,
 				681E3F44271FC7AD007BB547 /* RoomView.swift in Sources */,
 				6816B1B1272D9198005ADB85 /* ParticipantView.swift in Sources */,
 				68B3854D271E780700711D5F /* LiveKitExample.swift in Sources */,

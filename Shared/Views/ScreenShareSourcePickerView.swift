@@ -99,7 +99,7 @@ struct ScreenShareSourcePickerView: View {
                           spacing: 10) {
 
                     ForEach(ctrl.visibleTracks) { track in
-                        SwiftUIVideoView(track, mode: .fill)
+                        SwiftUIVideoView(track, mode: .fit)
                             .aspectRatio(1, contentMode: .fit)
                             .onTapGesture {
                                 guard let capturer = track.capturer as? MacOSScreenCapturer else { return }
