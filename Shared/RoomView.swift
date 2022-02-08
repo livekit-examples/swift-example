@@ -225,7 +225,7 @@ struct RoomView: View {
 
                             #if os(iOS)
                             Button(action: {
-                                room.toggleScreenShareEnabled()
+                                room.toggleScreenShareEnabled(screenShareSource: nil)
                             },
                             label: {
                                 Image(systemName: "video.square.fill")

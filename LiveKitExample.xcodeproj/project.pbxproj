@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		680FE2F227A8EF7700B6F6DB /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 680FE2F127A8EF7700B6F6DB /* SFSafeSymbols */; };
+		680FE2F427A8EFF700B6F6DB /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 680FE2F327A8EFF700B6F6DB /* SFSafeSymbols */; };
 		6816B1A8272D45DF005ADB85 /* ExampleObservableRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816B1A7272D45DF005ADB85 /* ExampleObservableRoom.swift */; };
 		6816B1A9272D45DF005ADB85 /* ExampleObservableRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816B1A7272D45DF005ADB85 /* ExampleObservableRoom.swift */; };
 		6816B1B0272D9198005ADB85 /* ParticipantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816B1AF272D9198005ADB85 /* ParticipantView.swift */; };
@@ -101,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				680FE2F227A8EF7700B6F6DB /* SFSafeSymbols in Frameworks */,
 				6866E93C27A196C4008AD2DF /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -109,6 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				680FE2F427A8EFF700B6F6DB /* SFSafeSymbols in Frameworks */,
 				6866E93E27A1974B008AD2DF /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -257,6 +261,7 @@
 			name = "LiveKitExample (iOS)";
 			packageProductDependencies = (
 				6866E93B27A196C4008AD2DF /* LiveKit */,
+				680FE2F127A8EF7700B6F6DB /* SFSafeSymbols */,
 			);
 			productName = "Multiplatform-SwiftUI (iOS)";
 			productReference = 68B38543271E780700711D5F /* LiveKitExample.app */;
@@ -277,6 +282,7 @@
 			name = "LiveKitExample (macOS)";
 			packageProductDependencies = (
 				6866E93D27A1974B008AD2DF /* LiveKit */,
+				680FE2F327A8EFF700B6F6DB /* SFSafeSymbols */,
 			);
 			productName = "Multiplatform-SwiftUI (macOS)";
 			productReference = 68B38549271E780700711D5F /* LiveKitExample.app */;
@@ -315,6 +321,7 @@
 			packageReferences = (
 				685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 				6866E93A27A196C4008AD2DF /* XCRemoteSwiftPackageReference "client-sdk-swift" */,
+				680FE2F027A8EF7700B6F6DB /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 			);
 			productRefGroup = 68B38544271E780700711D5F /* Products */;
 			projectDirPath = "";
@@ -502,7 +509,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
-					"$(inherited)",
+					"GL_SILENCE_DEPRECATION=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -559,6 +566,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "GL_SILENCE_DEPRECATION=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -744,6 +752,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		680FE2F027A8EF7700B6F6DB /* XCRemoteSwiftPackageReference "SFSafeSymbols" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SFSafeSymbols/SFSafeSymbols";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-protobuf.git";
@@ -763,6 +779,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		680FE2F127A8EF7700B6F6DB /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 680FE2F027A8EF7700B6F6DB /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
+		};
+		680FE2F327A8EFF700B6F6DB /* SFSafeSymbols */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 680FE2F027A8EF7700B6F6DB /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
+			productName = SFSafeSymbols;
+		};
 		6866E93B27A196C4008AD2DF /* LiveKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6866E93A27A196C4008AD2DF /* XCRemoteSwiftPackageReference "client-sdk-swift" */;

@@ -1,5 +1,6 @@
 import SwiftUI
 import LiveKit
+import SFSafeSymbols
 
 struct ConnectView: View {
 
@@ -40,16 +41,20 @@ struct ConnectView: View {
                             Spacer()
 
                             LKButton(title: "Connect") {
-                                roomCtx.connect()
+                                roomCtx.connect().then { room in
+                                    appCtx.connectionHistory.update(room: room)
+                                }
                             }
 
                             if !appCtx.connectionHistory.isEmpty {
                                 Menu {
                                     ForEach(appCtx.connectionHistory.view) { entry in
                                         Button {
-                                            roomCtx.connect(entry: entry)
+                                            roomCtx.connect(entry: entry).then { room in
+                                                appCtx.connectionHistory.update(room: room)
+                                            }
                                         } label: {
-                                            Image(systemName: "bolt.horizontal.circle")
+                                            Image(systemName: SFSymbol.boltHorizontalCircle.rawValue)
                                                 .renderingMode(.original)
                                             Text([entry.roomName,
                                                   entry.participantIdentity,
@@ -72,10 +77,12 @@ struct ConnectView: View {
                                         .renderingMode(.original)
                                     Text("Recent")
                                 }
-                                .frame(minWidth: nil,
-                                       maxWidth: 200,
-                                       minHeight: nil,
-                                       maxHeight: nil)
+                                #if os(macOS)
+                                .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                                #elseif os(iOS)
+                                .menuStyle(BorderlessButtonMenuStyle())
+                                #endif
+                                .fixedSize()
                             }
 
                             Spacer()

@@ -43,13 +43,60 @@ struct RoomContextView: View {
     }
 }
 
+extension Decimal {
+    mutating func round(_ scale: Int, _ roundingMode: NSDecimalNumber.RoundingMode) {
+        var localCopy = self
+        NSDecimalRound(&self, &localCopy, scale, roundingMode)
+    }
+
+    func rounded(_ scale: Int, _ roundingMode: NSDecimalNumber.RoundingMode) -> Decimal {
+        var result = Decimal()
+        var localCopy = self
+        NSDecimalRound(&result, &localCopy, scale, roundingMode)
+        return result
+    }
+
+    func remainder(of divisor: Decimal) -> Decimal {
+        let s = self as NSDecimalNumber
+        let d = divisor as NSDecimalNumber
+        let b = NSDecimalNumberHandler(roundingMode: .down,
+                                       scale: 0,
+                                       raiseOnExactness: false,
+                                       raiseOnOverflow: false,
+                                       raiseOnUnderflow: false,
+                                       raiseOnDivideByZero: false)
+        let quotient = s.dividing(by: d, withBehavior: b)
+
+        let subtractAmount = quotient.multiplying(by: d)
+        return s.subtracting(subtractAmount) as Decimal
+    }
+}
+
 @main
 struct LiveKitExample: App {
 
     @StateObject var appCtx = AppContext()
 
+    func nearestSafeScale(for target: Int, scale: Double) -> Decimal {
+
+        let p = Decimal(sign: .plus, exponent: -3, significand: 1)
+        let t = Decimal(target)
+        var s = Decimal(scale).rounded(3, .down)
+
+        while (t * s / 2).remainder(of: 2) != 0 {
+            //            print("x: \()")
+            s = s + p
+            print("currentValue: \(s)")
+        }
+
+        return s
+    }
+
     init() {
         LoggingSystem.bootstrap({ LiveKitLogHandler(label: $0) })
+
+        //        let x = nearestSafeScale(for: 1024, scale: 0.001)
+        //        print("safeScale: \(x)")
     }
 
     var body: some Scene {

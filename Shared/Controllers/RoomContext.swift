@@ -1,6 +1,7 @@
 import SwiftUI
 import LiveKit
 import WebRTC
+import Promises
 
 // This class contains the logic to control behavior of the whole app.
 final class RoomContext: ObservableObject {
@@ -23,7 +24,7 @@ final class RoomContext: ObservableObject {
         room.room.add(delegate: self)
     }
 
-    func connect(entry: ConnectionHistoryEntry? = nil) {
+    func connect(entry: ConnectionHistoryEntry? = nil) -> Promise<Room> {
 
         if let entry = entry {
             url = entry.url
@@ -39,13 +40,10 @@ final class RoomContext: ObservableObject {
             defaultVideoPublishOptions: VideoPublishOptions(simulcast: simulcast)
         )
 
-        room.room.connect(url,
-                          token,
-                          connectOptions: connectOptions,
-                          roomOptions: roomOptions).then { _ in
-                            // add successful connection to history
-                            // self.connectionHistory.update(room: room)
-                          }
+        return room.room.connect(url,
+                                 token,
+                                 connectOptions: connectOptions,
+                                 roomOptions: roomOptions)
     }
 
     func disconnect() {

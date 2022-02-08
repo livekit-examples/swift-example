@@ -1,5 +1,6 @@
 import SwiftUI
 import LiveKit
+import SFSafeSymbols
 
 struct ParticipantView: View {
 
@@ -25,7 +26,7 @@ struct ParticipantView: View {
                     ZStack(alignment: .topLeading) {
                         SwiftUIVideoView(track,
                                          mode: videoViewMode,
-                                         dimensions: $dimensions,
+                                         mirrored: true, dimensions: $dimensions,
                                          preferMetal: appCtx.preferMetal)
                             .background(Color.black)
 
@@ -64,6 +65,7 @@ struct ParticipantView: View {
                 }
 
                 VStack(alignment: .trailing, spacing: 0) {
+                    // Show the sub-video view
                     if let subVideoTrack = participant.subVideoTrack {
                         SwiftUIVideoView(subVideoTrack, mode: .fill,
                                          preferMetal: appCtx.preferMetal)
@@ -73,6 +75,8 @@ struct ParticipantView: View {
                             .cornerRadius(8)
                             .padding()
                     }
+
+                    // Bottom user info bar
                     HStack {
                         Text("\(participant.identity)") //  (\(participant.publish ?? "-"))
                             .lineLimit(1)
@@ -94,6 +98,33 @@ struct ParticipantView: View {
                         } else if participant.connectionQuality == .poor {
                             Image(systemName: "wifi.exclamationmark")
                                 .foregroundColor(Color.red)
+                        }
+
+                        if let remoteParticipant = participant.asRemote {
+                            if  remoteParticipant.audioTracks.first != nil {
+                                Menu {
+                                    Button {
+                                        // roomCtx.room.room.sendSimulate(scenario: .nodeFailure)
+                                    } label: {
+                                        Text("Unsubscribe")
+                                    }
+
+                                    Button {
+                                        // roomCtx.room.room.sendSimulate(scenario: .serverLeave)
+                                    } label: {
+                                        Text("Subscribe")
+                                    }
+
+                                } label: {
+                                    Image(systemName: "speaker.wave.3.fill")
+                                }
+                                #if os(macOS)
+                                .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                                #elseif os(iOS)
+                                .menuStyle(BorderlessButtonMenuStyle())
+                                #endif
+                                .fixedSize()
+                            }
                         }
 
                     }.padding(5)
