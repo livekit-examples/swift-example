@@ -84,9 +84,7 @@ struct LiveKitExample: App {
         var s = Decimal(scale).rounded(3, .down)
 
         while (t * s / 2).remainder(of: 2) != 0 {
-            //            print("x: \()")
             s = s + p
-            print("currentValue: \(s)")
         }
 
         return s
@@ -94,9 +92,10 @@ struct LiveKitExample: App {
 
     init() {
         LoggingSystem.bootstrap({ LiveKitLogHandler(label: $0) })
-
-        //        let x = nearestSafeScale(for: 1024, scale: 0.001)
-        //        print("safeScale: \(x)")
+        print("safeScale: \(nearestSafeScale(for: 1000, scale: 0.51))")
+        print("safeScale: \(nearestSafeScale(for: 2000, scale: 0.231))")
+        print("safeScale: \(nearestSafeScale(for: 3000, scale: 0.74))")
+        
     }
 
     var body: some Scene {

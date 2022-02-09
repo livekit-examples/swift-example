@@ -28,10 +28,10 @@ struct ConnectView: View {
                                 .fontWeight(.bold)
                         }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
                         // Not yet available
-                        //                        Toggle(isOn: $ctrl.publish) {
-                        //                            Text("Publish mode")
-                        //                                .fontWeight(.bold)
-                        //                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
+                                                Toggle(isOn: $roomCtx.publish) {
+                                                    Text("Publish mode")
+                                                        .fontWeight(.bold)
+                                                }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
                     }.frame(maxWidth: 350)
 
                     if case .connecting = roomCtx.connectionState {

@@ -32,12 +32,15 @@ final class RoomContext: ObservableObject {
         }
 
         let connectOptions = ConnectOptions(
+            //autoSubscribe: !publish, // don't autosubscribe if publish mode
             publish: publish ? "publish_\(UUID().uuidString)" : nil
         )
 
         let roomOptions = RoomOptions(
             // Pass the simulcast option
-            defaultVideoPublishOptions: VideoPublishOptions(simulcast: simulcast)
+            defaultVideoPublishOptions: VideoPublishOptions(
+                simulcast: publish ? false : simulcast
+            )
         )
 
         return room.room.connect(url,
