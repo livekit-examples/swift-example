@@ -26,6 +26,8 @@
 		683F05F5273F96B20080C7AC /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 683F05F4273F96B20080C7AC /* ReplayKit.framework */; platformFilter = maccatalyst; };
 		683F05F8273F96B20080C7AC /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683F05F7273F96B20080C7AC /* SampleHandler.swift */; };
 		683F05FC273F96B20080C7AC /* BroadcastExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6847616427B44A1A001611BE /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6847616327B44A1A001611BE /* Bundle.swift */; };
+		6847616527B44A1A001611BE /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6847616327B44A1A001611BE /* Bundle.swift */; };
 		6866E93C27A196C4008AD2DF /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6866E93B27A196C4008AD2DF /* LiveKit */; };
 		6866E93E27A1974B008AD2DF /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6866E93D27A1974B008AD2DF /* LiveKit */; };
 		6867533B27A65652003707B9 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6867533A27A65652003707B9 /* AppContext.swift */; };
@@ -77,6 +79,7 @@
 		683F05F9273F96B20080C7AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		683F0603273FAD690080C7AC /* iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS.entitlements; sourceTree = "<group>"; };
 		683F0604273FADC20080C7AC /* BroadcastExt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BroadcastExt.entitlements; sourceTree = "<group>"; };
+		6847616327B44A1A001611BE /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
 		6865EA2527513B4500FFAFC3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6865EA2D27513B6D00FFAFC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6867533A27A65652003707B9 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
@@ -133,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				683720D127A06404007DA986 /* ConnectionHistory.swift */,
+				6847616327B44A1A001611BE /* Bundle.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -381,6 +385,7 @@
 				6816B1B0272D9198005ADB85 /* ParticipantView.swift in Sources */,
 				68B3854C271E780700711D5F /* LiveKitExample.swift in Sources */,
 				681E3F3F271FC795007BB547 /* Custom.swift in Sources */,
+				6847616427B44A1A001611BE /* Bundle.swift in Sources */,
 				6816B1A8272D45DF005ADB85 /* ExampleObservableRoom.swift in Sources */,
 				6884B77C2750507400732D47 /* ScreenShareSourcePickerView.swift in Sources */,
 			);
@@ -398,6 +403,7 @@
 				6816B1B1272D9198005ADB85 /* ParticipantView.swift in Sources */,
 				68B3854D271E780700711D5F /* LiveKitExample.swift in Sources */,
 				681E3F40271FC795007BB547 /* Custom.swift in Sources */,
+				6847616527B44A1A001611BE /* Bundle.swift in Sources */,
 				6816B1A9272D45DF005ADB85 /* ExampleObservableRoom.swift in Sources */,
 				6884B77D2750507400732D47 /* ScreenShareSourcePickerView.swift in Sources */,
 			);
@@ -672,7 +678,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
 				PRODUCT_NAME = LiveKitExample;
 				SDKROOT = macosx;
@@ -702,7 +708,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
 				PRODUCT_NAME = LiveKitExample;
 				SDKROOT = macosx;
