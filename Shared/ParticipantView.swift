@@ -53,7 +53,7 @@ struct ParticipantView: View {
                     }
                 } else {
                     // Show no camera icon
-                    Image(systemName: "video.slash.fill")
+                    Image(systemName: SFSymbol.videoSlashFill.rawValue)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(Color.lkBlue.opacity(0.7))
@@ -82,41 +82,33 @@ struct ParticipantView: View {
                             .lineLimit(1)
                             .truncationMode(.tail)
 
-                        if participant.firstAudioAvailable {
-                            Image(systemName: "mic.fill")
-                        } else {
-                            Image(systemName: "mic.slash.fill")
-                                .foregroundColor(Color.red)
-                        }
+                        if let publication = participant.firstAudioPublication,
+                           !publication.muted {
 
-                        if participant.connectionQuality == .excellent {
-                            Image(systemName: "wifi")
-                                .foregroundColor(.green)
-                        } else if participant.connectionQuality == .good {
-                            Image(systemName: "wifi")
-                                .foregroundColor(Color.orange)
-                        } else if participant.connectionQuality == .poor {
-                            Image(systemName: "wifi.exclamationmark")
-                                .foregroundColor(Color.red)
-                        }
+                            // is remote
+                            if let remotePub = publication as? RemoteTrackPublication {
 
-                        if let remoteParticipant = participant.asRemote {
-                            if  remoteParticipant.audioTracks.first != nil {
                                 Menu {
-                                    Button {
-                                        // roomCtx.room.room.sendSimulate(scenario: .nodeFailure)
-                                    } label: {
-                                        Text("Unsubscribe")
-                                    }
+                                    if remotePub.subscribed {
+                                        Button {
+                                            remotePub.set(subscribed: false)
+                                        } label: {
+                                            Text("Unsubscribe")
+                                        }
+                                    } else {
+                                        Button {
+                                            remotePub.set(subscribed: true)
+                                        } label: {
+                                            Text("Subscribe")
+                                        }
 
-                                    Button {
-                                        // roomCtx.room.room.sendSimulate(scenario: .serverLeave)
-                                    } label: {
-                                        Text("Subscribe")
                                     }
-
                                 } label: {
-                                    Image(systemName: "speaker.wave.3.fill")
+                                    if publication.subscribed {
+                                        Image(systemName: SFSymbol.micFill.rawValue)
+                                    } else {
+                                        Image(systemName: SFSymbol.micSlashFill.rawValue)
+                                    }
                                 }
                                 #if os(macOS)
                                 .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
@@ -124,7 +116,24 @@ struct ParticipantView: View {
                                 .menuStyle(BorderlessButtonMenuStyle())
                                 #endif
                                 .fixedSize()
+                            } else {
+                                Image(systemName: SFSymbol.micFill.rawValue)
                             }
+
+                        } else {
+                            Image(systemName: SFSymbol.micSlashFill.rawValue)
+                                .foregroundColor(Color.red)
+                        }
+
+                        if participant.connectionQuality == .excellent {
+                            Image(systemName: SFSymbol.wifi.rawValue)
+                                .foregroundColor(.green)
+                        } else if participant.connectionQuality == .good {
+                            Image(systemName: SFSymbol.wifi.rawValue)
+                                .foregroundColor(Color.orange)
+                        } else if participant.connectionQuality == .poor {
+                            Image(systemName: SFSymbol.wifiExclamationmark.rawValue)
+                                .foregroundColor(Color.red)
                         }
 
                     }.padding(5)

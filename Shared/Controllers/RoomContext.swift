@@ -19,6 +19,7 @@ final class RoomContext: ObservableObject {
     @AppStorage("token") var token: String = ""
     @AppStorage("simulcast") var simulcast: Bool = true
     @AppStorage("publish") var publish: Bool = false
+    @AppStorage("autoSubscribe") var autoSubscribe: Bool = true
 
     public init() {
         room.room.add(delegate: self)
@@ -32,7 +33,7 @@ final class RoomContext: ObservableObject {
         }
 
         let connectOptions = ConnectOptions(
-            autoSubscribe: !publish, // don't autosubscribe if publish mode
+            autoSubscribe: !publish && autoSubscribe, // don't autosubscribe if publish mode
             publish: publish ? "publish_\(UUID().uuidString)" : nil
         )
 

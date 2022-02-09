@@ -32,6 +32,11 @@ struct ConnectView: View {
                             Text("Publish mode")
                                 .fontWeight(.bold)
                         }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
+                        Toggle(isOn: $roomCtx.autoSubscribe) {
+                            Text("Auto-Subscribe")
+                                .fontWeight(.bold)
+                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
+
                     }.frame(maxWidth: 350)
 
                     if case .connecting = roomCtx.connectionState {
@@ -54,7 +59,7 @@ struct ConnectView: View {
                                                 appCtx.connectionHistory.update(room: room)
                                             }
                                         } label: {
-                                            Image(systemName: SFSymbol.boltHorizontalCircle.rawValue)
+                                            Image(systemName: SFSymbol.boltHorizontalFill.rawValue)
                                                 .renderingMode(.original)
                                             Text([entry.roomName,
                                                   entry.participantIdentity,
@@ -67,13 +72,13 @@ struct ConnectView: View {
                                     Button {
                                         appCtx.connectionHistory.removeAll()
                                     } label: {
-                                        Image(systemName: "xmark.circle.fill")
+                                        Image(systemName: SFSymbol.xmarkCircleFill.rawValue)
                                             .renderingMode(.original)
                                         Text("Clear history")
                                     }
 
                                 } label: {
-                                    Image(systemName: "clock.fill")
+                                    Image(systemName: SFSymbol.clockFill.rawValue)
                                         .renderingMode(.original)
                                     Text("Recent")
                                 }

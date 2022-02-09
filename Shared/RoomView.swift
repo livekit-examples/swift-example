@@ -1,5 +1,6 @@
 import SwiftUI
 import LiveKit
+import SFSafeSymbols
 
 #if !os(macOS)
 let adaptiveMin = 170.0
@@ -105,7 +106,7 @@ struct RoomView: View {
                 Button {
                     room.sendMessage()
                 } label: {
-                    Image(systemName: "paperplane.fill")
+                    Image(systemName: SFSymbol.paperplaneFill.rawValue)
                         .foregroundColor(room.textFieldString.isEmpty ? nil : Color.blue)
                 }
                 .buttonStyle(.borderless)
@@ -193,7 +194,7 @@ struct RoomView: View {
                                     room.toggleCameraEnabled()
                                 },
                                 label: {
-                                    Image(systemName: "video.fill")
+                                    Image(systemName: SFSymbol.videoFill.rawValue)
                                         .renderingMode(room.cameraTrackState.isPublished ? .original : .template)
                                 })
                                 // disable while publishing/un-publishing
@@ -207,7 +208,7 @@ struct RoomView: View {
                                         room.toggleCameraEnabled()
                                     }
                                 } label: {
-                                    Image(systemName: "video.fill")
+                                    Image(systemName: SFSymbol.videoFill.rawValue)
                                         .renderingMode(.original)
                                 }
                             }
@@ -217,7 +218,7 @@ struct RoomView: View {
                                 room.toggleMicrophoneEnabled()
                             },
                             label: {
-                                Image(systemName: "mic.fill")
+                                Image(systemName: SFSymbol.micFill.rawValue)
                                     .renderingMode(room.microphoneTrackState.isPublished ? .original : .template)
                             })
                             // disable while publishing/un-publishing
@@ -228,7 +229,7 @@ struct RoomView: View {
                                 room.toggleScreenShareEnabled(screenShareSource: nil)
                             },
                             label: {
-                                Image(systemName: "video.square.fill")
+                                Image(systemName: SFSymbol.rectangleFillOnRectangleFill.rawValue)
                                     .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
                             })
                             #elseif os(macOS)
@@ -241,8 +242,9 @@ struct RoomView: View {
                                 }
                             },
                             label: {
-                                Image(systemName: "video.square.fill")
+                                Image(systemName: SFSymbol.rectangleFillOnRectangleFill.rawValue)
                                     .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
+                                    .foregroundColor(room.screenShareTrackState.isPublished ? Color.green : Color.white)
                             }).popover(isPresented: $screenPickerPresented) {
                                 ScreenShareSourcePickerView { source in
                                     room.toggleScreenShareEnabled(screenShareSource: source)
@@ -258,7 +260,7 @@ struct RoomView: View {
                                 }
                             },
                             label: {
-                                Image(systemName: "message.fill")
+                                Image(systemName: SFSymbol.messageFill.rawValue)
                                     .renderingMode(room.showMessagesView ? .original : .template)
                             })
 
@@ -300,7 +302,7 @@ struct RoomView: View {
                                 Text("Simulate scenario")
                             }
                         } label: {
-                            Image(systemName: "ladybug.fill")
+                            Image(systemName: SFSymbol.ladybugFill.rawValue)
                                 .renderingMode(.original)
                         }
 
@@ -311,7 +313,7 @@ struct RoomView: View {
                             roomCtx.disconnect()
                         },
                         label: {
-                            Image(systemName: "xmark.circle.fill")
+                            Image(systemName: SFSymbol.xmarkCircleFill.rawValue)
                                 .renderingMode(.original)
                         })
                     }
