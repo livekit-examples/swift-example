@@ -32,7 +32,7 @@ final class RoomContext: ObservableObject {
         }
 
         let connectOptions = ConnectOptions(
-            //autoSubscribe: !publish, // don't autosubscribe if publish mode
+            autoSubscribe: !publish, // don't autosubscribe if publish mode
             publish: publish ? "publish_\(UUID().uuidString)" : nil
         )
 
