@@ -269,8 +269,8 @@ struct RoomView: View {
                         Spacer()
 
                         Menu {
-                            Toggle("Show video information", isOn: $appCtx.showInformationOverlay)
-                            Toggle("Use video view", isOn: $appCtx.videoViewVisible)
+                            Toggle("Show info overlay", isOn: $appCtx.showInformationOverlay)
+                            Toggle("Video view visible", isOn: $appCtx.videoViewVisible)
                             Toggle("Prefer Metal", isOn: $appCtx.preferMetal)
 
                             Menu {
@@ -301,8 +301,25 @@ struct RoomView: View {
                             } label: {
                                 Text("Simulate scenario")
                             }
+
+                            Menu {
+                                Button {
+                                    roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                                } label: {
+                                    Text("Allow all")
+                                }
+
+                                Button {
+                                    roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
+                                } label: {
+                                    Text("Disallow all")
+                                }
+                            } label: {
+                                Text("Track permissions")
+                            }
+
                         } label: {
-                            Image(systemName: SFSymbol.ladybugFill.rawValue)
+                            Image(systemName: SFSymbol.gear.rawValue)
                                 .renderingMode(.original)
                         }
 

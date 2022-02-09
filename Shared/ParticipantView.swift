@@ -12,6 +12,18 @@ struct ParticipantView: View {
 
     @State private var dimensions: Dimensions?
 
+    func bgView(systemSymbol: SFSymbol, geometry: GeometryProxy) -> some View {
+        Image(systemSymbol: systemSymbol)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .foregroundColor(Color.lkBlue.opacity(0.7))
+            .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity
+            )
+    }
+
     var body: some View {
         GeometryReader { geometry in
 
@@ -21,7 +33,9 @@ struct ParticipantView: View {
                     .ignoresSafeArea()
 
                 // VideoView for the Participant
-                if let track = participant.mainVideoTrack,
+                if let publication = participant.mainVideoPublication,
+                   !publication.muted,
+                   let track = publication.track as? VideoTrack,
                    appCtx.videoViewVisible {
                     ZStack(alignment: .topLeading) {
                         SwiftUIVideoView(track,
@@ -51,17 +65,13 @@ struct ParticipantView: View {
                             .padding()
                         }
                     }
+                } else if let publication = participant.mainVideoPublication as? RemoteTrackPublication,
+                          case .notAllowed = publication.subscriptionState {
+                    // Show no permission icon
+                    bgView(systemSymbol: .exclamationmarkCircle, geometry: geometry)
                 } else {
                     // Show no camera icon
-                    Image(systemName: SFSymbol.videoSlashFill.rawValue)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(Color.lkBlue.opacity(0.7))
-                        .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity
-                        )
+                    bgView(systemSymbol: .videoSlashFill, geometry: geometry)
                 }
 
                 VStack(alignment: .trailing, spacing: 0) {
@@ -82,20 +92,19 @@ struct ParticipantView: View {
                             .lineLimit(1)
                             .truncationMode(.tail)
 
-                        if let publication = participant.firstAudioPublication,
+                        if let publication = participant.mainVideoPublication,
                            !publication.muted {
 
                             // is remote
                             if let remotePub = publication as? RemoteTrackPublication {
-
                                 Menu {
-                                    if remotePub.subscribed {
+                                    if case .subscribed = remotePub.subscriptionState {
                                         Button {
                                             remotePub.set(subscribed: false)
                                         } label: {
                                             Text("Unsubscribe")
                                         }
-                                    } else {
+                                    } else if case .unsubscribed = remotePub.subscriptionState {
                                         Button {
                                             remotePub.set(subscribed: true)
                                         } label: {
@@ -104,8 +113,60 @@ struct ParticipantView: View {
 
                                     }
                                 } label: {
-                                    if publication.subscribed {
+                                    if case .subscribed = remotePub.subscriptionState {
+                                        Image(systemName: SFSymbol.videoFill.rawValue)
+                                            .foregroundColor(Color.green)
+                                    } else if case .notAllowed = remotePub.subscriptionState {
+                                        Image(systemName: SFSymbol.exclamationmarkCircle.rawValue)
+                                            .foregroundColor(Color.red)
+                                    } else {
+                                        Image(systemName: SFSymbol.videoSlashFill.rawValue)
+                                    }
+                                }
+                                #if os(macOS)
+                                .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                                #elseif os(iOS)
+                                .menuStyle(BorderlessButtonMenuStyle())
+                                #endif
+                                .fixedSize()
+                            } else {
+                                // local
+                                Image(systemName: SFSymbol.videoFill.rawValue)
+                                    .foregroundColor(Color.green)
+                            }
+
+                        } else {
+                            Image(systemName: SFSymbol.videoSlashFill.rawValue)
+                                .foregroundColor(Color.white)
+                        }
+
+                        if let publication = participant.firstAudioPublication,
+                           !publication.muted {
+
+                            // is remote
+                            if let remotePub = publication as? RemoteTrackPublication {
+                                Menu {
+                                    if case .subscribed = remotePub.subscriptionState {
+                                        Button {
+                                            remotePub.set(subscribed: false)
+                                        } label: {
+                                            Text("Unsubscribe")
+                                        }
+                                    } else if case .unsubscribed = remotePub.subscriptionState {
+                                        Button {
+                                            remotePub.set(subscribed: true)
+                                        } label: {
+                                            Text("Subscribe")
+                                        }
+
+                                    }
+                                } label: {
+                                    if case .subscribed = remotePub.subscriptionState {
                                         Image(systemName: SFSymbol.micFill.rawValue)
+                                            .foregroundColor(Color.orange)
+                                    } else if case .notAllowed = remotePub.subscriptionState {
+                                        Image(systemName: SFSymbol.exclamationmarkCircle.rawValue)
+                                            .foregroundColor(Color.red)
                                     } else {
                                         Image(systemName: SFSymbol.micSlashFill.rawValue)
                                     }
@@ -117,12 +178,14 @@ struct ParticipantView: View {
                                 #endif
                                 .fixedSize()
                             } else {
+                                // local
                                 Image(systemName: SFSymbol.micFill.rawValue)
+                                    .foregroundColor(Color.orange)
                             }
 
                         } else {
                             Image(systemName: SFSymbol.micSlashFill.rawValue)
-                                .foregroundColor(Color.red)
+                                .foregroundColor(Color.white)
                         }
 
                         if participant.connectionQuality == .excellent {
