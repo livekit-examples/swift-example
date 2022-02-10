@@ -32,11 +32,9 @@ struct ConnectView: View {
 
                                 Toggle(isOn: $roomCtx.autoSubscribe) {
                                     Text("Auto-Subscribe")
-                                        .fontWeight(.bold)
                                 }
                                 Toggle(isOn: $roomCtx.publish) {
                                     Text("Publish only mode")
-                                        .fontWeight(.bold)
                                 }
 
                             } label: {
@@ -54,9 +52,13 @@ struct ConnectView: View {
                             Menu {
                                 Toggle(isOn: $roomCtx.simulcast) {
                                     Text("Simulcast")
-                                        .fontWeight(.bold)
                                 }
-
+                                Toggle(isOn: $roomCtx.adaptiveStream) {
+                                    Text("AdaptiveStream")
+                                }
+                                Toggle(isOn: $roomCtx.dynacast) {
+                                    Text("Dynacast")
+                                }
                             } label: {
                                 Image(systemName: SFSymbol.gear.rawValue)
                                     .renderingMode(.original)

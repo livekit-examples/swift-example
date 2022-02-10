@@ -92,10 +92,6 @@ struct LiveKitExample: App {
 
     init() {
         LoggingSystem.bootstrap({ LiveKitLogHandler(label: $0) })
-        print("safeScale: \(nearestSafeScale(for: 1000, scale: 0.51))")
-        print("safeScale: \(nearestSafeScale(for: 2000, scale: 0.231))")
-        print("safeScale: \(nearestSafeScale(for: 3000, scale: 0.74))")
-
     }
 
     var body: some Scene {

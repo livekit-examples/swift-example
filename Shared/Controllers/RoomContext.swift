@@ -20,6 +20,8 @@ final class RoomContext: ObservableObject {
 
     // RoomOptions
     @AppStorage("simulcast") var simulcast: Bool = true
+    @AppStorage("adaptiveStream") var adaptiveStream: Bool = false
+    @AppStorage("dynacast") var dynacast: Bool = false
 
     // ConnectOptions
     @AppStorage("autoSubscribe") var autoSubscribe: Bool = true
@@ -45,7 +47,9 @@ final class RoomContext: ObservableObject {
             // Pass the simulcast option
             defaultVideoPublishOptions: VideoPublishOptions(
                 simulcast: publish ? false : simulcast
-            )
+            ),
+            adaptiveStream: adaptiveStream,
+            dynacast: dynacast
         )
 
         return room.room.connect(url,
