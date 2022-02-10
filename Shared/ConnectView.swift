@@ -1,3 +1,4 @@
+import Foundation
 import SwiftUI
 import LiveKit
 import SFSafeSymbols
@@ -18,6 +19,7 @@ struct ConnectView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 40)
                         Text("SDK Version \(LiveKit.version)")
+                        Text("Example App Version \(Bundle.main.appVersionLong) (\(Bundle.main.appBuild))")
                     }
 
                     VStack(spacing: 20) {
