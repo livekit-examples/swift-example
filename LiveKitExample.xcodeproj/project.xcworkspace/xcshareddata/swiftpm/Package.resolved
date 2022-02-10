@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/livekit/client-sdk-swift",
         "state": {
           "branch": null,
-          "revision": "bb07c5ced350874296a2f3126f9f2e1d2b6fdda7",
-          "version": "0.9.5"
+          "revision": "6ed0edade6a4bdacc0b7d378d814360e79548281",
+          "version": "0.9.6"
         }
       },
       {
@@ -20,12 +20,21 @@
         }
       },
       {
+        "package": "SFSafeSymbols",
+        "repositoryURL": "https://github.com/SFSafeSymbols/SFSafeSymbols",
+        "state": {
+          "branch": "v3.2",
+          "revision": "ff7eb9b5abb5b76c7606d3650dae22e607a6c3be",
+          "version": null
+        }
+      },
+      {
         "package": "WebRTC",
         "repositoryURL": "https://github.com/webrtc-sdk/Specs.git",
         "state": {
           "branch": null,
-          "revision": "80c9eebccf89fb877e44b5f942cb9d2024fa7b86",
-          "version": "93.4577.1"
+          "revision": "f83999edabf06600cf4ff8ccd5647c333ba27e98",
+          "version": "93.4577.2"
         }
       },
       {
