@@ -1,9 +1,7 @@
 import SwiftUI
 import LiveKit
 
-typealias ConnectionHistory = Set<ConnectionHistoryEntry>
-
-struct ConnectionHistoryEntry: Codable {
+struct ConnectionHistory: Codable {
 
     let updated: Date
     let url: String
@@ -15,55 +13,41 @@ struct ConnectionHistoryEntry: Codable {
     let participantName: String?
 }
 
-extension ConnectionHistoryEntry: Identifiable {
+extension ConnectionHistory: Identifiable {
 
     var id: Int {
         self.hashValue
     }
 }
 
-extension ConnectionHistoryEntry: Hashable, Equatable {
+extension ConnectionHistory: Hashable, Equatable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(url)
         hasher.combine(token)
     }
 
-    static func == (lhs: ConnectionHistoryEntry, rhs: ConnectionHistoryEntry) -> Bool {
+    static func == (lhs: ConnectionHistory, rhs: ConnectionHistory) -> Bool {
         return lhs.url == rhs.url && lhs.token == rhs.token
     }
 }
 
-extension ConnectionHistory: RawRepresentable {
+extension Sequence where Element == ConnectionHistory {
 
-    private static let encoder = JSONEncoder()
-    private static let decoder = JSONDecoder()
-
-    var view: [ConnectionHistoryEntry] {
+    var sortedByUpdated: [ConnectionHistory] {
         Array(self).sorted { $0.updated > $1.updated }
     }
+}
 
-    public init?(rawValue: String) {
-        guard let data = rawValue.data(using: .utf8),
-              let result = try? Self.decoder.decode(Set<ConnectionHistoryEntry>.self, from: data)
-        else { return nil }
-        self = result
-    }
+extension Set where Element == ConnectionHistory {
 
-    public var rawValue: String {
-        guard let data = try? Self.encoder.encode(self),
-              let result = String(data: data, encoding: .utf8)
-        else { return "[]" }
-        return result
-    }
-
-    public mutating func update(room: Room) {
+    mutating func update(room: Room) {
 
         guard let url = room.url,
               let token = room.token,
               let localParticipant = room.localParticipant else { return }
 
-        let element = ConnectionHistoryEntry(
+        let element = ConnectionHistory(
             updated: Date(),
             url: url,
             token: token,

@@ -5,6 +5,9 @@ import Promises
 
 // This class contains the logic to control behavior of the whole app.
 final class RoomContext: ObservableObject {
+
+    private let store: SecureStore<SecureStoreKeys>
+
     // Used to show connection error dialog
     // private var didClose: Bool = false
     @Published var shouldShowError: Bool = false
@@ -15,23 +18,49 @@ final class RoomContext: ObservableObject {
         room.room.connectionState
     }
 
-    @AppStorage("url") var url: String = ""
-    @AppStorage("token") var token: String = ""
+    @Published var url: String {
+        didSet { store.set(.url, value: url) }
+    }
+
+    @Published var token: String {
+        didSet { store.set(.token, value: token) }
+    }
 
     // RoomOptions
-    @AppStorage("simulcast") var simulcast: Bool = true
-    @AppStorage("adaptiveStream") var adaptiveStream: Bool = false
-    @AppStorage("dynacast") var dynacast: Bool = false
+    @Published var simulcast: Bool {
+        didSet { store.set(.simulcast, value: simulcast) }
+    }
+
+    @Published var adaptiveStream: Bool {
+        didSet { store.set(.adaptiveStream, value: adaptiveStream) }
+    }
+
+    @Published var dynacast: Bool {
+        didSet { store.set(.dynacast, value: dynacast) }
+    }
 
     // ConnectOptions
-    @AppStorage("autoSubscribe") var autoSubscribe: Bool = true
-    @AppStorage("publish") var publish: Bool = false
+    @Published var autoSubscribe: Bool {
+        didSet { store.set(.autoSubscribe, value: autoSubscribe) }
+    }
 
-    public init() {
+    @Published var publish: Bool {
+        didSet { store.set(.publishMode, value: publish) }
+    }
+
+    public init(store: SecureStore<SecureStoreKeys>) {
+        self.store = store
+        self.url = store.get(.url) ?? ""
+        self.token = store.get(.token) ?? ""
+        self.simulcast = store.get(.simulcast) ?? true
+        self.adaptiveStream = store.get(.adaptiveStream) ?? false
+        self.dynacast = store.get(.dynacast) ?? false
+        self.autoSubscribe = store.get(.autoSubscribe) ?? true
+        self.publish = store.get(.publishMode) ?? false
         room.room.add(delegate: self)
     }
 
-    func connect(entry: ConnectionHistoryEntry? = nil) -> Promise<Room> {
+    func connect(entry: ConnectionHistory? = nil) -> Promise<Room> {
 
         if let entry = entry {
             url = entry.url

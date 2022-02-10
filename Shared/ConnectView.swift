@@ -27,16 +27,13 @@ struct ConnectView: View {
                         LKTextField(title: "Token", text: $roomCtx.token, type: .ascii)
 
                         HStack {
-
                             Menu {
-
                                 Toggle(isOn: $roomCtx.autoSubscribe) {
                                     Text("Auto-Subscribe")
                                 }
                                 Toggle(isOn: $roomCtx.publish) {
                                     Text("Publish only mode")
                                 }
-
                             } label: {
                                 Image(systemSymbol: .boltFill)
                                     .renderingMode(.original)
@@ -87,7 +84,7 @@ struct ConnectView: View {
 
                             if !appCtx.connectionHistory.isEmpty {
                                 Menu {
-                                    ForEach(appCtx.connectionHistory.view) { entry in
+                                    ForEach(appCtx.connectionHistory.sortedByUpdated) { entry in
                                         Button {
                                             roomCtx.connect(entry: entry).then { room in
                                                 appCtx.connectionHistory.update(room: room)

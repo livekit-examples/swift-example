@@ -2,9 +2,11 @@ import SwiftUI
 import Logging
 import LiveKit
 
+let store = SecureStore<SecureStoreKeys>()
+
 struct RoomContextView: View {
 
-    @StateObject var roomCtx = RoomContext()
+    @StateObject var roomCtx = RoomContext(store: store)
 
     var shouldShowRoomView: Bool {
         roomCtx.connectionState.isConnected || roomCtx.connectionState.isReconnecting
@@ -75,7 +77,7 @@ extension Decimal {
 @main
 struct LiveKitExample: App {
 
-    @StateObject var appCtx = AppContext()
+    @StateObject var appCtx = AppContext(store: store)
 
     func nearestSafeScale(for target: Int, scale: Double) -> Decimal {
 
