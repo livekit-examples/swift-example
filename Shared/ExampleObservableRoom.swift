@@ -9,6 +9,10 @@ import ReplayKit
 
 extension ObservableParticipant {
 
+    public var mainVideoPublication: TrackPublication? {
+        firstScreenSharePublication ?? firstCameraPublication
+    }
+
     public var mainVideoTrack: VideoTrack? {
         firstScreenShareVideoTrack ?? firstCameraVideoTrack
     }
@@ -18,7 +22,7 @@ extension ObservableParticipant {
     }
 }
 
-struct RoomMessage: Identifiable, Equatable, Hashable, Codable {
+struct ExampleRoomMessage: Identifiable, Equatable, Hashable, Codable {
     // Identifiable protocol needs param named id
     var id: String {
         messageId
@@ -45,27 +49,14 @@ class ExampleObservableRoom: ObservableRoom {
     let jsonEncoder = JSONEncoder()
     let jsonDecoder = JSONDecoder()
 
-    let bgName: [Background: String] = [
-        .office: "bg-1",
-        .space: "bg-2",
-        .thailand: "bg-3"
-    ]
-
-    enum Background {
-        case none
-        case office
-        case space
-        case thailand
-    }
-
     @Published var focusParticipant: ObservableParticipant?
 
     @Published var showMessagesView: Bool = false
-    @Published var messages: [RoomMessage] = []
+    @Published var messages: [ExampleRoomMessage] = []
 
     @Published var textFieldString: String = ""
 
-    override init(_ room: Room) {
+    override init(_ room: Room = Room()) {
         super.init(room)
         room.add(delegate: self)
     }
@@ -80,10 +71,10 @@ class ExampleObservableRoom: ObservableRoom {
         // Make sure the message is not empty
         guard !textFieldString.isEmpty else { return }
 
-        let roomMessage = RoomMessage(messageId: UUID().uuidString,
-                                      senderSid: localParticipant.sid,
-                                      senderIdentity: localParticipant.identity,
-                                      text: textFieldString)
+        let roomMessage = ExampleRoomMessage(messageId: UUID().uuidString,
+                                             senderSid: localParticipant.sid,
+                                             senderIdentity: localParticipant.identity,
+                                             text: textFieldString)
         textFieldString = ""
         messages.append(roomMessage)
 
@@ -104,7 +95,17 @@ class ExampleObservableRoom: ObservableRoom {
     func toggleScreenShareEnabled(screenShareSource: ScreenShareSource? = nil) {
 
         #if os(iOS)
-        return toggleScreenShareEnabled()
+        // return toggleScreenShareEnabled()
+        // Experimental iOS screen share
+
+        RPSystemBroadcastPickerView.show(for: "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt",
+                                         showsMicrophoneButton: false)
+
+        if let ud = UserDefaults(suiteName: "group.livekit-example.broadcast") {
+            ud.set(room.url, forKey: "url")
+            ud.set(room.token, forKey: "token")
+        }
+
         #elseif os(macOS)
 
         guard let localParticipant = room.localParticipant else {
@@ -116,16 +117,6 @@ class ExampleObservableRoom: ObservableRoom {
             print("screenShareTrackState is .busy")
             return
         }
-
-        // Experimental iOS screen share
-        //
-        //        RPSystemBroadcastPickerView.show(for: "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt",
-        //                                         showsMicrophoneButton: false)
-        //
-        //        if let ud = UserDefaults(suiteName: "group.livekit-example.broadcast") {
-        //            ud.set(room.url, forKey: "url")
-        //            ud.set(room.token, forKey: "token")
-        //        }
 
         if case .published(let track) = screenShareTrackState {
 
@@ -158,10 +149,26 @@ class ExampleObservableRoom: ObservableRoom {
         #endif
     }
 
+    // MARK: - RoomDelegate
+
+    override func room(_ room: Room, didUpdate connectionState: ConnectionState) {
+        super.room(room, didUpdate: connectionState)
+        if case .disconnected = connectionState {
+            DispatchQueue.main.async {
+                // Reset state
+                self.focusParticipant = nil
+                self.showMessagesView = false
+                self.textFieldString = ""
+                self.messages.removeAll()
+                self.objectWillChange.send()
+            }
+        }
+    }
+
     override func room(_ room: Room,
                        participantDidLeave participant: RemoteParticipant) {
         DispatchQueue.main.async {
-            //            self.participants.removeValue(forKey: participant.sid)
+            // self.participants.removeValue(forKey: participant.sid)
             if let focusParticipant = self.focusParticipant,
                focusParticipant.sid == participant.sid {
                 self.focusParticipant = nil
@@ -170,19 +177,22 @@ class ExampleObservableRoom: ObservableRoom {
         }
     }
 
-    override func room(_ room: Room, participant: RemoteParticipant?, didReceive data: Data) {
+    override func room(_ room: Room,
+                       participant: RemoteParticipant?, didReceive data: Data) {
 
         print("did receive data \(data)")
 
         do {
-            let roomMessage = try jsonDecoder.decode(RoomMessage.self, from: data)
+            let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
             // Update UI from main queue
             DispatchQueue.main.async {
-                // Add messages to the @Published messages property
-                // which will trigger the UI to update
-                self.messages.append(roomMessage)
-                // Show the messages view when new messages arrive
-                self.showMessagesView = true
+                withAnimation {
+                    // Add messages to the @Published messages property
+                    // which will trigger the UI to update
+                    self.messages.append(roomMessage)
+                    // Show the messages view when new messages arrive
+                    self.showMessagesView = true
+                }
             }
 
         } catch let error {

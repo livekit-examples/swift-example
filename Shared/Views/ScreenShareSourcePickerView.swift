@@ -33,15 +33,15 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
         DispatchQueue.main.async {
             self.visibleTracks = tracks
         }
-
-        print("visibleTracks: \(self.visibleTracks)")
     }
 
     init() {
         print("ScreenPickerCtrl.init()")
 
         // Create tracks for all sources
-        self.allTracks = MacOSScreenCapturer.sources().map { LocalVideoTrack.createMacOSScreenShareTrack(source: $0) }
+        self.allTracks = MacOSScreenCapturer.sources().map {
+            LocalVideoTrack.createMacOSScreenShareTrack(source: $0)
+        }
 
         // Start all tracks
         let displayStartPromises = self.allTracks.map { $0.start() }
@@ -52,6 +52,7 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
 
     deinit {
         print("ScreenPickerCtrl.deinit")
+        _ = all(self.allTracks.map { $0.stop() })
     }
 }
 
@@ -98,7 +99,7 @@ struct ScreenShareSourcePickerView: View {
                           spacing: 10) {
 
                     ForEach(ctrl.visibleTracks) { track in
-                        SwiftUIVideoView(track, mode: .fill)
+                        SwiftUIVideoView(track, mode: .fit)
                             .aspectRatio(1, contentMode: .fit)
                             .onTapGesture {
                                 guard let capturer = track.capturer as? MacOSScreenCapturer else { return }

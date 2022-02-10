@@ -1,52 +1,99 @@
 import SwiftUI
-
-final class ConnectViewCtrl: ObservableObject {
-    @AppStorage("url") var url: String = ""
-    @AppStorage("token") var token: String = ""
-    @AppStorage("simulcast") var simulcast: Bool = true
-    @AppStorage("publish") var publish: Bool = false
-}
+import LiveKit
+import SFSafeSymbols
 
 struct ConnectView: View {
 
-    @EnvironmentObject var appCtrl: AppCtrl
-    @ObservedObject var ctrl = ConnectViewCtrl()
-
-    @State var isModalActive: Bool = true
+    @EnvironmentObject var appCtx: AppContext
+    @EnvironmentObject var roomCtx: RoomContext
 
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
-                VStack(alignment: .center, spacing: 60.0) {
+                VStack(alignment: .center, spacing: 40.0) {
 
-                    Image("logo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 40)
+                    VStack(spacing: 20) {
+                        Image("logo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 40)
+                        Text("SDK Version \(LiveKit.version)")
+                    }
 
-                    VStack(spacing: 30) {
-                        LKTextField(title: "Server URL", text: $ctrl.url, type: .URL)
-                        LKTextField(title: "Token", text: $ctrl.token, type: .ascii)
-                        Toggle(isOn: $ctrl.simulcast) {
+                    VStack(spacing: 20) {
+                        LKTextField(title: "Server URL", text: $roomCtx.url, type: .URL)
+                        LKTextField(title: "Token", text: $roomCtx.token, type: .ascii)
+                        Toggle(isOn: $roomCtx.simulcast) {
                             Text("Simulcast")
                                 .fontWeight(.bold)
                         }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
                         // Not yet available
-//                        Toggle(isOn: $ctrl.publish) {
-//                            Text("Publish mode")
-//                                .fontWeight(.bold)
-//                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
+                        Toggle(isOn: $roomCtx.publish) {
+                            Text("Publish mode")
+                                .fontWeight(.bold)
+                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
+                        Toggle(isOn: $roomCtx.autoSubscribe) {
+                            Text("Auto-Subscribe")
+                                .fontWeight(.bold)
+                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
+
                     }.frame(maxWidth: 350)
 
-                    if case .connecting = appCtrl.connectionState {
+                    if case .connecting = roomCtx.connectionState {
                         ProgressView()
                     } else {
-                        LKButton(title: "Connect") {
-                            appCtrl.connect(url: ctrl.url,
-                                            token: ctrl.token,
-                                            simulcast: ctrl.simulcast,
-                                            publish: ctrl.publish)
+                        HStack(alignment: .center) {
+                            Spacer()
+
+                            LKButton(title: "Connect") {
+                                roomCtx.connect().then { room in
+                                    appCtx.connectionHistory.update(room: room)
+                                }
+                            }
+
+                            if !appCtx.connectionHistory.isEmpty {
+                                Menu {
+                                    ForEach(appCtx.connectionHistory.view) { entry in
+                                        Button {
+                                            roomCtx.connect(entry: entry).then { room in
+                                                appCtx.connectionHistory.update(room: room)
+                                            }
+                                        } label: {
+                                            Image(systemName: SFSymbol.boltHorizontalFill.rawValue)
+                                                .renderingMode(.original)
+                                            Text([entry.roomName,
+                                                  entry.participantIdentity,
+                                                  entry.url].compactMap { $0 }.joined(separator: " "))
+                                        }
+                                    }
+
+                                    Divider()
+
+                                    Button {
+                                        appCtx.connectionHistory.removeAll()
+                                    } label: {
+                                        Image(systemName: SFSymbol.xmarkCircleFill.rawValue)
+                                            .renderingMode(.original)
+                                        Text("Clear history")
+                                    }
+
+                                } label: {
+                                    Image(systemName: SFSymbol.clockFill.rawValue)
+                                        .renderingMode(.original)
+                                    Text("Recent")
+                                }
+                                #if os(macOS)
+                                .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                                #elseif os(iOS)
+                                .menuStyle(BorderlessButtonMenuStyle())
+                                #endif
+                                .fixedSize()
+                            }
+
+                            Spacer()
+
                         }
+
                     }
                 }
                 .padding()
@@ -55,10 +102,10 @@ struct ConnectView: View {
             }
         }
 
-        .alert(isPresented: $appCtrl.shouldShowError) {
+        .alert(isPresented: $roomCtx.shouldShowError) {
             Alert(title: Text("Error"),
-                  message: Text(appCtrl.latestError != nil
-                                    ? String(describing: appCtrl.latestError!)
+                  message: Text(roomCtx.latestError != nil
+                                    ? String(describing: roomCtx.latestError!)
                                     : "Unknown error"))
         }
     }

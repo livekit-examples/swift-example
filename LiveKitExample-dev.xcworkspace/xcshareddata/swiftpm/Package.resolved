@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "SFSafeSymbols",
+        "repositoryURL": "https://github.com/SFSafeSymbols/SFSafeSymbols",
+        "state": {
+          "branch": "v3.2",
+          "revision": "ff7eb9b5abb5b76c7606d3650dae22e607a6c3be",
+          "version": null
+        }
+      },
+      {
         "package": "WebRTC",
         "repositoryURL": "https://github.com/webrtc-sdk/Specs.git",
         "state": {

@@ -10,6 +10,7 @@ let logger = OSLog(subsystem: "io.livekit.example.screen-broadcaster",
 class SampleHandler: RPBroadcastSampleHandler {
 
     lazy var room = Room()
+    var bufferTrack: LocalVideoTrack?
     var publication: LocalTrackPublication?
 
     override func broadcastStarted(withSetupInfo setupInfo: [String: NSObject]?) {
@@ -36,8 +37,8 @@ class SampleHandler: RPBroadcastSampleHandler {
                          token,
                          connectOptions: connectOptions,
                          roomOptions: roomOptions).then { (room) -> Promise<LocalTrackPublication> in
-                            let track = LocalVideoTrack.createBufferTrack()
-                            return room.localParticipant!.publishVideoTrack(track: track)
+                            self.bufferTrack = LocalVideoTrack.createBufferTrack()
+                            return room.localParticipant!.publishVideoTrack(track: self.bufferTrack!)
                          }.then { publication in
                             self.publication = publication
                          }
@@ -68,13 +69,11 @@ class SampleHandler: RPBroadcastSampleHandler {
         switch sampleBufferType {
         case RPSampleBufferType.video:
 
-            guard let publication = publication,
-                  let track = publication.track as? LocalVideoTrack,
-                  let capturer = track.capturer as? BufferCapturer else {
+            guard let capturer = bufferTrack?.capturer as? BufferCapturer else {
                 return
             }
 
-            capturer.capture(sampleBuffer, scale: 1 / 3)
+            capturer.capture(sampleBuffer)
 
         default: break
         }
