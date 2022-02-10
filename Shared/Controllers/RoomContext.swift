@@ -17,9 +17,13 @@ final class RoomContext: ObservableObject {
 
     @AppStorage("url") var url: String = ""
     @AppStorage("token") var token: String = ""
+
+    // RoomOptions
     @AppStorage("simulcast") var simulcast: Bool = true
-    @AppStorage("publish") var publish: Bool = false
+
+    // ConnectOptions
     @AppStorage("autoSubscribe") var autoSubscribe: Bool = true
+    @AppStorage("publish") var publish: Bool = false
 
     public init() {
         room.room.add(delegate: self)

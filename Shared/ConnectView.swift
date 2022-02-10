@@ -23,20 +23,50 @@ struct ConnectView: View {
                     VStack(spacing: 20) {
                         LKTextField(title: "Server URL", text: $roomCtx.url, type: .URL)
                         LKTextField(title: "Token", text: $roomCtx.token, type: .ascii)
-                        Toggle(isOn: $roomCtx.simulcast) {
-                            Text("Simulcast")
-                                .fontWeight(.bold)
-                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
-                        // Not yet available
-                        Toggle(isOn: $roomCtx.publish) {
-                            Text("Publish mode")
-                                .fontWeight(.bold)
-                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
-                        Toggle(isOn: $roomCtx.autoSubscribe) {
-                            Text("Auto-Subscribe")
-                                .fontWeight(.bold)
-                        }.toggleStyle(SwitchToggleStyle(tint: Color.lkBlue))
 
+                        HStack {
+
+                            Menu {
+
+                                Toggle(isOn: $roomCtx.autoSubscribe) {
+                                    Text("Auto-Subscribe")
+                                        .fontWeight(.bold)
+                                }
+                                Toggle(isOn: $roomCtx.publish) {
+                                    Text("Publish only mode")
+                                        .fontWeight(.bold)
+                                }
+
+                            } label: {
+                                Image(systemSymbol: .boltFill)
+                                    .renderingMode(.original)
+                                Text("Connect Options")
+                            }
+                            #if os(macOS)
+                            .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                            #elseif os(iOS)
+                            .menuStyle(BorderlessButtonMenuStyle())
+                            #endif
+                            .fixedSize()
+
+                            Menu {
+                                Toggle(isOn: $roomCtx.simulcast) {
+                                    Text("Simulcast")
+                                        .fontWeight(.bold)
+                                }
+
+                            } label: {
+                                Image(systemName: SFSymbol.gear.rawValue)
+                                    .renderingMode(.original)
+                                Text("Room Options")
+                            }
+                            #if os(macOS)
+                            .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                            #elseif os(iOS)
+                            .menuStyle(BorderlessButtonMenuStyle())
+                            #endif
+                            .fixedSize()
+                        }
                     }.frame(maxWidth: 350)
 
                     if case .connecting = roomCtx.connectionState {
@@ -59,7 +89,7 @@ struct ConnectView: View {
                                                 appCtx.connectionHistory.update(room: room)
                                             }
                                         } label: {
-                                            Image(systemName: SFSymbol.boltHorizontalFill.rawValue)
+                                            Image(systemName: SFSymbol.boltFill.rawValue)
                                                 .renderingMode(.original)
                                             Text([entry.roomName,
                                                   entry.participantIdentity,
