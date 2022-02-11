@@ -20,6 +20,7 @@ enum SecureStoreKeys: String {
     case showInformationOverlay = "showInformationOverlay"
     case preferMetal = "preferMetal"
     case videoViewMode = "videoViewMode"
+    case videoViewMirrored = "videoViewMirrored"
 
     case connectionHistory = "connectionHistory"
 }

@@ -38,29 +38,36 @@ struct ParticipantView: View {
                    let track = publication.track as? VideoTrack,
                    appCtx.videoViewVisible {
                     ZStack(alignment: .topLeading) {
+                        let mirrored = track is LocalVideoTrack ? !appCtx.videoViewMirrored : appCtx.videoViewMirrored
                         SwiftUIVideoView(track,
                                          mode: videoViewMode,
-                                         mirrored: true, dimensions: $dimensions,
+                                         mirrored: mirrored,
+                                         dimensions: $dimensions,
                                          preferMetal: appCtx.preferMetal)
                             .background(Color.black)
+                        // .scaleEffect(CGSize(width: -1.0, height: 1.0))// flip local view horizontally
 
                         // Show the actual video dimensions (if enabled)
                         if appCtx.showInformationOverlay {
                             VStack(alignment: .leading) {
-                                if  let dimensions = dimensions {
-                                    Text("DIM. \(dimensions.width)x\(dimensions.height)")
+                                Text("Metal: \(String(describing: appCtx.preferMetal))")
+                                    .foregroundColor(Color.white)
+                                    .padding(3)
+                                    .background(Color.black)
+                                    .cornerRadius(8)
+                                Text("Mirrored: \(String(describing: mirrored))")
+                                    .foregroundColor(Color.white)
+                                    .padding(3)
+                                    .background(Color.black)
+                                    .cornerRadius(8)
+                                if let dimensions = dimensions {
+                                    Text("\(dimensions.width)x\(dimensions.height)")
                                         .foregroundColor(Color.white)
                                         .padding(3)
                                         .background(Color.lkBlue)
                                         .cornerRadius(8)
 
                                 }
-                                Text("Metal: \(String(describing: appCtx.preferMetal))")
-                                    .foregroundColor(Color.white)
-                                    .padding(3)
-                                    .background(Color.green)
-                                    .cornerRadius(8)
-
                             }
                             .padding()
                         }
@@ -77,13 +84,17 @@ struct ParticipantView: View {
                 VStack(alignment: .trailing, spacing: 0) {
                     // Show the sub-video view
                     if let subVideoTrack = participant.subVideoTrack {
-                        SwiftUIVideoView(subVideoTrack, mode: .fill,
-                                         preferMetal: appCtx.preferMetal)
-                            .background(Color.black)
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
-                            .cornerRadius(8)
-                            .padding()
+                        let mirrored = subVideoTrack is LocalVideoTrack ? !appCtx.videoViewMirrored : appCtx.videoViewMirrored
+                        SwiftUIVideoView(subVideoTrack,
+                                         mode: .fill,
+                                         mirrored: mirrored,
+                                         preferMetal: appCtx.preferMetal
+                        )
+                        .background(Color.black)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
+                        .cornerRadius(8)
+                        .padding()
                     }
 
                     // Bottom user info bar

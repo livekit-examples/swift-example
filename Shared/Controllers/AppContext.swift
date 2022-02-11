@@ -23,6 +23,10 @@ final class AppContext: ObservableObject {
         didSet { store.set(.videoViewMode, value: videoViewMode) }
     }
 
+    @Published var videoViewMirrored: Bool {
+        didSet { store.set(.videoViewMirrored, value: videoViewMirrored) }
+    }
+
     @Published var connectionHistory: Set<ConnectionHistory> {
         didSet { store.set(.connectionHistory, value: connectionHistory) }
     }
@@ -33,6 +37,7 @@ final class AppContext: ObservableObject {
         self.showInformationOverlay = store.get(.showInformationOverlay) ?? false
         self.preferMetal = store.get(.preferMetal) ?? true
         self.videoViewMode = store.get(.videoViewMode) ?? .fit
+        self.videoViewMirrored = store.get(.videoViewMirrored) ?? false
         self.connectionHistory = store.get(.connectionHistory) ?? []
     }
 }

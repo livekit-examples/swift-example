@@ -270,8 +270,14 @@ struct RoomView: View {
 
                         Menu {
                             Toggle("Show info overlay", isOn: $appCtx.showInformationOverlay)
-                            Toggle("Video view visible", isOn: $appCtx.videoViewVisible)
-                            Toggle("Prefer Metal", isOn: $appCtx.preferMetal)
+
+                            Divider()
+
+                            Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
+                            Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
+                            Toggle("VideoView mirrored", isOn: $appCtx.videoViewMirrored)
+
+                            Divider()
 
                             Menu {
                                 Button {
