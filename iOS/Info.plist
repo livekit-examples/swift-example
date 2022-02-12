@@ -62,5 +62,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+    <key>NSFaceIDUsageDescription</key>
+    <string>Keychain is used to store all preferences.</string>
 </dict>
 </plist>

@@ -1,12 +1,15 @@
 import SwiftUI
 import Logging
 import LiveKit
+import KeychainAccess
 
-let store = SecureStore<SecureStoreKeys>(service: "io.livekit.example")
+let sync = ValueStore<Preferences>(store: Keychain(service: "io.livekit.example"),
+                                   key: "preferences",
+                                   default: Preferences())
 
 struct RoomContextView: View {
 
-    @StateObject var roomCtx = RoomContext(store: store)
+    @StateObject var roomCtx = RoomContext(store: sync)
 
     var shouldShowRoomView: Bool {
         roomCtx.connectionState.isConnected || roomCtx.connectionState.isReconnecting
@@ -77,7 +80,7 @@ extension Decimal {
 @main
 struct LiveKitExample: App {
 
-    @StateObject var appCtx = AppContext(store: store)
+    @StateObject var appCtx = AppContext(store: sync)
 
     func nearestSafeScale(for target: Int, scale: Double) -> Decimal {
 

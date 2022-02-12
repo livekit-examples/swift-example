@@ -1,47 +1,98 @@
 import SwiftUI
 import KeychainAccess
 import Combine
+import LiveKit
+import Promises
 
-enum SecureStoreKeys: String {
-    case url = "url"
-    case token = "token"
+struct Preferences: Codable, Equatable {
+    var url = ""
+    var token = ""
 
     // Connect options
-    case autoSubscribe = "autoSubscribe"
-    case publishMode = "publishMode"
+    var autoSubscribe = true
+    var publishMode = false
 
     // Room options
-    case simulcast = "simulcast"
-    case adaptiveStream = "adaptiveStream"
-    case dynacast = "dynacast"
+    var simulcast = true
+    var adaptiveStream = false
+    var dynacast = false
 
     // Settings
-    case videoViewVisible = "videoViewVisible"
-    case showInformationOverlay = "showInformationOverlay"
-    case preferMetal = "preferMetal"
-    case videoViewMode = "videoViewMode"
-    case videoViewMirrored = "videoViewMirrored"
+    var videoViewVisible = true
+    var showInformationOverlay = false
+    var preferMetal = true
+    var videoViewMode: VideoView.Mode = .fit
+    var videoViewMirrored = false
 
-    case connectionHistory = "connectionHistory"
+    var connectionHistory = Set<ConnectionHistory>()
 }
 
-class SecureStore<K: RawRepresentable> where K.RawValue == String {
+let encoder = JSONEncoder()
+let decoder = JSONDecoder()
 
-    let keychain: Keychain
-    let encoder = JSONEncoder()
-    let decoder = JSONDecoder()
+// Promise version
+extension Keychain {
 
-    init(service: String) {
-        self.keychain = Keychain(service: service)
+    @discardableResult
+    func get<T: Decodable>(_ key: String) -> Promise<T?> {
+        Promise(on: .global()) { () -> T? in
+            guard let data = try self.getData(key) else { return nil }
+            return try decoder.decode(T.self, from: data)
+        }
     }
 
-    func get<T: Decodable>(_ key: K) -> T? {
-        guard let data = try? keychain.getData(key.rawValue) else { return nil }
-        return try? decoder.decode(T.self, from: data)
+    @discardableResult
+    func set<T: Encodable>(_ key: String, value: T) -> Promise<Void> {
+        Promise(on: .global()) { () -> Void in
+            let data = try encoder.encode(value)
+            try self.set(data, key: key)
+        }
+    }
+}
+
+class ValueStore<T: Codable & Equatable>: ObservableObject {
+
+    private let store: Keychain
+    private let key: String
+    private let message = ""
+    private weak var timer: Timer?
+
+    public let onLoaded = Promise<T>.pending()
+
+    public var value: T {
+        didSet {
+            guard oldValue != value else { return }
+            lazySync()
+        }
     }
 
-    func set<T: Encodable>(_ key: K, value: T) {
-        guard let data = try? encoder.encode(value) else { return }
-        try? keychain.set(data, key: key.rawValue)
+    private var storeWithOptions: Keychain {
+        store.accessibility(.whenUnlocked)
+    }
+
+    public init(store: Keychain, key: String, `default`: T) {
+        self.store = store
+        self.key = key
+        self.value = `default`
+
+        storeWithOptions.get(key).then { (result: T?) -> Void in
+            self.value = result ?? self.value
+            self.onLoaded.fulfill(self.value)
+        }
+    }
+
+    deinit {
+        timer?.invalidate()
+    }
+
+    public func lazySync() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 1,
+                                     repeats: false,
+                                     block: { _ in self.sync() })
+    }
+
+    public func sync() {
+        storeWithOptions.set(key, value: value)
     }
 }

@@ -1,43 +1,53 @@
 import SwiftUI
 import LiveKit
 import WebRTC
+import Combine
+
+extension ObservableObject where Self.ObjectWillChangePublisher == ObservableObjectPublisher {
+    func notify() {
+        DispatchQueue.main.async { self.objectWillChange.send() }
+    }
+}
 
 // This class contains the logic to control behavior of the whole app.
 final class AppContext: ObservableObject {
 
-    private let store: SecureStore<SecureStoreKeys>
+    private let store: ValueStore<Preferences>
 
-    @Published var videoViewVisible: Bool {
-        didSet { store.set(.videoViewVisible, value: videoViewVisible) }
+    @Published var videoViewVisible: Bool = true {
+        didSet { store.value.videoViewVisible = videoViewVisible }
     }
 
-    @Published var showInformationOverlay: Bool {
-        didSet { store.set(.showInformationOverlay, value: showInformationOverlay) }
+    @Published var showInformationOverlay: Bool = false {
+        didSet { store.value.showInformationOverlay = showInformationOverlay }
     }
 
-    @Published var preferMetal: Bool {
-        didSet { store.set(.preferMetal, value: preferMetal) }
+    @Published var preferMetal: Bool = true {
+        didSet { store.value.preferMetal = preferMetal }
     }
 
-    @Published var videoViewMode: VideoView.Mode {
-        didSet { store.set(.videoViewMode, value: videoViewMode) }
+    @Published var videoViewMode: VideoView.Mode = .fit {
+        didSet { store.value.videoViewMode = videoViewMode }
     }
 
-    @Published var videoViewMirrored: Bool {
-        didSet { store.set(.videoViewMirrored, value: videoViewMirrored) }
+    @Published var videoViewMirrored: Bool = false {
+        didSet { store.value.videoViewMirrored = videoViewMirrored }
     }
 
-    @Published var connectionHistory: Set<ConnectionHistory> {
-        didSet { store.set(.connectionHistory, value: connectionHistory) }
+    @Published var connectionHistory: Set<ConnectionHistory> = [] {
+        didSet { store.value.connectionHistory = connectionHistory }
     }
 
-    public init(store: SecureStore<SecureStoreKeys>) {
+    public init(store: ValueStore<Preferences>) {
         self.store = store
-        self.videoViewVisible = store.get(.videoViewVisible) ?? true
-        self.showInformationOverlay = store.get(.showInformationOverlay) ?? false
-        self.preferMetal = store.get(.preferMetal) ?? true
-        self.videoViewMode = store.get(.videoViewMode) ?? .fit
-        self.videoViewMirrored = store.get(.videoViewMirrored) ?? false
-        self.connectionHistory = store.get(.connectionHistory) ?? Set<ConnectionHistory>()
+
+        store.onLoaded.then { preferences in
+            self.videoViewVisible = preferences.videoViewVisible
+            self.showInformationOverlay = preferences.showInformationOverlay
+            self.preferMetal = preferences.preferMetal
+            self.videoViewMode = preferences.videoViewMode
+            self.videoViewMirrored = preferences.videoViewMirrored
+            self.connectionHistory = preferences.connectionHistory
+        }
     }
 }
