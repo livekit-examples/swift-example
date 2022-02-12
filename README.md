@@ -2,6 +2,12 @@
 
 This app demonstrates the basic usage of [LiveKit Swift SDK (iOS/macOS)](https://github.com/livekit/client-sdk-swift). See [LiveKit Docs](https://docs.livekit.io/) for more information.
 
+### Compiled version
+
+Precompiled macOS version is available from the [Releases page](https://github.com/livekit/client-example-swift/releases), so you can quickly try out features of the [LiveKit Swift SDK](https://github.com/livekit/client-sdk-swift) or the [LiveKit Server](https://github.com/livekit/livekit-server).
+
+
+### Screenshots
 **macOS**
 ![macOS](https://user-images.githubusercontent.com/548776/150068761-ce8f7d59-72e8-412a-9675-66a2eec9f04f.png)
 
