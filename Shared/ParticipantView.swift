@@ -38,10 +38,10 @@ struct ParticipantView: View {
                    let track = publication.track as? VideoTrack,
                    appCtx.videoViewVisible {
                     ZStack(alignment: .topLeading) {
-                        let mirrored = track is LocalVideoTrack ? !appCtx.videoViewMirrored : appCtx.videoViewMirrored
+                        let shouldMirror = track is LocalVideoTrack && track.source == .camera
                         SwiftUIVideoView(track,
                                          mode: videoViewMode,
-                                         mirrored: mirrored,
+                                         mirrored: appCtx.videoViewMirrored ? !shouldMirror : shouldMirror,
                                          dimensions: $dimensions,
                                          preferMetal: appCtx.preferMetal)
                             .background(Color.black)
@@ -55,7 +55,7 @@ struct ParticipantView: View {
                                     .padding(3)
                                     .background(Color.black)
                                     .cornerRadius(8)
-                                Text("Mirrored: \(String(describing: mirrored))")
+                                Text("Mirrored: \(String(describing: shouldMirror))")
                                     .foregroundColor(Color.white)
                                     .padding(3)
                                     .background(Color.black)
@@ -84,10 +84,10 @@ struct ParticipantView: View {
                 VStack(alignment: .trailing, spacing: 0) {
                     // Show the sub-video view
                     if let subVideoTrack = participant.subVideoTrack {
-                        let mirrored = subVideoTrack is LocalVideoTrack ? !appCtx.videoViewMirrored : appCtx.videoViewMirrored
+                        let shouldMirror = subVideoTrack is LocalVideoTrack && subVideoTrack.source == .camera
                         SwiftUIVideoView(subVideoTrack,
                                          mode: .fill,
-                                         mirrored: mirrored,
+                                         mirrored: appCtx.videoViewMirrored ? !shouldMirror : shouldMirror,
                                          preferMetal: appCtx.preferMetal
                         )
                         .background(Color.black)

@@ -275,7 +275,7 @@ struct RoomView: View {
 
                             Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
                             Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
-                            Toggle("VideoView mirrored", isOn: $appCtx.videoViewMirrored)
+                            Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
 
                             Divider()
 
