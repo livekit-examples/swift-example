@@ -38,6 +38,6 @@ final class AppContext: ObservableObject {
         self.preferMetal = store.get(.preferMetal) ?? true
         self.videoViewMode = store.get(.videoViewMode) ?? .fit
         self.videoViewMirrored = store.get(.videoViewMirrored) ?? false
-        self.connectionHistory = store.get(.connectionHistory) ?? []
+        self.connectionHistory = store.get(.connectionHistory) ?? Set<ConnectionHistory>()
     }
 }

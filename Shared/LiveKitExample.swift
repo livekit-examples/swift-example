@@ -2,7 +2,7 @@ import SwiftUI
 import Logging
 import LiveKit
 
-let store = SecureStore<SecureStoreKeys>()
+let store = SecureStore<SecureStoreKeys>(service: "io.livekit.example")
 
 struct RoomContextView: View {
 

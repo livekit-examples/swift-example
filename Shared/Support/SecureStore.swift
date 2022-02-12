@@ -27,9 +27,13 @@ enum SecureStoreKeys: String {
 
 class SecureStore<K: RawRepresentable> where K.RawValue == String {
 
-    let keychain = Keychain()
+    let keychain: Keychain
     let encoder = JSONEncoder()
     let decoder = JSONDecoder()
+
+    init(service: String) {
+        self.keychain = Keychain(service: service)
+    }
 
     func get<T: Decodable>(_ key: K) -> T? {
         guard let data = try? keychain.getData(key.rawValue) else { return nil }
