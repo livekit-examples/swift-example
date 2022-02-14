@@ -329,8 +329,6 @@ struct RoomView: View {
                                 .renderingMode(.original)
                         }
 
-                        Spacer()
-
                         // Disconnect
                         Button(action: {
                             roomCtx.disconnect()

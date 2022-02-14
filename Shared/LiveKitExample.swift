@@ -105,8 +105,8 @@ struct LiveKitExample: App {
                 .environmentObject(appCtx)
         }
         #if os(macOS)
-        .windowStyle(.automatic)
-        .windowToolbarStyle(.automatic)
+        .windowStyle(.hiddenTitleBar)
+        .windowToolbarStyle(.unifiedCompact(showsTitle: true))
         #endif
     }
 }
