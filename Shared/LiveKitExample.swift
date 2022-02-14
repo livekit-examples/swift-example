@@ -110,3 +110,28 @@ struct LiveKitExample: App {
         #endif
     }
 }
+
+#if os(macOS)
+
+extension View {
+    func withHostingWindow(_ callback: @escaping (NSWindow) -> Void) -> some View {
+        self.background(HostingWindowFinder(callback: callback))
+    }
+}
+
+struct HostingWindowFinder: NSViewRepresentable {
+    var callback: (NSWindow) -> Void
+
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async { [weak view] in
+            if let window = view?.window {
+                self.callback(window)
+            }
+        }
+        return view
+    }
+
+    func updateNSView(_ uiView: NSView, context: Context) {}
+}
+#endif

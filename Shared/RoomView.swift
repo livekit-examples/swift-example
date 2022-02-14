@@ -28,6 +28,10 @@ struct RoomView: View {
     @EnvironmentObject var room: ExampleObservableRoom
 
     @State private var screenPickerPresented = false
+    #if os(macOS)
+    @State private var window: NSWindow?
+    @State private var pinned: Bool = false
+    #endif
 
     var columns = [
         GridItem(.adaptive(minimum: CGFloat(adaptiveMin)))
@@ -329,6 +333,16 @@ struct RoomView: View {
                                 .renderingMode(.original)
                         }
 
+                        #if os(macOS)
+                        // Pin on top
+                        Toggle(isOn: $pinned) {
+                            Image(systemSymbol: pinned ? .pinFill : .pin)
+                                .renderingMode(.original)
+                        }.onChange(of: pinned) { newValue in
+                            window?.level = newValue ? .floating : .normal
+                        }
+                        #endif
+
                         // Disconnect
                         Button(action: {
                             roomCtx.disconnect()
@@ -341,6 +355,9 @@ struct RoomView: View {
 
                 }
         }
+        #if os(macOS)
+        .withHostingWindow { self.window = $0 }
+        #endif
     }
 }
 
