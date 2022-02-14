@@ -106,7 +106,7 @@ struct LiveKitExample: App {
         }
         #if os(macOS)
         .windowStyle(.hiddenTitleBar)
-        .windowToolbarStyle(.unifiedCompact(showsTitle: true))
+        .windowToolbarStyle(.unifiedCompact)
         #endif
     }
 }

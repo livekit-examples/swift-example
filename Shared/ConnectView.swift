@@ -57,7 +57,7 @@ struct ConnectView: View {
                                     Text("Dynacast")
                                 }
                             } label: {
-                                Image(systemName: SFSymbol.gear.rawValue)
+                                Image(systemSymbol: .gear)
                                     .renderingMode(.original)
                                 Text("Room Options")
                             }
@@ -90,7 +90,7 @@ struct ConnectView: View {
                                                 appCtx.connectionHistory.update(room: room)
                                             }
                                         } label: {
-                                            Image(systemName: SFSymbol.boltFill.rawValue)
+                                            Image(systemSymbol: .boltFill)
                                                 .renderingMode(.original)
                                             Text([entry.roomName,
                                                   entry.participantIdentity,
@@ -103,13 +103,13 @@ struct ConnectView: View {
                                     Button {
                                         appCtx.connectionHistory.removeAll()
                                     } label: {
-                                        Image(systemName: SFSymbol.xmarkCircleFill.rawValue)
+                                        Image(systemSymbol: .xmarkCircleFill)
                                             .renderingMode(.original)
                                         Text("Clear history")
                                     }
 
                                 } label: {
-                                    Image(systemName: SFSymbol.clockFill.rawValue)
+                                    Image(systemSymbol: .clockFill)
                                         .renderingMode(.original)
                                     Text("Recent")
                                 }

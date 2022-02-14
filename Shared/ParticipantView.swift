@@ -125,13 +125,13 @@ struct ParticipantView: View {
                                     }
                                 } label: {
                                     if case .subscribed = remotePub.subscriptionState {
-                                        Image(systemName: SFSymbol.videoFill.rawValue)
+                                        Image(systemSymbol: .videoFill)
                                             .foregroundColor(Color.green)
                                     } else if case .notAllowed = remotePub.subscriptionState {
-                                        Image(systemName: SFSymbol.exclamationmarkCircle.rawValue)
+                                        Image(systemSymbol: .exclamationmarkCircle)
                                             .foregroundColor(Color.red)
                                     } else {
-                                        Image(systemName: SFSymbol.videoSlashFill.rawValue)
+                                        Image(systemSymbol: .videoSlashFill)
                                     }
                                 }
                                 #if os(macOS)
@@ -142,12 +142,12 @@ struct ParticipantView: View {
                                 .fixedSize()
                             } else {
                                 // local
-                                Image(systemName: SFSymbol.videoFill.rawValue)
+                                Image(systemSymbol: .videoFill)
                                     .foregroundColor(Color.green)
                             }
 
                         } else {
-                            Image(systemName: SFSymbol.videoSlashFill.rawValue)
+                            Image(systemSymbol: .videoSlashFill)
                                 .foregroundColor(Color.white)
                         }
 
@@ -173,13 +173,13 @@ struct ParticipantView: View {
                                     }
                                 } label: {
                                     if case .subscribed = remotePub.subscriptionState {
-                                        Image(systemName: SFSymbol.micFill.rawValue)
+                                        Image(systemSymbol: .micFill)
                                             .foregroundColor(Color.orange)
                                     } else if case .notAllowed = remotePub.subscriptionState {
-                                        Image(systemName: SFSymbol.exclamationmarkCircle.rawValue)
+                                        Image(systemSymbol: .exclamationmarkCircle)
                                             .foregroundColor(Color.red)
                                     } else {
-                                        Image(systemName: SFSymbol.micSlashFill.rawValue)
+                                        Image(systemSymbol: .micSlashFill)
                                     }
                                 }
                                 #if os(macOS)
@@ -190,23 +190,23 @@ struct ParticipantView: View {
                                 .fixedSize()
                             } else {
                                 // local
-                                Image(systemName: SFSymbol.micFill.rawValue)
+                                Image(systemSymbol: .micFill)
                                     .foregroundColor(Color.orange)
                             }
 
                         } else {
-                            Image(systemName: SFSymbol.micSlashFill.rawValue)
+                            Image(systemSymbol: .micSlashFill)
                                 .foregroundColor(Color.white)
                         }
 
                         if participant.connectionQuality == .excellent {
-                            Image(systemName: SFSymbol.wifi.rawValue)
+                            Image(systemSymbol: .wifi)
                                 .foregroundColor(.green)
                         } else if participant.connectionQuality == .good {
-                            Image(systemName: SFSymbol.wifi.rawValue)
+                            Image(systemSymbol: .wifi)
                                 .foregroundColor(Color.orange)
                         } else if participant.connectionQuality == .poor {
-                            Image(systemName: SFSymbol.wifiExclamationmark.rawValue)
+                            Image(systemSymbol: .wifiExclamationmark)
                                 .foregroundColor(Color.red)
                         }
 

@@ -106,7 +106,7 @@ struct RoomView: View {
                 Button {
                     room.sendMessage()
                 } label: {
-                    Image(systemName: SFSymbol.paperplaneFill.rawValue)
+                    Image(systemSymbol: .paperplaneFill)
                         .foregroundColor(room.textFieldString.isEmpty ? nil : Color.blue)
                 }
                 .buttonStyle(.borderless)
@@ -194,7 +194,7 @@ struct RoomView: View {
                                     room.toggleCameraEnabled()
                                 },
                                 label: {
-                                    Image(systemName: SFSymbol.videoFill.rawValue)
+                                    Image(systemSymbol: .videoFill)
                                         .renderingMode(room.cameraTrackState.isPublished ? .original : .template)
                                 })
                                 // disable while publishing/un-publishing
@@ -208,7 +208,7 @@ struct RoomView: View {
                                         room.toggleCameraEnabled()
                                     }
                                 } label: {
-                                    Image(systemName: SFSymbol.videoFill.rawValue)
+                                    Image(systemSymbol: .videoFill)
                                         .renderingMode(.original)
                                 }
                             }
@@ -218,7 +218,7 @@ struct RoomView: View {
                                 room.toggleMicrophoneEnabled()
                             },
                             label: {
-                                Image(systemName: SFSymbol.micFill.rawValue)
+                                Image(systemSymbol: .micFill)
                                     .renderingMode(room.microphoneTrackState.isPublished ? .original : .template)
                             })
                             // disable while publishing/un-publishing
@@ -229,7 +229,7 @@ struct RoomView: View {
                                 room.toggleScreenShareEnabled(screenShareSource: nil)
                             },
                             label: {
-                                Image(systemName: SFSymbol.rectangleFillOnRectangleFill.rawValue)
+                                Image(systemSymbol: .rectangleFillOnRectangleFill)
                                     .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
                             })
                             #elseif os(macOS)
@@ -242,7 +242,7 @@ struct RoomView: View {
                                 }
                             },
                             label: {
-                                Image(systemName: SFSymbol.rectangleFillOnRectangleFill.rawValue)
+                                Image(systemSymbol: .rectangleFillOnRectangleFill)
                                     .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
                                     .foregroundColor(room.screenShareTrackState.isPublished ? Color.green : Color.white)
                             }).popover(isPresented: $screenPickerPresented) {
@@ -260,7 +260,7 @@ struct RoomView: View {
                                 }
                             },
                             label: {
-                                Image(systemName: SFSymbol.messageFill.rawValue)
+                                Image(systemSymbol: .messageFill)
                                     .renderingMode(room.showMessagesView ? .original : .template)
                             })
 
@@ -325,7 +325,7 @@ struct RoomView: View {
                             }
 
                         } label: {
-                            Image(systemName: SFSymbol.gear.rawValue)
+                            Image(systemSymbol: .gear)
                                 .renderingMode(.original)
                         }
 
@@ -334,7 +334,7 @@ struct RoomView: View {
                             roomCtx.disconnect()
                         },
                         label: {
-                            Image(systemName: SFSymbol.xmarkCircleFill.rawValue)
+                            Image(systemSymbol: .xmarkCircleFill)
                                 .renderingMode(.original)
                         })
                     }
