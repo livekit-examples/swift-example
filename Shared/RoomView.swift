@@ -207,6 +207,16 @@ struct RoomView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: toolbarPlacement) {
 
+                        #if os(macOS)
+                        // Pin on top
+                        Toggle(isOn: $pinned) {
+                            Image(systemSymbol: pinned ? .pinFill : .pin)
+                                .renderingMode(.original)
+                        }.onChange(of: pinned) { newValue in
+                            windowRef.level = newValue ? .floating : .normal
+                        }
+                        #endif
+
                         // VideoView mode switcher
                         Picker("Mode", selection: $appCtx.videoViewMode) {
                             Text("Fit").tag(VideoView.Mode.fit)
@@ -358,16 +368,6 @@ struct RoomView: View {
                             Image(systemSymbol: .gear)
                                 .renderingMode(.original)
                         }
-
-                        #if os(macOS)
-                        // Pin on top
-                        Toggle(isOn: $pinned) {
-                            Image(systemSymbol: pinned ? .pinFill : .pin)
-                                .renderingMode(.original)
-                        }.onChange(of: pinned) { newValue in
-                            windowRef.level = newValue ? .floating : .normal
-                        }
-                        #endif
 
                         // Disconnect
                         Button(action: {
