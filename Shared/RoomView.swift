@@ -23,14 +23,18 @@ extension CIImage {
 
 #if os(macOS)
 // keeps weak reference to NSWindow
-class WindowRef: ObservableObject {
-    internal weak var window: NSWindow? {
+class WindowAccess: ObservableObject {
+
+    private weak var window: NSWindow?
+
+    @Published public var pinned: Bool = false {
         didSet {
-            DispatchQueue.main.async { self.objectWillChange.send() }
+            guard oldValue != pinned else { return }
+            self.level = pinned ? .floating : .normal
         }
     }
 
-    internal var level: NSWindow.Level {
+    private var level: NSWindow.Level {
         get { window?.level ?? .normal }
         set {
             DispatchQueue.main.async {
@@ -38,6 +42,11 @@ class WindowRef: ObservableObject {
                 self.objectWillChange.send()
             }
         }
+    }
+
+    public func set(window: NSWindow?) {
+        self.window = window
+        DispatchQueue.main.async { self.objectWillChange.send() }
     }
 }
 #endif
@@ -50,8 +59,7 @@ struct RoomView: View {
 
     @State private var screenPickerPresented = false
     #if os(macOS)
-    @State private var windowRef = WindowRef()
-    @State private var pinned: Bool = false
+    @ObservedObject private var windowAccess = WindowAccess()
     #endif
 
     // @State private var itemCount = 0.0
@@ -209,11 +217,9 @@ struct RoomView: View {
 
                         #if os(macOS)
                         // Pin on top
-                        Toggle(isOn: $pinned) {
-                            Image(systemSymbol: pinned ? .pinFill : .pin)
+                        Toggle(isOn: $windowAccess.pinned) {
+                            Image(systemSymbol: windowAccess.pinned ? .pinFill : .pin)
                                 .renderingMode(.original)
-                        }.onChange(of: pinned) { newValue in
-                            windowRef.level = newValue ? .floating : .normal
                         }
                         #endif
 
@@ -382,7 +388,7 @@ struct RoomView: View {
                 }
         }
         #if os(macOS)
-        .withHostingWindow { self.windowRef.window = $0 }
+        .withHostingWindow { self.windowAccess.set(window: $0) }
         #endif
     }
 }
