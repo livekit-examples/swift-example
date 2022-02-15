@@ -54,7 +54,7 @@ struct RoomView: View {
     @State private var pinned: Bool = false
     #endif
 
-    @State private var columns = 0.0
+    // @State private var itemCount = 0.0
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
 
@@ -146,7 +146,6 @@ struct RoomView: View {
     func content(geometry: GeometryProxy) -> some View {
 
         VStack {
-
             if case .connecting(let connectMode) = roomCtx.connectionState,
                case .reconnect(let reconnectMode) = connectMode {
                 Text("Re-connecting(\(String(describing: reconnectMode)))...")
@@ -155,26 +154,34 @@ struct RoomView: View {
                     .padding()
             }
 
-            HorVStack(axis: geometry.isWide ? .horizontal : .vertical) {
+            HorVStack(axis: geometry.isTall ? .vertical : .horizontal, spacing: 5) {
 
                 Group {
                     if let focusParticipant = room.focusParticipant {
-                        ParticipantView(participant: focusParticipant,
-                                        videoViewMode: appCtx.videoViewMode, onTap: ({ _ in
-                                            room.focusParticipant = nil
-                                        })).frame(maxWidth: .infinity, maxHeight: .infinity)
+                        ZStack(alignment: .topTrailing) {
+                            ParticipantView(participant: focusParticipant,
+                                            videoViewMode: appCtx.videoViewMode) { _ in
+                                room.focusParticipant = nil
+                            }
+                            .overlay(RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.orange.opacity(0.3), lineWidth: 5.0))
+                            Text("FOCUSED")
+                                .font(.system(size: 10))
+                                .fontWeight(.bold)
+                                .foregroundColor(Color.white)
+                                .padding(.horizontal, 5)
+                                .padding(.vertical, 2)
+                                .background(Color.orange.opacity(0.3))
+                                .cornerRadius(8)
+                                .padding()
+                        }
                     } else {
-                        ScrollView(.vertical, showsIndicators: true) {
-                            LazyVGrid(columns: (0...Int(max(0, columns))).map { _ in GridItem(.flexible()) },
-                                      alignment: .center,
-                                      spacing: 10) {
-                                ForEach(room.allParticipants.values) { participant in
-                                    ParticipantView(participant: participant,
-                                                    videoViewMode: appCtx.videoViewMode, onTap: ({ participant in
-                                                        room.focusParticipant = participant
-                                                    })).aspectRatio(1, contentMode: .fit)
-                                }
-                            }.padding()
+                        ParticipantLayout(room.allParticipants.values, spacing: 5) { participant in
+                            ParticipantView(participant: participant,
+                                            videoViewMode: appCtx.videoViewMode) { participant in
+                                room.focusParticipant = participant
+
+                            }
                         }
                     }
                 }
@@ -182,8 +189,7 @@ struct RoomView: View {
                     minWidth: 0,
                     maxWidth: .infinity,
                     minHeight: 0,
-                    maxHeight: .infinity,
-                    alignment: .topLeading
+                    maxHeight: .infinity
                 )
                 // Show messages view if enabled
                 if room.showMessagesView {
@@ -191,6 +197,7 @@ struct RoomView: View {
                 }
             }
         }
+        .padding(5)
     }
 
     var body: some View {
@@ -206,16 +213,6 @@ struct RoomView: View {
                             Text("Fill").tag(VideoView.Mode.fill)
                         }
                         .pickerStyle(SegmentedPickerStyle())
-
-                        if room.allParticipants.count > 1 {
-                            Slider(
-                                value: $columns,
-                                in: 0...Double(room.allParticipants.count - 1),
-                                step: 1
-                            )
-                            .frame(idealWidth: 100)
-                            Text("\(Int(columns) + 1)")
-                        }
 
                         Spacer()
 
@@ -390,6 +387,135 @@ struct RoomView: View {
     }
 }
 
+struct ParticipantLayout<Content: View>: View {
+
+    let views: [AnyView]
+    let spacing: CGFloat?
+
+    init<Data: RandomAccessCollection>(
+        _ data: Data,
+        id: KeyPath<Data.Element, Data.Element> = \.self,
+        spacing: CGFloat? = nil,
+        @ViewBuilder content: @escaping (Data.Element) -> Content) {
+        self.spacing = spacing
+        self.views = data.map { AnyView(content($0[keyPath: id])) }
+    }
+
+    func computeColumn(with geometry: GeometryProxy) -> (x: Int, y: Int) {
+        let sqr = Double(views.count).squareRoot()
+        let r: [Int] = [Int(sqr.rounded()), Int(sqr.rounded(.up))]
+        let c = geometry.isTall ? r : r.reversed()
+        return (x: c[0], y: c[1])
+    }
+
+    func grid(axis: Axis) -> some View {
+        ScrollView([ axis == .vertical ? .vertical : .horizontal ]) {
+            HorVGrid(axis: axis, columns: [GridItem(.flexible())], spacing: spacing) {
+                ForEach(0..<views.count, id: \.self) { i in
+                    views[i]
+                        .aspectRatio(1, contentMode: .fill)
+                }
+            }
+        }
+    }
+
+    var body: some View {
+        GeometryReader { geometry in
+            if views.isEmpty {
+                EmptyView()
+            } else if geometry.size.width <= 300 {
+                grid(axis: .vertical)
+            } else if geometry.size.height <= 300 {
+                grid(axis: .horizontal)
+            } else {
+
+                let verticalWhenTall: Axis = geometry.isTall ? .vertical : .horizontal
+                let horizontalWhenTall: Axis = geometry.isTall ? .horizontal : .vertical
+
+                switch views.count {
+                // simply return first view
+                case 1: views[0]
+                case 3: HorVStack(axis: verticalWhenTall, spacing: spacing) {
+                    views[0]
+                    HorVStack(axis: horizontalWhenTall, spacing: spacing) {
+                        views[1]
+                        views[2]
+                    }
+                }
+                case 5: HorVStack(axis: verticalWhenTall, spacing: spacing) {
+                    views[0]
+                    if geometry.isTall {
+                        HStack(spacing: spacing) {
+                            views[1]
+                            views[2]
+                        }
+                        HStack(spacing: spacing) {
+                            views[3]
+                            views[4]
+
+                        }
+                    } else {
+                        VStack(spacing: spacing) {
+                            views[1]
+                            views[3]
+                        }
+                        VStack(spacing: spacing) {
+                            views[2]
+                            views[4]
+                        }
+                    }
+                }
+                //            case 6:
+                //                if geometry.isTall {
+                //                    VStack {
+                //                        HStack {
+                //                            views[0]
+                //                            views[1]
+                //                        }
+                //                        HStack {
+                //                            views[2]
+                //                            views[3]
+                //                        }
+                //                        HStack {
+                //                            views[4]
+                //                            views[5]
+                //                        }
+                //                    }
+                //                } else {
+                //                    VStack {
+                //                        HStack {
+                //                            views[0]
+                //                            views[1]
+                //                            views[2]
+                //                        }
+                //                        HStack {
+                //                            views[3]
+                //                            views[4]
+                //                            views[5]
+                //                        }
+                //                    }
+                //                }
+                default:
+                    let c = computeColumn(with: geometry)
+                    VStack(spacing: spacing) {
+                        ForEach(0...(c.y - 1), id: \.self) { y in
+                            HStack(spacing: spacing) {
+                                ForEach(0...(c.x - 1), id: \.self) { x in
+                                    let index = (y * c.x) + x
+                                    if index < views.count {
+                                        views[index]
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+}
+
 struct HorVStack<Content: View>: View {
     let axis: Axis
     let horizontalAlignment: HorizontalAlignment
@@ -416,6 +542,34 @@ struct HorVStack<Content: View>: View {
                 VStack(alignment: horizontalAlignment, spacing: spacing, content: content)
             } else {
                 HStack(alignment: verticalAlignment, spacing: spacing, content: content)
+            }
+        }
+    }
+}
+
+struct HorVGrid<Content: View>: View {
+    let axis: Axis
+    let spacing: CGFloat?
+    let content: () -> Content
+    let columns: [GridItem]
+
+    init(axis: Axis = .horizontal,
+         columns: [GridItem],
+         spacing: CGFloat? = nil,
+         @ViewBuilder content: @escaping () -> Content) {
+
+        self.axis = axis
+        self.spacing = spacing
+        self.columns = columns
+        self.content = content
+    }
+
+    var body: some View {
+        Group {
+            if axis == .vertical {
+                LazyVGrid(columns: columns, spacing: spacing, content: content)
+            } else {
+                LazyHGrid(rows: columns, spacing: spacing, content: content)
             }
         }
     }
