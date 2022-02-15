@@ -21,6 +21,27 @@ extension CIImage {
     }
 }
 
+#if os(macOS)
+// keeps weak reference to NSWindow
+class WindowRef: ObservableObject {
+    internal weak var window: NSWindow? {
+        didSet {
+            DispatchQueue.main.async { self.objectWillChange.send() }
+        }
+    }
+
+    internal var level: NSWindow.Level {
+        get { window?.level ?? .normal }
+        set {
+            DispatchQueue.main.async {
+                self.window?.level = newValue
+                self.objectWillChange.send()
+            }
+        }
+    }
+}
+#endif
+
 struct RoomView: View {
 
     @EnvironmentObject var appCtx: AppContext
@@ -29,7 +50,7 @@ struct RoomView: View {
 
     @State private var screenPickerPresented = false
     #if os(macOS)
-    @State private var window: NSWindow?
+    @State private var windowRef = WindowRef()
     @State private var pinned: Bool = false
     #endif
 
@@ -347,7 +368,7 @@ struct RoomView: View {
                             Image(systemSymbol: pinned ? .pinFill : .pin)
                                 .renderingMode(.original)
                         }.onChange(of: pinned) { newValue in
-                            window?.level = newValue ? .floating : .normal
+                            windowRef.level = newValue ? .floating : .normal
                         }
                         #endif
 
@@ -364,7 +385,7 @@ struct RoomView: View {
                 }
         }
         #if os(macOS)
-        .withHostingWindow { self.window = $0 }
+        .withHostingWindow { self.windowRef.window = $0 }
         #endif
     }
 }
