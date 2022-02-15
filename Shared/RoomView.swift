@@ -33,9 +33,7 @@ struct RoomView: View {
     @State private var pinned: Bool = false
     #endif
 
-    var columns = [
-        GridItem(.adaptive(minimum: CGFloat(adaptiveMin)))
-    ]
+    @State private var columns = 0.0
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
 
@@ -70,7 +68,7 @@ struct RoomView: View {
         VStack(spacing: 0) {
             ScrollViewReader { scrollView in
                 ScrollView(.vertical, showsIndicators: true) {
-                    LazyVStack(alignment: .leading, spacing: 0) {
+                    LazyVStack(alignment: .center, spacing: 0) {
                         ForEach(room.messages) {
                             messageView($0)
                         }
@@ -146,7 +144,7 @@ struct RoomView: View {
                                         })).frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
                         ScrollView(.vertical, showsIndicators: true) {
-                            LazyVGrid(columns: columns,
+                            LazyVGrid(columns: (0...Int(max(0, columns))).map { _ in GridItem(.flexible()) },
                                       alignment: .center,
                                       spacing: 10) {
                                 ForEach(room.allParticipants.values) { participant in
@@ -187,6 +185,16 @@ struct RoomView: View {
                             Text("Fill").tag(VideoView.Mode.fill)
                         }
                         .pickerStyle(SegmentedPickerStyle())
+
+                        if room.allParticipants.count > 1 {
+                            Slider(
+                                value: $columns,
+                                in: 0...Double(room.allParticipants.count - 1),
+                                step: 1
+                            )
+                            .frame(idealWidth: 100)
+                            Text("\(Int(columns) + 1)")
+                        }
 
                         Spacer()
 
