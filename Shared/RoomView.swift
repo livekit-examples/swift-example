@@ -29,8 +29,8 @@ class WindowAccess: ObservableObject {
 
     deinit {
         // reset changed properties
-        DispatchQueue.main.async {
-            self.window?.level = .normal
+        DispatchQueue.main.async { [weak window] in
+            window?.level = .normal
         }
     }
 
