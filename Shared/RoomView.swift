@@ -27,6 +27,13 @@ class WindowAccess: ObservableObject {
 
     private weak var window: NSWindow?
 
+    deinit {
+        // reset changed properties
+        DispatchQueue.main.async {
+            self.window?.level = .normal
+        }
+    }
+
     @Published public var pinned: Bool = false {
         didSet {
             guard oldValue != pinned else { return }
