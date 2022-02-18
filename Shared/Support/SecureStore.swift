@@ -93,6 +93,8 @@ class ValueStore<T: Codable & Equatable>: ObservableObject {
     }
 
     public func sync() {
-        storeWithOptions.set(key, value: value)
+        storeWithOptions.set(key, value: value).catch { error in
+            print("Failed to write in Keychain, error: \(error)")
+        }
     }
 }

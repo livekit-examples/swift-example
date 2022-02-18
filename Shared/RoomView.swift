@@ -222,6 +222,15 @@ struct RoomView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: toolbarPlacement) {
 
+                        if let name = room.room.name {
+                            Text(name)
+                                .fontWeight(.bold)
+                        }
+
+                        if let identity = room.room.localParticipant?.identity {
+                            Text(identity)
+                        }
+
                         #if os(macOS)
                         // Pin on top
                         Toggle(isOn: $windowAccess.pinned) {
