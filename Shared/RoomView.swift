@@ -222,6 +222,7 @@ struct RoomView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: toolbarPlacement) {
 
+                        #if os(macOS)
                         if let name = room.room.name {
                             Text(name)
                                 .fontWeight(.bold)
@@ -230,6 +231,7 @@ struct RoomView: View {
                         if let identity = room.room.localParticipant?.identity {
                             Text(identity)
                         }
+                        #endif
 
                         #if os(macOS)
                         // Pin on top
@@ -412,12 +414,12 @@ struct RoomView: View {
 struct ParticipantLayout<Content: View>: View {
 
     let views: [AnyView]
-    let spacing: CGFloat?
+    let spacing: CGFloat
 
     init<Data: RandomAccessCollection>(
         _ data: Data,
         id: KeyPath<Data.Element, Data.Element> = \.self,
-        spacing: CGFloat? = nil,
+        spacing: CGFloat,
         @ViewBuilder content: @escaping (Data.Element) -> Content) {
         self.spacing = spacing
         self.views = data.map { AnyView(content($0[keyPath: id])) }
@@ -430,7 +432,7 @@ struct ParticipantLayout<Content: View>: View {
         return (x: c[0], y: c[1])
     }
 
-    func grid(axis: Axis) -> some View {
+    func grid(axis: Axis, geometry: GeometryProxy) -> some View {
         ScrollView([ axis == .vertical ? .vertical : .horizontal ]) {
             HorVGrid(axis: axis, columns: [GridItem(.flexible())], spacing: spacing) {
                 ForEach(0..<views.count, id: \.self) { i in
@@ -438,6 +440,9 @@ struct ParticipantLayout<Content: View>: View {
                         .aspectRatio(1, contentMode: .fill)
                 }
             }
+            .padding(axis == .horizontal ? [.leading, .trailing] : [.top, .bottom],
+                     max(0, ((axis == .horizontal ? geometry.size.width : geometry.size.height)
+                                - ((axis == .horizontal ? geometry.size.height : geometry.size.width) * CGFloat(views.count)) - (spacing * CGFloat(views.count - 1))) / 2))
         }
     }
 
@@ -446,9 +451,9 @@ struct ParticipantLayout<Content: View>: View {
             if views.isEmpty {
                 EmptyView()
             } else if geometry.size.width <= 300 {
-                grid(axis: .vertical)
+                grid(axis: .vertical, geometry: geometry)
             } else if geometry.size.height <= 300 {
-                grid(axis: .horizontal)
+                grid(axis: .horizontal, geometry: geometry)
             } else {
 
                 let verticalWhenTall: Axis = geometry.isTall ? .vertical : .horizontal

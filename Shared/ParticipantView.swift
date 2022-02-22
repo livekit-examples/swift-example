@@ -11,6 +11,7 @@ struct ParticipantView: View {
     var onTap: ((_ participant: ObservableParticipant) -> Void)?
 
     @State private var dimensions: Dimensions?
+    @State private var trackStats: TrackStats?
 
     func bgView(systemSymbol: SFSymbol, geometry: GeometryProxy) -> some View {
         Image(systemSymbol: systemSymbol)
@@ -43,31 +44,61 @@ struct ParticipantView: View {
                                          mode: videoViewMode,
                                          mirrored: appCtx.videoViewMirrored ? !shouldMirror : shouldMirror,
                                          dimensions: $dimensions,
+                                         trackStats: $trackStats,
                                          preferMetal: appCtx.preferMetal)
                             .background(Color.black)
                         // .scaleEffect(CGSize(width: -1.0, height: 1.0))// flip local view horizontally
 
                         // Show the actual video dimensions (if enabled)
                         if appCtx.showInformationOverlay {
-                            VStack(alignment: .leading) {
-                                Text("Metal: \(String(describing: appCtx.preferMetal))")
-                                    .foregroundColor(Color.white)
-                                    .padding(3)
-                                    .background(Color.black)
-                                    .cornerRadius(8)
-                                Text("Mirrored: \(String(describing: shouldMirror))")
-                                    .foregroundColor(Color.white)
-                                    .padding(3)
-                                    .background(Color.black)
-                                    .cornerRadius(8)
-                                if let dimensions = dimensions {
-                                    Text("\(dimensions.width)x\(dimensions.height)")
-                                        .foregroundColor(Color.white)
-                                        .padding(3)
-                                        .background(Color.lkBlue)
-                                        .cornerRadius(8)
+                            HStack(alignment: .top, spacing: 5) {
 
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text("View")
+                                        .fontWeight(.bold)
+                                    Text("metal: \(String(describing: appCtx.preferMetal))")
+                                    Text("mirror: \(String(describing: shouldMirror))")
                                 }
+                                .font(.system(size: 10))
+                                .foregroundColor(Color.white)
+                                .padding(5)
+                                .background(Color.black.opacity(0.5))
+                                .cornerRadius(8)
+
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text("Video")
+                                        .fontWeight(.bold)
+
+                                    HStack(alignment: .top, spacing: 3) {
+                                        if let dimensions = dimensions {
+                                            Text("\(dimensions.width)x\(dimensions.height)")
+                                        }
+                                        if let codecName = trackStats?.codecName {
+                                            HStack(spacing: 3) {
+                                                Text(codecName)
+                                                    .fontWeight(.bold)
+                                            }
+                                        }
+                                    }
+                                    
+                                    if let trackStats = trackStats, trackStats.bpsSent != 0 {
+                                        HStack(spacing: 3) {
+                                            Image(systemSymbol: .arrowUpCircle)
+                                            Text(trackStats.formattedBpsSent())
+                                        }
+                                    }
+                                    if let trackStats = trackStats, trackStats.bpsReceived != 0 {
+                                        HStack(spacing: 3) {
+                                            Image(systemSymbol: .arrowDownCircle)
+                                            Text(trackStats.formattedBpsReceived())
+                                        }
+                                    }
+                                }
+                                .font(.system(size: 10))
+                                .foregroundColor(Color.white)
+                                .padding(5)
+                                .background(Color.black.opacity(0.5))
+                                .cornerRadius(8)
                             }
                             .padding()
                         }
