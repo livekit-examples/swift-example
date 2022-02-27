@@ -98,7 +98,7 @@ final class RoomContext: ObservableObject {
 extension RoomContext: RoomDelegate {
 
     func room(_ room: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
-        
+
         guard !connectionState.isEqual(to: oldValue, includingAssociatedValues: false) else {
             print("Skipping same conectionState")
             return

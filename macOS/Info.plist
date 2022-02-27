@@ -35,5 +35,14 @@
 	<string>uses your camera for video chat</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>uses your microphone for video chat</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>livekit</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

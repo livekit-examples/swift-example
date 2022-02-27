@@ -332,6 +332,16 @@ struct RoomView: View {
 
                         Spacer()
 
+                        #if os(macOS)
+                        Button {
+                            if let url = URL(string: "livekit://") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        } label: {
+                            Image(systemSymbol: .plusCircle)
+                        }
+                        #endif
+
                         Menu {
                             Toggle("Show info overlay", isOn: $appCtx.showInformationOverlay)
 

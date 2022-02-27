@@ -64,5 +64,14 @@
 	</array>
     <key>NSFaceIDUsageDescription</key>
     <string>Keychain is used to store all preferences.</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>livekit</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>

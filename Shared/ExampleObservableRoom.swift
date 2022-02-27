@@ -154,7 +154,7 @@ class ExampleObservableRoom: ObservableRoom {
     override func room(_ room: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
 
         super.room(room, didUpdate: connectionState, oldValue: oldValue)
-        
+
         guard !connectionState.isEqual(to: oldValue, includingAssociatedValues: false) else {
             print("Skipping same conectionState")
             return

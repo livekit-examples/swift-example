@@ -80,7 +80,7 @@ struct ParticipantView: View {
                                             }
                                         }
                                     }
-                                    
+
                                     if let trackStats = trackStats, trackStats.bpsSent != 0 {
                                         HStack(spacing: 3) {
                                             Image(systemSymbol: .arrowUpCircle)

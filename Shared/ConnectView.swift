@@ -13,16 +13,16 @@ struct ConnectView: View {
             ScrollView {
                 VStack(alignment: .center, spacing: 40.0) {
 
-                    VStack(spacing: 20) {
+                    VStack(spacing: 10) {
                         Image("logo")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(height: 40)
+                            .frame(height: 30)
                         Text("SDK Version \(LiveKit.version)")
                         Text("Example App Version \(Bundle.main.appVersionLong) (\(Bundle.main.appBuild))")
                     }
 
-                    VStack(spacing: 20) {
+                    VStack(spacing: 15) {
                         LKTextField(title: "Server URL", text: $roomCtx.url, type: .URL)
                         LKTextField(title: "Token", text: $roomCtx.token, type: .ascii)
 
@@ -132,7 +132,9 @@ struct ConnectView: View {
                 .frame(minHeight: geometry.size.height) // Set the content’s min height to the parent
             }
         }
-
+        #if os(macOS)
+        .frame(minWidth: 500, minHeight: 500)
+        #endif
         .alert(isPresented: $roomCtx.shouldShowError) {
             Alert(title: Text("Error"),
                   message: Text(roomCtx.latestError != nil

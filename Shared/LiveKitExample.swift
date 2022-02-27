@@ -9,6 +9,7 @@ let sync = ValueStore<Preferences>(store: Keychain(service: "io.livekit.example"
 
 struct RoomContextView: View {
 
+    @EnvironmentObject var appCtx: AppContext
     @StateObject var roomCtx = RoomContext(store: sync)
 
     var shouldShowRoomView: Bool {
@@ -37,7 +38,8 @@ struct RoomContextView: View {
                 ConnectView()
             }
 
-        }.foregroundColor(Color.white)
+        }
+        .foregroundColor(Color.white)
         .environmentObject(roomCtx)
         .environmentObject(roomCtx.room)
         .navigationTitle(computeTitle())
@@ -45,6 +47,35 @@ struct RoomContextView: View {
             print("\(String(describing: type(of: self))) onDisappear")
             roomCtx.disconnect()
         }
+        .onOpenURL(perform: { url in
+
+            guard let urlComponent = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
+            guard let host = url.host else { return }
+
+            let secureValue = urlComponent.queryItems?.first(where: { $0.name == "secure" })?.value?.lowercased()
+            let secure = ["true", "1"].contains { $0 == secureValue }
+
+            let tokenValue = urlComponent.queryItems?.first(where: { $0.name == "token" })?.value ?? ""
+
+            var builder = URLComponents()
+            builder.scheme = secure ? "wss" : "ws"
+            builder.host = host
+            builder.port = url.port
+
+            guard let builtUrl = builder.url?.absoluteString else { return }
+
+            print("built URL: \(builtUrl), token: \(tokenValue)")
+
+            DispatchQueue.main.async {
+                roomCtx.url = builtUrl
+                roomCtx.token = tokenValue
+                if !roomCtx.token.isEmpty {
+                    roomCtx.connect().then { room in
+                        appCtx.connectionHistory.update(room: room)
+                    }
+                }
+            }
+        })
     }
 }
 
@@ -104,6 +135,7 @@ struct LiveKitExample: App {
             RoomContextView()
                 .environmentObject(appCtx)
         }
+        .handlesExternalEvents(matching: Set(arrayLiteral: "*"))
         #if os(macOS)
         .windowStyle(.hiddenTitleBar)
         .windowToolbarStyle(.unifiedCompact)
