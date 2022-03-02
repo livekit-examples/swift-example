@@ -14,8 +14,8 @@ struct Preferences: Codable, Equatable {
 
     // Room options
     var simulcast = true
-    var adaptiveStream = false
-    var dynacast = false
+    var adaptiveStream = true
+    var dynacast = true
 
     // Settings
     var videoViewVisible = true
