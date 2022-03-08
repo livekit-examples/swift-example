@@ -39,6 +39,10 @@ final class RoomContext: ObservableObject {
         didSet { store.value.dynacast = dynacast }
     }
 
+    @Published var reportStats: Bool = false {
+        didSet { store.value.reportStats = reportStats }
+    }
+
     // ConnectOptions
     @Published var autoSubscribe: Bool = true {
         didSet { store.value.autoSubscribe = autoSubscribe}
@@ -58,6 +62,7 @@ final class RoomContext: ObservableObject {
             self.simulcast = preferences.simulcast
             self.adaptiveStream = preferences.adaptiveStream
             self.dynacast = preferences.dynacast
+            self.reportStats = preferences.reportStats
             self.autoSubscribe = preferences.autoSubscribe
             self.publish = preferences.publishMode
         }
@@ -72,7 +77,7 @@ final class RoomContext: ObservableObject {
 
         let connectOptions = ConnectOptions(
             autoSubscribe: !publish && autoSubscribe, // don't autosubscribe if publish mode
-            publish: publish ? "publish_\(UUID().uuidString)" : nil
+            publishOnlyMode: publish ? "publish_\(UUID().uuidString)" : nil
         )
 
         let roomOptions = RoomOptions(
@@ -81,7 +86,8 @@ final class RoomContext: ObservableObject {
                 simulcast: publish ? false : simulcast
             ),
             adaptiveStream: adaptiveStream,
-            dynacast: dynacast
+            dynacast: dynacast,
+            reportStats: reportStats
         )
 
         return room.room.connect(url,

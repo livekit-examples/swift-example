@@ -24,7 +24,7 @@ class SampleHandler: RPBroadcastSampleHandler {
             let connectOptions = ConnectOptions(
                 // do not subscribe since this is for publish only
                 autoSubscribe: false,
-                publish: "screen_share"
+                publishOnlyMode: "screen_share"
             )
 
             let roomOptions = RoomOptions(

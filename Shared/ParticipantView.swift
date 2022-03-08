@@ -100,7 +100,7 @@ struct ParticipantView: View {
                                 .background(Color.black.opacity(0.5))
                                 .cornerRadius(8)
                             }
-                            .padding()
+                            .padding(5)
                         }
                     }
                 } else if let publication = participant.mainVideoPublication as? RemoteTrackPublication,

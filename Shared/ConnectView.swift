@@ -56,6 +56,9 @@ struct ConnectView: View {
                                 Toggle(isOn: $roomCtx.dynacast) {
                                     Text("Dynacast")
                                 }
+                                Toggle(isOn: $roomCtx.reportStats) {
+                                    Text("Report stats")
+                                }
                             } label: {
                                 Image(systemSymbol: .gear)
                                     .renderingMode(.original)

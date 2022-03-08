@@ -16,6 +16,7 @@ struct Preferences: Codable, Equatable {
     var simulcast = true
     var adaptiveStream = true
     var dynacast = true
+    var reportStats = true
 
     // Settings
     var videoViewVisible = true
