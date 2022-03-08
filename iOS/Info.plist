@@ -18,6 +18,15 @@
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>livekit</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -29,6 +38,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>uses your camera for video chat</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Keychain is used to store all preferences.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>uses your microphone for video chat</string>
 	<key>UIApplicationSceneManifest</key>
@@ -62,16 +73,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>NSFaceIDUsageDescription</key>
-    <string>Keychain is used to store all preferences.</string>
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>livekit</string>
-            </array>
-        </dict>
-    </array>
 </dict>
 </plist>

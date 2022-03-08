@@ -68,7 +68,9 @@ class ValueStore<T: Codable & Equatable>: ObservableObject {
     }
 
     private var storeWithOptions: Keychain {
-        store.accessibility(.whenUnlocked)
+        store
+            .accessibility(.whenUnlocked)
+            .synchronizable(true)
     }
 
     public init(store: Keychain, key: String, `default`: T) {

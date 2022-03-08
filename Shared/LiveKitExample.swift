@@ -3,7 +3,7 @@ import Logging
 import LiveKit
 import KeychainAccess
 
-let sync = ValueStore<Preferences>(store: Keychain(service: "io.livekit.example"),
+let sync = ValueStore<Preferences>(store: Keychain(service: "io.livekit.example.SwiftSDK.1"),
                                    key: "preferences",
                                    default: Preferences())
 

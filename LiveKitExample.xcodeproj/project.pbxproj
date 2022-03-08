@@ -438,8 +438,8 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/BroadcastExt/BroadcastExt.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				CURRENT_PROJECT_VERSION = 10;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/BroadcastExt/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -448,8 +448,8 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt";
+				MARKETING_VERSION = 1.0.6;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1.BroadcastExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -463,8 +463,8 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/BroadcastExt/BroadcastExt.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				CURRENT_PROJECT_VERSION = 10;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/BroadcastExt/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -473,8 +473,8 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt";
+				MARKETING_VERSION = 1.0.6;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1.BroadcastExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -609,8 +609,8 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				CURRENT_PROJECT_VERSION = 10;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
@@ -624,8 +624,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
+				MARKETING_VERSION = 1.0.6;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -643,8 +643,8 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				CURRENT_PROJECT_VERSION = 10;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
@@ -658,8 +658,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
+				MARKETING_VERSION = 1.0.6;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
@@ -678,8 +678,8 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				CURRENT_PROJECT_VERSION = 10;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info.plist";
@@ -691,8 +691,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.0.5;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
+				MARKETING_VERSION = 1.0.6;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -708,8 +708,8 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 8;
-				DEVELOPMENT_TEAM = J48VV6BZV9;
+				CURRENT_PROJECT_VERSION = 10;
+				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info.plist";
@@ -721,8 +721,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.0.5;
-				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.Multiplatform-SwiftUI";
+				MARKETING_VERSION = 1.0.6;
+				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;

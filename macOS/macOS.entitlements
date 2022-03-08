@@ -6,7 +6,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.livekit-example.broadcast</string>
+		<string>group.io.livekit.example.SwiftSDK.1</string>
 	</array>
 	<key>com.apple.security.cs.disable-library-validation</key>
 	<true/>
@@ -22,7 +22,7 @@
 	<true/>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)io.livekit.example.Multiplatform-SwiftUI</string>
+		<string>$(AppIdentifierPrefix)keychain-group.io.livekit.example.SwiftSDK.1</string>
 	</array>
 </dict>
 </plist>
