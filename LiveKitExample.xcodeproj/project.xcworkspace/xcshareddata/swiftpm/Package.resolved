@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/livekit/client-sdk-swift",
         "state": {
           "branch": null,
-          "revision": "dd8dc57bc53487ec4437d8b6bed3117c3495adb5",
-          "version": "0.9.9"
+          "revision": "24d2e8ed574b9a0612ad3c98c55b1bbabcab91ec",
+          "version": "0.9.10"
         }
       },
       {

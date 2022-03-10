@@ -26,7 +26,7 @@ final class AppContext: ObservableObject {
         didSet { store.value.preferMetal = preferMetal }
     }
 
-    @Published var videoViewMode: VideoView.Mode = .fit {
+    @Published var videoViewMode: VideoView.LayoutMode = .fit {
         didSet { store.value.videoViewMode = videoViewMode }
     }
 

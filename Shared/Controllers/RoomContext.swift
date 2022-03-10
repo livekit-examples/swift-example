@@ -66,6 +66,17 @@ final class RoomContext: ObservableObject {
             self.autoSubscribe = preferences.autoSubscribe
             self.publish = preferences.publishMode
         }
+        
+        #if os(iOS)
+        UIApplication.shared.isIdleTimerDisabled = true
+        #endif
+    }
+    
+    deinit {
+        #if os(iOS)
+        UIApplication.shared.isIdleTimerDisabled = false
+        #endif
+        print("RoomContext.deinit")
     }
 
     func connect(entry: ConnectionHistory? = nil) -> Promise<Room> {
