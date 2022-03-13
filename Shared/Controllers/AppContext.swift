@@ -49,7 +49,7 @@ final class AppContext: ObservableObject {
         }
     }
 
-    @Published var recordingDevice: RTCIODevice = RTCDevice.defaultDevice(with: .input){
+    @Published var recordingDevice: RTCIODevice = RTCDevice.defaultDevice(with: .input) {
         didSet {
             print("didSet recordingDevice: \(String(describing: recordingDevice))")
 

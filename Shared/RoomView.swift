@@ -345,23 +345,23 @@ struct RoomView: View {
                         Group {
 
                             Menu {
-                                
+
                                 #if os(macOS)
                                 Button {
                                     if let url = URL(string: "livekit://") {
                                         NSWorkspace.shared.open(url)
                                     }
                                 } label: {
-                                   Text("New window")
+                                    Text("New window")
                                 }
                                 #endif
 
                                 Toggle("Show info", isOn: $appCtx.showInformationOverlay)
 
                                 Divider()
-                                
+
                                 Group {
-                                     
+
                                     Picker("Output device", selection: $appCtx.playoutDevice) {
                                         ForEach(Room.audioDeviceModule().playoutDevices) { device in
                                             Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
@@ -374,7 +374,7 @@ struct RoomView: View {
                                         }
                                     }
                                 }
-                                
+
                                 Divider()
 
                                 Group {
@@ -382,7 +382,7 @@ struct RoomView: View {
                                     Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
                                     Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
                                 }
-                                
+
                                 Divider()
 
                                 Menu {
