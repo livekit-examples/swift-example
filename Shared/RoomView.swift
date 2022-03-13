@@ -1,6 +1,7 @@
 import SwiftUI
 import LiveKit
 import SFSafeSymbols
+import WebRTC
 
 #if !os(macOS)
 let adaptiveMin = 170.0
@@ -18,6 +19,13 @@ extension CIImage {
         #else
         self.init(data: NSImage(named: name)!.tiffRepresentation!)!
         #endif
+    }
+}
+
+extension RTCDevice: Identifiable {
+
+    public var id: String {
+        guid
     }
 }
 
@@ -332,85 +340,108 @@ struct RoomView: View {
 
                         Spacer()
 
-                        #if os(macOS)
-                        Button {
-                            if let url = URL(string: "livekit://") {
-                                NSWorkspace.shared.open(url)
-                            }
-                        } label: {
-                            Image(systemSymbol: .plusCircle)
-                        }
-                        #endif
-
-                        Menu {
-                            Toggle("Show info overlay", isOn: $appCtx.showInformationOverlay)
-
-                            Divider()
-
-                            Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
-                            Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
-                            Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
-
-                            Divider()
+                        Group {
 
                             Menu {
+                                
+                                #if os(macOS)
                                 Button {
-                                    roomCtx.room.room.sendSimulate(scenario: .nodeFailure)
+                                    if let url = URL(string: "livekit://") {
+                                        NSWorkspace.shared.open(url)
+                                    }
                                 } label: {
-                                    Text("Node failure")
+                                   Text("New window")
+                                }
+                                #endif
+
+                                Toggle("Show info", isOn: $appCtx.showInformationOverlay)
+
+                                Divider()
+                                
+                                Group {
+                                     
+                                    Picker("Output device", selection: $appCtx.playoutDevice) {
+                                        ForEach(Room.audioDeviceModule().playoutDevices) { device in
+                                            Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                                        }
+                                    }
+
+                                    Picker("Recording device", selection: $appCtx.recordingDevice) {
+                                        ForEach(Room.audioDeviceModule().recordingDevices) { device in
+                                            Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                                        }
+                                    }
+                                }
+                                
+                                Divider()
+
+                                Group {
+                                    Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
+                                    Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
+                                    Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
+                                }
+                                
+                                Divider()
+
+                                Menu {
+                                    Button {
+                                        roomCtx.room.room.sendSimulate(scenario: .nodeFailure)
+                                    } label: {
+                                        Text("Node failure")
+                                    }
+
+                                    Button {
+                                        roomCtx.room.room.sendSimulate(scenario: .serverLeave)
+                                    } label: {
+                                        Text("Server leave")
+                                    }
+
+                                    Button {
+                                        roomCtx.room.room.sendSimulate(scenario: .migration)
+                                    } label: {
+                                        Text("Migration")
+                                    }
+
+                                    Button {
+                                        roomCtx.room.room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                                    } label: {
+                                        Text("Speaker update")
+                                    }
+
+                                } label: {
+                                    Text("Simulate scenario")
                                 }
 
-                                Button {
-                                    roomCtx.room.room.sendSimulate(scenario: .serverLeave)
-                                } label: {
-                                    Text("Server leave")
-                                }
+                                Menu {
+                                    Button {
+                                        roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                                    } label: {
+                                        Text("Allow all")
+                                    }
 
-                                Button {
-                                    roomCtx.room.room.sendSimulate(scenario: .migration)
+                                    Button {
+                                        roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
+                                    } label: {
+                                        Text("Disallow all")
+                                    }
                                 } label: {
-                                    Text("Migration")
-                                }
-
-                                Button {
-                                    roomCtx.room.room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
-                                } label: {
-                                    Text("Speaker update")
+                                    Text("Track permissions")
                                 }
 
                             } label: {
-                                Text("Simulate scenario")
+                                Image(systemSymbol: .gear)
+                                    .renderingMode(.original)
                             }
 
-                            Menu {
-                                Button {
-                                    roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
-                                } label: {
-                                    Text("Allow all")
-                                }
-
-                                Button {
-                                    roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
-                                } label: {
-                                    Text("Disallow all")
-                                }
-                            } label: {
-                                Text("Track permissions")
-                            }
-
-                        } label: {
-                            Image(systemSymbol: .gear)
-                                .renderingMode(.original)
+                            // Disconnect
+                            Button(action: {
+                                roomCtx.disconnect()
+                            },
+                            label: {
+                                Image(systemSymbol: .xmarkCircleFill)
+                                    .renderingMode(.original)
+                            })
                         }
-
-                        // Disconnect
-                        Button(action: {
-                            roomCtx.disconnect()
-                        },
-                        label: {
-                            Image(systemSymbol: .xmarkCircleFill)
-                                .renderingMode(.original)
-                        })
                     }
 
                 }
