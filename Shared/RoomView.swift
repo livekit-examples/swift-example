@@ -251,8 +251,8 @@ struct RoomView: View {
 
                         // VideoView mode switcher
                         Picker("Mode", selection: $appCtx.videoViewMode) {
-                            Text("Fit").tag(VideoView.Mode.fit)
-                            Text("Fill").tag(VideoView.Mode.fill)
+                            Text("Fit").tag(VideoView.LayoutMode.fit)
+                            Text("Fill").tag(VideoView.LayoutMode.fill)
                         }
                         .pickerStyle(SegmentedPickerStyle())
 
@@ -274,7 +274,9 @@ struct RoomView: View {
                             } else {
                                 Menu {
                                     Button("Switch position") {
-                                        room.switchCameraPosition()
+                                        room.switchCameraPosition().then { _ in
+                                            //
+                                        }
                                     }
                                     Button("Disable") {
                                         room.toggleCameraEnabled()

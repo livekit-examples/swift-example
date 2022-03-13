@@ -7,7 +7,7 @@ struct ParticipantView: View {
     @ObservedObject var participant: ObservableParticipant
     @EnvironmentObject var appCtx: AppContext
 
-    var videoViewMode: VideoView.Mode = .fill
+    var videoViewMode: VideoView.LayoutMode = .fill
     var onTap: ((_ participant: ObservableParticipant) -> Void)?
 
     @State private var dimensions: Dimensions?
@@ -39,10 +39,9 @@ struct ParticipantView: View {
                    let track = publication.track as? VideoTrack,
                    appCtx.videoViewVisible {
                     ZStack(alignment: .topLeading) {
-                        let shouldMirror = track is LocalVideoTrack && track.source == .camera
                         SwiftUIVideoView(track,
-                                         mode: videoViewMode,
-                                         mirrored: appCtx.videoViewMirrored ? !shouldMirror : shouldMirror,
+                                         layoutMode: videoViewMode,
+                                         mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto,
                                          dimensions: $dimensions,
                                          trackStats: $trackStats,
                                          preferMetal: appCtx.preferMetal)
@@ -57,7 +56,7 @@ struct ParticipantView: View {
                                     Text("View")
                                         .fontWeight(.bold)
                                     Text("metal: \(String(describing: appCtx.preferMetal))")
-                                    Text("mirror: \(String(describing: shouldMirror))")
+                                    Text("mirrorMode: \(String(describing: (appCtx.videoViewMirrored ? VideoView.MirrorMode.mirror : .auto)))")
                                 }
                                 .font(.system(size: 10))
                                 .foregroundColor(Color.white)
@@ -115,10 +114,9 @@ struct ParticipantView: View {
                 VStack(alignment: .trailing, spacing: 0) {
                     // Show the sub-video view
                     if let subVideoTrack = participant.subVideoTrack {
-                        let shouldMirror = subVideoTrack is LocalVideoTrack && subVideoTrack.source == .camera
                         SwiftUIVideoView(subVideoTrack,
-                                         mode: .fill,
-                                         mirrored: appCtx.videoViewMirrored ? !shouldMirror : shouldMirror,
+                                         layoutMode: .fill,
+                                         mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto,
                                          preferMetal: appCtx.preferMetal
                         )
                         .background(Color.black)
