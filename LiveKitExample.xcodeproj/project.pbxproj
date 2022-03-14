@@ -23,11 +23,12 @@
 		681E3F44271FC7AD007BB547 /* RoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F41271FC7AC007BB547 /* RoomView.swift */; };
 		681E3F45271FC7AD007BB547 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F42271FC7AD007BB547 /* ConnectView.swift */; };
 		681E3F46271FC7AD007BB547 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F42271FC7AD007BB547 /* ConnectView.swift */; };
-		683332C227D9DC3800378C41 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 683332C127D9DC3800378C41 /* LiveKit */; };
+		683332C227D9DC3800378C41 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		683332C427D9DC4600378C41 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 683332C327D9DC4600378C41 /* LiveKit */; };
 		683720D227A06404007DA986 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683720D127A06404007DA986 /* ConnectionHistory.swift */; };
 		683720D327A06404007DA986 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683720D127A06404007DA986 /* ConnectionHistory.swift */; };
 		683F05F8273F96B20080C7AC /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683F05F7273F96B20080C7AC /* SampleHandler.swift */; };
+		6845DD5627DEBDD90009B5CD /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6845DD5527DEBDD90009B5CD /* LiveKit */; };
 		6847616427B44A1A001611BE /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6847616327B44A1A001611BE /* Bundle.swift */; };
 		6847616527B44A1A001611BE /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6847616327B44A1A001611BE /* Bundle.swift */; };
 		6867533B27A65652003707B9 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6867533A27A65652003707B9 /* AppContext.swift */; };
@@ -96,9 +97,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				683332C227D9DC3800378C41 /* LiveKit in Frameworks */,
+				683332C227D9DC3800378C41 /* (null) in Frameworks */,
 				680FE2F427A8EFF700B6F6DB /* SFSafeSymbols in Frameworks */,
 				68816CC327B4D94200E24622 /* KeychainAccess in Frameworks */,
+				6845DD5627DEBDD90009B5CD /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,7 +271,7 @@
 			packageProductDependencies = (
 				680FE2F327A8EFF700B6F6DB /* SFSafeSymbols */,
 				68816CC227B4D94200E24622 /* KeychainAccess */,
-				683332C127D9DC3800378C41 /* LiveKit */,
+				6845DD5527DEBDD90009B5CD /* LiveKit */,
 			);
 			productName = "Multiplatform-SwiftUI (macOS)";
 			productReference = 68B38549271E780700711D5F /* LiveKitExample.app */;
@@ -783,17 +785,15 @@
 		};
 		681A0AB627D888D80097E3F4 /* LiveKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6866E93A27A196C4008AD2DF /* XCRemoteSwiftPackageReference "client-sdk-swift" */;
-			productName = LiveKit;
-		};
-		6866E93B27A196C4008AD2DF /* LiveKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 683332BC27D9D92B00378C41 /* XCRemoteSwiftPackageReference "client-sdk-swift" */;
 			productName = LiveKit;
 		};
 		683332C327D9DC4600378C41 /* LiveKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 683332BC27D9D92B00378C41 /* XCRemoteSwiftPackageReference "client-sdk-swift" */;
+			productName = LiveKit;
+		};
+		6845DD5527DEBDD90009B5CD /* LiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = LiveKit;
 		};
 		68816CC027B4D6BC00E24622 /* KeychainAccess */ = {

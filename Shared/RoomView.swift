@@ -22,10 +22,10 @@ extension CIImage {
     }
 }
 
-extension RTCDevice: Identifiable {
+extension RTCIODevice: Identifiable {
 
     public var id: String {
-        guid
+        deviceId
     }
 }
 

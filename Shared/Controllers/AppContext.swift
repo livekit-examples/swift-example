@@ -38,7 +38,7 @@ final class AppContext: ObservableObject {
         didSet { store.value.connectionHistory = connectionHistory }
     }
 
-    @Published var playoutDevice: RTCIODevice = RTCAudioDevice.defaultDevice() {
+    @Published var playoutDevice: RTCAudioDevice = RTCAudioDevice.defaultDevice(with: .output) {
         didSet {
             print("didSet playoutDevice: \(String(describing: playoutDevice))")
 
@@ -49,7 +49,7 @@ final class AppContext: ObservableObject {
         }
     }
 
-    @Published var recordingDevice: RTCIODevice = RTCDevice.defaultDevice(with: .input) {
+    @Published var recordingDevice: RTCAudioDevice = RTCAudioDevice.defaultDevice(with: .input) {
         didSet {
             print("didSet recordingDevice: \(String(describing: recordingDevice))")
 
