@@ -299,13 +299,13 @@ struct RoomView: View {
                             .disabled(room.microphoneTrackState.isBusy)
 
                             #if os(iOS)
-                            Button(action: {
-                                room.toggleScreenShareEnabled(screenShareSource: nil)
-                            },
-                            label: {
-                                Image(systemSymbol: .rectangleFillOnRectangleFill)
-                                    .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
-                            })
+//                            Button(action: {
+//                                room.toggleScreenShareEnabled(screenShareSource: nil)
+//                            },
+//                            label: {
+//                                Image(systemSymbol: .rectangleFillOnRectangleFill)
+//                                    .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
+//                            })
                             #elseif os(macOS)
                             Button(action: {
                                 if room.screenShareTrackState.isPublished {
@@ -358,22 +358,24 @@ struct RoomView: View {
 
                                 Toggle("Show info", isOn: $appCtx.showInformationOverlay)
 
+                                #if os(macOS)
                                 Divider()
 
                                 Group {
 
-                                    Picker("Output device", selection: $appCtx.playoutDevice) {
-                                        ForEach(Room.audioDeviceModule().playoutDevices) { device in
+                                    Picker("Output device", selection: $appCtx.outputDevice) {
+                                        ForEach(Room.audioDeviceModule().outputDevices) { device in
                                             Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
                                         }
                                     }
 
-                                    Picker("Recording device", selection: $appCtx.recordingDevice) {
-                                        ForEach(Room.audioDeviceModule().recordingDevices) { device in
+                                    Picker("Input device", selection: $appCtx.inputDevice) {
+                                        ForEach(Room.audioDeviceModule().inputDevices) { device in
                                             Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
                                         }
                                     }
                                 }
+                                #endif
 
                                 Divider()
 

@@ -38,23 +38,23 @@ final class AppContext: ObservableObject {
         didSet { store.value.connectionHistory = connectionHistory }
     }
 
-    @Published var playoutDevice: RTCAudioDevice = RTCAudioDevice.defaultDevice(with: .output) {
+    @Published var outputDevice: RTCAudioDevice = RTCAudioDevice.defaultDevice(with: .output) {
         didSet {
-            print("didSet playoutDevice: \(String(describing: playoutDevice))")
+            print("didSet outputDevice: \(String(describing: outputDevice))")
 
             let adm = Room.audioDeviceModule()
-            if !adm.switchPlayoutDevice(playoutDevice) {
+            if !adm.setOutputDevice(outputDevice) {
                 print("failed to set value")
             }
         }
     }
 
-    @Published var recordingDevice: RTCAudioDevice = RTCAudioDevice.defaultDevice(with: .input) {
+    @Published var inputDevice: RTCAudioDevice = RTCAudioDevice.defaultDevice(with: .input) {
         didSet {
-            print("didSet recordingDevice: \(String(describing: recordingDevice))")
+            print("didSet inputDevice: \(String(describing: inputDevice))")
 
             let adm = Room.audioDeviceModule()
-            if !adm.switchRecording(recordingDevice) {
+            if !adm.setInputDevice(inputDevice) {
                 print("failed to set value")
             }
         }
