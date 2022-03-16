@@ -69,7 +69,7 @@ struct RoomView: View {
     @ObservedObject private var windowAccess = WindowAccess()
     #endif
 
-    // @State private var itemCount = 0.0
+    @State private var showConnectionTime = true
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
 
@@ -161,6 +161,14 @@ struct RoomView: View {
     func content(geometry: GeometryProxy) -> some View {
 
         VStack {
+            
+            if showConnectionTime {
+                Text("Connected (\(String(describing: room.room.connectStopwatch.total().rounded(to: 2)))s)")
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.white)
+                    .padding()
+            }
+            
             if case .connecting(let connectMode) = roomCtx.connectionState,
                case .reconnect(let reconnectMode) = connectMode {
                 Text("Re-connecting(\(String(describing: reconnectMode)))...")
@@ -420,6 +428,16 @@ struct RoomView: View {
         #if os(macOS)
         .withHostingWindow { self.windowAccess.set(window: $0) }
         #endif
+        .onAppear {
+            //
+            Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.showConnectionTime = false
+                    }
+                }
+            }
+        }
     }
 }
 
