@@ -351,35 +351,6 @@ struct RoomView: View {
                         Spacer()
 
                         Group {
-
-                        #if os(macOS)
-                        Button {
-                            if let url = URL(string: "livekit://") {
-                                NSWorkspace.shared.open(url)
-                            }
-                        } label: {
-                            Image(systemSymbol: .plusCircle)
-                        }
-                        #endif
-
-                        Menu {
-                            Toggle("Show info overlay", isOn: $appCtx.showInformationOverlay)
-
-                            Divider()
-
-                            Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
-                            Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
-                            Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
-
-                            Divider()
-                            
-                            Button {
-                                roomCtx.room.unpublishAll()
-                            } label: {
-                                Text("Unpublish all")
-                            }
-                            
-                            Divider()
                             
                             Menu {
 
@@ -393,6 +364,14 @@ struct RoomView: View {
                                 }
                                 #endif
 
+                                
+                                Button {
+                                    roomCtx.room.unpublishAll()
+                                } label: {
+                                    Text("Unpublish all")
+                                }
+                                
+                                
                                 Toggle("Show info", isOn: $appCtx.showInformationOverlay)
 
                                 #if os(macOS)
@@ -473,7 +452,8 @@ struct RoomView: View {
                                 Image(systemSymbol: .gear)
                                     .renderingMode(.original)
                             }
-
+                        
+                            
                             // Disconnect
                             Button(action: {
                                 roomCtx.disconnect()
