@@ -2,6 +2,7 @@ import SwiftUI
 import LiveKit
 import OrderedCollections
 import AVFoundation
+import Promises
 
 import WebRTC
 import CoreImage.CIFilterBuiltins
@@ -46,6 +47,8 @@ struct ExampleRoomMessage: Identifiable, Equatable, Hashable, Codable {
 
 class ExampleObservableRoom: ObservableRoom {
 
+    let queue = DispatchQueue(label: "example.observableroom")
+    
     let jsonEncoder = JSONEncoder()
     let jsonDecoder = JSONDecoder()
 
@@ -147,6 +150,18 @@ class ExampleObservableRoom: ObservableRoom {
             }
         }
         #endif
+    }
+    
+    func unpublishAll() -> Promise<Void> {
+        Promise(on: queue) { () -> Void in
+            guard let localParticipant = self.room.localParticipant else { return }
+            try awaitPromise(localParticipant.unpublishAll())
+            DispatchQueue.main.async {
+                self.cameraTrackState = .notPublished()
+                self.microphoneTrackState = .notPublished()
+                self.screenShareTrackState = .notPublished()
+            }
+        }
     }
 
     // MARK: - RoomDelegate

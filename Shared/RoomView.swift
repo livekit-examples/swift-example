@@ -354,7 +354,15 @@ struct RoomView: View {
                             Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
 
                             Divider()
-
+                            
+                            Button {
+                                roomCtx.room.unpublishAll()
+                            } label: {
+                                Text("Unpublish all")
+                            }
+                            
+                            Divider()
+                            
                             Menu {
                                 Button {
                                     roomCtx.room.room.sendSimulate(scenario: .nodeFailure)
