@@ -39,6 +39,7 @@ struct RoomContextView: View {
             }
 
         }
+        .environment(\.colorScheme, .dark)
         .foregroundColor(Color.white)
         .environmentObject(roomCtx)
         .environmentObject(roomCtx.room)
