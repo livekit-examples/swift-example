@@ -69,7 +69,7 @@ struct RoomView: View {
     @ObservedObject private var windowAccess = WindowAccess()
     #endif
 
-    // @State private var itemCount = 0.0
+    @State private var showConnectionTime = true
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
 
@@ -161,6 +161,14 @@ struct RoomView: View {
     func content(geometry: GeometryProxy) -> some View {
 
         VStack {
+
+            if showConnectionTime {
+                Text("Connected (\(String(describing: room.room.connectStopwatch.total().rounded(to: 2)))s)")
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.white)
+                    .padding()
+            }
+
             if case .connecting(let connectMode) = roomCtx.connectionState,
                case .reconnect(let reconnectMode) = connectMode {
                 Text("Re-connecting(\(String(describing: reconnectMode)))...")
@@ -332,24 +340,29 @@ struct RoomView: View {
 
                         Spacer()
 
-                        #if os(macOS)
-                        Button {
-                            if let url = URL(string: "livekit://") {
-                                NSWorkspace.shared.open(url)
-                            }
-                        } label: {
-                            Image(systemSymbol: .plusCircle)
-                        }
-                        #endif
-
                         Menu {
+                            #if os(macOS)
+                            Button {
+                                if let url = URL(string: "livekit://") {
+                                    NSWorkspace.shared.open(url)
+                                }
+                            } label: {
+                                Text("New window")
+                            }
+
+                            Divider()
+
+                            #endif
+
                             Toggle("Show info overlay", isOn: $appCtx.showInformationOverlay)
 
                             Divider()
 
-                            Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
-                            Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
-                            Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
+                            Group {
+                                Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
+                                Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
+                                Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
+                            }
 
                             Divider()
 
@@ -426,6 +439,16 @@ struct RoomView: View {
         #if os(macOS)
         .withHostingWindow { self.windowAccess.set(window: $0) }
         #endif
+        .onAppear {
+            //
+            Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+                DispatchQueue.main.async {
+                    withAnimation {
+                        self.showConnectionTime = false
+                    }
+                }
+            }
+        }
     }
 }
 
