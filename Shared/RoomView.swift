@@ -163,7 +163,7 @@ struct RoomView: View {
         VStack {
 
             if showConnectionTime {
-                Text("Connected (\(String(describing: room.room.connectStopwatch.total().rounded(to: 2)))s)")
+                Text("Connected (\([room.room.serverRegion, "\(String(describing: room.room.connectStopwatch.total().rounded(to: 2)))s"].compactMap { $0 }.joined(separator: ", ")))")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
                     .padding()
@@ -297,13 +297,13 @@ struct RoomView: View {
                             .disabled(room.microphoneTrackState.isBusy)
 
                             #if os(iOS)
-                            Button(action: {
-                                room.toggleScreenShareEnabled(screenShareSource: nil)
-                            },
-                            label: {
-                                Image(systemSymbol: .rectangleFillOnRectangleFill)
-                                    .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
-                            })
+                            //                            Button(action: {
+                            //                                room.toggleScreenShareEnabled(screenShareSource: nil)
+                            //                            },
+                            //                            label: {
+                            //                                Image(systemSymbol: .rectangleFillOnRectangleFill)
+                            //                                    .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
+                            //                            })
                             #elseif os(macOS)
                             Button(action: {
                                 if room.screenShareTrackState.isPublished {
