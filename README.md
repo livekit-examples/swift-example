@@ -6,6 +6,7 @@ This app demonstrates the basic usage of [LiveKit Swift SDK (iOS/macOS)](https:/
 
 Precompiled macOS version is available from the [Releases page](https://github.com/livekit/client-example-swift/releases), so you can quickly try out features of the [LiveKit Swift SDK](https://github.com/livekit/client-sdk-swift) or the [LiveKit Server](https://github.com/livekit/livekit-server).
 
+Precompiled iOS version can be downloaded on [Apple TestFlight](https://testflight.apple.com/join/21F6ARiQ).
 
 ### Screenshots
 **macOS**
