@@ -101,7 +101,7 @@ class ExampleObservableRoom: ObservableRoom {
         // return toggleScreenShareEnabled()
         // Experimental iOS screen share
 
-        RPSystemBroadcastPickerView.show(for: "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt",
+        RPSystemBroadcastPickerView.show(for: "io.livekit.example.SwiftSDK.1.BroadcastExt",
                                          showsMicrophoneButton: false)
 
         if let ud = UserDefaults(suiteName: "group.livekit-example.broadcast") {

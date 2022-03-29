@@ -297,13 +297,13 @@ struct RoomView: View {
                             .disabled(room.microphoneTrackState.isBusy)
 
                             #if os(iOS)
-                            //                            Button(action: {
-                            //                                room.toggleScreenShareEnabled(screenShareSource: nil)
-                            //                            },
-                            //                            label: {
-                            //                                Image(systemSymbol: .rectangleFillOnRectangleFill)
-                            //                                    .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
-                            //                            })
+                            Button(action: {
+                                room.toggleScreenShareEnabled(screenShareSource: nil)
+                            },
+                            label: {
+                                Image(systemSymbol: .rectangleFillOnRectangleFill)
+                                    .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
+                            })
                             #elseif os(macOS)
                             Button(action: {
                                 if room.screenShareTrackState.isPublished {

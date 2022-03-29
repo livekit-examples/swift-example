@@ -42,7 +42,32 @@
 		68B3854D271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
 		68B38550271E780700711D5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68B3853E271E780700711D5F /* Assets.xcassets */; };
 		68B38551271E780700711D5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68B3853E271E780700711D5F /* Assets.xcassets */; };
+		68EA18E827F2E91000F9AE48 /* BroadcastExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		68EA18E927F2E91000F9AE48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 68B38537271E780600711D5F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 683F05F2273F96B20080C7AC;
+			remoteInfo = BroadcastExt;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		68EA18EB27F2E91100F9AE48 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				68EA18E827F2E91000F9AE48 /* BroadcastExt.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		6816B1A7272D45DF005ADB85 /* ExampleObservableRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleObservableRoom.swift; sourceTree = "<group>"; };
@@ -238,10 +263,12 @@
 				68B3853F271E780700711D5F /* Sources */,
 				68B38540271E780700711D5F /* Frameworks */,
 				68B38541271E780700711D5F /* Resources */,
+				68EA18EB27F2E91100F9AE48 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				68EA18EA27F2E91000F9AE48 /* PBXTargetDependency */,
 			);
 			name = "LiveKitExample (iOS)";
 			packageProductDependencies = (
@@ -396,6 +423,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		68EA18EA27F2E91000F9AE48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 683F05F2273F96B20080C7AC /* BroadcastExt */;
+			targetProxy = 68EA18E927F2E91000F9AE48 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		683F05FE273F96B20080C7AC /* Debug */ = {
