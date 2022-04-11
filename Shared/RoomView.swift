@@ -230,6 +230,8 @@ struct RoomView: View {
                 .toolbar {
                     ToolbarItemGroup(placement: toolbarPlacement) {
 
+                        Text("(\(room.room.remoteParticipants.count)) ")
+
                         #if os(macOS)
                         if let name = room.room.name {
                             Text(name)

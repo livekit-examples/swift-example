@@ -52,17 +52,17 @@ struct ParticipantView: View {
                         if appCtx.showInformationOverlay {
                             HStack(alignment: .top, spacing: 5) {
 
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text("View")
-                                        .fontWeight(.bold)
-                                    Text("metal: \(String(describing: appCtx.preferMetal))")
-                                    Text("mirrorMode: \(String(describing: (appCtx.videoViewMirrored ? VideoView.MirrorMode.mirror : .auto)))")
-                                }
-                                .font(.system(size: 10))
-                                .foregroundColor(Color.white)
-                                .padding(5)
-                                .background(Color.black.opacity(0.5))
-                                .cornerRadius(8)
+                                // VStack(alignment: .leading, spacing: 5) {
+                                //    Text("View")
+                                //        .fontWeight(.bold)
+                                //    Text("metal: \(String(describing: appCtx.preferMetal))")
+                                //    Text("mirrorMode: \(String(describing: (appCtx.videoViewMirrored ? VideoView.MirrorMode.mirror : .auto)))")
+                                // }
+                                // .font(.system(size: 10))
+                                // .foregroundColor(Color.white)
+                                // .padding(5)
+                                // .background(Color.black.opacity(0.5))
+                                // .cornerRadius(8)
 
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text("Video")
