@@ -309,7 +309,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1310;
+				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
 					683F05F2273F96B20080C7AC = {
@@ -792,7 +792,7 @@
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 0.9.14;
+				version = 0.9.15;
 			};
 		};
 		68816CBF27B4D6BC00E24622 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {

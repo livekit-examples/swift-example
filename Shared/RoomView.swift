@@ -169,9 +169,8 @@ struct RoomView: View {
                     .padding()
             }
 
-            if case .connecting(let connectMode) = roomCtx.connectionState,
-               case .reconnect(let reconnectMode) = connectMode {
-                Text("Re-connecting(\(String(describing: reconnectMode)))...")
+            if case .reconnecting = room.room.connectionState {
+                Text("Re-connecting...")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
                     .padding()
@@ -181,14 +180,14 @@ struct RoomView: View {
 
                 Group {
                     if let focusParticipant = room.focusParticipant {
-                        ZStack(alignment: .topTrailing) {
+                        ZStack(alignment: .bottomTrailing) {
                             ParticipantView(participant: focusParticipant,
                                             videoViewMode: appCtx.videoViewMode) { _ in
                                 room.focusParticipant = nil
                             }
-                            .overlay(RoundedRectangle(cornerRadius: 8)
+                            .overlay(RoundedRectangle(cornerRadius: 5)
                                         .stroke(Color.orange.opacity(0.3), lineWidth: 5.0))
-                            Text("FOCUSED")
+                            Text("SELECTED")
                                 .font(.system(size: 10))
                                 .fontWeight(.bold)
                                 .foregroundColor(Color.white)
@@ -196,8 +195,10 @@ struct RoomView: View {
                                 .padding(.vertical, 2)
                                 .background(Color.orange.opacity(0.3))
                                 .cornerRadius(8)
-                                .padding()
+                                .padding(.vertical, 35)
+                                .padding(.horizontal, 10)
                         }
+
                     } else {
                         ParticipantLayout(room.allParticipants.values, spacing: 5) { participant in
                             ParticipantView(participant: participant,

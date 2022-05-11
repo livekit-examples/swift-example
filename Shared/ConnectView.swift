@@ -73,7 +73,7 @@ struct ConnectView: View {
                         }
                     }.frame(maxWidth: 350)
 
-                    if case .connecting = roomCtx.connectionState {
+                    if case .connecting = roomCtx.room.room.connectionState {
                         ProgressView()
                     } else {
                         HStack(alignment: .center) {

@@ -171,11 +171,6 @@ class ExampleObservableRoom: ObservableRoom {
 
         super.room(room, didUpdate: connectionState, oldValue: oldValue)
 
-        guard !connectionState.isEqual(to: oldValue, includingAssociatedValues: false) else {
-            print("Skipping same conectionState")
-            return
-        }
-
         if case .disconnected = connectionState {
             DispatchQueue.main.async {
                 // Reset state

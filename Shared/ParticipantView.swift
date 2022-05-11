@@ -43,8 +43,7 @@ struct ParticipantView: View {
                                          layoutMode: videoViewMode,
                                          mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto,
                                          dimensions: $dimensions,
-                                         trackStats: $trackStats,
-                                         preferMetal: appCtx.preferMetal)
+                                         trackStats: $trackStats)
                             .background(Color.black)
                         // .scaleEffect(CGSize(width: -1.0, height: 1.0))// flip local view horizontally
 
@@ -116,8 +115,7 @@ struct ParticipantView: View {
                     if let subVideoTrack = participant.subVideoTrack {
                         SwiftUIVideoView(subVideoTrack,
                                          layoutMode: .fill,
-                                         mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto,
-                                         preferMetal: appCtx.preferMetal
+                                         mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto
                         )
                         .background(Color.black)
                         .aspectRatio(contentMode: .fit)
@@ -248,7 +246,7 @@ struct ParticipantView: View {
             // Glow the border when the participant is speaking
             .overlay(
                 participant.isSpeaking ?
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 5)
                     .stroke(Color.blue, lineWidth: 5.0)
                     : nil
             )

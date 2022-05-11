@@ -13,7 +13,7 @@ struct RoomContextView: View {
     @StateObject var roomCtx = RoomContext(store: sync)
 
     var shouldShowRoomView: Bool {
-        roomCtx.connectionState.isConnected || roomCtx.connectionState.isReconnecting
+        roomCtx.room.room.connectionState.isConnected || roomCtx.room.room.connectionState.isReconnecting
     }
 
     func computeTitle() -> String {
