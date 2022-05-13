@@ -128,7 +128,11 @@ struct LiveKitExample: App {
     }
 
     init() {
-        LoggingSystem.bootstrap({ LiveKitLogHandler(label: $0) })
+        LoggingSystem.bootstrap({
+            var logHandler = StreamLogHandler.standardOutput(label: $0)
+            logHandler.logLevel = .debug
+            return logHandler
+        })
     }
 
     var body: some Scene {

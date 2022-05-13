@@ -42,6 +42,7 @@ struct ParticipantView: View {
                         SwiftUIVideoView(track,
                                          layoutMode: videoViewMode,
                                          mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto,
+                                         debugMode: appCtx.showInformationOverlay,
                                          dimensions: $dimensions,
                                          trackStats: $trackStats)
                             .background(Color.black)
