@@ -84,10 +84,13 @@ struct RoomView: View {
             //                Text(message.identity)
             Text(message.text)
                 .padding(8)
-                .background(isMe ? Color.lkBlue : Color.gray)
-                .foregroundColor(isMe ? Color.white : Color.black)
-                .cornerRadius(12)
+                .background(isMe ? Color.lkRed : Color.lkGray3)
+                .foregroundColor(Color.white)
+                .cornerRadius(18)
             //            }
+            if !isMe {
+                Spacer()
+            }
         }.padding(.vertical, 5)
         .padding(.horizontal, 10)
     }
@@ -109,6 +112,8 @@ struct RoomView: View {
                             messageView($0)
                         }
                     }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 7)
                 }
                 .onAppear(perform: {
                     // Scroll to bottom when first showing the messages list
@@ -145,13 +150,16 @@ struct RoomView: View {
                     room.sendMessage()
                 } label: {
                     Image(systemSymbol: .paperplaneFill)
-                        .foregroundColor(room.textFieldString.isEmpty ? nil : Color.blue)
+                        .foregroundColor(room.textFieldString.isEmpty ? nil : Color.lkRed)
                 }
                 .buttonStyle(.borderless)
 
-            }.padding()
-            .background(Color.lkBlue)
-        }.background(Color.lkDarkBlue)
+            }
+            .padding()
+            .background(Color.lkGray2)
+        }
+        .background(Color.lkGray1)
+        .cornerRadius(8)
         .frame(
             minWidth: 0,
             maxWidth: geometry.isTall ? .infinity : 320
@@ -186,14 +194,14 @@ struct RoomView: View {
                                 room.focusParticipant = nil
                             }
                             .overlay(RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.orange.opacity(0.3), lineWidth: 5.0))
+                                        .stroke(Color.lkRed.opacity(0.7), lineWidth: 5.0))
                             Text("SELECTED")
                                 .font(.system(size: 10))
                                 .fontWeight(.bold)
                                 .foregroundColor(Color.white)
                                 .padding(.horizontal, 5)
                                 .padding(.vertical, 2)
-                                .background(Color.orange.opacity(0.3))
+                                .background(Color.lkRed.opacity(0.7))
                                 .cornerRadius(8)
                                 .padding(.vertical, 35)
                                 .padding(.horizontal, 10)
