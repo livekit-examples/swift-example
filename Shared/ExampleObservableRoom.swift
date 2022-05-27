@@ -48,7 +48,7 @@ struct ExampleRoomMessage: Identifiable, Equatable, Hashable, Codable {
 class ExampleObservableRoom: ObservableRoom {
 
     let queue = DispatchQueue(label: "example.observableroom")
-    
+
     let jsonEncoder = JSONEncoder()
     let jsonDecoder = JSONDecoder()
 
@@ -101,7 +101,7 @@ class ExampleObservableRoom: ObservableRoom {
         // return toggleScreenShareEnabled()
         // Experimental iOS screen share
 
-        RPSystemBroadcastPickerView.show(for: "io.livekit.example.Multiplatform-SwiftUI.BroadcastExt",
+        RPSystemBroadcastPickerView.show(for: "io.livekit.example.SwiftSDK.1.BroadcastExt",
                                          showsMicrophoneButton: false)
 
         if let ud = UserDefaults(suiteName: "group.livekit-example.broadcast") {
@@ -151,7 +151,8 @@ class ExampleObservableRoom: ObservableRoom {
         }
         #endif
     }
-    
+
+    @discardableResult
     func unpublishAll() -> Promise<Void> {
         Promise(on: queue) { () -> Void in
             guard let localParticipant = self.room.localParticipant else { return }
@@ -169,11 +170,6 @@ class ExampleObservableRoom: ObservableRoom {
     override func room(_ room: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
 
         super.room(room, didUpdate: connectionState, oldValue: oldValue)
-
-        guard !connectionState.isEqual(to: oldValue, includingAssociatedValues: false) else {
-            print("Skipping same conectionState")
-            return
-        }
 
         if case .disconnected = connectionState {
             DispatchQueue.main.async {

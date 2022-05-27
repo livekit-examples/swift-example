@@ -18,8 +18,11 @@ struct ConnectView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 30)
+                            .padding(.bottom, 10)
                         Text("SDK Version \(LiveKit.version)")
+                            .opacity(0.5)
                         Text("Example App Version \(Bundle.main.appVersionLong) (\(Bundle.main.appBuild))")
+                            .opacity(0.5)
                     }
 
                     VStack(spacing: 15) {
@@ -73,7 +76,7 @@ struct ConnectView: View {
                         }
                     }.frame(maxWidth: 350)
 
-                    if case .connecting = roomCtx.connectionState {
+                    if case .connecting = roomCtx.room.room.connectionState {
                         ProgressView()
                     } else {
                         HStack(alignment: .center) {

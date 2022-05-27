@@ -1,9 +1,11 @@
 import SwiftUI
 
 extension Color {
-    static let lkBlue = Color("LKBlue")
-    static let lkDarkBlue = Color("LKDarkBlue")
-    static let lightGray = Color(red: 0.949, green: 0.949, blue: 0.97, opacity: 1.0)
+    static let lkRed = Color("lkRed")
+    static let lkDarkRed = Color("lkDarkRed")
+    static let lkGray1 = Color("lkGray1")
+    static let lkGray2 = Color("lkGray2")
+    static let lkGray3 = Color("lkGray3")
 }
 
 struct LazyView<Content: View>: View {
@@ -31,7 +33,8 @@ struct LKButton: View {
                     .padding(.horizontal, 12)
                     .padding(.vertical, 10)
                }
-        )   .background(Color.blue)
+        )
+        .background(Color.lkRed)
         .cornerRadius(8)
     }
 }

@@ -13,7 +13,7 @@ struct RoomContextView: View {
     @StateObject var roomCtx = RoomContext(store: sync)
 
     var shouldShowRoomView: Bool {
-        roomCtx.connectionState.isConnected || roomCtx.connectionState.isReconnecting
+        roomCtx.room.room.connectionState.isConnected || roomCtx.room.room.connectionState.isReconnecting
     }
 
     func computeTitle() -> String {
@@ -39,6 +39,7 @@ struct RoomContextView: View {
             }
 
         }
+        .environment(\.colorScheme, .dark)
         .foregroundColor(Color.white)
         .environmentObject(roomCtx)
         .environmentObject(roomCtx.room)
@@ -127,7 +128,11 @@ struct LiveKitExample: App {
     }
 
     init() {
-        LoggingSystem.bootstrap({ LiveKitLogHandler(label: $0) })
+        LoggingSystem.bootstrap({
+            var logHandler = StreamLogHandler.standardOutput(label: $0)
+            logHandler.logLevel = .debug
+            return logHandler
+        })
     }
 
     var body: some Scene {

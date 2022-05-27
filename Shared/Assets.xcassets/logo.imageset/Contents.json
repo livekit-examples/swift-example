@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "logo-dark.png",
+      "filename" : "Livekit Wordmark.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "logo-dark_2.png",
+      "filename" : "Livekit Wordmark@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "logo-dark_3.png",
+      "filename" : "Livekit Wordmark@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -14,9 +14,6 @@ final class RoomContext: ObservableObject {
     public var latestError: Error?
 
     public let room = ExampleObservableRoom()
-    public var connectionState: ConnectionState {
-        room.room.connectionState
-    }
 
     @Published var url: String = "" {
         didSet { store.value.url = url }
@@ -115,11 +112,6 @@ final class RoomContext: ObservableObject {
 extension RoomContext: RoomDelegate {
 
     func room(_ room: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
-
-        guard !connectionState.isEqual(to: oldValue, includingAssociatedValues: false) else {
-            print("Skipping same conectionState")
-            return
-        }
 
         print("Did update connectionState \(connectionState) \(room.connectionState)")
 

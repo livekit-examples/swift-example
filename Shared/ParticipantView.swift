@@ -10,6 +10,7 @@ struct ParticipantView: View {
     var videoViewMode: VideoView.LayoutMode = .fill
     var onTap: ((_ participant: ObservableParticipant) -> Void)?
 
+    @State private var isRendering: Bool = false
     @State private var dimensions: Dimensions?
     @State private var trackStats: TrackStats?
 
@@ -17,7 +18,7 @@ struct ParticipantView: View {
         Image(systemSymbol: systemSymbol)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .foregroundColor(Color.lkBlue.opacity(0.7))
+            .foregroundColor(Color.lkGray2)
             .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
             .frame(
                 maxWidth: .infinity,
@@ -30,7 +31,7 @@ struct ParticipantView: View {
 
             ZStack(alignment: .bottom) {
                 // Background color
-                Color.lkDarkBlue
+                Color.lkGray1
                     .ignoresSafeArea()
 
                 // VideoView for the Participant
@@ -42,27 +43,34 @@ struct ParticipantView: View {
                         SwiftUIVideoView(track,
                                          layoutMode: videoViewMode,
                                          mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto,
+                                         debugMode: appCtx.showInformationOverlay,
+                                         // isRendering: $isRendering,
                                          dimensions: $dimensions,
-                                         trackStats: $trackStats,
-                                         preferMetal: appCtx.preferMetal)
-                            .background(Color.black)
+                                         trackStats: $trackStats)
+                        // .background(Color.black)
+
+                        //                        if !isRendering {
+                        //                            ProgressView().progressViewStyle(CircularProgressViewStyle())
+                        //                                // .resizable()
+                        //                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        //                        }
                         // .scaleEffect(CGSize(width: -1.0, height: 1.0))// flip local view horizontally
 
                         // Show the actual video dimensions (if enabled)
                         if appCtx.showInformationOverlay {
                             HStack(alignment: .top, spacing: 5) {
 
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text("View")
-                                        .fontWeight(.bold)
-                                    Text("metal: \(String(describing: appCtx.preferMetal))")
-                                    Text("mirrorMode: \(String(describing: (appCtx.videoViewMirrored ? VideoView.MirrorMode.mirror : .auto)))")
-                                }
-                                .font(.system(size: 10))
-                                .foregroundColor(Color.white)
-                                .padding(5)
-                                .background(Color.black.opacity(0.5))
-                                .cornerRadius(8)
+                                // VStack(alignment: .leading, spacing: 5) {
+                                //    Text("View")
+                                //        .fontWeight(.bold)
+                                //    Text("metal: \(String(describing: appCtx.preferMetal))")
+                                //    Text("mirrorMode: \(String(describing: (appCtx.videoViewMirrored ? VideoView.MirrorMode.mirror : .auto)))")
+                                // }
+                                // .font(.system(size: 10))
+                                // .foregroundColor(Color.white)
+                                // .padding(5)
+                                // .background(Color.black.opacity(0.5))
+                                // .cornerRadius(8)
 
                                 VStack(alignment: .leading, spacing: 5) {
                                     Text("Video")
@@ -116,8 +124,7 @@ struct ParticipantView: View {
                     if let subVideoTrack = participant.subVideoTrack {
                         SwiftUIVideoView(subVideoTrack,
                                          layoutMode: .fill,
-                                         mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto,
-                                         preferMetal: appCtx.preferMetal
+                                         mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto
                         )
                         .background(Color.black)
                         .aspectRatio(contentMode: .fit)
@@ -248,7 +255,7 @@ struct ParticipantView: View {
             // Glow the border when the participant is speaking
             .overlay(
                 participant.isSpeaking ?
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 5)
                     .stroke(Color.blue, lineWidth: 5.0)
                     : nil
             )
