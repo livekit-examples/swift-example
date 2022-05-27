@@ -2,12 +2,30 @@
   "object": {
     "pins": [
       {
+        "package": "KeychainAccess",
+        "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess.git",
+        "state": {
+          "branch": null,
+          "revision": "84e546727d66f1adc5439debad16270d0fdd04e7",
+          "version": "4.2.2"
+        }
+      },
+      {
         "package": "Promises",
         "repositoryURL": "https://github.com/google/promises.git",
         "state": {
           "branch": null,
           "revision": "46c1e6b5ac09d8f82c991061c659f67e573d425d",
           "version": "2.1.0"
+        }
+      },
+      {
+        "package": "SFSafeSymbols",
+        "repositoryURL": "https://github.com/SFSafeSymbols/SFSafeSymbols",
+        "state": {
+          "branch": "stable",
+          "revision": "c8c33d947d8a1c883aa19fd24e14fd738b06e369",
+          "version": null
         }
       },
       {

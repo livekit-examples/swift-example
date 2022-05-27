@@ -185,7 +185,7 @@ struct RoomView: View {
                     .padding()
             }
 
-            if case .reconnecting = room.room.connectionState {
+            if case .connecting = room.room.connectionState {
                 Text("Re-connecting...")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
@@ -316,13 +316,13 @@ struct RoomView: View {
                             .disabled(room.microphoneTrackState.isBusy)
 
                             #if os(iOS)
-//                            Button(action: {
-//                                room.toggleScreenShareEnabled(screenShareSource: nil)
-//                            },
-//                            label: {
-//                                Image(systemSymbol: .rectangleFillOnRectangleFill)
-//                                    .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
-//                            })
+                            //                            Button(action: {
+                            //                                room.toggleScreenShareEnabled(screenShareSource: nil)
+                            //                            },
+                            //                            label: {
+                            //                                Image(systemSymbol: .rectangleFillOnRectangleFill)
+                            //                                    .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
+                            //                            })
                             #elseif os(macOS)
                             Button(action: {
                                 if room.screenShareTrackState.isPublished {
@@ -360,6 +360,7 @@ struct RoomView: View {
                         Spacer()
 
                         Menu {
+
                             #if os(macOS)
                             Button {
                                 if let url = URL(string: "livekit://") {
@@ -375,13 +376,31 @@ struct RoomView: View {
 
                             Toggle("Show info overlay", isOn: $appCtx.showInformationOverlay)
 
-                            Divider()
-
                             Group {
                                 Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
                                 Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
                                 Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
+                                Divider()
                             }
+
+                            #if os(macOS)
+                            //                            Divider()
+
+                            Group {
+                                //
+                                Picker("Output device", selection: $appCtx.outputDevice) {
+                                    ForEach(Room.audioDeviceModule().outputDevices) { device in
+                                        Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                                    }
+                                }
+
+                                Picker("Input device", selection: $appCtx.inputDevice) {
+                                    ForEach(Room.audioDeviceModule().inputDevices) { device in
+                                        Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                                    }
+                                }
+                            }
+                            #endif
 
                             Divider()
 
@@ -390,120 +409,68 @@ struct RoomView: View {
                             } label: {
                                 Text("Unpublish all")
                             }
-
+                            //
                             Divider()
 
                             Menu {
-
-                                #if os(macOS)
                                 Button {
-                                    if let url = URL(string: "livekit://") {
-                                        NSWorkspace.shared.open(url)
-                                    }
+                                    roomCtx.room.room.sendSimulate(scenario: .nodeFailure)
                                 } label: {
-                                    Text("New window")
+                                    Text("Node failure")
                                 }
-                                #endif
 
-                                
                                 Button {
-                                    roomCtx.room.unpublishAll()
+                                    roomCtx.room.room.sendSimulate(scenario: .serverLeave)
                                 } label: {
-                                    Text("Unpublish all")
-                                }
-                                
-                                
-                                Toggle("Show info", isOn: $appCtx.showInformationOverlay)
-
-                                #if os(macOS)
-                                Divider()
-
-                                Group {
-
-                                    Picker("Output device", selection: $appCtx.outputDevice) {
-                                        ForEach(Room.audioDeviceModule().outputDevices) { device in
-                                            Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
-                                        }
-                                    }
-
-                                    Picker("Input device", selection: $appCtx.inputDevice) {
-                                        ForEach(Room.audioDeviceModule().inputDevices) { device in
-                                            Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
-                                        }
-                                    }
-                                }
-                                #endif
-
-                                Divider()
-
-                                Group {
-                                    Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
-                                    Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
-                                    Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
+                                    Text("Server leave")
                                 }
 
-                                Divider()
-
-                                Menu {
-                                    Button {
-                                        roomCtx.room.room.sendSimulate(scenario: .nodeFailure)
-                                    } label: {
-                                        Text("Node failure")
-                                    }
-
-                                    Button {
-                                        roomCtx.room.room.sendSimulate(scenario: .serverLeave)
-                                    } label: {
-                                        Text("Server leave")
-                                    }
-
-                                    Button {
-                                        roomCtx.room.room.sendSimulate(scenario: .migration)
-                                    } label: {
-                                        Text("Migration")
-                                    }
-
-                                    Button {
-                                        roomCtx.room.room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
-                                    } label: {
-                                        Text("Speaker update")
-                                    }
-
+                                Button {
+                                    roomCtx.room.room.sendSimulate(scenario: .migration)
                                 } label: {
-                                    Text("Simulate scenario")
+                                    Text("Migration")
                                 }
 
-                                Menu {
-                                    Button {
-                                        roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
-                                    } label: {
-                                        Text("Allow all")
-                                    }
-
-                                    Button {
-                                        roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
-                                    } label: {
-                                        Text("Disallow all")
-                                    }
+                                Button {
+                                    roomCtx.room.room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
                                 } label: {
-                                    Text("Track permissions")
+                                    Text("Speaker update")
                                 }
 
                             } label: {
-                                Image(systemSymbol: .gear)
-                                    .renderingMode(.original)
+                                Text("Simulate scenario")
                             }
-                        
-                            
-                            // Disconnect
-                            Button(action: {
-                                roomCtx.disconnect()
-                            },
-                            label: {
-                                Image(systemSymbol: .xmarkCircleFill)
-                                    .renderingMode(.original)
-                            })
+                            //
+                            Menu {
+                                Button {
+                                    roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                                } label: {
+                                    Text("Allow all")
+                                }
+
+                                Button {
+                                    roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
+                                } label: {
+                                    Text("Disallow all")
+                                }
+                            } label: {
+                                Text("Track permissions")
+                            }
+                            //
+                        } label: {
+                            Image(systemSymbol: .gear)
+                                .renderingMode(.original)
                         }
+
+                        // Disconnect
+                        Button(action: {
+                            roomCtx.disconnect()
+                        },
+                        label: {
+                            Image(systemSymbol: .xmarkCircleFill)
+                                .renderingMode(.original)
+                        })
+                        //                        }
                     }
 
                 }
