@@ -17,7 +17,7 @@ class SampleHandler: RPBroadcastSampleHandler {
 
         os_log("broadcast started", log: logger, type: .debug)
 
-        if let ud = UserDefaults(suiteName: "group.livekit-example.broadcast"),
+        if let ud = UserDefaults(suiteName: "group.io.livekit.example.SwiftSDK.1"),
            let url = ud.string(forKey: "url"),
            let token = ud.string(forKey: "token") {
 
@@ -42,6 +42,8 @@ class SampleHandler: RPBroadcastSampleHandler {
                          }.then { publication in
                             self.publication = publication
                          }
+        } else {
+            os_log("broadcast connect failed", log: logger, type: .debug)
         }
     }
 

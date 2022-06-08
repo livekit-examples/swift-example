@@ -104,7 +104,7 @@ class ExampleObservableRoom: ObservableRoom {
         RPSystemBroadcastPickerView.show(for: "io.livekit.example.SwiftSDK.1.BroadcastExt",
                                          showsMicrophoneButton: false)
 
-        if let ud = UserDefaults(suiteName: "group.livekit-example.broadcast") {
+        if let ud = UserDefaults(suiteName: "group.io.livekit.example.SwiftSDK.1") {
             ud.set(room.url, forKey: "url")
             ud.set(room.token, forKey: "token")
         }
