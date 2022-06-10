@@ -105,8 +105,8 @@ class ExampleObservableRoom: ObservableRoom {
                                          showsMicrophoneButton: false)
 
         if let ud = UserDefaults(suiteName: "group.io.livekit.example.SwiftSDK.1") {
-            ud.set(room.url, forKey: "url")
-            ud.set(room.token, forKey: "token")
+            ud.set(room.url, forKey: "livekit_url")
+            ud.set(room.token, forKey: "livekit_token")
         }
 
         #elseif os(macOS)
