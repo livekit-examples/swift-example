@@ -71,5 +71,14 @@ final class AppContext: ObservableObject {
             self.videoViewMirrored = preferences.videoViewMirrored
             self.connectionHistory = preferences.connectionHistory
         }
+
+        Room.audioDeviceModule().setDevicesUpdatedHandler {
+            
+            print("audio devices did update")
+            // force UI update for outputDevice / inputDevice
+            DispatchQueue.main.async {
+                self.objectWillChange.send()
+            }
+        }
     }
 }
