@@ -384,18 +384,17 @@ struct RoomView: View {
                             }
 
                             #if os(macOS)
-                            //                            Divider()
 
                             Group {
                                 //
                                 Picker("Output device", selection: $appCtx.outputDevice) {
-                                    ForEach(Room.audioDeviceModule().outputDevices) { device in
+                                    ForEach(Room.audioDeviceModule.outputDevices) { device in
                                         Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
                                     }
                                 }
 
                                 Picker("Input device", selection: $appCtx.inputDevice) {
-                                    ForEach(Room.audioDeviceModule().inputDevices) { device in
+                                    ForEach(Room.audioDeviceModule.inputDevices) { device in
                                         Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
                                     }
                                 }
