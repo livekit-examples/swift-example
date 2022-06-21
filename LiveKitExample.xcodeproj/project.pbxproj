@@ -25,7 +25,6 @@
 		681E3F46271FC7AD007BB547 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F42271FC7AD007BB547 /* ConnectView.swift */; };
 		683720D227A06404007DA986 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683720D127A06404007DA986 /* ConnectionHistory.swift */; };
 		683720D327A06404007DA986 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683720D127A06404007DA986 /* ConnectionHistory.swift */; };
-		683F05F8273F96B20080C7AC /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683F05F7273F96B20080C7AC /* SampleHandler.swift */; };
 		6847616427B44A1A001611BE /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6847616327B44A1A001611BE /* Bundle.swift */; };
 		6847616527B44A1A001611BE /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6847616327B44A1A001611BE /* Bundle.swift */; };
 		6866E93C27A196C4008AD2DF /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6866E93B27A196C4008AD2DF /* LiveKit */; };
@@ -43,6 +42,8 @@
 		68B3854C271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
 		68B3854D271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
 		68EA18E827F2E91000F9AE48 /* BroadcastExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D7AA477B285A0FFC00EB41AE /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */; };
+		D7FECD462860B42700D04D1C /* LoggingOSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FECD452860B42700D04D1C /* LoggingOSLog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,7 +80,6 @@
 		683720D127A06404007DA986 /* ConnectionHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHistory.swift; sourceTree = "<group>"; };
 		683F05F3273F96B20080C7AC /* BroadcastExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BroadcastExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		683F05F4273F96B20080C7AC /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
-		683F05F7273F96B20080C7AC /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
 		683F05F9273F96B20080C7AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		683F0603273FAD690080C7AC /* iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS.entitlements; sourceTree = "<group>"; };
 		683F0604273FADC20080C7AC /* BroadcastExt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BroadcastExt.entitlements; sourceTree = "<group>"; };
@@ -95,6 +95,8 @@
 		68B38549271E780700711D5F /* LiveKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68B3854B271E780700711D5F /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		9E7835E62751A71500559DEC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
+		D7FECD452860B42700D04D1C /* LoggingOSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingOSLog.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,8 +155,9 @@
 			isa = PBXGroup;
 			children = (
 				683F0604273FADC20080C7AC /* BroadcastExt.entitlements */,
-				683F05F7273F96B20080C7AC /* SampleHandler.swift */,
 				683F05F9273F96B20080C7AC /* Info.plist */,
+				D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */,
+				D7FECD452860B42700D04D1C /* LoggingOSLog.swift */,
 			);
 			path = BroadcastExt;
 			sourceTree = "<group>";
@@ -380,7 +383,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				683F05F8273F96B20080C7AC /* SampleHandler.swift in Sources */,
+				D7FECD462860B42700D04D1C /* LoggingOSLog.swift in Sources */,
+				D7AA477B285A0FFC00EB41AE /* SampleHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,7 +442,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/BroadcastExt/BroadcastExt.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/BroadcastExt/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
@@ -448,7 +452,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.11;
+				MARKETING_VERSION = 1.0.13;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1.BroadcastExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -463,7 +467,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/BroadcastExt/BroadcastExt.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/BroadcastExt/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
@@ -473,7 +477,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.11;
+				MARKETING_VERSION = 1.0.13;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1.BroadcastExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -603,6 +607,7 @@
 		68B38555271E780700711D5F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = iOS;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/iOS.entitlements";
@@ -636,6 +641,7 @@
 		68B38556271E780700711D5F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = iOS;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/iOS.entitlements";
