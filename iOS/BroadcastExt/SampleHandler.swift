@@ -10,11 +10,11 @@ import LiveKit
 import Logging
 import OSLog
 
+fileprivate let broadcastLogger = OSLog(subsystem: "io.livekit.example.SwiftSDK", category: "Broadcast")
 class SampleHandler : LKSampleHandler {
-    let broadcastLogger = OSLog(subsystem: "io.livekit.example.SwiftSDK", category: "Broadcast")
     
     public override init() {
-        
+        // Turn on logging for the Broadcast Extension
         LoggingSystem.bootstrap({ label in
             var logHandler = LoggingOSLog(label: label, log: broadcastLogger)
             logHandler.logLevel = .debug
