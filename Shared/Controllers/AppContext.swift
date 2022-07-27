@@ -38,6 +38,10 @@ final class AppContext: ObservableObject {
         didSet { store.value.connectionHistory = connectionHistory }
     }
 
+//    @Published var preferSpeakerOutput: Bool = false {
+//        didSet { AudioManager.shared.preferSpeakerOutput = preferSpeakerOutput }
+//    }
+
     public init(store: ValueStore<Preferences>) {
         self.store = store
 

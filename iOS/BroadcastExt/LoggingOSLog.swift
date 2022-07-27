@@ -6,7 +6,7 @@ import os
 public struct LoggingOSLog: LogHandler {
     public var logLevel: Logger.Level = .debug
     private let oslogger: OSLog
-    
+
     public init(label: String) {
         self.oslogger = OSLog(subsystem: label, category: "")
     }
@@ -14,7 +14,7 @@ public struct LoggingOSLog: LogHandler {
     public init(label: String, log: OSLog) {
         self.oslogger = log
     }
-    
+
     public func log(level: Logger.Level, message: Logger.Message, metadata: Logger.Metadata?, file: String, function: String, line: UInt) {
         var combinedPrettyMetadata = self.prettyMetadata
         if let metadataOverride = metadata, !metadataOverride.isEmpty {
@@ -24,21 +24,21 @@ public struct LoggingOSLog: LogHandler {
                 }
             )
         }
-        
+
         var formedMessage = message.description
         if combinedPrettyMetadata != nil {
             formedMessage += " -- " + combinedPrettyMetadata!
         }
         os_log("%{public}@", log: self.oslogger, type: OSLogType.from(loggerLevel: .info), formedMessage as NSString)
     }
-    
+
     private var prettyMetadata: String?
     public var metadata = Logger.Metadata() {
         didSet {
             self.prettyMetadata = self.prettify(self.metadata)
         }
     }
-    
+
     /// Add, remove, or change the logging metadata.
     /// - parameters:
     ///    - metadataKey: the key for the metadata item.
@@ -50,7 +50,7 @@ public struct LoggingOSLog: LogHandler {
             self.metadata[metadataKey] = newValue
         }
     }
-    
+
     private func prettify(_ metadata: Logger.Metadata) -> String? {
         if metadata.isEmpty {
             return nil

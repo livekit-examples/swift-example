@@ -166,6 +166,14 @@ struct RoomView: View {
         )
     }
 
+    func sortedParticipants() -> [ObservableParticipant] {
+        room.allParticipants.values.sorted { p1, p2 in
+            if p1.participant is LocalParticipant { return true }
+            if p2.participant is LocalParticipant { return false }
+            return (p1.joinedAt ?? Date()) < (p2.joinedAt ?? Date())
+        }
+    }
+
     func content(geometry: GeometryProxy) -> some View {
 
         VStack {
@@ -208,7 +216,8 @@ struct RoomView: View {
                         }
 
                     } else {
-                        ParticipantLayout(room.allParticipants.values, spacing: 5) { participant in
+                        // Array([room.allParticipants.values, room.allParticipants.values].joined())
+                        ParticipantLayout(sortedParticipants(), spacing: 5) { participant in
                             ParticipantView(participant: participant,
                                             videoViewMode: appCtx.videoViewMode) { participant in
                                 room.focusParticipant = participant
@@ -414,20 +423,24 @@ struct RoomView: View {
                                 Text("Simulate scenario")
                             }
 
-                            Menu {
-                                Button {
-                                    roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                            Group {
+                                Menu {
+                                    Button {
+                                        roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                                    } label: {
+                                        Text("Allow all")
+                                    }
+
+                                    Button {
+                                        roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
+                                    } label: {
+                                        Text("Disallow all")
+                                    }
                                 } label: {
-                                    Text("Allow all")
+                                    Text("Track permissions")
                                 }
 
-                                Button {
-                                    roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
-                                } label: {
-                                    Text("Disallow all")
-                                }
-                            } label: {
-                                Text("Track permissions")
+                                // Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
                             }
 
                         } label: {
