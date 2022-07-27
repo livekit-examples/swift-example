@@ -170,7 +170,7 @@ struct RoomView: View {
         room.allParticipants.values.sorted { p1, p2 in
             if p1.participant is LocalParticipant { return true }
             if p2.participant is LocalParticipant { return false }
-            return (p1.joinedAt ?? Date()) < (p2.joinedAt ?? Date())
+            return (p1.participant.joinedAt ?? Date()) < (p2.participant.joinedAt ?? Date())
         }
     }
 
