@@ -43,17 +43,17 @@ struct ParticipantView: View {
                         SwiftUIVideoView(track,
                                          layoutMode: videoViewMode,
                                          mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto,
-                                         // debugMode: appCtx.showInformationOverlay,
-                                         // isRendering: $isRendering,
+                                         debugMode: appCtx.showInformationOverlay,
+                                         isRendering: $isRendering,
                                          dimensions: $dimensions,
                                          trackStats: $trackStats)
                         // .background(Color.black)
 
-                        //                        if !isRendering {
-                        //                            ProgressView().progressViewStyle(CircularProgressViewStyle())
-                        //                                // .resizable()
-                        //                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        //                        }
+                        if !isRendering {
+                            ProgressView().progressViewStyle(CircularProgressViewStyle())
+                                // .resizable()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        }
                         // .scaleEffect(CGSize(width: -1.0, height: 1.0))// flip local view horizontally
 
                         // Show the actual video dimensions (if enabled)

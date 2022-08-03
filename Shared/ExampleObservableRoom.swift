@@ -1,6 +1,5 @@
 import SwiftUI
 import LiveKit
-import OrderedCollections
 import AVFoundation
 import Promises
 
@@ -98,7 +97,6 @@ class ExampleObservableRoom: ObservableRoom {
     func toggleScreenShareEnabled(screenShareSource: ScreenShareSource? = nil) {
 
         #if os(iOS)
-        // return toggleScreenShareEnabled()
         // Experimental iOS screen share
 
         RPSystemBroadcastPickerView.show(for: "io.livekit.example.SwiftSDK.1.BroadcastExt",
