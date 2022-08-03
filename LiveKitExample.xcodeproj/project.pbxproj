@@ -27,7 +27,6 @@
 		683332C427D9DC4600378C41 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 683332C327D9DC4600378C41 /* LiveKit */; };
 		683720D227A06404007DA986 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683720D127A06404007DA986 /* ConnectionHistory.swift */; };
 		683720D327A06404007DA986 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683720D127A06404007DA986 /* ConnectionHistory.swift */; };
-		683F05F8273F96B20080C7AC /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683F05F7273F96B20080C7AC /* SampleHandler.swift */; };
 		6845DD5627DEBDD90009B5CD /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6845DD5527DEBDD90009B5CD /* LiveKit */; };
 		6847616427B44A1A001611BE /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6847616327B44A1A001611BE /* Bundle.swift */; };
 		6847616527B44A1A001611BE /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6847616327B44A1A001611BE /* Bundle.swift */; };
@@ -795,7 +794,7 @@
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 0.9.10;
+				version = 1.0.2;
 			};
 		};
 		685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
@@ -804,14 +803,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.18.0;
-			};
-		};
-		6866E93A27A196C4008AD2DF /* XCRemoteSwiftPackageReference "client-sdk-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/livekit/client-sdk-swift";
-			requirement = {
-				kind = exactVersion;
-				version = 1.0.1;
 			};
 		};
 		68816CBF27B4D6BC00E24622 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
