@@ -417,7 +417,7 @@ struct RoomView: View {
                             } label: {
                                 Text("Unpublish all")
                             }
-                            //
+
                             Divider()
 
                             Menu {
@@ -468,7 +468,7 @@ struct RoomView: View {
 
                                 // Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
                             }
-                            //
+
                         } label: {
                             Image(systemSymbol: .gear)
                                 .renderingMode(.original)
@@ -482,7 +482,6 @@ struct RoomView: View {
                             Image(systemSymbol: .xmarkCircleFill)
                                 .renderingMode(.original)
                         })
-                        //                        }
                     }
 
                 }
