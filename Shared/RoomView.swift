@@ -1,6 +1,7 @@
 import SwiftUI
 import LiveKit
 import SFSafeSymbols
+import WebRTC
 
 #if !os(macOS)
 let adaptiveMin = 170.0
@@ -18,6 +19,13 @@ extension CIImage {
         #else
         self.init(data: NSImage(named: name)!.tiffRepresentation!)!
         #endif
+    }
+}
+
+extension RTCIODevice: Identifiable {
+
+    public var id: String {
+        deviceId
     }
 }
 
@@ -185,7 +193,7 @@ struct RoomView: View {
                     .padding()
             }
 
-            if case .reconnecting = room.room.connectionState {
+            if case .connecting = room.room.connectionState {
                 Text("Re-connecting...")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
@@ -361,6 +369,7 @@ struct RoomView: View {
                         Spacer()
 
                         Menu {
+
                             #if os(macOS)
                             Button {
                                 if let url = URL(string: "livekit://") {
@@ -376,13 +385,30 @@ struct RoomView: View {
 
                             Toggle("Show info overlay", isOn: $appCtx.showInformationOverlay)
 
-                            Divider()
-
                             Group {
                                 Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
                                 Toggle("VideoView preferMetal", isOn: $appCtx.preferMetal)
                                 Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
+                                Divider()
                             }
+
+                            #if os(macOS)
+
+                            Group {
+                                //
+                                Picker("Output device", selection: $appCtx.outputDevice) {
+                                    ForEach(Room.audioDeviceModule.outputDevices) { device in
+                                        Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                                    }
+                                }
+
+                                Picker("Input device", selection: $appCtx.inputDevice) {
+                                    ForEach(Room.audioDeviceModule.inputDevices) { device in
+                                        Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                                    }
+                                }
+                            }
+                            #endif
 
                             Divider()
 
