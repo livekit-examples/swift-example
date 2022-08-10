@@ -617,7 +617,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -632,7 +632,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.15;
+				MARKETING_VERSION = 1.0.20;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -651,7 +651,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
@@ -666,7 +666,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.15;
+				MARKETING_VERSION = 1.0.20;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -686,7 +686,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -699,7 +699,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.0.15;
+				MARKETING_VERSION = 1.0.20;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -717,7 +717,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -730,7 +730,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.0.15;
+				MARKETING_VERSION = 1.0.20;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
