@@ -89,10 +89,13 @@ final class RoomContext: ObservableObject {
         )
 
         let roomOptions = RoomOptions(
-            defaultScreenShareCaptureOptions: ScreenShareCaptureOptions(
-                // useBroadcastExtension: true
+            defaultCameraCaptureOptions: CameraCaptureOptions(
+                dimensions: .h1080_169
             ),
-            // Pass the simulcast option
+            defaultScreenShareCaptureOptions: ScreenShareCaptureOptions(
+                dimensions: .h1080_169,
+                useBroadcastExtension: true
+            ),
             defaultVideoPublishOptions: VideoPublishOptions(
                 simulcast: publish ? false : simulcast
             ),
