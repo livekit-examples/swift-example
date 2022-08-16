@@ -55,7 +55,13 @@ final class RoomContext: NSObject, ObservableObject {
     private lazy var pipCtrl: AVPictureInPictureController? = {
         //
         if #available(macOS 12.0, iOS 15.0, *) {
-            return AVPictureInPictureController(contentSource: .init(sampleBufferDisplayLayer: pipLayer, playbackDelegate: self))
+            try? AVAudioSession.sharedInstance().setActive(true)
+            let r = AVPictureInPictureController(contentSource: .init(sampleBufferDisplayLayer: pipLayer, playbackDelegate: self))
+            r.delegate = self
+            r.canStartPictureInPictureAutomaticallyFromInline = true
+            //            r.contentSource.
+
+            return r
         }
 
         return nil
@@ -156,14 +162,26 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    func room(_ room: Room, localParticipant: LocalParticipant, didPublish publication: LocalTrackPublication) {
-        guard let track = publication.track as? LocalVideoTrack else { return }
+    //    func room(_ room: Room, localParticipant: LocalParticipant, didPublish publication: LocalTrackPublication) {
+    //        //
+    //    }
+    //
+    //    func room(_ room: Room, localParticipant: LocalParticipant, didUnpublish publication: LocalTrackPublication) {
+    //        //
+    //    }
+
+    func room(_ room: Room, participant: RemoteParticipant, didSubscribe publication: RemoteTrackPublication, track: Track) {
+        print("PIP did subscribe \(track)")
+        guard let track = track as? VideoTrack else { return }
         track.add(videoRenderer: self)
+        print("PIP did add renderer")
     }
 
-    func room(_ room: Room, localParticipant: LocalParticipant, didUnpublish publication: LocalTrackPublication) {
-        guard let track = publication.track as? LocalVideoTrack else { return }
+    func room(_ room: Room, participant: RemoteParticipant, didUnsubscribe publication: RemoteTrackPublication, track: Track) {
+        print("PIP did unpublish \(track)")
+        guard let track = track as? VideoTrack else { return }
         track.remove(videoRenderer: self)
+        print("PIP did remove renderer")
     }
 }
 
@@ -171,15 +189,46 @@ extension RoomContext: VideoRenderer {
 
     func setSize(_ size: CGSize) {
         //
+
     }
 
     func renderFrame(_ frame: RTCVideoFrame?) {
         //
-        guard let rtcPixelBuffer = frame?.buffer as? RTCCVPixelBuffer,
-              let sampleBuffer = CMSampleBuffer.from(rtcPixelBuffer.pixelBuffer) else { return }
+        guard let rtcPixelBuffer = frame?.buffer as? RTCCVPixelBuffer else {
+            print("PIP RTCCVPixelBuffer is nil")
+            return
+        }
 
-        print("CMSampleBuffer: \(sampleBuffer)")
+        guard let sampleBuffer = CMSampleBuffer.from(rtcPixelBuffer.pixelBuffer) else {
+            print("PIP failed to create CMSampleBuffer")
+            return
+        }
+
         pipLayer.enqueue(sampleBuffer)
+
+        guard let pipCtrl = pipCtrl else {
+            print("PIP pipCtrl is nil")
+            return
+        }
+
+        DispatchQueue.main.async {
+
+            self.pipLayer.frame = CGRect(origin: .zero, size: .init(width: 100, height: 100))
+            self.pipLayer.videoGravity = .resizeAspectFill
+
+            print("PIP did enqueue active: \(pipCtrl.isPictureInPictureActive)")
+            if !pipCtrl.isPictureInPictureActive {
+                pipCtrl.startPictureInPicture()
+            }
+        }
+    }
+}
+
+extension RoomContext: AVPictureInPictureControllerDelegate {
+
+    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, failedToStartPictureInPictureWithError error: Error) {
+        //
+        print("PIP failedToStartPictureInPictureWithError: \(error)")
     }
 }
 
@@ -190,7 +239,8 @@ extension RoomContext: AVPictureInPictureSampleBufferPlaybackDelegate {
     }
 
     func pictureInPictureControllerTimeRangeForPlayback(_ pictureInPictureController: AVPictureInPictureController) -> CMTimeRange {
-        CMTimeRange(start: .zero, end: .positiveInfinity)
+        CMTimeRange(start: .negativeInfinity,
+                    duration: .positiveInfinity)
     }
 
     func pictureInPictureControllerIsPlaybackPaused(_ pictureInPictureController: AVPictureInPictureController) -> Bool {
@@ -202,6 +252,69 @@ extension RoomContext: AVPictureInPictureSampleBufferPlaybackDelegate {
     }
 
     func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, skipByInterval skipInterval: CMTime, completion completionHandler: @escaping () -> Void) {
-        //
+        completionHandler()
     }
+}
+
+func CopyVideoFrameToPixelBuffer(frameBuffer: RTCI420Buffer) -> CVPixelBuffer {
+
+    var pixelBuffer: CVPixelBuffer!
+
+    let result = CVPixelBufferCreate(kCFAllocatorDefault,
+                                     Int(frameBuffer.width),
+                                     Int(frameBuffer.height),
+                                     kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
+                                     nil,
+                                     &pixelBuffer)
+
+    guard result == kCVReturnSuccess else { fatalError() }
+
+    CVPixelBufferLockBaseAddress(pixelBuffer, [])
+    defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, []) }
+
+    //  RTC_DCHECK(pixelBuffer);
+    //  RTC_DCHECK_EQ(CVPixelBufferGetPixelFormatType(pixelBuffer),
+    //                kCVPixelFormatType_420YpCbCr8BiPlanarFullRange);
+    //  RTC_DCHECK_EQ(CVPixelBufferGetHeightOfPlane(pixelBuffer, 0),
+    //                frameBuffer.height);
+    //  RTC_DCHECK_EQ(CVPixelBufferGetWidthOfPlane(pixelBuffer, 0),
+    //                frameBuffer.width);
+
+    //    let cvRet: CVReturn = CVPixelBufferLockBaseAddress(pixelBuffer, [])
+    //    if (cvRet != kCVReturnSuccess) { fatalError() }
+
+    let dstY = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0)
+
+    let dstStrideY = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0)
+    let dstUV = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1)
+
+    let dstStrideUV = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1)
+
+    // Convert I420 to NV12.
+    //  int ret = libyuv::I420ToNV12(
+    //      frameBuffer.dataY, frameBuffer.strideY, frameBuffer.dataU,
+    //      frameBuffer.strideU, frameBuffer.dataV, frameBuffer.strideV, dstY,
+    //      dstStrideY, dstUV, dstStrideUV, frameBuffer.width, frameBuffer.height);
+
+    RTCYUVHelper.i420(toNV12: frameBuffer.dataY,
+                      srcStrideY: frameBuffer.strideY,
+                      srcU: frameBuffer.dataU,
+                      srcStrideU: frameBuffer.strideU,
+                      srcV: frameBuffer.dataV,
+                      srcStrideV: frameBuffer.strideV,
+                      dstY: dstY,
+                      dstStrideY: Int32(dstStrideY),
+                      dstUV: dstUV,
+                      dstStrideUV: Int32(dstStrideUV),
+                      width: frameBuffer.width,
+                      width: frameBuffer.height)
+
+    // CVPixelBufferUnlockBaseAddress(pixelBuffer, [])
+
+    //  if (ret) {
+    //    RTC_LOG(LS_ERROR) << "Error converting I420 VideoFrame to NV12 :" << ret;
+    //    return false;
+    //  }
+
+    return pixelBuffer
 }
