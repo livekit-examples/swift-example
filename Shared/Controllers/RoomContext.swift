@@ -49,7 +49,7 @@ final class RoomContext: NSObject, ObservableObject {
     @Published var publish: Bool = false {
         didSet { store.value.publishMode = publish }
     }
-    
+
     private let pipLayer = AVSampleBufferDisplayLayer()
 
     private lazy var pipCtrl: AVPictureInPictureController? = {
@@ -57,11 +57,10 @@ final class RoomContext: NSObject, ObservableObject {
         if #available(macOS 12.0, iOS 15.0, *) {
             return AVPictureInPictureController(contentSource: .init(sampleBufferDisplayLayer: pipLayer, playbackDelegate: self))
         }
-        
+
         return nil
     }()
-    
-    
+
     public init(store: ValueStore<Preferences>) {
         self.store = store
         super.init()
@@ -84,7 +83,7 @@ final class RoomContext: NSObject, ObservableObject {
         #endif
 
         print("PIP isPictureInPictureSupported: \(AVPictureInPictureController.isPictureInPictureSupported())")
-        
+
         if let ctrl = pipCtrl {
             ctrl.startPictureInPicture()
             print("PIP did start pip")
@@ -156,6 +155,32 @@ extension RoomContext: RoomDelegate {
             }
         }
     }
+
+    func room(_ room: Room, localParticipant: LocalParticipant, didPublish publication: LocalTrackPublication) {
+        guard let track = publication.track as? LocalVideoTrack else { return }
+        track.add(videoRenderer: self)
+    }
+
+    func room(_ room: Room, localParticipant: LocalParticipant, didUnpublish publication: LocalTrackPublication) {
+        guard let track = publication.track as? LocalVideoTrack else { return }
+        track.remove(videoRenderer: self)
+    }
+}
+
+extension RoomContext: VideoRenderer {
+
+    func setSize(_ size: CGSize) {
+        //
+    }
+
+    func renderFrame(_ frame: RTCVideoFrame?) {
+        //
+        guard let rtcPixelBuffer = frame?.buffer as? RTCCVPixelBuffer,
+              let sampleBuffer = CMSampleBuffer.from(rtcPixelBuffer.pixelBuffer) else { return }
+
+        print("CMSampleBuffer: \(sampleBuffer)")
+        pipLayer.enqueue(sampleBuffer)
+    }
 }
 
 extension RoomContext: AVPictureInPictureSampleBufferPlaybackDelegate {
@@ -163,19 +188,19 @@ extension RoomContext: AVPictureInPictureSampleBufferPlaybackDelegate {
     func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, setPlaying playing: Bool) {
         //
     }
-    
+
     func pictureInPictureControllerTimeRangeForPlayback(_ pictureInPictureController: AVPictureInPictureController) -> CMTimeRange {
         CMTimeRange(start: .zero, end: .positiveInfinity)
     }
-    
+
     func pictureInPictureControllerIsPlaybackPaused(_ pictureInPictureController: AVPictureInPictureController) -> Bool {
         false
     }
-    
+
     func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, didTransitionToRenderSize newRenderSize: CMVideoDimensions) {
         //
     }
-    
+
     func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, skipByInterval skipInterval: CMTime, completion completionHandler: @escaping () -> Void) {
         //
     }
