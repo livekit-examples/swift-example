@@ -2,9 +2,10 @@ import SwiftUI
 import LiveKit
 import WebRTC
 import Promises
+import AVKit
 
 // This class contains the logic to control behavior of the whole app.
-final class RoomContext: ObservableObject {
+final class RoomContext: NSObject, ObservableObject {
 
     private let store: ValueStore<Preferences>
 
@@ -48,9 +49,23 @@ final class RoomContext: ObservableObject {
     @Published var publish: Bool = false {
         didSet { store.value.publishMode = publish }
     }
+    
+    private let pipLayer = AVSampleBufferDisplayLayer()
 
+    private lazy var pipCtrl: AVPictureInPictureController? = {
+        //
+        if #available(macOS 12.0, iOS 15.0, *) {
+            return AVPictureInPictureController(contentSource: .init(sampleBufferDisplayLayer: pipLayer, playbackDelegate: self))
+        }
+        
+        return nil
+    }()
+    
+    
     public init(store: ValueStore<Preferences>) {
         self.store = store
+        super.init()
+
         room.room.add(delegate: self)
 
         store.onLoaded.then { preferences in
@@ -67,6 +82,13 @@ final class RoomContext: ObservableObject {
         #if os(iOS)
         UIApplication.shared.isIdleTimerDisabled = true
         #endif
+
+        print("PIP isPictureInPictureSupported: \(AVPictureInPictureController.isPictureInPictureSupported())")
+        
+        if let ctrl = pipCtrl {
+            ctrl.startPictureInPicture()
+            print("PIP did start pip")
+        }
     }
 
     deinit {
@@ -133,5 +155,28 @@ extension RoomContext: RoomDelegate {
                 self.objectWillChange.send()
             }
         }
+    }
+}
+
+extension RoomContext: AVPictureInPictureSampleBufferPlaybackDelegate {
+
+    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, setPlaying playing: Bool) {
+        //
+    }
+    
+    func pictureInPictureControllerTimeRangeForPlayback(_ pictureInPictureController: AVPictureInPictureController) -> CMTimeRange {
+        CMTimeRange(start: .zero, end: .positiveInfinity)
+    }
+    
+    func pictureInPictureControllerIsPlaybackPaused(_ pictureInPictureController: AVPictureInPictureController) -> Bool {
+        false
+    }
+    
+    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, didTransitionToRenderSize newRenderSize: CMVideoDimensions) {
+        //
+    }
+    
+    func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, skipByInterval skipInterval: CMTime, completion completionHandler: @escaping () -> Void) {
+        //
     }
 }
