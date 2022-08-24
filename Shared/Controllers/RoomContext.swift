@@ -119,7 +119,7 @@ extension RoomContext: RoomDelegate {
 
     func room(_ room: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
 
-        print("Did update connectionState \(connectionState) \(room.connectionState)")
+        print("Did update connectionState \(oldValue) -> \(connectionState)")
 
         if let error = connectionState.disconnectedWithError {
             latestError = error
