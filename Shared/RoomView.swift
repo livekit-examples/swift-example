@@ -295,7 +295,7 @@ struct RoomView: View {
                                 },
                                 label: {
                                     Image(systemSymbol: .videoFill)
-                                        .renderingMode(room.cameraTrackState.isPublished ? .original : .template)
+                                        .renderingMode((room.room.localParticipant?.isCameraEnabled() ?? false) ? .original : .template)
                                 })
                                 // disable while publishing/un-publishing
                                 .disabled(room.cameraTrackState.isBusy)
@@ -319,7 +319,7 @@ struct RoomView: View {
                             },
                             label: {
                                 Image(systemSymbol: .micFill)
-                                    .renderingMode(room.microphoneTrackState.isPublished ? .original : .template)
+                                    .renderingMode((room.room.localParticipant?.isMicrophoneEnabled() ?? false) ? .original : .template)
                             })
                             // disable while publishing/un-publishing
                             .disabled(room.microphoneTrackState.isBusy)
@@ -334,7 +334,7 @@ struct RoomView: View {
                             })
                             #elseif os(macOS)
                             Button(action: {
-                                if room.screenShareTrackState.isPublished {
+                                if room.room.localParticipant?.isScreenShareEnabled() ?? false {
                                     // turn off screen share
                                     room.toggleScreenShareEnabled(screenShareSource: nil)
                                 } else {
