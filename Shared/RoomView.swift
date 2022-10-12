@@ -326,7 +326,7 @@ struct RoomView: View {
 
                             #if os(iOS)
                             Button(action: {
-                                room.toggleScreenShareEnabled(screenShareSource: nil)
+                                room.toggleScreenShareEnablediOS()
                             },
                             label: {
                                 Image(systemSymbol: .rectangleFillOnRectangleFill)
@@ -336,7 +336,7 @@ struct RoomView: View {
                             Button(action: {
                                 if room.room.localParticipant?.isScreenShareEnabled() ?? false {
                                     // turn off screen share
-                                    room.toggleScreenShareEnabled(screenShareSource: nil)
+                                    room.toggleScreenShareEnabledMacOS(screenShareSource: nil)
                                 } else {
                                     screenPickerPresented = true
                                 }
@@ -347,7 +347,7 @@ struct RoomView: View {
                                     .foregroundColor(room.screenShareTrackState.isPublished ? Color.green : Color.white)
                             }).popover(isPresented: $screenPickerPresented) {
                                 ScreenShareSourcePickerView { source in
-                                    room.toggleScreenShareEnabled(screenShareSource: source)
+                                    room.toggleScreenShareEnabledMacOS(screenShareSource: source)
                                     screenPickerPresented = false
                                 }.padding()
                             }

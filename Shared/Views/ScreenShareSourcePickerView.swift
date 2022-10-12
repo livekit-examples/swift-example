@@ -8,61 +8,43 @@ import Promises
 
 class ScreenShareSourcePickerCtrl: ObservableObject {
 
-    private var allTracks = [LocalVideoTrack]()
-
-    @Published var visibleTracks = [LocalVideoTrack]()
+    @Published var tracks = [LocalVideoTrack]()
     @Published var mode: ScreenShareSourcePickerView.Mode = .display {
         didSet {
             guard oldValue != mode else { return }
-            recomputeVisibleTracks()
+            restartTracks()
         }
     }
 
-    private func recomputeVisibleTracks() {
+    private func restartTracks() {
 
-        let tracks = self.allTracks.filter {
-            guard let capturer = $0.capturer as? MacOSScreenCapturer else { return false }
-            if case .display = capturer.source, case .display = self.mode {
-                return true
-            } else if case .window = capturer.source, case .window = self.mode {
-                return true
+        // stop all
+        let stopAllPromise = all(tracks.map { $0.stop() })
+        let sourcesPromise = MacOSScreenCapturer.sources(for: (mode == .display ? .display : .window))
+
+        stopAllPromise.then { _ in
+            sourcesPromise
+        }.then { sources in
+            sources.map {
+                LocalVideoTrack.createMacOSScreenShareTrack(source: $0)
             }
-            return false
-        }
-
-        DispatchQueue.main.async {
-            self.visibleTracks = tracks
+        }.then { tracks -> Promise<[LocalVideoTrack]> in
+            all(tracks.map({ $0.start() })).then { _ in tracks }
+        }.then(on: .main) { tracks in
+            self.tracks = tracks
         }
     }
-
+    
     init() {
-        print("ScreenPickerCtrl.init()")
-
-        // Create tracks for all sources
-        self.allTracks = MacOSScreenCapturer.sources().map {
-            LocalVideoTrack.createMacOSScreenShareTrack(source: $0)
-        }
-
-        // Start all tracks
-        let displayStartPromises = self.allTracks.map { $0.start() }
-        all(displayStartPromises).then { _ in
-            self.recomputeVisibleTracks()
-        }
+        restartTracks()
     }
 
     deinit {
-        print("ScreenPickerCtrl.deinit")
-        _ = all(self.allTracks.map { $0.stop() })
+        _ = all(tracks.map { $0.stop() })
     }
 }
 
-extension LocalVideoTrack: Identifiable {
-    public var id: ObjectIdentifier {
-        return ObjectIdentifier(self)
-    }
-}
-
-typealias OnPickScreenShareSource = (ScreenShareSource) -> Void
+typealias OnPickScreenShareSource = (MacOSScreenCaptureSource) -> Void
 
 struct ScreenShareSourcePickerView: View {
 
@@ -98,13 +80,22 @@ struct ScreenShareSourcePickerView: View {
                           alignment: .center,
                           spacing: 10) {
 
-                    ForEach(ctrl.visibleTracks) { track in
-                        SwiftUIVideoView(track, layoutMode: .fit)
-                            .aspectRatio(1, contentMode: .fit)
-                            .onTapGesture {
-                                guard let capturer = track.capturer as? MacOSScreenCapturer else { return }
-                                onPickScreenShareSource?(capturer.source)
+                    ForEach(ctrl.tracks) { track in
+                        ZStack {
+                            SwiftUIVideoView(track, layoutMode: .fit)
+                                .aspectRatio(1, contentMode: .fit)
+                                .onTapGesture {
+                                    guard let capturer = track.capturer as? MacOSScreenCapturer,
+                                          let source = capturer.captureSource else { return }
+                                    onPickScreenShareSource?(source)
+                                }
+                            
+                            if let capturer = track.capturer as? MacOSScreenCapturer,
+                               let source = capturer.captureSource as? MacOSWindow,
+                               let appName = source.owningApplication?.applicationName {
+                                Text(appName)
                             }
+                        }
                     }
                 }
             }

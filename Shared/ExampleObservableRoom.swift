@@ -94,9 +94,8 @@ class ExampleObservableRoom: ObservableRoom {
         }
     }
 
-    func toggleScreenShareEnabled(screenShareSource: ScreenShareSource? = nil) {
-
-        #if os(iOS)
+    #if os(iOS)
+    func toggleScreenShareEnablediOS() {
         // Experimental iOS screen share
 
         RPSystemBroadcastPickerView.show(for: "io.livekit.example.SwiftSDK.1.BroadcastExt",
@@ -107,7 +106,9 @@ class ExampleObservableRoom: ObservableRoom {
             ud.set(room.token, forKey: "token")
         }
 
-        #elseif os(macOS)
+    }
+    #elseif os(macOS)
+    func toggleScreenShareEnabledMacOS(screenShareSource: MacOSScreenCaptureSource? = nil) {
 
         guard let localParticipant = room.localParticipant else {
             print("LocalParticipant doesn't exist")
@@ -132,11 +133,15 @@ class ExampleObservableRoom: ObservableRoom {
             }
         } else {
 
+            guard let source = screenShareSource else { return }
+            
+            print("selected source: \(source)")
+            
             DispatchQueue.main.async {
                 self.screenShareTrackState = .busy(isPublishing: true)
             }
 
-            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource ?? .mainDisplay)
+            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: source)
             localParticipant.publishVideoTrack(track: track).then { publication in
                 DispatchQueue.main.async {
                     self.screenShareTrackState = .published(publication)
@@ -147,8 +152,8 @@ class ExampleObservableRoom: ObservableRoom {
                 }
             }
         }
-        #endif
     }
+    #endif
 
     @discardableResult
     func unpublishAll() -> Promise<Void> {
