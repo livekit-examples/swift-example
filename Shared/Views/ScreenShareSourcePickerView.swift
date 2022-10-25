@@ -32,6 +32,8 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
             all(tracks.map({ $0.start() })).then { _ in tracks }
         }.then(on: .main) { tracks in
             self.tracks = tracks
+        }.catch { error in
+            assert(false, "error: \(error)")
         }
     }
     
@@ -40,7 +42,13 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
     }
 
     deinit {
-        _ = all(tracks.map { $0.stop() })
+        
+        print("\(type(of: self)) deinit")
+        
+        _ = all(tracks.map { $0.stop() }).catch { error in
+            // should not happen
+            assert(false, "error: \(error)")
+        }
     }
 }
 
