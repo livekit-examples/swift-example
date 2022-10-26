@@ -96,16 +96,7 @@ class ExampleObservableRoom: ObservableRoom {
 
     #if os(iOS)
     func toggleScreenShareEnablediOS() {
-        // Experimental iOS screen share
-
-        RPSystemBroadcastPickerView.show(for: "io.livekit.example.SwiftSDK.1.BroadcastExt",
-                                         showsMicrophoneButton: false)
-
-        if let ud = UserDefaults(suiteName: "group.io.livekit.example.SwiftSDK.1") {
-            ud.set(room.url, forKey: "url")
-            ud.set(room.token, forKey: "token")
-        }
-
+        toggleScreenShareEnabled()
     }
     #elseif os(macOS)
     func toggleScreenShareEnabledMacOS(screenShareSource: MacOSScreenCaptureSource? = nil) {
