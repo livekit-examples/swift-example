@@ -125,9 +125,9 @@ class ExampleObservableRoom: ObservableRoom {
         } else {
 
             guard let source = screenShareSource else { return }
-            
+
             print("selected source: \(source)")
-            
+
             DispatchQueue.main.async {
                 self.screenShareTrackState = .busy(isPublishing: true)
             }

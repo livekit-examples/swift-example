@@ -36,15 +36,15 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
             assert(false, "error: \(error)")
         }
     }
-    
+
     init() {
         restartTracks()
     }
 
     deinit {
-        
+
         print("\(type(of: self)) deinit")
-        
+
         _ = all(tracks.map { $0.stop() }).catch { error in
             // should not happen
             assert(false, "error: \(error)")
@@ -97,7 +97,7 @@ struct ScreenShareSourcePickerView: View {
                                           let source = capturer.captureSource else { return }
                                     onPickScreenShareSource?(source)
                                 }
-                            
+
                             if let capturer = track.capturer as? MacOSScreenCapturer,
                                let source = capturer.captureSource as? MacOSWindow,
                                let appName = source.owningApplication?.applicationName {
