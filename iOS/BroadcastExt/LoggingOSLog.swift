@@ -3,7 +3,8 @@ import Logging
 import os
 
 public struct LoggingOSLog: LogHandler {
-    public var logLevel: Logger.Level = .debug
+
+    public var logLevel: Logging.Logger.Level = .debug
     private let oslogger: OSLog
 
     public init(label: String) {
@@ -14,7 +15,7 @@ public struct LoggingOSLog: LogHandler {
         self.oslogger = log
     }
 
-    public func log(level: Logger.Level, message: Logger.Message, metadata: Logger.Metadata?, file: String, function: String, line: UInt) {
+    public func log(level: Logging.Logger.Level, message: Logging.Logger.Message, metadata: Logging.Logger.Metadata?, file: String, function: String, line: UInt) {
         var combinedPrettyMetadata = self.prettyMetadata
         if let metadataOverride = metadata, !metadataOverride.isEmpty {
             combinedPrettyMetadata = self.prettify(
@@ -41,7 +42,7 @@ public struct LoggingOSLog: LogHandler {
     /// Add, remove, or change the logging metadata.
     /// - parameters:
     ///    - metadataKey: the key for the metadata item.
-    public subscript(metadataKey metadataKey: String) -> Logger.Metadata.Value? {
+    public subscript(metadataKey metadataKey: String) -> Logging.Logger.Metadata.Value? {
         get {
             return self.metadata[metadataKey]
         }
@@ -50,7 +51,7 @@ public struct LoggingOSLog: LogHandler {
         }
     }
 
-    private func prettify(_ metadata: Logger.Metadata) -> String? {
+    private func prettify(_ metadata: Logging.Logger.Metadata) -> String? {
         if metadata.isEmpty {
             return nil
         }
@@ -61,7 +62,7 @@ public struct LoggingOSLog: LogHandler {
 }
 
 extension OSLogType {
-    static func from(loggerLevel: Logger.Level) -> Self {
+    static func from(loggerLevel: Logging.Logger.Level) -> Self {
         switch loggerLevel {
         case .trace:
             /// `OSLog` doesn't have `trace`, so use `debug`
