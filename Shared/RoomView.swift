@@ -466,7 +466,7 @@ struct RoomView: View {
                                     Text("Track permissions")
                                 }
 
-                                // Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
+                                Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
                             }
 
                         } label: {
