@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/google/promises.git",
         "state": {
           "branch": null,
-          "revision": "46c1e6b5ac09d8f82c991061c659f67e573d425d",
-          "version": "2.1.0"
+          "revision": "3e4e743631e86c8c70dbc6efdc7beaa6e90fd3bb",
+          "version": "2.1.1"
         }
       },
       {
@@ -24,7 +24,7 @@
         "repositoryURL": "https://github.com/SFSafeSymbols/SFSafeSymbols",
         "state": {
           "branch": "stable",
-          "revision": "c8c33d947d8a1c883aa19fd24e14fd738b06e369",
+          "revision": "06556049663d3deec0f1bb89fdf0c119cdf5f484",
           "version": null
         }
       },
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/webrtc-sdk/Specs.git",
         "state": {
           "branch": null,
-          "revision": "5225f2de4b6d0098803b3a0e55b255a41f293dad",
-          "version": "104.5112.2"
+          "revision": "2915620754b1d5b3d6570246b6c2f084b488589d",
+          "version": "104.5112.7"
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/apple/swift-log.git",
         "state": {
           "branch": null,
-          "revision": "5d66f7ba25daf4f94100e7022febf3c75e37a6c7",
-          "version": "1.4.2"
+          "revision": "6fe203dc33195667ce1759bf0182975e4653ba1c",
+          "version": "1.4.4"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/apple/swift-protobuf.git",
         "state": {
           "branch": null,
-          "revision": "e1499bc69b9040b29184f7f2996f7bab467c1639",
-          "version": "1.19.0"
+          "revision": "ab3a58b7209a17d781c0d1dbb3e1ff3da306bae8",
+          "version": "1.20.3"
         }
       }
     ]
