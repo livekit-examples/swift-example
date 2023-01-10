@@ -55,13 +55,20 @@ final class RoomContext: NSObject, ObservableObject {
     private lazy var pipCtrl: AVPictureInPictureController? = {
         //
         if #available(macOS 12.0, iOS 15.0, *) {
-            try? AVAudioSession.sharedInstance().setActive(true)
-            let r = AVPictureInPictureController(contentSource: .init(sampleBufferDisplayLayer: pipLayer, playbackDelegate: self))
-            r.delegate = self
-            r.canStartPictureInPictureAutomaticallyFromInline = true
+            // try? AVAudioSession.sharedInstance().setActive(true)
+            
+            let kw = UIApplication.shared.windows.first { $0.isKeyWindow }
+            if let window = kw {
+                print("did add to sublayer")
+                kw!.layer.addSublayer(pipLayer)
+            }
+            
+            let result = AVPictureInPictureController(contentSource: .init(sampleBufferDisplayLayer: pipLayer, playbackDelegate: self))
+            result.delegate = self
+            // r.canStartPictureInPictureAutomaticallyFromInline = true
             //            r.contentSource.
 
-            return r
+            return result
         }
 
         return nil
@@ -173,7 +180,9 @@ extension RoomContext: RoomDelegate {
     func room(_ room: Room, participant: RemoteParticipant, didSubscribe publication: RemoteTrackPublication, track: Track) {
         print("PIP did subscribe \(track)")
         guard let track = track as? VideoTrack else { return }
-        track.add(videoRenderer: self)
+        DispatchQueue.main.async {
+            track.add(videoRenderer: self)
+        }
         print("PIP did add renderer")
     }
 
@@ -187,9 +196,16 @@ extension RoomContext: RoomDelegate {
 
 extension RoomContext: VideoRenderer {
 
+    var adaptiveStreamIsEnabled: Bool {
+        true
+    }
+
+    var adaptiveStreamSize: CGSize {
+        CGSize(width: 100, height: 100)
+    }
+
     func setSize(_ size: CGSize) {
         //
-
     }
 
     func renderFrame(_ frame: RTCVideoFrame?) {
@@ -204,6 +220,9 @@ extension RoomContext: VideoRenderer {
             return
         }
 
+        if pipLayer.status == .failed {
+            pipLayer.flush()
+        }
         pipLayer.enqueue(sampleBuffer)
 
         guard let pipCtrl = pipCtrl else {
@@ -218,6 +237,7 @@ extension RoomContext: VideoRenderer {
 
             print("PIP did enqueue active: \(pipCtrl.isPictureInPictureActive)")
             if !pipCtrl.isPictureInPictureActive {
+                print("PIP Start")
                 pipCtrl.startPictureInPicture()
             }
         }
@@ -239,19 +259,21 @@ extension RoomContext: AVPictureInPictureSampleBufferPlaybackDelegate {
     }
 
     func pictureInPictureControllerTimeRangeForPlayback(_ pictureInPictureController: AVPictureInPictureController) -> CMTimeRange {
-        CMTimeRange(start: .negativeInfinity,
-                    duration: .positiveInfinity)
+        print("\(#function)")
+        return CMTimeRange(start: .negativeInfinity, duration: .positiveInfinity)
     }
 
     func pictureInPictureControllerIsPlaybackPaused(_ pictureInPictureController: AVPictureInPictureController) -> Bool {
-        false
+        print("\(#function)")
+        return false
     }
 
     func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, didTransitionToRenderSize newRenderSize: CMVideoDimensions) {
-        //
+        print("\(#function)")
     }
 
     func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, skipByInterval skipInterval: CMTime, completion completionHandler: @escaping () -> Void) {
+        print("\(#function)")
         completionHandler()
     }
 }
