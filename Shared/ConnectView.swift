@@ -141,11 +141,11 @@ struct ConnectView: View {
         #if os(macOS)
         .frame(minWidth: 500, minHeight: 500)
         #endif
-        .alert(isPresented: $roomCtx.shouldShowError) {
-            Alert(title: Text("Error"),
-                  message: Text(roomCtx.latestError != nil
+        .alert(isPresented: $roomCtx.shouldShowDisconnectReason) {
+            Alert(title: Text("Disconnected"),
+                  message: Text("Reason: " + (roomCtx.latestError != nil
                                     ? String(describing: roomCtx.latestError!)
-                                    : "Unknown error"))
+                                    : "Unknown")))
         }
     }
 }

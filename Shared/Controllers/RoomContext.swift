@@ -10,8 +10,8 @@ final class RoomContext: ObservableObject {
 
     // Used to show connection error dialog
     // private var didClose: Bool = false
-    @Published var shouldShowError: Bool = false
-    public var latestError: Error?
+    @Published var shouldShowDisconnectReason: Bool = false
+    public var latestError: DisconnectReason?
 
     public let room = ExampleObservableRoom()
 
@@ -121,10 +121,10 @@ extension RoomContext: RoomDelegate {
 
         print("Did update connectionState \(oldValue) -> \(connectionState)")
 
-        if let error = connectionState.disconnectedWithError {
-            latestError = error
+        if case .disconnected(let reason) = connectionState, reason != .user {
+            latestError = reason
             DispatchQueue.main.async {
-                self.shouldShowError = true
+                self.shouldShowDisconnectReason = true
             }
         }
 
