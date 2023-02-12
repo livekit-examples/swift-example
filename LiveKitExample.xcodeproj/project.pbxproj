@@ -42,7 +42,7 @@
 		688D931A283FE244003CA647 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68B3853E271E780700711D5F /* Assets.xcassets */; };
 		68B3854C271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
 		68B3854D271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
-		68EA18E827F2E91000F9AE48 /* BroadcastExt.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		68EA18E827F2E91000F9AE48 /* BroadcastExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D7AA477B285A0FFC00EB41AE /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */; };
 		D7FECD462860B42700D04D1C /* LoggingOSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FECD452860B42700D04D1C /* LoggingOSLog.swift */; };
 /* End PBXBuildFile section */
@@ -58,15 +58,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		68EA18EB27F2E91100F9AE48 /* Embed App Extensions */ = {
+		68EA18EB27F2E91100F9AE48 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				68EA18E827F2E91000F9AE48 /* BroadcastExt.appex in Embed App Extensions */,
+				68EA18E827F2E91000F9AE48 /* BroadcastExt.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -270,7 +270,7 @@
 				68B3853F271E780700711D5F /* Sources */,
 				68B38540271E780700711D5F /* Frameworks */,
 				68B38541271E780700711D5F /* Resources */,
-				68EA18EB27F2E91100F9AE48 /* Embed App Extensions */,
+				68EA18EB27F2E91100F9AE48 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -317,7 +317,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1330;
-				LastUpgradeCheck = 1310;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					683F05F2273F96B20080C7AC = {
 						CreatedOnToolsVersion = 13.1;
@@ -496,7 +496,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -527,6 +526,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -558,7 +558,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -589,6 +588,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -689,6 +689,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 24;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -720,6 +721,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 24;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -787,8 +789,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SFSafeSymbols/SFSafeSymbols";
 			requirement = {
-				branch = stable;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.1.1;
 			};
 		};
 		683332BC27D9D92B00378C41 /* XCRemoteSwiftPackageReference "client-sdk-swift" */ = {
@@ -796,7 +798,7 @@
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 1.0.6;
+				version = 1.0.9;
 			};
 		};
 		685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {

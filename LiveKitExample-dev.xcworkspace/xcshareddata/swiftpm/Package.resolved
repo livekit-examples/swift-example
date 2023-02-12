@@ -23,9 +23,9 @@
         "package": "SFSafeSymbols",
         "repositoryURL": "https://github.com/SFSafeSymbols/SFSafeSymbols",
         "state": {
-          "branch": "stable",
-          "revision": "06556049663d3deec0f1bb89fdf0c119cdf5f484",
-          "version": null
+          "branch": null,
+          "revision": "7cca2d60925876b5953a2cf7341cd80fbeac983c",
+          "version": "4.1.1"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/webrtc-sdk/Specs.git",
         "state": {
           "branch": null,
-          "revision": "2915620754b1d5b3d6570246b6c2f084b488589d",
-          "version": "104.5112.7"
+          "revision": "a69a33e85d747cd5f1a993b783489ef08454ad7f",
+          "version": "104.5112.9"
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/apple/swift-log.git",
         "state": {
           "branch": null,
-          "revision": "6fe203dc33195667ce1759bf0182975e4653ba1c",
-          "version": "1.4.4"
+          "revision": "32e8d724467f8fe623624570367e3d50c5638e46",
+          "version": "1.5.2"
         }
       },
       {

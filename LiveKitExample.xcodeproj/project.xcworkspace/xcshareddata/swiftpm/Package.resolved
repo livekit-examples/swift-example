@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/client-sdk-swift",
       "state" : {
-        "revision" : "f6ca534eb334e99acb8e82cc99b491717df28d8a",
-        "version" : "1.0.6"
+        "revision" : "3b1cefbc198509e935806050f5f9dde0c5d561c7",
+        "version" : "1.0.9"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",
       "state" : {
-        "revision" : "611337c330350c9c1823ad6d671e7f936af5ee13",
-        "version" : "2.0.0"
+        "revision" : "3e4e743631e86c8c70dbc6efdc7beaa6e90fd3bb",
+        "version" : "2.1.1"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
       "state" : {
-        "branch" : "stable",
-        "revision" : "7bb874408110c6aa80056f81177ee732071195f8"
+        "revision" : "7cca2d60925876b5953a2cf7341cd80fbeac983c",
+        "version" : "4.1.1"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/webrtc-sdk/Specs.git",
       "state" : {
-        "revision" : "38ac06261e62f980652278c69b70284324c769e0",
-        "version" : "104.5112.5"
+        "revision" : "a69a33e85d747cd5f1a993b783489ef08454ad7f",
+        "version" : "104.5112.9"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "6fe203dc33195667ce1759bf0182975e4653ba1c",
-        "version" : "1.4.4"
+        "revision" : "32e8d724467f8fe623624570367e3d50c5638e46",
+        "version" : "1.5.2"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "88c7d15e1242fdb6ecbafbc7926426a19be1e98a",
-        "version" : "1.20.2"
+        "revision" : "ab3a58b7209a17d781c0d1dbb3e1ff3da306bae8",
+        "version" : "1.20.3"
       }
     }
   ],
