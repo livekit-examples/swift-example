@@ -23,9 +23,9 @@
         "package": "SFSafeSymbols",
         "repositoryURL": "https://github.com/SFSafeSymbols/SFSafeSymbols",
         "state": {
-          "branch": "stable",
-          "revision": "2bcd249b49178247e6b52bac7d67d6e338a40cee",
-          "version": null
+          "branch": null,
+          "revision": "7cca2d60925876b5953a2cf7341cd80fbeac983c",
+          "version": "4.1.1"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/webrtc-sdk/Specs.git",
         "state": {
           "branch": null,
-          "revision": "7c3f5165589812a77ed974b27299408f88dc7167",
-          "version": "104.5112.8"
+          "revision": "a69a33e85d747cd5f1a993b783489ef08454ad7f",
+          "version": "104.5112.9"
         }
       },
       {

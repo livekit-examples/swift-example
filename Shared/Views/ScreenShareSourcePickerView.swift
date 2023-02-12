@@ -12,42 +12,64 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
     @Published var mode: ScreenShareSourcePickerView.Mode = .display {
         didSet {
             guard oldValue != mode else { return }
-            restartTracks()
+            Task {
+                await restartTracks()
+            }
         }
     }
 
-    private func restartTracks() {
+    private func restartTracks() async {
 
-        // stop all
-        let stopAllPromise = all(tracks.map { $0.stop() })
-        let sourcesPromise = MacOSScreenCapturer.sources(for: (mode == .display ? .display : .window))
-
-        stopAllPromise.then { _ in
-            sourcesPromise
-        }.then { sources in
-            sources.map {
-                LocalVideoTrack.createMacOSScreenShareTrack(source: $0)
+        Task {
+            // stop in parallel
+            await withThrowingTaskGroup(of: Void.self) { group in
+                for track in tracks {
+                    group.addTask {
+                        try await track.stop()
+                    }
+                }
             }
-        }.then { tracks -> Promise<[LocalVideoTrack]> in
-            all(tracks.map({ $0.start() })).then { _ in tracks }
-        }.then(on: .main) { tracks in
-            self.tracks = tracks
-        }.catch { error in
-            assert(false, "error: \(error)")
+
+            let sources = try await MacOSScreenCapturer.sources(for: (mode == .display ? .display : .window))
+            let _newTracks = sources.map { LocalVideoTrack.createMacOSScreenShareTrack(source: $0) }
+
+            Task { @MainActor in
+                self.tracks = _newTracks
+            }
+
+            // start in parallel
+            await withThrowingTaskGroup(of: Void.self) { group in
+                for track in _newTracks {
+                    group.addTask {
+                        try await track.start()
+                    }
+                }
+            }
         }
     }
 
     init() {
-        restartTracks()
+        Task {
+            await restartTracks()
+        }
     }
 
     deinit {
 
         print("\(type(of: self)) deinit")
 
-        _ = all(tracks.map { $0.stop() }).catch { error in
-            // should not happen
-            assert(false, "error: \(error)")
+        // copy
+        let _tracks = tracks
+
+        Task {
+            // stop in parallel
+            await withThrowingTaskGroup(of: Void.self) { group in
+                for track in _tracks {
+                    group.addTask {
+                        try await track.stop()
+                    }
+                }
+            }
         }
     }
 }

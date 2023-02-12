@@ -789,8 +789,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SFSafeSymbols/SFSafeSymbols";
 			requirement = {
-				branch = stable;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.1.1;
 			};
 		};
 		683332BC27D9D92B00378C41 /* XCRemoteSwiftPackageReference "client-sdk-swift" */ = {
@@ -798,7 +798,7 @@
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 1.0.6;
+				version = 1.0.9;
 			};
 		};
 		685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
