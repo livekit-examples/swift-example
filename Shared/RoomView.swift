@@ -253,11 +253,12 @@ struct RoomView: View {
 
         GeometryReader { geometry in
             content(geometry: geometry)
+        }
                 .toolbar {
                     ToolbarItemGroup(placement: toolbarPlacement) {
-
-                        Text("(\(room.room.remoteParticipants.count)) ")
-
+//
+//                        Text("(\(room.room.remoteParticipants.count)) ")
+//
                         #if os(macOS)
                         if let name = room.room.name {
                             Text(name)
@@ -268,51 +269,60 @@ struct RoomView: View {
                             Text(identity)
                         }
                         #endif
-
-                        #if os(macOS)
-                        // Pin on top
-                        Toggle(isOn: $windowAccess.pinned) {
-                            Image(systemSymbol: windowAccess.pinned ? .pinFill : .pin)
-                                .renderingMode(.original)
-                        }
-                        #endif
-
+//
+//                        #if os(macOS)
+//                        // Pin on top
+//                        Toggle(isOn: $windowAccess.pinned) {
+//                            Image(systemSymbol: windowAccess.pinned ? .pinFill : .pin)
+//                                .renderingMode(.original)
+//                        }
+//                        #endif
+//
                         // VideoView mode switcher
                         Picker("Mode", selection: $appCtx.videoViewMode) {
                             Text("Fit").tag(VideoView.LayoutMode.fit)
                             Text("Fill").tag(VideoView.LayoutMode.fill)
                         }
                         .pickerStyle(SegmentedPickerStyle())
-
+//
                         Spacer()
-
+//
                         Group {
-
+//
                             // Toggle camera enabled
-                            if !room.cameraTrackState.isPublished || !CameraCapturer.canSwitchPosition() {
-                                Button(action: {
-                                    room.toggleCameraEnabled()
-                                },
-                                label: {
-                                    Image(systemSymbol: .videoFill)
-                                        .renderingMode((room.room.localParticipant?.isCameraEnabled() ?? false) ? .original : .template)
-                                })
-                                // disable while publishing/un-publishing
-                                .disabled(room.cameraTrackState.isBusy)
-                            } else {
-                                Menu {
-                                    Button("Switch position") {
-                                        room.switchCameraPosition()
-                                    }
-                                    Button("Disable") {
-                                        room.toggleCameraEnabled()
-                                    }
-                                } label: {
-                                    Image(systemSymbol: .videoFill)
-                                        .renderingMode(.original)
-                                }
+                            
+//                        if false {
+                            Button(action: {
+                                room.toggleCameraEnabled()
+                            },
+                                   label: {
+                                Image(systemSymbol: .videoFill)
+                                    .renderingMode((room.room.localParticipant?.isCameraEnabled() ?? false) ? .original : .template)
+                            })
+                            // disable while publishing/un-publishing
+                            .disabled(room.cameraTrackState.isBusy)
+                       
+                        if (room.room.localParticipant?.isCameraEnabled() ?? false) && CameraCapturer.canSwitchPosition() {
+                            
+                            
+                                                            Menu {
+                                                                Button("Switch position") {
+                                                                    room.switchCameraPosition()
+                                                                }
+                                                                Button("Disable") {
+                                                                    room.toggleCameraEnabled()
+                                                                }
+                                                            } label: {
+                                                                Image(systemSymbol: .videoFill)
+                                                                    .renderingMode(.original)
+                                                            }
+                                
                             }
-
+                
+//                            } else {
+///
+//                            }
+//
                             // Toggle microphone enabled
                             Button(action: {
                                 room.toggleMicrophoneEnabled()
@@ -323,7 +333,7 @@ struct RoomView: View {
                             })
                             // disable while publishing/un-publishing
                             .disabled(room.microphoneTrackState.isBusy)
-
+//
                             #if os(iOS)
                             Button(action: {
                                 room.toggleScreenShareEnablediOS()
@@ -352,7 +362,7 @@ struct RoomView: View {
                                 }.padding()
                             }
                             #endif
-
+//
                             // Toggle messages view (chat example)
                             Button(action: {
                                 withAnimation {
@@ -363,11 +373,11 @@ struct RoomView: View {
                                 Image(systemSymbol: .messageFill)
                                     .renderingMode(room.showMessagesView ? .original : .template)
                             })
-
+//
                         }
-
-                        Spacer()
-
+//
+//                        Spacer()
+//
                         Menu {
 
                             #if os(macOS)
@@ -473,7 +483,7 @@ struct RoomView: View {
                             Image(systemSymbol: .gear)
                                 .renderingMode(.original)
                         }
-
+//
                         // Disconnect
                         Button(action: {
                             roomCtx.disconnect()
@@ -482,13 +492,13 @@ struct RoomView: View {
                             Image(systemSymbol: .xmarkCircleFill)
                                 .renderingMode(.original)
                         })
-                    }
-
+//                    }
+//
                 }
         }
-        #if os(macOS)
-        .withHostingWindow { self.windowAccess.set(window: $0) }
-        #endif
+//        #if os(macOS)
+//        .withHostingWindow { self.windowAccess.set(window: $0) }
+//        #endif
         .onAppear {
             //
             Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
