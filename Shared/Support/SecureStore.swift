@@ -2,7 +2,6 @@ import SwiftUI
 import KeychainAccess
 import Combine
 import LiveKit
-import Promises
 
 struct Preferences: Codable, Equatable {
     var url = ""
@@ -31,34 +30,12 @@ struct Preferences: Codable, Equatable {
 let encoder = JSONEncoder()
 let decoder = JSONDecoder()
 
-// Promise version
-extension Keychain {
-
-    @discardableResult
-    func get<T: Decodable>(_ key: String) -> Promise<T?> {
-        Promise(on: .global()) { () -> T? in
-            guard let data = try self.getData(key) else { return nil }
-            return try decoder.decode(T.self, from: data)
-        }
-    }
-
-    @discardableResult
-    func set<T: Encodable>(_ key: String, value: T) -> Promise<Void> {
-        Promise(on: .global()) { () -> Void in
-            let data = try encoder.encode(value)
-            try self.set(data, key: key)
-        }
-    }
-}
-
 class ValueStore<T: Codable & Equatable>: ObservableObject {
 
     private let store: Keychain
     private let key: String
     private let message = ""
     private weak var timer: Timer?
-
-    public let onLoaded = Promise<T>.pending()
 
     public var value: T {
         didSet {
@@ -78,9 +55,9 @@ class ValueStore<T: Codable & Equatable>: ObservableObject {
         self.key = key
         self.value = `default`
 
-        storeWithOptions.get(key).then { (result: T?) -> Void in
-            self.value = result ?? self.value
-            self.onLoaded.fulfill(self.value)
+        if let data = try? storeWithOptions.getData(key),
+           let result = try? decoder.decode(T.self, from: data) {
+            self.value = result
         }
     }
 
@@ -96,7 +73,10 @@ class ValueStore<T: Codable & Equatable>: ObservableObject {
     }
 
     public func sync() {
-        storeWithOptions.set(key, value: value).catch { error in
+        do {
+            let data = try encoder.encode(value)
+            try self.storeWithOptions.set(data, key: key)
+        } catch let error {
             print("Failed to write in Keychain, error: \(error)")
         }
     }

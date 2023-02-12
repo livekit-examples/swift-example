@@ -46,7 +46,9 @@ struct RoomContextView: View {
         .navigationTitle(computeTitle())
         .onDisappear {
             print("\(String(describing: type(of: self))) onDisappear")
-            roomCtx.disconnect()
+            Task {
+                try await roomCtx.disconnect()
+            }
         }
         .onOpenURL(perform: { url in
 
@@ -67,13 +69,12 @@ struct RoomContextView: View {
 
             print("built URL: \(builtUrl), token: \(tokenValue)")
 
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 roomCtx.url = builtUrl
                 roomCtx.token = tokenValue
                 if !roomCtx.token.isEmpty {
-                    roomCtx.connect().then { room in
-                        appCtx.connectionHistory.update(room: room)
-                    }
+                    let room = try await roomCtx.connect()
+                    appCtx.connectionHistory.update(room: room)
                 }
             }
         })

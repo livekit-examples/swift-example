@@ -419,7 +419,9 @@ struct RoomView: View {
                     Divider()
 
                     Button {
-                        roomCtx.room.unpublishAll()
+                        Task {
+                            try await roomCtx.room.unpublishAll()
+                        }
                     } label: {
                         Text("Unpublish all")
                     }
@@ -482,7 +484,9 @@ struct RoomView: View {
 
                 // Disconnect
                 Button(action: {
-                    roomCtx.disconnect()
+                    Task {
+                        try await roomCtx.disconnect()
+                    }
                 },
                 label: {
                     Image(systemSymbol: .xmarkCircleFill)

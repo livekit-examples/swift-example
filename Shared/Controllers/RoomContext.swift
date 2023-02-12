@@ -1,7 +1,6 @@
 import SwiftUI
 import LiveKit
 import WebRTC
-import Promises
 
 // This class contains the logic to control behavior of the whole app.
 final class RoomContext: ObservableObject {
@@ -53,16 +52,14 @@ final class RoomContext: ObservableObject {
         self.store = store
         room.room.add(delegate: self)
 
-        store.onLoaded.then { preferences in
-            self.url = preferences.url
-            self.token = preferences.token
-            self.simulcast = preferences.simulcast
-            self.adaptiveStream = preferences.adaptiveStream
-            self.dynacast = preferences.dynacast
-            self.reportStats = preferences.reportStats
-            self.autoSubscribe = preferences.autoSubscribe
-            self.publish = preferences.publishMode
-        }
+        self.url = store.value.url
+        self.token = store.value.token
+        self.simulcast = store.value.simulcast
+        self.adaptiveStream = store.value.adaptiveStream
+        self.dynacast = store.value.dynacast
+        self.reportStats = store.value.reportStats
+        self.autoSubscribe = store.value.autoSubscribe
+        self.publish = store.value.publishMode
 
         #if os(iOS)
         UIApplication.shared.isIdleTimerDisabled = true
@@ -76,7 +73,8 @@ final class RoomContext: ObservableObject {
         print("RoomContext.deinit")
     }
 
-    func connect(entry: ConnectionHistory? = nil) -> Promise<Room> {
+    @MainActor
+    func connect(entry: ConnectionHistory? = nil) async throws -> Room {
 
         if let entry = entry {
             url = entry.url
@@ -104,14 +102,14 @@ final class RoomContext: ObservableObject {
             reportStats: reportStats
         )
 
-        return room.room.connect(url,
-                                 token,
-                                 connectOptions: connectOptions,
-                                 roomOptions: roomOptions)
+        return try await room.room.connect(url,
+                                           token,
+                                           connectOptions: connectOptions,
+                                           roomOptions: roomOptions)
     }
 
-    func disconnect() {
-        room.room.disconnect()
+    func disconnect() async throws {
+        try await room.room.disconnect()
     }
 }
 

@@ -1,7 +1,6 @@
 import SwiftUI
 import LiveKit
 import AVFoundation
-import Promises
 
 import WebRTC
 import CoreImage.CIFilterBuiltins
@@ -146,16 +145,13 @@ class ExampleObservableRoom: ObservableRoom {
     }
     #endif
 
-    @discardableResult
-    func unpublishAll() -> Promise<Void> {
-        Promise(on: queue) { () -> Void in
-            guard let localParticipant = self.room.localParticipant else { return }
-            try awaitPromise(localParticipant.unpublishAll())
-            DispatchQueue.main.async {
-                self.cameraTrackState = .notPublished()
-                self.microphoneTrackState = .notPublished()
-                self.screenShareTrackState = .notPublished()
-            }
+    func unpublishAll() async throws {
+        guard let localParticipant = self.room.localParticipant else { return }
+        try await localParticipant.unpublishAll()
+        Task { @MainActor in
+            self.cameraTrackState = .notPublished()
+            self.microphoneTrackState = .notPublished()
+            self.screenShareTrackState = .notPublished()
         }
     }
 

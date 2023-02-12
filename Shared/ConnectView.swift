@@ -83,7 +83,8 @@ struct ConnectView: View {
                             Spacer()
 
                             LKButton(title: "Connect") {
-                                roomCtx.connect().then { room in
+                                Task {
+                                    let room = try await roomCtx.connect()
                                     appCtx.connectionHistory.update(room: room)
                                 }
                             }
@@ -92,7 +93,8 @@ struct ConnectView: View {
                                 Menu {
                                     ForEach(appCtx.connectionHistory.sortedByUpdated) { entry in
                                         Button {
-                                            roomCtx.connect(entry: entry).then { room in
+                                            Task {
+                                                let room = try await roomCtx.connect(entry: entry)
                                                 appCtx.connectionHistory.update(room: room)
                                             }
                                         } label: {

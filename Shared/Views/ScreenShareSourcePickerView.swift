@@ -2,7 +2,6 @@ import Foundation
 import CoreGraphics
 import SwiftUI
 import LiveKit
-import Promises
 
 #if os(macOS)
 

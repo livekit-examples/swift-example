@@ -65,14 +65,12 @@ final class AppContext: ObservableObject {
     public init(store: ValueStore<Preferences>) {
         self.store = store
 
-        store.onLoaded.then { preferences in
-            self.videoViewVisible = preferences.videoViewVisible
-            self.showInformationOverlay = preferences.showInformationOverlay
-            self.preferMetal = preferences.preferMetal
-            self.videoViewMode = preferences.videoViewMode
-            self.videoViewMirrored = preferences.videoViewMirrored
-            self.connectionHistory = preferences.connectionHistory
-        }
+        self.videoViewVisible = store.value.videoViewVisible
+        self.showInformationOverlay = store.value.showInformationOverlay
+        self.preferMetal = store.value.preferMetal
+        self.videoViewMode = store.value.videoViewMode
+        self.videoViewMirrored = store.value.videoViewMirrored
+        self.connectionHistory = store.value.connectionHistory
 
         Room.audioDeviceModule.setDevicesUpdatedHandler {
             print("devices did update")
