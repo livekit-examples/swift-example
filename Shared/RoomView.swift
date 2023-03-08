@@ -288,19 +288,8 @@ struct RoomView: View {
                 Spacer()
 
                 Group {
-                    // Toggle camera enabled
-                    Button(action: {
-                        room.toggleCameraEnabled()
-                    },
-                    label: {
-                        Image(systemSymbol: .videoFill)
-                            .renderingMode((room.room.localParticipant?.isCameraEnabled() ?? false) ? .original : .template)
-                    })
-                    // disable while publishing/un-publishing
-                    .disabled(room.cameraTrackState.isBusy)
 
                     if (room.room.localParticipant?.isCameraEnabled() ?? false) && CameraCapturer.canSwitchPosition() {
-
                         Menu {
                             Button("Switch position") {
                                 room.switchCameraPosition()
@@ -312,7 +301,17 @@ struct RoomView: View {
                             Image(systemSymbol: .videoFill)
                                 .renderingMode(.original)
                         }
-
+                    } else {
+                        // Toggle camera enabled
+                        Button(action: {
+                            room.toggleCameraEnabled()
+                        },
+                        label: {
+                            Image(systemSymbol: .videoFill)
+                                .renderingMode((room.room.localParticipant?.isCameraEnabled() ?? false) ? .original : .template)
+                        })
+                        // disable while publishing/un-publishing
+                        .disabled(room.cameraTrackState.isBusy)
                     }
 
                     // Toggle microphone enabled
