@@ -30,7 +30,8 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
             }
 
             let sources = try await MacOSScreenCapturer.sources(for: (mode == .display ? .display : .window))
-            let _newTracks = sources.map { LocalVideoTrack.createMacOSScreenShareTrack(source: $0) }
+            let options = ScreenShareCaptureOptions(dimensions: .h360_43, fps: 5)
+            let _newTracks = sources.map { LocalVideoTrack.createMacOSScreenShareTrack(source: $0, options: options) }
 
             Task { @MainActor in
                 self.tracks = _newTracks
@@ -123,6 +124,7 @@ struct ScreenShareSourcePickerView: View {
                                let source = capturer.captureSource as? MacOSWindow,
                                let appName = source.owningApplication?.applicationName {
                                 Text(appName)
+                                    .shadow(color: .black, radius: 1)
                             }
                         }
                     }
