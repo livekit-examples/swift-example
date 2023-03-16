@@ -12,7 +12,7 @@ struct ParticipantView: View {
 
     @State private var isRendering: Bool = false
     @State private var dimensions: Dimensions?
-    @State private var trackStats: TrackStats?
+    @State private var videoTrackStats: TrackStats?
 
     func bgView(systemSymbol: SFSymbol, geometry: GeometryProxy) -> some View {
         Image(systemSymbol: systemSymbol)
@@ -46,68 +46,11 @@ struct ParticipantView: View {
                                          debugMode: appCtx.showInformationOverlay,
                                          isRendering: $isRendering,
                                          dimensions: $dimensions,
-                                         trackStats: $trackStats)
-                        // .background(Color.black)
+                                         trackStats: $videoTrackStats)
 
                         if !isRendering {
                             ProgressView().progressViewStyle(CircularProgressViewStyle())
-                                // .resizable()
                                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                        }
-                        // .scaleEffect(CGSize(width: -1.0, height: 1.0))// flip local view horizontally
-
-                        // Show the actual video dimensions (if enabled)
-                        if appCtx.showInformationOverlay {
-                            HStack(alignment: .top, spacing: 5) {
-
-                                // VStack(alignment: .leading, spacing: 5) {
-                                //    Text("View")
-                                //        .fontWeight(.bold)
-                                //    Text("metal: \(String(describing: appCtx.preferMetal))")
-                                //    Text("mirrorMode: \(String(describing: (appCtx.videoViewMirrored ? VideoView.MirrorMode.mirror : .auto)))")
-                                // }
-                                // .font(.system(size: 10))
-                                // .foregroundColor(Color.white)
-                                // .padding(5)
-                                // .background(Color.black.opacity(0.5))
-                                // .cornerRadius(8)
-
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text("Video")
-                                        .fontWeight(.bold)
-
-                                    HStack(alignment: .top, spacing: 3) {
-                                        if let dimensions = dimensions {
-                                            Text("\(dimensions.width)x\(dimensions.height)")
-                                        }
-                                        if let codecName = trackStats?.codecName {
-                                            HStack(spacing: 3) {
-                                                Text(codecName)
-                                                    .fontWeight(.bold)
-                                            }
-                                        }
-                                    }
-
-                                    if let trackStats = trackStats, trackStats.bpsSent != 0 {
-                                        HStack(spacing: 3) {
-                                            Image(systemSymbol: .arrowUpCircle)
-                                            Text(trackStats.formattedBpsSent())
-                                        }
-                                    }
-                                    if let trackStats = trackStats, trackStats.bpsReceived != 0 {
-                                        HStack(spacing: 3) {
-                                            Image(systemSymbol: .arrowDownCircle)
-                                            Text(trackStats.formattedBpsReceived())
-                                        }
-                                    }
-                                }
-                                .font(.system(size: 10))
-                                .foregroundColor(Color.white)
-                                .padding(5)
-                                .background(Color.black.opacity(0.5))
-                                .cornerRadius(8)
-                            }
-                            .padding(5)
                         }
                     }
                 } else if let publication = participant.mainVideoPublication as? RemoteTrackPublication,
@@ -117,6 +60,33 @@ struct ParticipantView: View {
                 } else {
                     // Show no camera icon
                     bgView(systemSymbol: .videoSlashFill, geometry: geometry)
+                }
+
+                if appCtx.showInformationOverlay {
+
+                    VStack(alignment: .leading, spacing: 5) {
+                        // Video stats
+                        if let publication = participant.mainVideoPublication,
+                           !publication.muted,
+                           let track = publication.track as? VideoTrack {
+                            StatsView(track: track)
+                        }
+                        // Audio stats
+                        if let publication = participant.firstAudioPublication,
+                           !publication.muted,
+                           let track = publication.track as? AudioTrack {
+                            StatsView(track: track)
+                        }
+                    }
+                    .padding(8)
+                    .frame(
+                        minWidth: 0,
+                        maxWidth: .infinity,
+                        minHeight: 0,
+                        maxHeight: .infinity,
+                        alignment: .topLeading
+                    )
+
                 }
 
                 VStack(alignment: .trailing, spacing: 0) {
@@ -264,5 +234,98 @@ struct ParticipantView: View {
                         // Pass the tap event
                         onTap?(participant)
                     })
+    }
+}
+
+struct StatsView: View {
+
+    @ObservedObject private var viewModel: DelegateObserver
+    private let track: Track
+
+    init(track: Track) {
+        self.track = track
+        viewModel = DelegateObserver(track: track)
+    }
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 5) {
+            VStack(alignment: .leading, spacing: 5) {
+                if track is VideoTrack {
+                    HStack(spacing: 3) {
+                        Image(systemSymbol: .videoFill)
+                        Text("Video").fontWeight(.bold)
+                        if let dimensions = viewModel.dimensions {
+                            Text("\(dimensions.width)×\(dimensions.height)")
+                        }
+                    }
+                } else if track is AudioTrack {
+                    HStack(spacing: 3) {
+                        Image(systemSymbol: .micFill)
+                        Text("Audio").fontWeight(.bold)
+                    }
+                } else {
+                    Text("Unknown").fontWeight(.bold)
+                }
+
+                if let trackStats = viewModel.stats {
+
+                    if trackStats.bpsSent != 0 {
+
+                        HStack(spacing: 3) {
+                            if let codecName = trackStats.codecName {
+                                Text(codecName.uppercased()).fontWeight(.bold)
+                            }
+                            Image(systemSymbol: .arrowUpCircle)
+                            Text(trackStats.formattedBpsSent())
+                        }
+                    }
+
+                    if trackStats.bpsReceived != 0 {
+                        HStack(spacing: 3) {
+                            if let codecName = trackStats.codecName {
+                                Text(codecName.uppercased()).fontWeight(.bold)
+                            }
+                            Image(systemSymbol: .arrowDownCircle)
+                            Text(trackStats.formattedBpsReceived())
+                        }
+                    }
+                }
+            }
+            .font(.system(size: 10))
+            .foregroundColor(Color.white)
+            .padding(5)
+            .background(Color.black.opacity(0.5))
+            .cornerRadius(8)
+        }
+    }
+}
+
+extension StatsView {
+
+    class DelegateObserver: ObservableObject, TrackDelegate {
+        private let track: Track
+        @Published var dimensions: Dimensions?
+        @Published var stats: TrackStats?
+
+        init(track: Track) {
+            self.track = track
+
+            dimensions = track.dimensions
+            stats = track.stats
+
+            track.add(delegate: self)
+        }
+
+        func track(_ track: VideoTrack, didUpdate dimensions: Dimensions?) {
+            Task.detached { @MainActor in
+                self.dimensions = dimensions
+            }
+        }
+
+        func track(_ track: Track, didUpdate stats: TrackStats) {
+            Task.detached { @MainActor in
+                self.stats = stats
+            }
+        }
     }
 }
