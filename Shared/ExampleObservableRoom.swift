@@ -207,4 +207,24 @@ class ExampleObservableRoom: ObservableRoom {
             print("Failed to decode data \(error)")
         }
     }
+
+    override func room(_ room: Room, participant: RemoteParticipant,
+                       didPublish publication: RemoteTrackPublication) {
+
+        print("participant:\(participant) didPublish:\(publication)")
+
+        Task.detached { @MainActor in
+            self.objectWillChange.send()
+        }
+    }
+
+    override func room(_ room: Room, participant: RemoteParticipant,
+                       didUnpublish publication: RemoteTrackPublication) {
+
+        print("participant:\(participant) didUnpublish:\(publication)")
+
+        Task.detached { @MainActor in
+            self.objectWillChange.send()
+        }
+    }
 }
