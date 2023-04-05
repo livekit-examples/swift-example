@@ -82,12 +82,13 @@ struct ConnectView: View {
                         HStack(alignment: .center) {
                             Spacer()
 
-                            LKButton(title: "Connect") {
+                            Button("Connect") {
                                 Task {
                                     let room = try await roomCtx.connect()
                                     appCtx.connectionHistory.update(room: room)
                                 }
                             }
+                            .keyboardShortcut(.defaultAction)
 
                             if !appCtx.connectionHistory.isEmpty {
                                 Menu {

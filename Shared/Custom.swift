@@ -28,7 +28,7 @@ struct LKButton: View {
 
         Button(action: action,
                label: {
-                Text(title.uppercased())
+                Text(title)
                     .fontWeight(.bold)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 10)

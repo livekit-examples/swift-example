@@ -29,7 +29,7 @@ struct PublishOptionsView: View {
                 }
             }
 
-            LKButton(title: "Publish") {
+            Button("Publish") {
 
                 let result = VideoPublishOptions(
                     name: providedPublishOptions.name,
@@ -45,6 +45,7 @@ struct PublishOptionsView: View {
 
                 onPublish(result)
             }
+            .keyboardShortcut(.defaultAction)
         }
     }
 }
