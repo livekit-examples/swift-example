@@ -74,9 +74,9 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
     }
 }
 
-typealias OnPickScreenShareSource = (MacOSScreenCaptureSource) -> Void
-
 struct ScreenShareSourcePickerView: View {
+
+    typealias OnPick = (MacOSScreenCaptureSource) -> Void
 
     public enum Mode {
         case display
@@ -85,14 +85,14 @@ struct ScreenShareSourcePickerView: View {
 
     @ObservedObject var ctrl = ScreenShareSourcePickerCtrl()
 
-    let onPickScreenShareSource: OnPickScreenShareSource?
+    let onPickScreenShareSource: OnPick?
 
     private var columns = [
         GridItem(.fixed(250)),
         GridItem(.fixed(250))
     ]
 
-    init(onPickScreenShareSource: OnPickScreenShareSource? = nil) {
+    init(onPickScreenShareSource: OnPick? = nil) {
         self.onPickScreenShareSource = onPickScreenShareSource
     }
 

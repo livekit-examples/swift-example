@@ -77,6 +77,8 @@ struct RoomView: View {
     @ObservedObject private var windowAccess = WindowAccess()
     #endif
 
+    @State private var publishOptionsPickerPresented = false
+
     @State private var showConnectionTime = true
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
@@ -304,7 +306,11 @@ struct RoomView: View {
                     } else {
                         // Toggle camera enabled
                         Button(action: {
-                            room.toggleCameraEnabled()
+                            if case .published = room.cameraTrackState {
+                                room.toggleCameraEnabled()
+                            } else {
+                                publishOptionsPickerPresented = true
+                            }
                         },
                         label: {
                             Image(systemSymbol: .videoFill)
@@ -312,6 +318,15 @@ struct RoomView: View {
                         })
                         // disable while publishing/un-publishing
                         .disabled(room.cameraTrackState.isBusy)
+                        .popover(isPresented: $publishOptionsPickerPresented) {
+                            PublishOptionsView(publishOptions: room.cameraPublishOptions) { opts in
+                                publishOptionsPickerPresented = false
+                                // ..
+                                room.cameraPublishOptions = opts
+                                room.toggleCameraEnabled()
+                            }
+                            .padding()
+                        }
                     }
 
                     // Toggle microphone enabled
