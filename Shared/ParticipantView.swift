@@ -115,6 +115,60 @@ struct ParticipantView: View {
                             // is remote
                             if let remotePub = publication as? RemoteTrackPublication {
                                 Menu {
+                                    Menu {
+                                        Button {
+                                            remotePub.set(preferredVideoQuality: .high)
+                                        } label: {
+                                            Text("High")
+                                        }
+                                        Button {
+                                            remotePub.set(preferredVideoQuality: .medium)
+                                        } label: {
+                                            Text("Medium")
+                                        }
+                                        Button {
+                                            remotePub.set(preferredVideoQuality: .low)
+                                        } label: {
+                                            Text("Low")
+                                        }
+                                    } label: {
+                                        Text("Preferred Video Quality")
+                                    }
+
+                                    Menu {
+                                        Button {
+                                            remotePub.set(preferredFPS: 0)
+                                        } label: {
+                                            Text("Default")
+                                        }
+                                        Button {
+                                            remotePub.set(preferredFPS: 10)
+                                        } label: {
+                                            Text("10")
+                                        }
+                                        Button {
+                                            remotePub.set(preferredFPS: 5)
+                                        } label: {
+                                            Text("5")
+                                        }
+                                    } label: {
+                                        Text("Preferred FPS")
+                                    }
+
+                                    if !remotePub.enabled {
+                                        Button {
+                                            remotePub.set(enabled: true)
+                                        } label: {
+                                            Text("Enable")
+                                        }
+                                    } else {
+                                        Button {
+                                            remotePub.set(enabled: false)
+                                        } label: {
+                                            Text("Disable")
+                                        }
+                                    }
+
                                     if case .subscribed = remotePub.subscriptionState {
                                         Button {
                                             remotePub.set(subscribed: false)
@@ -127,7 +181,6 @@ struct ParticipantView: View {
                                         } label: {
                                             Text("Subscribe")
                                         }
-
                                     }
                                 } label: {
                                     if case .subscribed = remotePub.subscriptionState {
