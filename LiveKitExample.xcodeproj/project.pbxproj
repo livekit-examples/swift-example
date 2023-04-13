@@ -87,6 +87,7 @@
 		683F0603273FAD690080C7AC /* iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS.entitlements; sourceTree = "<group>"; };
 		683F0604273FADC20080C7AC /* BroadcastExt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BroadcastExt.entitlements; sourceTree = "<group>"; };
 		6847616327B44A1A001611BE /* Bundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bundle.swift; sourceTree = "<group>"; };
+		6858139B29E407690068001B /* LiveKitExample (macOS) copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LiveKitExample (macOS) copy-Info.plist"; path = "/Users/hiroshi/repos/livekit/client-example-swift/LiveKitExample (macOS) copy-Info.plist"; sourceTree = "<absolute>"; };
 		685B7FB629DC04D100BF8286 /* PublishOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishOptionsView.swift; sourceTree = "<group>"; };
 		6865EA2527513B4500FFAFC3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6865EA2D27513B6D00FFAFC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -205,6 +206,7 @@
 				68B3854A271E780700711D5F /* macOS */,
 				68B38544271E780700711D5F /* Products */,
 				681E3F47271FCB40007BB547 /* Frameworks */,
+				6858139B29E407690068001B /* LiveKitExample (macOS) copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};

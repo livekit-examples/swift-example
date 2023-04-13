@@ -6,7 +6,8 @@ struct PublishOptionsView: View {
 
     typealias OnPublish = (_ publishOptions: VideoPublishOptions) -> Void
 
-    @State private var preferredVideoCodec: PreferredVideoCodec
+    @State private var preferredVideoCodec: VideoCodec
+    @State private var preferredBackupVideoCodec: VideoCodec
 
     private let providedPublishOptions: VideoPublishOptions
     private let onPublish: OnPublish
@@ -16,6 +17,7 @@ struct PublishOptionsView: View {
         self.onPublish = onPublish
 
         self.preferredVideoCodec = publishOptions.preferredCodec
+        self.preferredBackupVideoCodec = publishOptions.preferredBackupCodec
     }
 
     var body: some View {
@@ -24,7 +26,13 @@ struct PublishOptionsView: View {
                 .fontWeight(.bold)
 
             Picker("Codec", selection: $preferredVideoCodec) {
-                ForEach(PreferredVideoCodec.allCases, id: \.self) {
+                ForEach(VideoCodec.allCases, id: \.self) {
+                    Text($0.rawStringValue?.uppercased() ?? "Auto")
+                }
+            }
+
+            Picker("Backup Codec", selection: $preferredBackupVideoCodec) {
+                ForEach(VideoCodec.allCases.filter({ $0 != .av1 }), id: \.self) {
                     Text($0.rawStringValue?.uppercased() ?? "Auto")
                 }
             }
@@ -39,7 +47,7 @@ struct PublishOptionsView: View {
                     simulcastLayers: providedPublishOptions.simulcastLayers,
                     screenShareSimulcastLayers: providedPublishOptions.screenShareSimulcastLayers,
                     preferredCodec: preferredVideoCodec,
-                    preferredBackupCodec: providedPublishOptions.preferredBackupCodec,
+                    preferredBackupCodec: preferredBackupVideoCodec,
                     backupEncoding: providedPublishOptions.backupEncoding
                 )
 
