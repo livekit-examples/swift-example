@@ -29,11 +29,19 @@ struct PublishOptionsView: View {
                 ForEach(VideoCodec.allCases, id: \.self) {
                     Text($0.rawStringValue?.uppercased() ?? "Auto")
                 }
+            }.onChange(of: preferredVideoCodec) { newValue in
+                if newValue == .av1 {
+                    preferredBackupVideoCodec = .vp8
+                } else {
+                    preferredBackupVideoCodec = .none
+                }
             }
 
-            Picker("Backup Codec", selection: $preferredBackupVideoCodec) {
-                ForEach(VideoCodec.allCases.filter({ $0 != .av1 }), id: \.self) {
-                    Text($0.rawStringValue?.uppercased() ?? "Auto")
+            if preferredVideoCodec != .none {
+                Picker("Backup Codec", selection: $preferredBackupVideoCodec) {
+                    ForEach(VideoCodec.allCases.filter({ $0 != .av1 && $0 != preferredVideoCodec }), id: \.self) {
+                        Text($0.rawStringValue?.uppercased() ?? "Off")
+                    }
                 }
             }
 
