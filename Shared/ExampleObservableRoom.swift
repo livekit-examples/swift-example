@@ -9,15 +9,15 @@ import ReplayKit
 extension ObservableParticipant {
 
     public var mainVideoPublication: TrackPublication? {
-        firstScreenSharePublication ?? firstCameraPublication
+        participant.firstScreenSharePublication ?? participant.firstCameraPublication
     }
 
     public var mainVideoTrack: VideoTrack? {
-        firstScreenShareVideoTrack ?? firstCameraVideoTrack
+        participant.firstScreenShareVideoTrack ?? participant.firstCameraVideoTrack
     }
 
     public var subVideoTrack: VideoTrack? {
-        firstScreenShareVideoTrack != nil ? firstCameraVideoTrack : nil
+        participant.firstScreenShareVideoTrack != nil ? participant.firstCameraVideoTrack : nil
     }
 }
 

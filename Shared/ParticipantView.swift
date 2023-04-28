@@ -72,7 +72,7 @@ struct ParticipantView: View {
                             StatsView(track: track)
                         }
                         // Audio stats
-                        if let publication = participant.firstAudioPublication,
+                        if let publication = participant.participant.firstAudioPublication,
                            !publication.muted,
                            let track = publication.track as? AudioTrack {
                             StatsView(track: track)
@@ -157,7 +157,7 @@ struct ParticipantView: View {
                                 .foregroundColor(Color.white)
                         }
 
-                        if let publication = participant.firstAudioPublication,
+                        if let publication = participant.participant.firstAudioPublication,
                            !publication.muted {
 
                             // is remote
