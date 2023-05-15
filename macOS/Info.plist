@@ -41,8 +41,8 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>uses your camera for video chat</string>
+	<string>Please allow for publishing your camera</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>uses your microphone for video chat</string>
+	<string>Please allow for publishing your microphone</string>
 </dict>
 </plist>
