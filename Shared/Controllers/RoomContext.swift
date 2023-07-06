@@ -86,6 +86,8 @@ final class RoomContext: ObservableObject {
             publishOnlyMode: publish ? "publish_\(UUID().uuidString)" : nil
         )
 
+        let keyProvider = BaseKeyProvider(isSharedKey: true)
+        keyProvider.setSharedKey(key: "12345678")
         let roomOptions = RoomOptions(
             defaultCameraCaptureOptions: CameraCaptureOptions(
                 dimensions: .h1080_169
@@ -99,7 +101,8 @@ final class RoomContext: ObservableObject {
             ),
             adaptiveStream: adaptiveStream,
             dynacast: dynacast,
-            reportStats: reportStats
+            reportStats: reportStats,
+            e2eeOptions: E2EEOptions(keyProvider: keyProvider)
         )
 
         return try await room.room.connect(url,
