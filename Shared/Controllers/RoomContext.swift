@@ -134,6 +134,10 @@ final class RoomContext: ObservableObject {
 }
 
 extension RoomContext: RoomDelegate {
+    
+    func room(_ room: Room, publication: TrackPublication, didUpdate e2eeState: E2EEState) {
+        print("Did update e2eeState = [\(e2eeState.toString())] for publication \(publication.sid)")
+    }
 
     func room(_ room: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
 
