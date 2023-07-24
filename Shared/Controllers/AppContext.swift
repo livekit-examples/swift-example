@@ -38,14 +38,14 @@ final class AppContext: ObservableObject {
         didSet { store.value.connectionHistory = connectionHistory }
     }
 
-    @Published var outputDevice: RTCAudioDevice = RTCAudioDevice.defaultDevice(with: .output) {
+    @Published var outputDevice: RTCIODevice = RTCIODevice.defaultDevice(with: .output) {
         didSet {
             print("didSet outputDevice: \(String(describing: outputDevice))")
             Room.audioDeviceModule.outputDevice = outputDevice
         }
     }
 
-    @Published var inputDevice: RTCAudioDevice = RTCAudioDevice.defaultDevice(with: .input) {
+    @Published var inputDevice: RTCIODevice = RTCIODevice.defaultDevice(with: .input) {
         didSet {
             print("didSet inputDevice: \(String(describing: inputDevice))")
             Room.audioDeviceModule.inputDevice = inputDevice
