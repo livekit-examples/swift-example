@@ -101,7 +101,7 @@ final class RoomContext: ObservableObject {
         var e2eeOptions: E2EEOptions? = nil
         if e2ee {
             let keyProvider = BaseKeyProvider(isSharedKey: true)
-            keyProvider.setSharedKey(key: e2eeKey)
+            keyProvider.setKey(key: e2eeKey)
             e2eeOptions = E2EEOptions(keyProvider: keyProvider)
         }
 
