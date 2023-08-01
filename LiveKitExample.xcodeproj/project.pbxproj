@@ -24,7 +24,6 @@
 		681E3F45271FC7AD007BB547 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F42271FC7AD007BB547 /* ConnectView.swift */; };
 		681E3F46271FC7AD007BB547 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681E3F42271FC7AD007BB547 /* ConnectView.swift */; };
 		683332C227D9DC3800378C41 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
-		683332C427D9DC4600378C41 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 683332C327D9DC4600378C41 /* LiveKit */; };
 		683720D227A06404007DA986 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683720D127A06404007DA986 /* ConnectionHistory.swift */; };
 		683720D327A06404007DA986 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683720D127A06404007DA986 /* ConnectionHistory.swift */; };
 		6845DD5627DEBDD90009B5CD /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6845DD5527DEBDD90009B5CD /* LiveKit */; };
@@ -45,6 +44,7 @@
 		68B3854C271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
 		68B3854D271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
 		68EA18E827F2E91000F9AE48 /* BroadcastExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		68FBA43F2A38B49C0015853E /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 68FBA43E2A38B49C0015853E /* LiveKit */; };
 		D7AA477B285A0FFC00EB41AE /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */; };
 		D7FECD462860B42700D04D1C /* LoggingOSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FECD452860B42700D04D1C /* LoggingOSLog.swift */; };
 /* End PBXBuildFile section */
@@ -119,7 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				683332C427D9DC4600378C41 /* LiveKit in Frameworks */,
+				68FBA43F2A38B49C0015853E /* LiveKit in Frameworks */,
 				680FE2F227A8EF7700B6F6DB /* SFSafeSymbols in Frameworks */,
 				68816CC127B4D6BC00E24622 /* KeychainAccess in Frameworks */,
 			);
@@ -287,7 +287,7 @@
 			packageProductDependencies = (
 				680FE2F127A8EF7700B6F6DB /* SFSafeSymbols */,
 				68816CC027B4D6BC00E24622 /* KeychainAccess */,
-				683332C327D9DC4600378C41 /* LiveKit */,
+				68FBA43E2A38B49C0015853E /* LiveKit */,
 			);
 			productName = "Multiplatform-SwiftUI (iOS)";
 			productReference = 68B38543271E780700711D5F /* LiveKitExample.app */;
@@ -349,7 +349,7 @@
 				685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 				680FE2F027A8EF7700B6F6DB /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 				68816CBF27B4D6BC00E24622 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				683332BC27D9D92B00378C41 /* XCRemoteSwiftPackageReference "client-sdk-swift" */,
+				68FBA43D2A38B49C0015853E /* XCRemoteSwiftPackageReference "client-sdk-swift" */,
 			);
 			productRefGroup = 68B38544271E780700711D5F /* Products */;
 			projectDirPath = "";
@@ -801,14 +801,6 @@
 				minimumVersion = 4.1.1;
 			};
 		};
-		683332BC27D9D92B00378C41 /* XCRemoteSwiftPackageReference "client-sdk-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/livekit/client-sdk-swift";
-			requirement = {
-				kind = exactVersion;
-				version = 1.0.13;
-			};
-		};
 		685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-protobuf.git";
@@ -823,6 +815,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 4.2.2;
+			};
+		};
+		68FBA43D2A38B49C0015853E /* XCRemoteSwiftPackageReference "client-sdk-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/livekit/client-sdk-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -842,11 +842,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = LiveKit;
 		};
-		683332C327D9DC4600378C41 /* LiveKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 683332BC27D9D92B00378C41 /* XCRemoteSwiftPackageReference "client-sdk-swift" */;
-			productName = LiveKit;
-		};
 		6845DD5527DEBDD90009B5CD /* LiveKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LiveKit;
@@ -860,6 +855,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 68816CBF27B4D6BC00E24622 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		68FBA43E2A38B49C0015853E /* LiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 68FBA43D2A38B49C0015853E /* XCRemoteSwiftPackageReference "client-sdk-swift" */;
+			productName = LiveKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
