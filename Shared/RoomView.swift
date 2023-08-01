@@ -466,7 +466,16 @@ struct RoomView: View {
                         } label: {
                             Text("Speaker update")
                         }
-
+                        Button {
+                            roomCtx.room.room.sendSimulate(scenario: .forceTCP)
+                        } label: {
+                            Text("Force TCP")
+                        }
+                        Button {
+                            roomCtx.room.room.sendSimulate(scenario: .forceTLS)
+                        } label: {
+                            Text("Force TLS")
+                        }
                     } label: {
                         Text("Simulate scenario")
                     }
