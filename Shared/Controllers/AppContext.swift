@@ -13,6 +13,7 @@ extension ObservableObject where Self.ObjectWillChangePublisher == ObservableObj
 final class AppContext: ObservableObject {
 
     private let store: ValueStore<Preferences>
+    private let simpleReverbAudioCapturePostProcessor = SimpleReverbAudioCapturePostProcessor()
 
     @Published var videoViewVisible: Bool = true {
         didSet { store.value.videoViewVisible = videoViewVisible }
@@ -38,28 +39,28 @@ final class AppContext: ObservableObject {
         didSet { store.value.connectionHistory = connectionHistory }
     }
 
-    @Published var outputDevice: RTCAudioDevice = RTCAudioDevice.defaultDevice(with: .output) {
+    @Published var outputDevice: RTCIODevice = RTCIODevice.defaultDevice(with: .output) {
         didSet {
             print("didSet outputDevice: \(String(describing: outputDevice))")
-
-            if !Room.audioDeviceModule.setOutputDevice(outputDevice) {
-                print("failed to set value")
-            }
+            Room.audioDeviceModule.outputDevice = outputDevice
         }
     }
 
-    @Published var inputDevice: RTCAudioDevice = RTCAudioDevice.defaultDevice(with: .input) {
+    @Published var inputDevice: RTCIODevice = RTCIODevice.defaultDevice(with: .input) {
         didSet {
             print("didSet inputDevice: \(String(describing: inputDevice))")
-
-            if !Room.audioDeviceModule.setInputDevice(inputDevice) {
-                print("failed to set value")
-            }
+            Room.audioDeviceModule.inputDevice = inputDevice
         }
     }
 
     @Published var preferSpeakerOutput: Bool = true {
         didSet { AudioManager.shared.preferSpeakerOutput = preferSpeakerOutput }
+    }
+
+    @Published var sampleCapturePostProcessingEnabled: Bool = false {
+        didSet {
+            Room.audioProcessingModule.capturePostProcessingDelegate = sampleCapturePostProcessingEnabled ? simpleReverbAudioCapturePostProcessor : nil
+        }
     }
 
     public init(store: ValueStore<Preferences>) {
@@ -76,17 +77,8 @@ final class AppContext: ObservableObject {
             print("devices did update")
             // force UI update for outputDevice / inputDevice
             DispatchQueue.main.async {
-
-                // set to default device if selected device is removed
-                if !Room.audioDeviceModule.outputDevices.contains(where: { self.outputDevice == $0 }) {
-                    self.outputDevice = RTCAudioDevice.defaultDevice(with: .output)
-                }
-
-                // set to default device if selected device is removed
-                if !Room.audioDeviceModule.inputDevices.contains(where: { self.inputDevice == $0 }) {
-                    self.inputDevice = RTCAudioDevice.defaultDevice(with: .input)
-                }
-
+                self.outputDevice = Room.audioDeviceModule.outputDevice
+                self.inputDevice = Room.audioDeviceModule.inputDevice
                 self.objectWillChange.send()
             }
         }

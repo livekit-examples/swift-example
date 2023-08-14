@@ -43,6 +43,8 @@
 		68B3854C271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
 		68B3854D271E780700711D5F /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B3853C271E780600711D5F /* LiveKitExample.swift */; };
 		68EA18E827F2E91000F9AE48 /* BroadcastExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		68FC569C2A8AB369004B4989 /* SimpleReverbAudioCapturePostProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68FC569B2A8AB369004B4989 /* SimpleReverbAudioCapturePostProcessor.swift */; };
+		68FC569D2A8AB586004B4989 /* SimpleReverbAudioCapturePostProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68FC569B2A8AB369004B4989 /* SimpleReverbAudioCapturePostProcessor.swift */; };
 		D7AA477B285A0FFC00EB41AE /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */; };
 		D7FECD462860B42700D04D1C /* LoggingOSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FECD452860B42700D04D1C /* LoggingOSLog.swift */; };
 /* End PBXBuildFile section */
@@ -96,6 +98,7 @@
 		68B38549271E780700711D5F /* LiveKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68B3854B271E780700711D5F /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		68DEF27E2919EEFA00258494 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.1.sdk/System/Library/Frameworks/ReplayKit.framework; sourceTree = DEVELOPER_DIR; };
+		68FC569B2A8AB369004B4989 /* SimpleReverbAudioCapturePostProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleReverbAudioCapturePostProcessor.swift; sourceTree = "<group>"; };
 		9E7835E62751A71500559DEC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
 		D7FECD452860B42700D04D1C /* LoggingOSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingOSLog.swift; sourceTree = "<group>"; };
@@ -207,6 +210,7 @@
 		68B3853B271E780600711D5F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				68FC569A2A8AB35D004B4989 /* AudioProcessors */,
 				683720D427A0640D007DA986 /* Support */,
 				6884B77A2750505B00732D47 /* Views */,
 				685271EA27443907006B4D6A /* Controllers */,
@@ -238,6 +242,14 @@
 				68B3854B271E780700711D5F /* macOS.entitlements */,
 			);
 			path = macOS;
+			sourceTree = "<group>";
+		};
+		68FC569A2A8AB35D004B4989 /* AudioProcessors */ = {
+			isa = PBXGroup;
+			children = (
+				68FC569B2A8AB369004B4989 /* SimpleReverbAudioCapturePostProcessor.swift */,
+			);
+			path = AudioProcessors;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -402,6 +414,7 @@
 				683720D227A06404007DA986 /* ConnectionHistory.swift in Sources */,
 				681E3F43271FC7AD007BB547 /* RoomView.swift in Sources */,
 				6816B1B0272D9198005ADB85 /* ParticipantView.swift in Sources */,
+				68FC569C2A8AB369004B4989 /* SimpleReverbAudioCapturePostProcessor.swift in Sources */,
 				68816CC527B4DCD500E24622 /* SecureStore.swift in Sources */,
 				68B3854C271E780700711D5F /* LiveKitExample.swift in Sources */,
 				681E3F3F271FC795007BB547 /* Custom.swift in Sources */,
@@ -421,6 +434,7 @@
 				683720D327A06404007DA986 /* ConnectionHistory.swift in Sources */,
 				681E3F44271FC7AD007BB547 /* RoomView.swift in Sources */,
 				6816B1B1272D9198005ADB85 /* ParticipantView.swift in Sources */,
+				68FC569D2A8AB586004B4989 /* SimpleReverbAudioCapturePostProcessor.swift in Sources */,
 				68816CC627B4DCD500E24622 /* SecureStore.swift in Sources */,
 				68B3854D271E780700711D5F /* LiveKitExample.swift in Sources */,
 				681E3F40271FC795007BB547 /* Custom.swift in Sources */,

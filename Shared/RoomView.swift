@@ -483,6 +483,8 @@ struct RoomView: View {
                         }
 
                         Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
+
+                        Toggle("(Demo) Audio Capture-post processing", isOn: $appCtx.sampleCapturePostProcessingEnabled)
                     }
 
                 } label: {
