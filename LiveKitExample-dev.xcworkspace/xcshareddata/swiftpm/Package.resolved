@@ -29,6 +29,15 @@
         }
       },
       {
+        "package": "WebRTC",
+        "repositoryURL": "https://github.com/webrtc-sdk/Specs.git",
+        "state": {
+          "branch": "audio-processing",
+          "revision": "1de3e7724bf83d182b3ec8de0de04e2195b880ae",
+          "version": null
+        }
+      },
+      {
         "package": "swift-log",
         "repositoryURL": "https://github.com/apple/swift-log.git",
         "state": {
