@@ -9,12 +9,13 @@ class SimpleReverbAudioCapturePostProcessor: NSObject, RTCAudioCustomProcessingD
     private var delayBufferIndex: Int = 0
     private let feedback: Float = 0.6
 
-    func initialize(sampleRateHz: Int, numChannels: Int) {
-        print("\(String(describing: self)) initialize(sampleRateHz: \(sampleRateHz), numChannels: \(numChannels))")
+    func audioProcessingInitialize(sampleRate sampleRateHz: Int, channels: Int) {
+        print("\(String(describing: self)) initialize(sampleRateHz: \(sampleRateHz), channels: \(channels))")
         delayBuffer = Array(repeating: 0.0, count: delayBufferSize)
     }
 
-    func process(audioBuffer: RTCAudioBuffer) {
+    func audioProcessingProcess(audioBuffer: RTCAudioBuffer) {
+
         // print("\(String(describing: self)) process(audioBuffer: \(audioBuffer))")
 
         for channelIndex in 0..<audioBuffer.channels {
@@ -39,7 +40,7 @@ class SimpleReverbAudioCapturePostProcessor: NSObject, RTCAudioCustomProcessingD
         }
     }
 
-    func destroy() {
+    func audioProcessingRelease() {
         print("\(String(describing: self)) destroy()")
         delayBuffer.removeAll()
     }

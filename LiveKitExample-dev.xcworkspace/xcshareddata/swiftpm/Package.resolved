@@ -33,7 +33,7 @@
         "repositoryURL": "https://github.com/webrtc-sdk/Specs.git",
         "state": {
           "branch": "audio-processing",
-          "revision": "1de3e7724bf83d182b3ec8de0de04e2195b880ae",
+          "revision": "e92a92cfdaec60c1b89bb94969d8009507a107ae",
           "version": null
         }
       },
