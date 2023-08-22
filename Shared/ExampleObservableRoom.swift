@@ -79,17 +79,14 @@ class ExampleObservableRoom: ObservableRoom {
         textFieldString = ""
         messages.append(roomMessage)
 
-        do {
-            let json = try jsonEncoder.encode(roomMessage)
-
-            localParticipant.publishData(data: json).then {
-                print("did send data")
-            }.catch { error in
-                print("failed to send data \(error)")
+        Task {
+            do {
+                let json = try jsonEncoder.encode(roomMessage)
+                try await localParticipant.publish(data: json)
+            } catch let error {
+                print("Failed to encode data \(error)")
             }
 
-        } catch let error {
-            print("Failed to encode data \(error)")
         }
     }
 
