@@ -6,8 +6,6 @@ import LiveKit
 struct Preferences: Codable, Equatable {
     var url = ""
     var token = ""
-    var e2eeKey = ""
-    var e2ee = false
 
     // Connect options
     var autoSubscribe = true
