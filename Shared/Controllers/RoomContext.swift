@@ -113,15 +113,14 @@ final class RoomContext: ObservableObject {
         )
 
         return try await room.connect(url,
-                                           token,
-                                           connectOptions: connectOptions,
-                                           roomOptions: roomOptions)
+                                      token,
+                                      connectOptions: connectOptions,
+                                      roomOptions: roomOptions)
     }
 
     func disconnect() async throws {
         try await room.disconnect()
     }
-
 
     func sendMessage() {
 
@@ -150,70 +149,68 @@ final class RoomContext: ObservableObject {
 
         }
     }
-    
-    //
+
     //    #if os(iOS)
     //    func toggleScreenShareEnablediOS() {
     //        toggleScreenShareEnabled()
     //    }
-    //    #elseif os(macOS)
-    //    func toggleScreenShareEnabledMacOS(screenShareSource: MacOSScreenCaptureSource? = nil) {
-    //
-    //        guard let localParticipant = room.localParticipant else {
-    //            print("LocalParticipant doesn't exist")
-    //            return
-    //        }
-    //
-    //        guard !screenShareTrackState.isBusy else {
-    //            print("screenShareTrackState is .busy")
-    //            return
-    //        }
-    //
-    //        if case .published(let track) = screenShareTrackState {
-    //
-    //            DispatchQueue.main.async {
-    //                self.screenShareTrackState = .busy(isPublishing: false)
-    //            }
-    //
-    //            localParticipant.unpublish(publication: track).then { _ in
-    //                DispatchQueue.main.async {
-    //                    self.screenShareTrackState = .notPublished()
-    //                }
-    //            }
-    //        } else {
-    //
-    //            guard let source = screenShareSource else { return }
-    //
-    //            print("selected source: \(source)")
-    //
-    //            DispatchQueue.main.async {
-    //                self.screenShareTrackState = .busy(isPublishing: true)
-    //            }
-    //
-    //            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: source)
-    //            localParticipant.publishVideoTrack(track: track).then { publication in
-    //                DispatchQueue.main.async {
-    //                    self.screenShareTrackState = .published(publication)
-    //                }
-    //            }.catch { error in
-    //                DispatchQueue.main.async {
-    //                    self.screenShareTrackState = .notPublished(error: error)
-    //                }
-    //            }
-    //        }
-    //    }
-    //    #endif
-    //
-//        func unpublishAll() async throws {
-//            guard let localParticipant = self.room.localParticipant else { return }
-//            try await localParticipant.unpublishAll()
-//            Task { @MainActor in
-////                self.cameraTrackState = .notPublished()
-////                self.microphoneTrackState = .notPublished()
-////                self.screenShareTrackState = .notPublished()
-//            }
-//        }
-    //
+    #if os(macOS)
+    weak var screenShareTrack: LocalTrackPublication?
+    func setScreenShareMacOS(enabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
+
+        guard let localParticipant = room.localParticipant else {
+            print("LocalParticipant doesn't exist")
+            return
+        }
+
+        //            guard !screenShareTrackState.isBusy else {
+        //                print("screenShareTrackState is .busy")
+        //                return
+        //            }
+
+        if enabled, let screenShareSource = screenShareSource {
+            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource)
+            screenShareTrack = try await localParticipant.publishVideo(track)
+        }
+
+        if !enabled, let screenShareTrack = screenShareTrack {
+            try await localParticipant.unpublish(publication: screenShareTrack)
+        }
+
+        //            if case .published(let track) = screenShareTrackState {
+        //
+        //                DispatchQueue.main.async {
+        //                    self.screenShareTrackState = .busy(isPublishing: false)
+        //                }
+        //
+        //                localParticipant.unpublish(publication: track).then { _ in
+        //                    DispatchQueue.main.async {
+        //                        self.screenShareTrackState = .notPublished()
+        //                    }
+        //                }
+        //            } else {
+        //
+        //                guard let source = screenShareSource else { return }
+        //
+        //                print("selected source: \(source)")
+        //
+        //                DispatchQueue.main.async {
+        //                    self.screenShareTrackState = .busy(isPublishing: true)
+        //                }
+        //
+        //                let track = LocalVideoTrack.createMacOSScreenShareTrack(source: source)
+        //                localParticipant.publishVideoTrack(track: track).then { publication in
+        //                    DispatchQueue.main.async {
+        //                        self.screenShareTrackState = .published(publication)
+        //                    }
+        //                }.catch { error in
+        //                    DispatchQueue.main.async {
+        //                        self.screenShareTrackState = .notPublished(error: error)
+        //                    }
+        //                }
+        //            }
+    }
+    #endif
 }
 
 extension RoomContext: RoomDelegate {
@@ -226,13 +223,45 @@ extension RoomContext: RoomDelegate {
             latestError = reason
             DispatchQueue.main.async {
                 self.shouldShowDisconnectReason = true
+                // Reset state
+                self.focusParticipant = nil
+                self.showMessagesView = false
+                self.textFieldString = ""
+                self.messages.removeAll()
+                // self.objectWillChange.send()
             }
         }
+    }
 
+    func room(_ room: Room,
+              participantDidLeave participant: RemoteParticipant) {
         DispatchQueue.main.async {
-            withAnimation {
-                self.objectWillChange.send()
+            // self.participants.removeValue(forKey: participant.sid)
+            if let focusParticipant = self.focusParticipant,
+               focusParticipant.sid == participant.sid {
+                self.focusParticipant = nil
             }
+        }
+    }
+
+    func room(_ room: Room,
+              participant: RemoteParticipant?, didReceive data: Data) {
+
+        do {
+            let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
+            // Update UI from main queue
+            DispatchQueue.main.async {
+                withAnimation {
+                    // Add messages to the @Published messages property
+                    // which will trigger the UI to update
+                    self.messages.append(roomMessage)
+                    // Show the messages view when new messages arrive
+                    self.showMessagesView = true
+                }
+            }
+
+        } catch let error {
+            print("Failed to decode data \(error)")
         }
     }
 }

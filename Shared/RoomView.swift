@@ -74,6 +74,7 @@ struct RoomView: View {
 
     @State var isCameraPublishingBusy = false
     @State var isMicrophonePublishingBusy = false
+    @State var isScreenSharePublishingBusy = false
 
     @State private var screenPickerPresented = false
     #if os(macOS)
@@ -291,26 +292,37 @@ struct RoomView: View {
                 Spacer()
 
                 Group {
-//
-//                    if (room.localParticipant?.isCameraEnabled() ?? false) && CameraCapturer.canSwitchPosition() {
-////                        Menu {
-////                            Button("Switch position") {
-////                                // room.switchCameraPosition()
-////                                print("Not implemented")
-////                            }
-////                            Button("Disable") {
-////                                // room.toggleCameraEnabled()
-////                                print("Not implemented")
-////                            }
-////                        } label: {
-////                            Image(systemSymbol: .videoFill)
-////                                .renderingMode(.original)
-////                        }
-//                    } else {
-                        // Toggle camera enabled
                     let isCameraEnabled = room.localParticipant?.isCameraEnabled() ?? false
                     let isMicrophoneEnabled = room.localParticipant?.isMicrophoneEnabled() ?? false
+                    let isScreenShareEnabled = room.localParticipant?.isScreenShareEnabled() ?? false
 
+                    if (isCameraEnabled) && CameraCapturer.canSwitchPosition() {
+                        Menu {
+                            Button("Switch position") {
+                                Task {
+                                    isCameraPublishingBusy = true
+                                    defer { isCameraPublishingBusy = false }
+                                    if let track = room.localParticipant?.firstCameraVideoTrack as? LocalVideoTrack,
+                                       let cameraCapturer = track.capturer as? CameraCapturer {
+                                        try await cameraCapturer.switchCameraPosition()
+                                    }
+                                }
+                            }
+                            Button("Disable") {
+                                Task {
+                                    isCameraPublishingBusy = true
+                                    defer { isCameraPublishingBusy = false }
+                                    try await room.localParticipant?.setCamera(enabled: !isCameraEnabled)
+                                }
+                            }
+                        } label: {
+                            Image(systemSymbol: .videoFill)
+                                .renderingMode(.original)
+                        }
+                        // disable while publishing/un-publishing
+                        .disabled(isCameraPublishingBusy)
+                    } else {
+                        // Toggle camera enabled
                         Button(action: {
                             Task {
                                 isCameraPublishingBusy = true
@@ -323,8 +335,8 @@ struct RoomView: View {
                                 .renderingMode(isCameraEnabled ? .original : .template)
                         })
                         // disable while publishing/un-publishing
-                         .disabled(isCameraPublishingBusy)
-//                    }
+                        .disabled(isCameraPublishingBusy)
+                    }
 
                     // Toggle microphone enabled
                     Button(action: {
@@ -339,36 +351,51 @@ struct RoomView: View {
                             .renderingMode(isMicrophoneEnabled ? .original : .template)
                     })
                     // disable while publishing/un-publishing
-                     .disabled(isMicrophonePublishingBusy)
-//
-//                    #if os(iOS)
-//                    Button(action: {
-//                        // room.toggleScreenShareEnablediOS()
-//                    },
-//                    label: {
-////                        Image(systemSymbol: .rectangleFillOnRectangleFill)
-////                            .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
-//                    })
-//                    #elseif os(macOS)
-//                    Button(action: {
-//                        if room.localParticipant?.isScreenShareEnabled() ?? false {
-//                            // turn off screen share
-//                            room.toggleScreenShareEnabledMacOS(screenShareSource: nil)
-//                        } else {
-//                            screenPickerPresented = true
-//                        }
-//                    },
-//                    label: {
-//                        Image(systemSymbol: .rectangleFillOnRectangleFill)
-//                            .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
-//                            .foregroundColor(room.screenShareTrackState.isPublished ? Color.green : Color.white)
-//                    }).popover(isPresented: $screenPickerPresented) {
-//                        ScreenShareSourcePickerView { source in
-//                            room.toggleScreenShareEnabledMacOS(screenShareSource: source)
-//                            screenPickerPresented = false
-//                        }.padding()
-//                    }
-//                    #endif
+                    .disabled(isMicrophonePublishingBusy)
+
+                    #if os(iOS)
+                    Button(action: {
+                        Task {
+                            isScreenSharePublishingBusy = true
+                            defer { isScreenSharePublishingBusy = false }
+                            try await room.localParticipant?.setScreenShare(enabled: !isScreenShareEnabled)
+                        }
+                    },
+                    label: {
+                        Image(systemSymbol: .rectangleFillOnRectangleFill)
+                            .renderingMode(isScreenShareEnabled ? .original : .template)
+                    })
+                    // disable while publishing/un-publishing
+                    .disabled(isScreenSharePublishingBusy)
+                    #elseif os(macOS)
+                    Button(action: {
+                        if isScreenShareEnabled {
+                            // turn off screen share
+                            Task {
+                                isScreenSharePublishingBusy = true
+                                defer { isScreenSharePublishingBusy = false }
+                                try await roomCtx.setScreenShareMacOS(enabled: false)
+                            }
+                        } else {
+                            screenPickerPresented = true
+                        }
+                    },
+                    label: {
+                        Image(systemSymbol: .rectangleFillOnRectangleFill)
+                            .renderingMode(isScreenShareEnabled ? .original : .template)
+                            .foregroundColor(isScreenShareEnabled ? Color.green : Color.white)
+                    }).popover(isPresented: $screenPickerPresented) {
+                        ScreenShareSourcePickerView { source in
+                            Task {
+                                isScreenSharePublishingBusy = true
+                                defer { isScreenSharePublishingBusy = false }
+                                try await roomCtx.setScreenShareMacOS(enabled: true, screenShareSource: source)
+                            }
+                            screenPickerPresented = false
+                        }.padding()
+                    }
+                    .disabled(isScreenSharePublishingBusy)
+                    #endif
 
                     // Toggle messages view (chat example)
                     Button(action: {

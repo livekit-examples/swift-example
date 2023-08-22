@@ -7,20 +7,21 @@ let sync = ValueStore<Preferences>(store: Keychain(service: "io.livekit.example.
                                    key: "preferences",
                                    default: Preferences())
 
-struct RoomContextView: View {
+struct RoomSwitchView: View {
 
     @EnvironmentObject var appCtx: AppContext
-    @StateObject var roomCtx = RoomContext(store: sync)
+    @EnvironmentObject var roomCtx: RoomContext
+    @EnvironmentObject var room: Room
 
     var shouldShowRoomView: Bool {
-        roomCtx.room.connectionState.isConnected || roomCtx.room.connectionState.isReconnecting
+        room.connectionState.isConnected || room.connectionState.isReconnecting
     }
 
     func computeTitle() -> String {
         if shouldShowRoomView {
-            let elements = [roomCtx.room.name,
-                            roomCtx.room.localParticipant?.name,
-                            roomCtx.room.localParticipant?.identity]
+            let elements = [room.name,
+                            room.localParticipant?.name,
+                            room.localParticipant?.identity]
             return elements.compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
         }
 
@@ -37,47 +38,57 @@ struct RoomContextView: View {
             } else {
                 ConnectView()
             }
-
         }
-        .environment(\.colorScheme, .dark)
-        .foregroundColor(Color.white)
-        .environmentObject(roomCtx)
-        .environmentObject(roomCtx.room)
         .navigationTitle(computeTitle())
-        .onDisappear {
-            print("\(String(describing: type(of: self))) onDisappear")
-            Task {
-                try await roomCtx.disconnect()
-            }
-        }
-        .onOpenURL(perform: { url in
+    }
+}
 
-            guard let urlComponent = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
-            guard let host = url.host else { return }
+// Attaches RoomContext and Room to the environment
+struct RoomContextView: View {
 
-            let secureValue = urlComponent.queryItems?.first(where: { $0.name == "secure" })?.value?.lowercased()
-            let secure = ["true", "1"].contains { $0 == secureValue }
+    @EnvironmentObject var appCtx: AppContext
+    @StateObject var roomCtx = RoomContext(store: sync)
 
-            let tokenValue = urlComponent.queryItems?.first(where: { $0.name == "token" })?.value ?? ""
-
-            var builder = URLComponents()
-            builder.scheme = secure ? "wss" : "ws"
-            builder.host = host
-            builder.port = url.port
-
-            guard let builtUrl = builder.url?.absoluteString else { return }
-
-            print("built URL: \(builtUrl), token: \(tokenValue)")
-
-            Task { @MainActor in
-                roomCtx.url = builtUrl
-                roomCtx.token = tokenValue
-                if !roomCtx.token.isEmpty {
-                    let room = try await roomCtx.connect()
-                    appCtx.connectionHistory.update(room: room)
+    var body: some View {
+        RoomSwitchView()
+            .environmentObject(roomCtx)
+            .environmentObject(roomCtx.room)
+            .environment(\.colorScheme, .dark)
+            .foregroundColor(Color.white)
+            .onDisappear {
+                print("\(String(describing: type(of: self))) onDisappear")
+                Task {
+                    try await roomCtx.disconnect()
                 }
             }
-        })
+            .onOpenURL(perform: { url in
+
+                guard let urlComponent = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
+                guard let host = url.host else { return }
+
+                let secureValue = urlComponent.queryItems?.first(where: { $0.name == "secure" })?.value?.lowercased()
+                let secure = ["true", "1"].contains { $0 == secureValue }
+
+                let tokenValue = urlComponent.queryItems?.first(where: { $0.name == "token" })?.value ?? ""
+
+                var builder = URLComponents()
+                builder.scheme = secure ? "wss" : "ws"
+                builder.host = host
+                builder.port = url.port
+
+                guard let builtUrl = builder.url?.absoluteString else { return }
+
+                print("built URL: \(builtUrl), token: \(tokenValue)")
+
+                Task { @MainActor in
+                    roomCtx.url = builtUrl
+                    roomCtx.token = tokenValue
+                    if !roomCtx.token.isEmpty {
+                        let room = try await roomCtx.connect()
+                        appCtx.connectionHistory.update(room: room)
+                    }
+                }
+            })
     }
 }
 
