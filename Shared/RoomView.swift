@@ -70,7 +70,10 @@ struct RoomView: View {
 
     @EnvironmentObject var appCtx: AppContext
     @EnvironmentObject var roomCtx: RoomContext
-    @EnvironmentObject var room: ExampleObservableRoom
+    @EnvironmentObject var room: Room
+
+    @State var isCameraPublishingBusy = false
+    @State var isMicrophonePublishingBusy = false
 
     @State private var screenPickerPresented = false
     #if os(macOS)
@@ -81,7 +84,7 @@ struct RoomView: View {
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
 
-        let isMe = message.senderSid == room.room.localParticipant?.sid
+        let isMe = message.senderSid == room.localParticipant?.sid
 
         return HStack {
             if isMe {
@@ -104,7 +107,7 @@ struct RoomView: View {
     }
 
     func scrollToBottom(_ scrollView: ScrollViewProxy) {
-        guard let last = room.messages.last else { return }
+        guard let last = roomCtx.messages.last else { return }
         withAnimation {
             scrollView.scrollTo(last.id)
         }
@@ -116,7 +119,7 @@ struct RoomView: View {
             ScrollViewReader { scrollView in
                 ScrollView(.vertical, showsIndicators: true) {
                     LazyVStack(alignment: .center, spacing: 0) {
-                        ForEach(room.messages) {
+                        ForEach(roomCtx.messages) {
                             messageView($0)
                         }
                     }
@@ -127,7 +130,7 @@ struct RoomView: View {
                     // Scroll to bottom when first showing the messages list
                     scrollToBottom(scrollView)
                 })
-                .onChange(of: room.messages, perform: { _ in
+                .onChange(of: roomCtx.messages, perform: { _ in
                     // Scroll to bottom when there is a new message
                     scrollToBottom(scrollView)
                 })
@@ -141,7 +144,7 @@ struct RoomView: View {
             }
             HStack(spacing: 0) {
 
-                TextField("Enter message", text: $room.textFieldString)
+                TextField("Enter message", text: $roomCtx.textFieldString)
                     .textFieldStyle(PlainTextFieldStyle())
                     .disableAutocorrection(true)
                 // TODO: add iOS unique view modifiers
@@ -155,10 +158,10 @@ struct RoomView: View {
                 //                                              style: StrokeStyle(lineWidth: 1.0)))
 
                 Button {
-                    room.sendMessage()
+                    roomCtx.sendMessage()
                 } label: {
                     Image(systemSymbol: .paperplaneFill)
-                        .foregroundColor(room.textFieldString.isEmpty ? nil : Color.lkRed)
+                        .foregroundColor(roomCtx.textFieldString.isEmpty ? nil : Color.lkRed)
                 }
                 .buttonStyle(.borderless)
 
@@ -174,11 +177,11 @@ struct RoomView: View {
         )
     }
 
-    func sortedParticipants() -> [ObservableParticipant] {
+    func sortedParticipants() -> [Participant] {
         room.allParticipants.values.sorted { p1, p2 in
-            if p1.participant is LocalParticipant { return true }
-            if p2.participant is LocalParticipant { return false }
-            return (p1.participant.joinedAt ?? Date()) < (p2.participant.joinedAt ?? Date())
+            if p1 is LocalParticipant { return true }
+            if p2 is LocalParticipant { return false }
+            return (p1.joinedAt ?? Date()) < (p2.joinedAt ?? Date())
         }
     }
 
@@ -187,13 +190,13 @@ struct RoomView: View {
         VStack {
 
             if showConnectionTime {
-                Text("Connected (\([room.room.serverRegion, "\(String(describing: room.room.connectStopwatch.total().rounded(to: 2)))s"].compactMap { $0 }.joined(separator: ", ")))")
+                Text("Connected (\([room.serverRegion, "\(String(describing: room.connectStopwatch.total().rounded(to: 2)))s"].compactMap { $0 }.joined(separator: ", ")))")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
                     .padding()
             }
 
-            if case .connecting = room.room.connectionState {
+            if case .connecting = room.connectionState {
                 Text("Re-connecting...")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
@@ -203,11 +206,11 @@ struct RoomView: View {
             HorVStack(axis: geometry.isTall ? .vertical : .horizontal, spacing: 5) {
 
                 Group {
-                    if let focusParticipant = room.focusParticipant {
+                    if let focusParticipant = roomCtx.focusParticipant {
                         ZStack(alignment: .bottomTrailing) {
                             ParticipantView(participant: focusParticipant,
                                             videoViewMode: appCtx.videoViewMode) { _ in
-                                room.focusParticipant = nil
+                                roomCtx.focusParticipant = nil
                             }
                             .overlay(RoundedRectangle(cornerRadius: 5)
                                         .stroke(Color.lkRed.opacity(0.7), lineWidth: 5.0))
@@ -228,7 +231,7 @@ struct RoomView: View {
                         ParticipantLayout(sortedParticipants(), spacing: 5) { participant in
                             ParticipantView(participant: participant,
                                             videoViewMode: appCtx.videoViewMode) { participant in
-                                room.focusParticipant = participant
+                                roomCtx.focusParticipant = participant
 
                             }
                         }
@@ -241,7 +244,7 @@ struct RoomView: View {
                     maxHeight: .infinity
                 )
                 // Show messages view if enabled
-                if room.showMessagesView {
+                if roomCtx.showMessagesView {
                     messagesView(geometry: geometry)
                 }
             }
@@ -260,12 +263,12 @@ struct RoomView: View {
                 // Text("(\(room.room.remoteParticipants.count)) ")
 
                 #if os(macOS)
-                if let name = room.room.name {
+                if let name = room.name {
                     Text(name)
                         .fontWeight(.bold)
                 }
 
-                if let identity = room.room.localParticipant?.identity {
+                if let identity = room.localParticipant?.identity {
                     Text(identity)
                 }
                 #endif
@@ -288,83 +291,95 @@ struct RoomView: View {
                 Spacer()
 
                 Group {
-
-                    if (room.room.localParticipant?.isCameraEnabled() ?? false) && CameraCapturer.canSwitchPosition() {
-                        Menu {
-                            Button("Switch position") {
-                                room.switchCameraPosition()
-                            }
-                            Button("Disable") {
-                                room.toggleCameraEnabled()
-                            }
-                        } label: {
-                            Image(systemSymbol: .videoFill)
-                                .renderingMode(.original)
-                        }
-                    } else {
+//
+//                    if (room.localParticipant?.isCameraEnabled() ?? false) && CameraCapturer.canSwitchPosition() {
+////                        Menu {
+////                            Button("Switch position") {
+////                                // room.switchCameraPosition()
+////                                print("Not implemented")
+////                            }
+////                            Button("Disable") {
+////                                // room.toggleCameraEnabled()
+////                                print("Not implemented")
+////                            }
+////                        } label: {
+////                            Image(systemSymbol: .videoFill)
+////                                .renderingMode(.original)
+////                        }
+//                    } else {
                         // Toggle camera enabled
+                    let isCameraEnabled = room.localParticipant?.isCameraEnabled() ?? false
+                    let isMicrophoneEnabled = room.localParticipant?.isMicrophoneEnabled() ?? false
+
                         Button(action: {
-                            room.toggleCameraEnabled()
+                            Task {
+                                isCameraPublishingBusy = true
+                                defer { isCameraPublishingBusy = false }
+                                try await room.localParticipant?.setCamera(enabled: !isCameraEnabled)
+                            }
                         },
                         label: {
                             Image(systemSymbol: .videoFill)
-                                .renderingMode((room.room.localParticipant?.isCameraEnabled() ?? false) ? .original : .template)
+                                .renderingMode(isCameraEnabled ? .original : .template)
                         })
                         // disable while publishing/un-publishing
-                        .disabled(room.cameraTrackState.isBusy)
-                    }
+                         .disabled(isCameraPublishingBusy)
+//                    }
 
                     // Toggle microphone enabled
                     Button(action: {
-                        room.toggleMicrophoneEnabled()
-                    },
-                    label: {
-                        Image(systemSymbol: .micFill)
-                            .renderingMode((room.room.localParticipant?.isMicrophoneEnabled() ?? false) ? .original : .template)
-                    })
-                    // disable while publishing/un-publishing
-                    .disabled(room.microphoneTrackState.isBusy)
-
-                    #if os(iOS)
-                    Button(action: {
-                        room.toggleScreenShareEnablediOS()
-                    },
-                    label: {
-                        Image(systemSymbol: .rectangleFillOnRectangleFill)
-                            .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
-                    })
-                    #elseif os(macOS)
-                    Button(action: {
-                        if room.room.localParticipant?.isScreenShareEnabled() ?? false {
-                            // turn off screen share
-                            room.toggleScreenShareEnabledMacOS(screenShareSource: nil)
-                        } else {
-                            screenPickerPresented = true
+                        Task {
+                            isMicrophonePublishingBusy = true
+                            defer { isMicrophonePublishingBusy = false }
+                            try await room.localParticipant?.setMicrophone(enabled: !isMicrophoneEnabled)
                         }
                     },
                     label: {
-                        Image(systemSymbol: .rectangleFillOnRectangleFill)
-                            .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
-                            .foregroundColor(room.screenShareTrackState.isPublished ? Color.green : Color.white)
-                    }).popover(isPresented: $screenPickerPresented) {
-                        ScreenShareSourcePickerView { source in
-                            room.toggleScreenShareEnabledMacOS(screenShareSource: source)
-                            screenPickerPresented = false
-                        }.padding()
-                    }
-                    #endif
+                        Image(systemSymbol: .micFill)
+                            .renderingMode(isMicrophoneEnabled ? .original : .template)
+                    })
+                    // disable while publishing/un-publishing
+                     .disabled(isMicrophonePublishingBusy)
+//
+//                    #if os(iOS)
+//                    Button(action: {
+//                        // room.toggleScreenShareEnablediOS()
+//                    },
+//                    label: {
+////                        Image(systemSymbol: .rectangleFillOnRectangleFill)
+////                            .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
+//                    })
+//                    #elseif os(macOS)
+//                    Button(action: {
+//                        if room.localParticipant?.isScreenShareEnabled() ?? false {
+//                            // turn off screen share
+//                            room.toggleScreenShareEnabledMacOS(screenShareSource: nil)
+//                        } else {
+//                            screenPickerPresented = true
+//                        }
+//                    },
+//                    label: {
+//                        Image(systemSymbol: .rectangleFillOnRectangleFill)
+//                            .renderingMode(room.screenShareTrackState.isPublished ? .original : .template)
+//                            .foregroundColor(room.screenShareTrackState.isPublished ? Color.green : Color.white)
+//                    }).popover(isPresented: $screenPickerPresented) {
+//                        ScreenShareSourcePickerView { source in
+//                            room.toggleScreenShareEnabledMacOS(screenShareSource: source)
+//                            screenPickerPresented = false
+//                        }.padding()
+//                    }
+//                    #endif
 
                     // Toggle messages view (chat example)
                     Button(action: {
                         withAnimation {
-                            room.showMessagesView.toggle()
+                            roomCtx.showMessagesView.toggle()
                         }
                     },
                     label: {
                         Image(systemSymbol: .messageFill)
-                            .renderingMode(room.showMessagesView ? .original : .template)
+                            .renderingMode(roomCtx.showMessagesView ? .original : .template)
                     })
-
                 }
 
                 // Spacer()
@@ -419,7 +434,7 @@ struct RoomView: View {
 
                     Button {
                         Task {
-                            try await roomCtx.room.unpublishAll()
+                            try await room.localParticipant?.unpublishAll()
                         }
                     } label: {
                         Text("Unpublish all")
@@ -429,35 +444,35 @@ struct RoomView: View {
 
                     Menu {
                         Button {
-                            roomCtx.room.room.sendSimulate(scenario: .nodeFailure)
+                            room.sendSimulate(scenario: .nodeFailure)
                         } label: {
                             Text("Node failure")
                         }
 
                         Button {
-                            roomCtx.room.room.sendSimulate(scenario: .serverLeave)
+                            room.sendSimulate(scenario: .serverLeave)
                         } label: {
                             Text("Server leave")
                         }
 
                         Button {
-                            roomCtx.room.room.sendSimulate(scenario: .migration)
+                            room.sendSimulate(scenario: .migration)
                         } label: {
                             Text("Migration")
                         }
 
                         Button {
-                            roomCtx.room.room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                            room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
                         } label: {
                             Text("Speaker update")
                         }
                         Button {
-                            roomCtx.room.room.sendSimulate(scenario: .forceTCP)
+                            room.sendSimulate(scenario: .forceTCP)
                         } label: {
                             Text("Force TCP")
                         }
                         Button {
-                            roomCtx.room.room.sendSimulate(scenario: .forceTLS)
+                            room.sendSimulate(scenario: .forceTLS)
                         } label: {
                             Text("Force TLS")
                         }
@@ -468,13 +483,13 @@ struct RoomView: View {
                     Group {
                         Menu {
                             Button {
-                                roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                                room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
                             } label: {
                                 Text("Allow all")
                             }
 
                             Button {
-                                roomCtx.room.room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
+                                room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
                             } label: {
                                 Text("Disallow all")
                             }

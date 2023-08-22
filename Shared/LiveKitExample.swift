@@ -13,14 +13,14 @@ struct RoomContextView: View {
     @StateObject var roomCtx = RoomContext(store: sync)
 
     var shouldShowRoomView: Bool {
-        roomCtx.room.room.connectionState.isConnected || roomCtx.room.room.connectionState.isReconnecting
+        roomCtx.room.connectionState.isConnected || roomCtx.room.connectionState.isReconnecting
     }
 
     func computeTitle() -> String {
         if shouldShowRoomView {
-            let elements = [roomCtx.room.room.name,
-                            roomCtx.room.room.localParticipant?.name,
-                            roomCtx.room.room.localParticipant?.identity]
+            let elements = [roomCtx.room.name,
+                            roomCtx.room.localParticipant?.name,
+                            roomCtx.room.localParticipant?.identity]
             return elements.compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
         }
 

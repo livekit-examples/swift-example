@@ -5,6 +5,9 @@ import WebRTC
 // This class contains the logic to control behavior of the whole app.
 final class RoomContext: ObservableObject {
 
+    let jsonEncoder = JSONEncoder()
+    let jsonDecoder = JSONDecoder()
+
     private let store: ValueStore<Preferences>
 
     // Used to show connection error dialog
@@ -12,7 +15,7 @@ final class RoomContext: ObservableObject {
     @Published var shouldShowDisconnectReason: Bool = false
     public var latestError: DisconnectReason?
 
-    public let room = ExampleObservableRoom()
+    public let room = Room()
 
     @Published var url: String = "" {
         didSet { store.value.url = url }
@@ -48,9 +51,16 @@ final class RoomContext: ObservableObject {
         didSet { store.value.publishMode = publish }
     }
 
+    @Published var focusParticipant: Participant?
+
+    @Published var showMessagesView: Bool = false
+    @Published var messages: [ExampleRoomMessage] = []
+
+    @Published var textFieldString: String = ""
+
     public init(store: ValueStore<Preferences>) {
         self.store = store
-        room.room.add(delegate: self)
+        room.add(delegate: self)
 
         self.url = store.value.url
         self.token = store.value.token
@@ -102,15 +112,108 @@ final class RoomContext: ObservableObject {
             reportStats: reportStats
         )
 
-        return try await room.room.connect(url,
+        return try await room.connect(url,
                                            token,
                                            connectOptions: connectOptions,
                                            roomOptions: roomOptions)
     }
 
     func disconnect() async throws {
-        try await room.room.disconnect()
+        try await room.disconnect()
     }
+
+
+    func sendMessage() {
+
+        guard let localParticipant = room.localParticipant else {
+            print("LocalParticipant doesn't exist")
+            return
+        }
+
+        // Make sure the message is not empty
+        guard !textFieldString.isEmpty else { return }
+
+        let roomMessage = ExampleRoomMessage(messageId: UUID().uuidString,
+                                             senderSid: localParticipant.sid,
+                                             senderIdentity: localParticipant.identity,
+                                             text: textFieldString)
+        textFieldString = ""
+        messages.append(roomMessage)
+
+        Task {
+            do {
+                let json = try jsonEncoder.encode(roomMessage)
+                try await localParticipant.publish(data: json)
+            } catch let error {
+                print("Failed to encode data \(error)")
+            }
+
+        }
+    }
+    
+    //
+    //    #if os(iOS)
+    //    func toggleScreenShareEnablediOS() {
+    //        toggleScreenShareEnabled()
+    //    }
+    //    #elseif os(macOS)
+    //    func toggleScreenShareEnabledMacOS(screenShareSource: MacOSScreenCaptureSource? = nil) {
+    //
+    //        guard let localParticipant = room.localParticipant else {
+    //            print("LocalParticipant doesn't exist")
+    //            return
+    //        }
+    //
+    //        guard !screenShareTrackState.isBusy else {
+    //            print("screenShareTrackState is .busy")
+    //            return
+    //        }
+    //
+    //        if case .published(let track) = screenShareTrackState {
+    //
+    //            DispatchQueue.main.async {
+    //                self.screenShareTrackState = .busy(isPublishing: false)
+    //            }
+    //
+    //            localParticipant.unpublish(publication: track).then { _ in
+    //                DispatchQueue.main.async {
+    //                    self.screenShareTrackState = .notPublished()
+    //                }
+    //            }
+    //        } else {
+    //
+    //            guard let source = screenShareSource else { return }
+    //
+    //            print("selected source: \(source)")
+    //
+    //            DispatchQueue.main.async {
+    //                self.screenShareTrackState = .busy(isPublishing: true)
+    //            }
+    //
+    //            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: source)
+    //            localParticipant.publishVideoTrack(track: track).then { publication in
+    //                DispatchQueue.main.async {
+    //                    self.screenShareTrackState = .published(publication)
+    //                }
+    //            }.catch { error in
+    //                DispatchQueue.main.async {
+    //                    self.screenShareTrackState = .notPublished(error: error)
+    //                }
+    //            }
+    //        }
+    //    }
+    //    #endif
+    //
+//        func unpublishAll() async throws {
+//            guard let localParticipant = self.room.localParticipant else { return }
+//            try await localParticipant.unpublishAll()
+//            Task { @MainActor in
+////                self.cameraTrackState = .notPublished()
+////                self.microphoneTrackState = .notPublished()
+////                self.screenShareTrackState = .notPublished()
+//            }
+//        }
+    //
 }
 
 extension RoomContext: RoomDelegate {
