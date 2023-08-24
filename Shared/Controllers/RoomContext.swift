@@ -98,7 +98,7 @@ final class RoomContext: ObservableObject {
             publishOnlyMode: publish ? "publish_\(UUID().uuidString)" : nil
         )
 
-        var e2eeOptions: E2EEOptions? = nil
+        var e2eeOptions: E2EEOptions?
         if e2ee {
             let keyProvider = BaseKeyProvider(isSharedKey: true)
             keyProvider.setKey(key: e2eeKey)
@@ -134,7 +134,7 @@ final class RoomContext: ObservableObject {
 }
 
 extension RoomContext: RoomDelegate {
-    
+
     func room(_ room: Room, publication: TrackPublication, didUpdate e2eeState: E2EEState) {
         print("Did update e2eeState = [\(e2eeState.toString())] for publication \(publication.sid)")
     }
