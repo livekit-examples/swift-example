@@ -22,6 +22,14 @@ final class RoomContext: ObservableObject {
         didSet { store.value.token = token }
     }
 
+    @Published var e2eeKey: String = "" {
+        didSet { store.value.e2eeKey = e2eeKey }
+    }
+
+    @Published var e2ee: Bool = false {
+        didSet { store.value.e2ee = e2ee }
+    }
+
     // RoomOptions
     @Published var simulcast: Bool = true {
         didSet { store.value.simulcast = simulcast }
@@ -54,6 +62,8 @@ final class RoomContext: ObservableObject {
 
         self.url = store.value.url
         self.token = store.value.token
+        self.e2ee = store.value.e2ee
+        self.e2eeKey = store.value.e2eeKey
         self.simulcast = store.value.simulcast
         self.adaptiveStream = store.value.adaptiveStream
         self.dynacast = store.value.dynacast
@@ -79,12 +89,21 @@ final class RoomContext: ObservableObject {
         if let entry = entry {
             url = entry.url
             token = entry.token
+            e2ee = entry.e2ee
+            e2eeKey = entry.e2eeKey
         }
 
         let connectOptions = ConnectOptions(
             autoSubscribe: !publish && autoSubscribe, // don't autosubscribe if publish mode
             publishOnlyMode: publish ? "publish_\(UUID().uuidString)" : nil
         )
+
+        var e2eeOptions: E2EEOptions? = nil
+        if e2ee {
+            let keyProvider = BaseKeyProvider(isSharedKey: true)
+            keyProvider.setKey(key: e2eeKey)
+            e2eeOptions = E2EEOptions(keyProvider: keyProvider)
+        }
 
         let roomOptions = RoomOptions(
             defaultCameraCaptureOptions: CameraCaptureOptions(
@@ -99,7 +118,8 @@ final class RoomContext: ObservableObject {
             ),
             adaptiveStream: adaptiveStream,
             dynacast: dynacast,
-            reportStats: reportStats
+            reportStats: reportStats,
+            e2eeOptions: e2eeOptions
         )
 
         return try await room.room.connect(url,
@@ -114,6 +134,10 @@ final class RoomContext: ObservableObject {
 }
 
 extension RoomContext: RoomDelegate {
+    
+    func room(_ room: Room, publication: TrackPublication, didUpdate e2eeState: E2EEState) {
+        print("Did update e2eeState = [\(e2eeState.toString())] for publication \(publication.sid)")
+    }
 
     func room(_ room: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
 

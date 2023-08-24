@@ -216,6 +216,14 @@ struct ParticipantView: View {
                                 .foregroundColor(Color.red)
                         }
 
+                        if participant.encryptionType == .none {
+                            Image(systemSymbol: .lockOpenFill)
+                                .foregroundColor(.red)
+                        } else {
+                            Image(systemSymbol: .lockFill)
+                                .foregroundColor(.green)
+                        }
+
                     }.padding(5)
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .background(Color.black.opacity(0.5))

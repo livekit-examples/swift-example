@@ -28,6 +28,7 @@ struct ConnectView: View {
                     VStack(spacing: 15) {
                         LKTextField(title: "Server URL", text: $roomCtx.url, type: .URL)
                         LKTextField(title: "Token", text: $roomCtx.token, type: .ascii)
+                        LKTextField(title: "E2EE Key", text: $roomCtx.e2eeKey, type: .ascii)
 
                         HStack {
                             Menu {
@@ -36,6 +37,9 @@ struct ConnectView: View {
                                 }
                                 Toggle(isOn: $roomCtx.publish) {
                                     Text("Publish only mode")
+                                }
+                                Toggle(isOn: $roomCtx.e2ee) {
+                                    Text("Enable E2EE")
                                 }
                             } label: {
                                 Image(systemSymbol: .boltFill)
@@ -85,7 +89,7 @@ struct ConnectView: View {
                             LKButton(title: "Connect") {
                                 Task {
                                     let room = try await roomCtx.connect()
-                                    appCtx.connectionHistory.update(room: room)
+                                    appCtx.connectionHistory.update(room: room, e2ee: roomCtx.e2ee, e2eeKey: roomCtx.e2eeKey)
                                 }
                             }
 
@@ -95,7 +99,7 @@ struct ConnectView: View {
                                         Button {
                                             Task {
                                                 let room = try await roomCtx.connect(entry: entry)
-                                                appCtx.connectionHistory.update(room: room)
+                                                appCtx.connectionHistory.update(room: room, e2ee: roomCtx.e2ee, e2eeKey: roomCtx.e2eeKey)
                                             }
                                         } label: {
                                             Image(systemSymbol: .boltFill)
