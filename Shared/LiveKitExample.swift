@@ -71,6 +71,10 @@ struct RoomContextView: View {
 
                 let tokenValue = urlComponent.queryItems?.first(where: { $0.name == "token" })?.value ?? ""
 
+                let e2eeValue = urlComponent.queryItems?.first(where: { $0.name == "e2ee" })?.value?.lowercased()
+                let e2ee = ["true", "1"].contains { $0 == secureValue }
+                let e2eeKey = urlComponent.queryItems?.first(where: { $0.name == "e2eeKey" })?.value ?? ""
+
                 var builder = URLComponents()
                 builder.scheme = secure ? "wss" : "ws"
                 builder.host = host
@@ -83,9 +87,11 @@ struct RoomContextView: View {
                 Task { @MainActor in
                     roomCtx.url = builtUrl
                     roomCtx.token = tokenValue
+                    roomCtx.e2ee = e2ee
+                    roomCtx.e2eeKey = e2eeKey
                     if !roomCtx.token.isEmpty {
                         let room = try await roomCtx.connect()
-                        appCtx.connectionHistory.update(room: room)
+                        appCtx.connectionHistory.update(room: room, e2ee: e2ee, e2eeKey: e2eeKey)
                     }
                 }
             })
