@@ -170,10 +170,6 @@ final class RoomContext: ObservableObject {
         }
     }
 
-    //    #if os(iOS)
-    //    func toggleScreenShareEnablediOS() {
-    //        toggleScreenShareEnabled()
-    //    }
     #if os(macOS)
     weak var screenShareTrack: LocalTrackPublication?
     func setScreenShareMacOS(enabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
@@ -183,11 +179,6 @@ final class RoomContext: ObservableObject {
             return
         }
 
-        //            guard !screenShareTrackState.isBusy else {
-        //                print("screenShareTrackState is .busy")
-        //                return
-        //            }
-
         if enabled, let screenShareSource = screenShareSource {
             let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource)
             screenShareTrack = try await localParticipant.publishVideo(track)
@@ -196,46 +187,13 @@ final class RoomContext: ObservableObject {
         if !enabled, let screenShareTrack = screenShareTrack {
             try await localParticipant.unpublish(publication: screenShareTrack)
         }
-
-        //            if case .published(let track) = screenShareTrackState {
-        //
-        //                DispatchQueue.main.async {
-        //                    self.screenShareTrackState = .busy(isPublishing: false)
-        //                }
-        //
-        //                localParticipant.unpublish(publication: track).then { _ in
-        //                    DispatchQueue.main.async {
-        //                        self.screenShareTrackState = .notPublished()
-        //                    }
-        //                }
-        //            } else {
-        //
-        //                guard let source = screenShareSource else { return }
-        //
-        //                print("selected source: \(source)")
-        //
-        //                DispatchQueue.main.async {
-        //                    self.screenShareTrackState = .busy(isPublishing: true)
-        //                }
-        //
-        //                let track = LocalVideoTrack.createMacOSScreenShareTrack(source: source)
-        //                localParticipant.publishVideoTrack(track: track).then { publication in
-        //                    DispatchQueue.main.async {
-        //                        self.screenShareTrackState = .published(publication)
-        //                    }
-        //                }.catch { error in
-        //                    DispatchQueue.main.async {
-        //                        self.screenShareTrackState = .notPublished(error: error)
-        //                    }
-        //                }
-        //            }
     }
     #endif
 }
 
 extension RoomContext: RoomDelegate {
 
-    func room(_ room: Room, publication: TrackPublication, didUpdate e2eeState: E2EEState) {
+    func room(_ room: Room, publication: TrackPublication, didUpdateE2EEState e2eeState: E2EEState) {
         print("Did update e2eeState = [\(e2eeState.toString())] for publication \(publication.sid)")
     }
 
