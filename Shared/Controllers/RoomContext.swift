@@ -5,6 +5,9 @@ import WebRTC
 // This class contains the logic to control behavior of the whole app.
 final class RoomContext: ObservableObject {
 
+    let jsonEncoder = JSONEncoder()
+    let jsonDecoder = JSONDecoder()
+
     private let store: ValueStore<Preferences>
 
     // Used to show connection error dialog
@@ -12,7 +15,7 @@ final class RoomContext: ObservableObject {
     @Published var shouldShowDisconnectReason: Bool = false
     public var latestError: DisconnectReason?
 
-    public let room = ExampleObservableRoom()
+    public let room = Room()
 
     @Published var url: String = "" {
         didSet { store.value.url = url }
@@ -56,9 +59,16 @@ final class RoomContext: ObservableObject {
         didSet { store.value.publishMode = publish }
     }
 
+    @Published var focusParticipant: Participant?
+
+    @Published var showMessagesView: Bool = false
+    @Published var messages: [ExampleRoomMessage] = []
+
+    @Published var textFieldString: String = ""
+
     public init(store: ValueStore<Preferences>) {
         self.store = store
-        room.room.add(delegate: self)
+        room.add(delegate: self)
 
         self.url = store.value.url
         self.token = store.value.token
@@ -122,20 +132,68 @@ final class RoomContext: ObservableObject {
             e2eeOptions: e2eeOptions
         )
 
-        return try await room.room.connect(url,
-                                           token,
-                                           connectOptions: connectOptions,
-                                           roomOptions: roomOptions)
+        return try await room.connect(url,
+                                      token,
+                                      connectOptions: connectOptions,
+                                      roomOptions: roomOptions)
     }
 
     func disconnect() async throws {
-        try await room.room.disconnect()
+        try await room.disconnect()
     }
+
+    func sendMessage() {
+
+        guard let localParticipant = room.localParticipant else {
+            print("LocalParticipant doesn't exist")
+            return
+        }
+
+        // Make sure the message is not empty
+        guard !textFieldString.isEmpty else { return }
+
+        let roomMessage = ExampleRoomMessage(messageId: UUID().uuidString,
+                                             senderSid: localParticipant.sid,
+                                             senderIdentity: localParticipant.identity,
+                                             text: textFieldString)
+        textFieldString = ""
+        messages.append(roomMessage)
+
+        Task {
+            do {
+                let json = try jsonEncoder.encode(roomMessage)
+                try await localParticipant.publish(data: json)
+            } catch let error {
+                print("Failed to encode data \(error)")
+            }
+
+        }
+    }
+
+    #if os(macOS)
+    weak var screenShareTrack: LocalTrackPublication?
+    func setScreenShareMacOS(enabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
+
+        guard let localParticipant = room.localParticipant else {
+            print("LocalParticipant doesn't exist")
+            return
+        }
+
+        if enabled, let screenShareSource = screenShareSource {
+            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource)
+            screenShareTrack = try await localParticipant.publishVideo(track)
+        }
+
+        if !enabled, let screenShareTrack = screenShareTrack {
+            try await localParticipant.unpublish(publication: screenShareTrack)
+        }
+    }
+    #endif
 }
 
 extension RoomContext: RoomDelegate {
 
-    func room(_ room: Room, publication: TrackPublication, didUpdate e2eeState: E2EEState) {
+    func room(_ room: Room, publication: TrackPublication, didUpdateE2EEState e2eeState: E2EEState) {
         print("Did update e2eeState = [\(e2eeState.toString())] for publication \(publication.sid)")
     }
 
@@ -147,13 +205,45 @@ extension RoomContext: RoomDelegate {
             latestError = reason
             DispatchQueue.main.async {
                 self.shouldShowDisconnectReason = true
+                // Reset state
+                self.focusParticipant = nil
+                self.showMessagesView = false
+                self.textFieldString = ""
+                self.messages.removeAll()
+                // self.objectWillChange.send()
             }
         }
+    }
 
+    func room(_ room: Room,
+              participantDidLeave participant: RemoteParticipant) {
         DispatchQueue.main.async {
-            withAnimation {
-                self.objectWillChange.send()
+            // self.participants.removeValue(forKey: participant.sid)
+            if let focusParticipant = self.focusParticipant,
+               focusParticipant.sid == participant.sid {
+                self.focusParticipant = nil
             }
+        }
+    }
+
+    func room(_ room: Room,
+              participant: RemoteParticipant?, didReceive data: Data) {
+
+        do {
+            let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
+            // Update UI from main queue
+            DispatchQueue.main.async {
+                withAnimation {
+                    // Add messages to the @Published messages property
+                    // which will trigger the UI to update
+                    self.messages.append(roomMessage)
+                    // Show the messages view when new messages arrive
+                    self.showMessagesView = true
+                }
+            }
+
+        } catch let error {
+            print("Failed to decode data \(error)")
         }
     }
 }

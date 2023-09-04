@@ -4,11 +4,11 @@ import SFSafeSymbols
 
 struct ParticipantView: View {
 
-    @ObservedObject var participant: ObservableParticipant
+    @ObservedObject var participant: Participant
     @EnvironmentObject var appCtx: AppContext
 
     var videoViewMode: VideoView.LayoutMode = .fill
-    var onTap: ((_ participant: ObservableParticipant) -> Void)?
+    var onTap: ((_ participant: Participant) -> Void)?
 
     @State private var isRendering: Bool = false
     @State private var dimensions: Dimensions?
@@ -72,7 +72,7 @@ struct ParticipantView: View {
                             StatsView(track: track)
                         }
                         // Audio stats
-                        if let publication = participant.participant.firstAudioPublication,
+                        if let publication = participant.firstAudioPublication,
                            !publication.muted,
                            let track = publication.track as? AudioTrack {
                             StatsView(track: track)
@@ -157,7 +157,7 @@ struct ParticipantView: View {
                                 .foregroundColor(Color.white)
                         }
 
-                        if let publication = participant.participant.firstAudioPublication,
+                        if let publication = participant.firstAudioPublication,
                            !publication.muted {
 
                             // is remote
@@ -216,7 +216,7 @@ struct ParticipantView: View {
                                 .foregroundColor(Color.red)
                         }
 
-                        if participant.encryptionType == .none {
+                        if participant.firstTrackEncryptionType == .none {
                             Image(systemSymbol: .lockOpenFill)
                                 .foregroundColor(.red)
                         } else {

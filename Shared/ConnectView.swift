@@ -7,6 +7,7 @@ struct ConnectView: View {
 
     @EnvironmentObject var appCtx: AppContext
     @EnvironmentObject var roomCtx: RoomContext
+    @EnvironmentObject var room: Room
 
     var body: some View {
         GeometryReader { geometry in
@@ -80,7 +81,7 @@ struct ConnectView: View {
                         }
                     }.frame(maxWidth: 350)
 
-                    if case .connecting = roomCtx.room.room.connectionState {
+                    if case .connecting = room.connectionState {
                         ProgressView()
                     } else {
                         HStack(alignment: .center) {
