@@ -301,7 +301,7 @@ struct RoomView: View {
                             Button("Switch position") {
                                 Task {
                                     isCameraPublishingBusy = true
-                                    defer { isCameraPublishingBusy = false }
+                                    defer { Task { @MainActor in isCameraPublishingBusy = false } }
                                     if let track = room.localParticipant?.firstCameraVideoTrack as? LocalVideoTrack,
                                        let cameraCapturer = track.capturer as? CameraCapturer {
                                         try await cameraCapturer.switchCameraPosition()
@@ -311,7 +311,7 @@ struct RoomView: View {
                             Button("Disable") {
                                 Task {
                                     isCameraPublishingBusy = true
-                                    defer { isCameraPublishingBusy = false }
+                                    defer { Task { @MainActor in isCameraPublishingBusy = false } }
                                     try await room.localParticipant?.setCamera(enabled: !isCameraEnabled)
                                 }
                             }
@@ -326,7 +326,7 @@ struct RoomView: View {
                         Button(action: {
                             Task {
                                 isCameraPublishingBusy = true
-                                defer { isCameraPublishingBusy = false }
+                                defer { Task { @MainActor in isCameraPublishingBusy = false } }
                                 try await room.localParticipant?.setCamera(enabled: !isCameraEnabled)
                             }
                         },
@@ -342,7 +342,7 @@ struct RoomView: View {
                     Button(action: {
                         Task {
                             isMicrophonePublishingBusy = true
-                            defer { isMicrophonePublishingBusy = false }
+                            defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
                             try await room.localParticipant?.setMicrophone(enabled: !isMicrophoneEnabled)
                         }
                     },
@@ -373,7 +373,7 @@ struct RoomView: View {
                             // turn off screen share
                             Task {
                                 isScreenSharePublishingBusy = true
-                                defer { isScreenSharePublishingBusy = false }
+                                defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
                                 try await roomCtx.setScreenShareMacOS(enabled: false)
                             }
                         } else {
@@ -388,7 +388,7 @@ struct RoomView: View {
                         ScreenShareSourcePickerView { source in
                             Task {
                                 isScreenSharePublishingBusy = true
-                                defer { isScreenSharePublishingBusy = false }
+                                defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
                                 try await roomCtx.setScreenShareMacOS(enabled: true, screenShareSource: source)
                             }
                             screenPickerPresented = false
