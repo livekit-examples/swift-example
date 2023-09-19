@@ -357,7 +357,7 @@ struct RoomView: View {
                     Button(action: {
                         Task {
                             isScreenSharePublishingBusy = true
-                            defer { isScreenSharePublishingBusy = false }
+                            defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
                             try await room.localParticipant?.setScreenShare(enabled: !isScreenShareEnabled)
                         }
                     },
