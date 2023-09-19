@@ -435,7 +435,7 @@ struct RoomView: View {
                     Group {
                         Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
                         Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
-                        Toggle("VideoView preferSampleBufferRendering", isOn: $appCtx.preferSampleBufferRendering)
+                        Toggle("VideoView renderMode: .sampleBuffer", isOn: $appCtx.preferSampleBufferRendering)
                         Divider()
                     }
 
