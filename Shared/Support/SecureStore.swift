@@ -22,7 +22,7 @@ struct Preferences: Codable, Equatable {
     // Settings
     var videoViewVisible = true
     var showInformationOverlay = false
-    var preferMetal = true
+    var preferSampleBufferRendering = false
     var videoViewMode: VideoView.LayoutMode = .fit
     var videoViewMirrored = false
 

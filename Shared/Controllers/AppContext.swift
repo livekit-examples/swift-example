@@ -22,8 +22,8 @@ final class AppContext: ObservableObject {
         didSet { store.value.showInformationOverlay = showInformationOverlay }
     }
 
-    @Published var preferMetal: Bool = true {
-        didSet { store.value.preferMetal = preferMetal }
+    @Published var preferSampleBufferRendering: Bool = false {
+        didSet { store.value.preferSampleBufferRendering = preferSampleBufferRendering }
     }
 
     @Published var videoViewMode: VideoView.LayoutMode = .fit {
@@ -61,7 +61,7 @@ final class AppContext: ObservableObject {
 
         self.videoViewVisible = store.value.videoViewVisible
         self.showInformationOverlay = store.value.showInformationOverlay
-        self.preferMetal = store.value.preferMetal
+        self.preferSampleBufferRendering = store.value.preferSampleBufferRendering
         self.videoViewMode = store.value.videoViewMode
         self.videoViewMirrored = store.value.videoViewMirrored
         self.connectionHistory = store.value.connectionHistory
