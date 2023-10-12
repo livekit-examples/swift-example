@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/webrtc-sdk/Specs.git",
         "state": {
           "branch": null,
-          "revision": "7604a8945f9a867518df43095c7af3af30677c7d",
-          "version": "114.5735.6"
+          "revision": "4fa8d6d647fc759cdd0265fd413d2f28ea2e0e08",
+          "version": "114.5735.8"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/apple/swift-protobuf.git",
         "state": {
           "branch": null,
-          "revision": "cf62cdaea48b77f1a631e5cb3aeda6047c2cba1d",
-          "version": "1.23.0"
+          "revision": "3c54ab05249f59f2c6641dd2920b8358ea9ed127",
+          "version": "1.24.0"
         }
       }
     ]
