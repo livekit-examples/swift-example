@@ -443,17 +443,17 @@ struct RoomView: View {
 
                     Group {
                         //
-                        Picker("Output device", selection: $appCtx.outputDevice) {
-                            ForEach(Room.audioDeviceModule.outputDevices) { device in
-                                Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
-                            }
-                        }
+//                        Picker("Output device", selection: $appCtx.outputDevice) {
+//                            ForEach(Room.audioDeviceModule.outputDevices) { device in
+//                                Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+//                            }
+//                        }
 
-                        Picker("Input device", selection: $appCtx.inputDevice) {
-                            ForEach(Room.audioDeviceModule.inputDevices) { device in
-                                Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
-                            }
-                        }
+//                        Picker("Input device", selection: $appCtx.inputDevice) {
+//                            ForEach(Room.audioDeviceModule.inputDevices) { device in
+//                                Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+//                            }
+//                        }
                     }
                     #endif
 
