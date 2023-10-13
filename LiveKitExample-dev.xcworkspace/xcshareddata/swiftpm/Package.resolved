@@ -29,15 +29,6 @@
         }
       },
       {
-        "package": "WebRTC",
-        "repositoryURL": "https://github.com/webrtc-sdk/Specs.git",
-        "state": {
-          "branch": null,
-          "revision": "4fa8d6d647fc759cdd0265fd413d2f28ea2e0e08",
-          "version": "114.5735.8"
-        }
-      },
-      {
         "package": "swift-log",
         "repositoryURL": "https://github.com/apple/swift-log.git",
         "state": {
@@ -53,6 +44,15 @@
           "branch": null,
           "revision": "3c54ab05249f59f2c6641dd2920b8358ea9ed127",
           "version": "1.24.0"
+        }
+      },
+      {
+        "package": "WebRTC",
+        "repositoryURL": "https://github.com/livekit/webrtc-xcframework-static.git",
+        "state": {
+          "branch": null,
+          "revision": "05fb98380b8c2c43041050be6170ffa3dbc64174",
+          "version": "114.5735.9"
         }
       }
     ]

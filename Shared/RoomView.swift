@@ -22,12 +22,12 @@ extension CIImage {
     }
 }
 
-extension RTCIODevice: Identifiable {
-
-    public var id: String {
-        deviceId
-    }
-}
+//extension RTCIODevice: Identifiable {
+//
+//    public var id: String {
+//        deviceId
+//    }
+//}
 
 #if os(macOS)
 // keeps weak reference to NSWindow

@@ -38,19 +38,19 @@ final class AppContext: ObservableObject {
         didSet { store.value.connectionHistory = connectionHistory }
     }
 
-    @Published var outputDevice: RTCIODevice = RTCIODevice.defaultDevice(with: .output) {
-        didSet {
-            print("didSet outputDevice: \(String(describing: outputDevice))")
-            Room.audioDeviceModule.outputDevice = outputDevice
-        }
-    }
+//    @Published var outputDevice: LKRTCIODevice = LKRTCIODevice.defaultDevice(with: .output) {
+//        didSet {
+//            print("didSet outputDevice: \(String(describing: outputDevice))")
+//            Room.audioDeviceModule.outputDevice = outputDevice
+//        }
+//    }
 
-    @Published var inputDevice: RTCIODevice = RTCIODevice.defaultDevice(with: .input) {
-        didSet {
-            print("didSet inputDevice: \(String(describing: inputDevice))")
-            Room.audioDeviceModule.inputDevice = inputDevice
-        }
-    }
+//    @Published var inputDevice: LKRTCIODevice = LKRTCIODevice.defaultDevice(with: .input) {
+//        didSet {
+//            print("didSet inputDevice: \(String(describing: inputDevice))")
+//            Room.audioDeviceModule.inputDevice = inputDevice
+//        }
+//    }
 
     @Published var preferSpeakerOutput: Bool = true {
         didSet { AudioManager.shared.preferSpeakerOutput = preferSpeakerOutput }
@@ -66,13 +66,13 @@ final class AppContext: ObservableObject {
         self.videoViewMirrored = store.value.videoViewMirrored
         self.connectionHistory = store.value.connectionHistory
 
-        Room.audioDeviceModule.setDevicesUpdatedHandler {
-            print("devices did update")
-            // force UI update for outputDevice / inputDevice
-            DispatchQueue.main.async {
-                self.outputDevice = Room.audioDeviceModule.outputDevice
-                self.inputDevice = Room.audioDeviceModule.inputDevice
-            }
-        }
+//        Room.audioDeviceModule.setDevicesUpdatedHandler {
+//            print("devices did update")
+//            // force UI update for outputDevice / inputDevice
+//            DispatchQueue.main.async {
+//                self.outputDevice = Room.audioDeviceModule.outputDevice
+//                self.inputDevice = Room.audioDeviceModule.inputDevice
+//            }
+//        }
     }
 }
