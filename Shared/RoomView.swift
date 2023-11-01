@@ -469,35 +469,47 @@ struct RoomView: View {
 
                     Menu {
                         Button {
-                            room.sendSimulate(scenario: .nodeFailure)
+                            Task {
+                                try await room.sendSimulate(scenario: .nodeFailure)
+                            }
                         } label: {
                             Text("Node failure")
                         }
 
                         Button {
-                            room.sendSimulate(scenario: .serverLeave)
+                            Task {
+                                try await room.sendSimulate(scenario: .serverLeave)
+                            }
                         } label: {
                             Text("Server leave")
                         }
 
                         Button {
-                            room.sendSimulate(scenario: .migration)
+                            Task {
+                                try await room.sendSimulate(scenario: .migration)
+                            }
                         } label: {
                             Text("Migration")
                         }
 
                         Button {
-                            room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                            Task {
+                                try await room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                            }
                         } label: {
                             Text("Speaker update")
                         }
                         Button {
-                            room.sendSimulate(scenario: .forceTCP)
+                            Task {
+                                try await room.sendSimulate(scenario: .forceTCP)
+                            }
                         } label: {
                             Text("Force TCP")
                         }
                         Button {
-                            room.sendSimulate(scenario: .forceTLS)
+                            Task {
+                                try await room.sendSimulate(scenario: .forceTLS)
+                            }
                         } label: {
                             Text("Force TLS")
                         }

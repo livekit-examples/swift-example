@@ -128,7 +128,6 @@ final class RoomContext: ObservableObject {
             ),
             adaptiveStream: adaptiveStream,
             dynacast: dynacast,
-            reportStats: reportStats,
             e2eeOptions: e2eeOptions
         )
 
@@ -226,8 +225,7 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    func room(_ room: Room,
-              participant: RemoteParticipant?, didReceive data: Data) {
+    func room(_ room: Room, particiepant: RemoteParticipant?, didReceiveData data: Data, topic: String) {
 
         do {
             let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)

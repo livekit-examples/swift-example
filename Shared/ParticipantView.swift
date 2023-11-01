@@ -12,7 +12,7 @@ struct ParticipantView: View {
 
     @State private var isRendering: Bool = false
     @State private var dimensions: Dimensions?
-    @State private var videoTrackStats: TrackStats?
+    @State private var videoTrackStats: TrackStatistics?
 
     func bgView(systemSymbol: SFSymbol, geometry: GeometryProxy) -> some View {
         Image(systemSymbol: systemSymbol)
@@ -47,7 +47,7 @@ struct ParticipantView: View {
                                          debugMode: appCtx.showInformationOverlay,
                                          isRendering: $isRendering,
                                          dimensions: $dimensions,
-                                         trackStats: $videoTrackStats)
+                                         trackStatistics: $videoTrackStats)
 
                         if !isRendering {
                             ProgressView().progressViewStyle(CircularProgressViewStyle())
@@ -276,28 +276,27 @@ struct StatsView: View {
                     Text("Unknown").fontWeight(.bold)
                 }
 
-                if let trackStats = viewModel.stats {
+                if let trackStats = viewModel.statistics {
 
-                    if trackStats.bpsSent != 0 {
-
-                        HStack(spacing: 3) {
-                            if let codecName = trackStats.codecName {
-                                Text(codecName.uppercased()).fontWeight(.bold)
-                            }
-                            Image(systemSymbol: .arrowUpCircle)
-                            Text(trackStats.formattedBpsSent())
-                        }
-                    }
-
-                    if trackStats.bpsReceived != 0 {
-                        HStack(spacing: 3) {
-                            if let codecName = trackStats.codecName {
-                                Text(codecName.uppercased()).fontWeight(.bold)
-                            }
-                            Image(systemSymbol: .arrowDownCircle)
-                            Text(trackStats.formattedBpsReceived())
-                        }
-                    }
+//                    if trackStats.bpsSent != 0 {
+//                        HStack(spacing: 3) {
+//                            if let codecName = trackStats.codecName {
+//                                Text(codecName.uppercased()).fontWeight(.bold)
+//                            }
+//                            Image(systemSymbol: .arrowUpCircle)
+//                            Text(trackStats.formattedBpsSent())
+//                        }
+//                    }
+//
+//                    if trackStats.bpsReceived != 0 {
+//                        HStack(spacing: 3) {
+//                            if let codecName = trackStats.codecName {
+//                                Text(codecName.uppercased()).fontWeight(.bold)
+//                            }
+//                            Image(systemSymbol: .arrowDownCircle)
+//                            Text(trackStats.formattedBpsReceived())
+//                        }
+//                    }
                 }
             }
             .font(.system(size: 10))
@@ -314,13 +313,13 @@ extension StatsView {
     class DelegateObserver: ObservableObject, TrackDelegate {
         private let track: Track
         @Published var dimensions: Dimensions?
-        @Published var stats: TrackStats?
+        @Published var statistics: TrackStatistics?
 
         init(track: Track) {
             self.track = track
 
             dimensions = track.dimensions
-            stats = track.stats
+            statistics = track.statistics
 
             track.add(delegate: self)
         }
@@ -331,9 +330,9 @@ extension StatsView {
             }
         }
 
-        func track(_ track: Track, didUpdate stats: TrackStats) {
+        func track(_ track: Track, didUpdateStatistics statistics: TrackStatistics) {
             Task.detached { @MainActor in
-                self.stats = stats
+                self.statistics = statistics
             }
         }
     }
