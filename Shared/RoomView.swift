@@ -22,13 +22,6 @@ extension CIImage {
     }
 }
 
-//extension RTCIODevice: Identifiable {
-//
-//    public var id: String {
-//        deviceId
-//    }
-//}
-
 #if os(macOS)
 // keeps weak reference to NSWindow
 class WindowAccess: ObservableObject {
@@ -369,15 +362,17 @@ struct RoomView: View {
                     .disabled(isScreenSharePublishingBusy)
                     #elseif os(macOS)
                     Button(action: {
-                        if isScreenShareEnabled {
-                            // turn off screen share
-                            Task {
-                                isScreenSharePublishingBusy = true
-                                defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                try await roomCtx.setScreenShareMacOS(enabled: false)
+                        if #available(macOS 12.3, *) {
+                            if isScreenShareEnabled {
+                                // Turn off screen share
+                                Task {
+                                    isScreenSharePublishingBusy = true
+                                    defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
+                                    try await roomCtx.setScreenShareMacOS(enabled: false)
+                                }
+                            } else {
+                                screenPickerPresented = true
                             }
-                        } else {
-                            screenPickerPresented = true
                         }
                     },
                     label: {
@@ -385,14 +380,16 @@ struct RoomView: View {
                             .renderingMode(isScreenShareEnabled ? .original : .template)
                             .foregroundColor(isScreenShareEnabled ? Color.green : Color.white)
                     }).popover(isPresented: $screenPickerPresented) {
-                        ScreenShareSourcePickerView { source in
-                            Task {
-                                isScreenSharePublishingBusy = true
-                                defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                try await roomCtx.setScreenShareMacOS(enabled: true, screenShareSource: source)
-                            }
-                            screenPickerPresented = false
-                        }.padding()
+                        if #available(macOS 12.3, *) {
+                            ScreenShareSourcePickerView { source in
+                                Task {
+                                    isScreenSharePublishingBusy = true
+                                    defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
+                                    try await roomCtx.setScreenShareMacOS(enabled: true, screenShareSource: source)
+                                }
+                                screenPickerPresented = false
+                            }.padding()
+                        }
                     }
                     .disabled(isScreenSharePublishingBusy)
                     #endif
@@ -459,7 +456,7 @@ struct RoomView: View {
 
                     Button {
                         Task {
-                            try await room.localParticipant?.unpublishAll()
+                            await room.localParticipant?.unpublishAll()
                         }
                     } label: {
                         Text("Unpublish all")
@@ -520,13 +517,17 @@ struct RoomView: View {
                     Group {
                         Menu {
                             Button {
-                                room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                                Task {
+                                    try await room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                                }
                             } label: {
                                 Text("Allow all")
                             }
 
                             Button {
-                                room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
+                                Task {
+                                    try await room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
+                                }
                             } label: {
                                 Text("Disallow all")
                             }
@@ -545,7 +546,7 @@ struct RoomView: View {
                 // Disconnect
                 Button(action: {
                     Task {
-                        try await roomCtx.disconnect()
+                        await roomCtx.disconnect()
                     }
                 },
                 label: {

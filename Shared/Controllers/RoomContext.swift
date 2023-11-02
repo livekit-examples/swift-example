@@ -131,14 +131,15 @@ final class RoomContext: ObservableObject {
             e2eeOptions: e2eeOptions
         )
 
-        return try await room.connect(url,
-                                      token,
-                                      connectOptions: connectOptions,
-                                      roomOptions: roomOptions)
+        try await room.connect(url,
+                               token,
+                               connectOptions: connectOptions,
+                               roomOptions: roomOptions)
+        return room
     }
 
-    func disconnect() async throws {
-        try await room.disconnect()
+    func disconnect() async {
+        await room.disconnect()
     }
 
     func sendMessage() {
@@ -171,6 +172,8 @@ final class RoomContext: ObservableObject {
 
     #if os(macOS)
     weak var screenShareTrack: LocalTrackPublication?
+
+    @available(macOS 12.3, *)
     func setScreenShareMacOS(enabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
 
         guard let localParticipant = room.localParticipant else {
@@ -180,7 +183,7 @@ final class RoomContext: ObservableObject {
 
         if enabled, let screenShareSource = screenShareSource {
             let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource)
-            screenShareTrack = try await localParticipant.publishVideo(track)
+            screenShareTrack = try await localParticipant.publish(videoTrack: track)
         }
 
         if !enabled, let screenShareTrack = screenShareTrack {
@@ -225,7 +228,7 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    func room(_ room: Room, particiepant: RemoteParticipant?, didReceiveData data: Data, topic: String) {
+    func room(_ room: Room, participant: RemoteParticipant?, didReceiveData data: Data, topic: String) {
 
         do {
             let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)

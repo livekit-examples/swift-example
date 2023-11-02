@@ -118,13 +118,17 @@ struct ParticipantView: View {
                                 Menu {
                                     if case .subscribed = remotePub.subscriptionState {
                                         Button {
-                                            remotePub.set(subscribed: false)
+                                            Task {
+                                                try await remotePub.set(subscribed: false)
+                                            }
                                         } label: {
                                             Text("Unsubscribe")
                                         }
                                     } else if case .unsubscribed = remotePub.subscriptionState {
                                         Button {
-                                            remotePub.set(subscribed: true)
+                                            Task {
+                                                try await remotePub.set(subscribed: true)
+                                            }
                                         } label: {
                                             Text("Subscribe")
                                         }
@@ -166,13 +170,17 @@ struct ParticipantView: View {
                                 Menu {
                                     if case .subscribed = remotePub.subscriptionState {
                                         Button {
-                                            remotePub.set(subscribed: false)
+                                            Task {
+                                                try await remotePub.set(subscribed: false)
+                                            }
                                         } label: {
                                             Text("Unsubscribe")
                                         }
                                     } else if case .unsubscribed = remotePub.subscriptionState {
                                         Button {
-                                            remotePub.set(subscribed: true)
+                                            Task {
+                                                try await remotePub.set(subscribed: true)
+                                            }
                                         } label: {
                                             Text("Subscribe")
                                         }
@@ -278,25 +286,25 @@ struct StatsView: View {
 
                 if let trackStats = viewModel.statistics {
 
-//                    if trackStats.bpsSent != 0 {
-//                        HStack(spacing: 3) {
-//                            if let codecName = trackStats.codecName {
-//                                Text(codecName.uppercased()).fontWeight(.bold)
-//                            }
-//                            Image(systemSymbol: .arrowUpCircle)
-//                            Text(trackStats.formattedBpsSent())
-//                        }
-//                    }
-//
-//                    if trackStats.bpsReceived != 0 {
-//                        HStack(spacing: 3) {
-//                            if let codecName = trackStats.codecName {
-//                                Text(codecName.uppercased()).fontWeight(.bold)
-//                            }
-//                            Image(systemSymbol: .arrowDownCircle)
-//                            Text(trackStats.formattedBpsReceived())
-//                        }
-//                    }
+                    //                    if trackStats.bpsSent != 0 {
+                    //                        HStack(spacing: 3) {
+                    //                            if let codecName = trackStats.codecName {
+                    //                                Text(codecName.uppercased()).fontWeight(.bold)
+                    //                            }
+                    //                            Image(systemSymbol: .arrowUpCircle)
+                    //                            Text(trackStats.formattedBpsSent())
+                    //                        }
+                    //                    }
+                    //
+                    //                    if trackStats.bpsReceived != 0 {
+                    //                        HStack(spacing: 3) {
+                    //                            if let codecName = trackStats.codecName {
+                    //                                Text(codecName.uppercased()).fontWeight(.bold)
+                    //                            }
+                    //                            Image(systemSymbol: .arrowDownCircle)
+                    //                            Text(trackStats.formattedBpsReceived())
+                    //                        }
+                    //                    }
                 }
             }
             .font(.system(size: 10))

@@ -5,6 +5,7 @@ import LiveKit
 
 #if os(macOS)
 
+@available(macOS 12.3, *)
 class ScreenShareSourcePickerCtrl: ObservableObject {
 
     @Published var tracks = [LocalVideoTrack]()
@@ -12,45 +13,44 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
         didSet {
             guard oldValue != mode else { return }
             Task {
-                await restartTracks()
+                try await restartTracks()
             }
         }
     }
 
-    private func restartTracks() async {
+    private func restartTracks() async throws {
 
-        Task {
-            // stop in parallel
-            await withThrowingTaskGroup(of: Void.self) { group in
-                for track in tracks {
-                    group.addTask {
-                        try await track.stop()
-                    }
-                }
-            }
-
-            let sources = try await MacOSScreenCapturer.sources(for: (mode == .display ? .display : .window))
-            let options = ScreenShareCaptureOptions(dimensions: .h360_43, fps: 5)
-            let _newTracks = sources.map { LocalVideoTrack.createMacOSScreenShareTrack(source: $0, options: options) }
-
-            Task { @MainActor in
-                self.tracks = _newTracks
-            }
-
-            // start in parallel
-            await withThrowingTaskGroup(of: Void.self) { group in
-                for track in _newTracks {
-                    group.addTask {
-                        try await track.start()
-                    }
+        // stop in parallel
+        await withThrowingTaskGroup(of: Void.self) { group in
+            for track in tracks {
+                group.addTask {
+                    try await track.stop()
                 }
             }
         }
+
+        let sources = try await MacOSScreenCapturer.sources(for: (self.mode == .display ? .display : .window))
+        let options = ScreenShareCaptureOptions(dimensions: .h360_43, fps: 5)
+        let _newTracks = sources.map { LocalVideoTrack.createMacOSScreenShareTrack(source: $0, options: options) }
+
+        Task { @MainActor in
+            self.tracks = _newTracks
+        }
+
+        // start in parallel
+        await withThrowingTaskGroup(of: Void.self) { group in
+            for track in _newTracks {
+                group.addTask {
+                    try await track.start()
+                }
+            }
+        }
+
     }
 
     init() {
         Task {
-            await restartTracks()
+            try await restartTracks()
         }
     }
 
@@ -76,6 +76,7 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
 
 typealias OnPickScreenShareSource = (MacOSScreenCaptureSource) -> Void
 
+@available(macOS 12.3, *)
 struct ScreenShareSourcePickerView: View {
 
     public enum Mode {
