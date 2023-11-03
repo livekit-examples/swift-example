@@ -58,7 +58,7 @@ struct RoomContextView: View {
             .onDisappear {
                 print("\(String(describing: type(of: self))) onDisappear")
                 Task {
-                    try await roomCtx.disconnect()
+                    await roomCtx.disconnect()
                 }
             }
             .onOpenURL(perform: { url in

@@ -217,8 +217,8 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    func room(_ room: Room,
-              participantDidLeave participant: RemoteParticipant) {
+    func room(_ room: Room, participantDidLeave participant: RemoteParticipant) {
+
         DispatchQueue.main.async {
             // self.participants.removeValue(forKey: participant.sid)
             if let focusParticipant = self.focusParticipant,
