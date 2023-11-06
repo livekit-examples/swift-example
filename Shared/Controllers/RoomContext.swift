@@ -1,10 +1,25 @@
-import SwiftUI
+/*
+ * Copyright 2023 LiveKit
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import LiveKit
+import SwiftUI
 import WebRTC
 
 // This class contains the logic to control behavior of the whole app.
 final class RoomContext: ObservableObject {
-
     let jsonEncoder = JSONEncoder()
     let jsonDecoder = JSONDecoder()
 
@@ -52,7 +67,7 @@ final class RoomContext: ObservableObject {
 
     // ConnectOptions
     @Published var autoSubscribe: Bool = true {
-        didSet { store.value.autoSubscribe = autoSubscribe}
+        didSet { store.value.autoSubscribe = autoSubscribe }
     }
 
     @Published var publish: Bool = false {
@@ -70,33 +85,32 @@ final class RoomContext: ObservableObject {
         self.store = store
         room.add(delegate: self)
 
-        self.url = store.value.url
-        self.token = store.value.token
-        self.e2ee = store.value.e2ee
-        self.e2eeKey = store.value.e2eeKey
-        self.simulcast = store.value.simulcast
-        self.adaptiveStream = store.value.adaptiveStream
-        self.dynacast = store.value.dynacast
-        self.reportStats = store.value.reportStats
-        self.autoSubscribe = store.value.autoSubscribe
-        self.publish = store.value.publishMode
+        url = store.value.url
+        token = store.value.token
+        e2ee = store.value.e2ee
+        e2eeKey = store.value.e2eeKey
+        simulcast = store.value.simulcast
+        adaptiveStream = store.value.adaptiveStream
+        dynacast = store.value.dynacast
+        reportStats = store.value.reportStats
+        autoSubscribe = store.value.autoSubscribe
+        publish = store.value.publishMode
 
         #if os(iOS)
-        UIApplication.shared.isIdleTimerDisabled = true
+            UIApplication.shared.isIdleTimerDisabled = true
         #endif
     }
 
     deinit {
         #if os(iOS)
-        UIApplication.shared.isIdleTimerDisabled = false
+            UIApplication.shared.isIdleTimerDisabled = false
         #endif
         print("RoomContext.deinit")
     }
 
     @MainActor
     func connect(entry: ConnectionHistory? = nil) async throws -> Room {
-
-        if let entry = entry {
+        if let entry {
             url = entry.url
             token = entry.token
             e2ee = entry.e2ee
@@ -131,8 +145,8 @@ final class RoomContext: ObservableObject {
             e2eeOptions: e2eeOptions
         )
 
-        try await room.connect(url,
-                               token,
+        try await room.connect(url: url,
+                               token: token,
                                connectOptions: connectOptions,
                                roomOptions: roomOptions)
         return room
@@ -143,18 +157,12 @@ final class RoomContext: ObservableObject {
     }
 
     func sendMessage() {
-
-        guard let localParticipant = room.localParticipant else {
-            print("LocalParticipant doesn't exist")
-            return
-        }
-
         // Make sure the message is not empty
         guard !textFieldString.isEmpty else { return }
 
         let roomMessage = ExampleRoomMessage(messageId: UUID().uuidString,
-                                             senderSid: localParticipant.sid,
-                                             senderIdentity: localParticipant.identity,
+                                             senderSid: room.localParticipant.sid,
+                                             senderIdentity: room.localParticipant.identity,
                                              text: textFieldString)
         textFieldString = ""
         messages.append(roomMessage)
@@ -162,48 +170,39 @@ final class RoomContext: ObservableObject {
         Task {
             do {
                 let json = try jsonEncoder.encode(roomMessage)
-                try await localParticipant.publish(data: json)
-            } catch let error {
+                try await room.localParticipant.publish(data: json)
+            } catch {
                 print("Failed to encode data \(error)")
             }
-
         }
     }
 
     #if os(macOS)
-    weak var screenShareTrack: LocalTrackPublication?
+        weak var screenShareTrack: LocalTrackPublication?
 
-    @available(macOS 12.3, *)
-    func setScreenShareMacOS(enabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
+        @available(macOS 12.3, *)
+        func setScreenShareMacOS(enabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
+            if enabled, let screenShareSource {
+                let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource)
+                screenShareTrack = try await room.localParticipant.publish(videoTrack: track)
+            }
 
-        guard let localParticipant = room.localParticipant else {
-            print("LocalParticipant doesn't exist")
-            return
+            if !enabled, let screenShareTrack {
+                try await room.localParticipant.unpublish(publication: screenShareTrack)
+            }
         }
-
-        if enabled, let screenShareSource = screenShareSource {
-            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource)
-            screenShareTrack = try await localParticipant.publish(videoTrack: track)
-        }
-
-        if !enabled, let screenShareTrack = screenShareTrack {
-            try await localParticipant.unpublish(publication: screenShareTrack)
-        }
-    }
     #endif
 }
 
 extension RoomContext: RoomDelegate {
-
-    func room(_ room: Room, publication: TrackPublication, didUpdateE2EEState e2eeState: E2EEState) {
+    func room(_: Room, publication: TrackPublication, didUpdateE2EEState e2eeState: E2EEState) {
         print("Did update e2eeState = [\(e2eeState.toString())] for publication \(publication.sid)")
     }
 
-    func room(_ room: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
-
+    func room(_: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
         print("Did update connectionState \(oldValue) -> \(connectionState)")
 
-        if case .disconnected(let reason) = connectionState, reason != .user {
+        if case let .disconnected(reason) = connectionState, reason != .user {
             latestError = reason
             DispatchQueue.main.async {
                 self.shouldShowDisconnectReason = true
@@ -217,19 +216,18 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    func room(_ room: Room, participantDidLeave participant: RemoteParticipant) {
-
+    func room(_: Room, participantDidLeave participant: RemoteParticipant) {
         DispatchQueue.main.async {
             // self.participants.removeValue(forKey: participant.sid)
             if let focusParticipant = self.focusParticipant,
-               focusParticipant.sid == participant.sid {
+               focusParticipant.sid == participant.sid
+            {
                 self.focusParticipant = nil
             }
         }
     }
 
-    func room(_ room: Room, participant: RemoteParticipant?, didReceiveData data: Data, topic: String) {
-
+    func room(_: Room, participant _: RemoteParticipant?, didReceiveData data: Data, topic _: String) {
         do {
             let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
             // Update UI from main queue
@@ -243,7 +241,7 @@ extension RoomContext: RoomDelegate {
                 }
             }
 
-        } catch let error {
+        } catch {
             print("Failed to decode data \(error)")
         }
     }

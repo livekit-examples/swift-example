@@ -1,9 +1,25 @@
-import SwiftUI
+/*
+ * Copyright 2023 LiveKit
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import LiveKit
 import SFSafeSymbols
+import SwiftUI
 
 struct ParticipantView: View {
-
     @ObservedObject var participant: Participant
     @EnvironmentObject var appCtx: AppContext
 
@@ -38,7 +54,8 @@ struct ParticipantView: View {
                 if let publication = participant.mainVideoPublication,
                    !publication.muted,
                    let track = publication.track as? VideoTrack,
-                   appCtx.videoViewVisible {
+                   appCtx.videoViewVisible
+                {
                     ZStack(alignment: .topLeading) {
                         SwiftUIVideoView(track,
                                          layoutMode: videoViewMode,
@@ -55,7 +72,8 @@ struct ParticipantView: View {
                         }
                     }
                 } else if let publication = participant.mainVideoPublication as? RemoteTrackPublication,
-                          case .notAllowed = publication.subscriptionState {
+                          case .notAllowed = publication.subscriptionState
+                {
                     // Show no permission icon
                     bgView(systemSymbol: .exclamationmarkCircle, geometry: geometry)
                 } else {
@@ -64,18 +82,19 @@ struct ParticipantView: View {
                 }
 
                 if appCtx.showInformationOverlay {
-
                     VStack(alignment: .leading, spacing: 5) {
                         // Video stats
                         if let publication = participant.mainVideoPublication,
                            !publication.muted,
-                           let track = publication.track as? VideoTrack {
+                           let track = publication.track as? VideoTrack
+                        {
                             StatsView(track: track)
                         }
                         // Audio stats
                         if let publication = participant.firstAudioPublication,
                            !publication.muted,
-                           let track = publication.track as? AudioTrack {
+                           let track = publication.track as? AudioTrack
+                        {
                             StatsView(track: track)
                         }
                     }
@@ -87,7 +106,6 @@ struct ParticipantView: View {
                         maxHeight: .infinity,
                         alignment: .topLeading
                     )
-
                 }
 
                 VStack(alignment: .trailing, spacing: 0) {
@@ -95,24 +113,23 @@ struct ParticipantView: View {
                     if let subVideoTrack = participant.subVideoTrack {
                         SwiftUIVideoView(subVideoTrack,
                                          layoutMode: .fill,
-                                         mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto
-                        )
-                        .background(Color.black)
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
-                        .cornerRadius(8)
-                        .padding()
+                                         mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto)
+                            .background(Color.black)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
+                            .cornerRadius(8)
+                            .padding()
                     }
 
                     // Bottom user info bar
                     HStack {
-                        Text("\(participant.identity)") //  (\(participant.publish ?? "-"))
+                        Text(participant.identity ?? "") //  (\(participant.publish ?? "-"))
                             .lineLimit(1)
                             .truncationMode(.tail)
 
                         if let publication = participant.mainVideoPublication,
-                           !publication.muted {
-
+                           !publication.muted
+                        {
                             // is remote
                             if let remotePub = publication as? RemoteTrackPublication {
                                 Menu {
@@ -132,7 +149,6 @@ struct ParticipantView: View {
                                         } label: {
                                             Text("Subscribe")
                                         }
-
                                     }
                                 } label: {
                                     if case .subscribed = remotePub.subscriptionState {
@@ -163,8 +179,8 @@ struct ParticipantView: View {
                         }
 
                         if let publication = participant.firstAudioPublication,
-                           !publication.muted {
-
+                           !publication.muted
+                        {
                             // is remote
                             if let remotePub = publication as? RemoteTrackPublication {
                                 Menu {
@@ -184,7 +200,6 @@ struct ParticipantView: View {
                                         } label: {
                                             Text("Subscribe")
                                         }
-
                                     }
                                 } label: {
                                     if case .subscribed = remotePub.subscriptionState {
@@ -234,8 +249,8 @@ struct ParticipantView: View {
                         }
 
                     }.padding(5)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .background(Color.black.opacity(0.5))
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .background(Color.black.opacity(0.5))
                 }
             }
             .cornerRadius(8)
@@ -247,15 +262,14 @@ struct ParticipantView: View {
                     : nil
             )
         }.gesture(TapGesture()
-                    .onEnded { _ in
-                        // Pass the tap event
-                        onTap?(participant)
-                    })
+            .onEnded { _ in
+                // Pass the tap event
+                onTap?(participant)
+            })
     }
 }
 
 struct StatsView: View {
-
     @ObservedObject private var viewModel: DelegateObserver
     private let track: Track
 
@@ -285,7 +299,6 @@ struct StatsView: View {
                 }
 
                 if let trackStats = viewModel.statistics {
-
                     //                    if trackStats.bpsSent != 0 {
                     //                        HStack(spacing: 3) {
                     //                            if let codecName = trackStats.codecName {
@@ -317,7 +330,6 @@ struct StatsView: View {
 }
 
 extension StatsView {
-
     class DelegateObserver: ObservableObject, TrackDelegate {
         private let track: Track
         @Published var dimensions: Dimensions?
@@ -332,13 +344,13 @@ extension StatsView {
             track.add(delegate: self)
         }
 
-        func track(_ track: VideoTrack, didUpdate dimensions: Dimensions?) {
+        func track(_: VideoTrack, didUpdate dimensions: Dimensions?) {
             Task.detached { @MainActor in
                 self.dimensions = dimensions
             }
         }
 
-        func track(_ track: Track, didUpdateStatistics statistics: TrackStatistics) {
+        func track(_: Track, didUpdateStatistics statistics: TrackStatistics) {
             Task.detached { @MainActor in
                 self.statistics = statistics
             }

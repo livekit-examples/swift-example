@@ -1,66 +1,80 @@
-import SwiftUI
+/*
+ * Copyright 2023 LiveKit
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import LiveKit
 import SFSafeSymbols
+import SwiftUI
 import WebRTC
 
 #if !os(macOS)
-let adaptiveMin = 170.0
-let toolbarPlacement: ToolbarItemPlacement = .bottomBar
+    let adaptiveMin = 170.0
+    let toolbarPlacement: ToolbarItemPlacement = .bottomBar
 #else
-let adaptiveMin = 300.0
-let toolbarPlacement: ToolbarItemPlacement = .primaryAction
+    let adaptiveMin = 300.0
+    let toolbarPlacement: ToolbarItemPlacement = .primaryAction
 #endif
 
 extension CIImage {
     // helper to create a `CIImage` for both platforms
     convenience init(named name: String) {
         #if !os(macOS)
-        self.init(cgImage: UIImage(named: name)!.cgImage!)
+            self.init(cgImage: UIImage(named: name)!.cgImage!)
         #else
-        self.init(data: NSImage(named: name)!.tiffRepresentation!)!
+            self.init(data: NSImage(named: name)!.tiffRepresentation!)!
         #endif
     }
 }
 
 #if os(macOS)
-// keeps weak reference to NSWindow
-class WindowAccess: ObservableObject {
+    // keeps weak reference to NSWindow
+    class WindowAccess: ObservableObject {
+        private weak var window: NSWindow?
 
-    private weak var window: NSWindow?
-
-    deinit {
-        // reset changed properties
-        DispatchQueue.main.async { [weak window] in
-            window?.level = .normal
-        }
-    }
-
-    @Published public var pinned: Bool = false {
-        didSet {
-            guard oldValue != pinned else { return }
-            self.level = pinned ? .floating : .normal
-        }
-    }
-
-    private var level: NSWindow.Level {
-        get { window?.level ?? .normal }
-        set {
-            DispatchQueue.main.async {
-                self.window?.level = newValue
-                self.objectWillChange.send()
+        deinit {
+            // reset changed properties
+            DispatchQueue.main.async { [weak window] in
+                window?.level = .normal
             }
         }
-    }
 
-    public func set(window: NSWindow?) {
-        self.window = window
-        DispatchQueue.main.async { self.objectWillChange.send() }
+        @Published public var pinned: Bool = false {
+            didSet {
+                guard oldValue != pinned else { return }
+                level = pinned ? .floating : .normal
+            }
+        }
+
+        private var level: NSWindow.Level {
+            get { window?.level ?? .normal }
+            set {
+                DispatchQueue.main.async {
+                    self.window?.level = newValue
+                    self.objectWillChange.send()
+                }
+            }
+        }
+
+        public func set(window: NSWindow?) {
+            self.window = window
+            DispatchQueue.main.async { self.objectWillChange.send() }
+        }
     }
-}
 #endif
 
 struct RoomView: View {
-
     @EnvironmentObject var appCtx: AppContext
     @EnvironmentObject var roomCtx: RoomContext
     @EnvironmentObject var room: Room
@@ -71,14 +85,13 @@ struct RoomView: View {
 
     @State private var screenPickerPresented = false
     #if os(macOS)
-    @ObservedObject private var windowAccess = WindowAccess()
+        @ObservedObject private var windowAccess = WindowAccess()
     #endif
 
     @State private var showConnectionTime = true
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
-
-        let isMe = message.senderSid == room.localParticipant?.sid
+        let isMe = message.senderSid == room.localParticipant.sid
 
         return HStack {
             if isMe {
@@ -97,7 +110,7 @@ struct RoomView: View {
                 Spacer()
             }
         }.padding(.vertical, 5)
-        .padding(.horizontal, 10)
+            .padding(.horizontal, 10)
     }
 
     func scrollToBottom(_ scrollView: ScrollViewProxy) {
@@ -108,7 +121,6 @@ struct RoomView: View {
     }
 
     func messagesView(geometry: GeometryProxy) -> some View {
-
         VStack(spacing: 0) {
             ScrollViewReader { scrollView in
                 ScrollView(.vertical, showsIndicators: true) {
@@ -137,7 +149,6 @@ struct RoomView: View {
                 )
             }
             HStack(spacing: 0) {
-
                 TextField("Enter message", text: $roomCtx.textFieldString)
                     .textFieldStyle(PlainTextFieldStyle())
                     .disableAutocorrection(true)
@@ -158,7 +169,6 @@ struct RoomView: View {
                         .foregroundColor(roomCtx.textFieldString.isEmpty ? nil : Color.lkRed)
                 }
                 .buttonStyle(.borderless)
-
             }
             .padding()
             .background(Color.lkGray2)
@@ -180,9 +190,7 @@ struct RoomView: View {
     }
 
     func content(geometry: GeometryProxy) -> some View {
-
         VStack {
-
             if showConnectionTime {
                 Text("Connected (\([room.serverRegion, "\(String(describing: room.connectStopwatch.total().rounded(to: 2)))s"].compactMap { $0 }.joined(separator: ", ")))")
                     .multilineTextAlignment(.center)
@@ -198,16 +206,16 @@ struct RoomView: View {
             }
 
             HorVStack(axis: geometry.isTall ? .vertical : .horizontal, spacing: 5) {
-
                 Group {
                     if let focusParticipant = roomCtx.focusParticipant {
                         ZStack(alignment: .bottomTrailing) {
                             ParticipantView(participant: focusParticipant,
-                                            videoViewMode: appCtx.videoViewMode) { _ in
+                                            videoViewMode: appCtx.videoViewMode)
+                            { _ in
                                 roomCtx.focusParticipant = nil
                             }
                             .overlay(RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.lkRed.opacity(0.7), lineWidth: 5.0))
+                                .stroke(Color.lkRed.opacity(0.7), lineWidth: 5.0))
                             Text("SELECTED")
                                 .font(.system(size: 10))
                                 .fontWeight(.bold)
@@ -224,9 +232,9 @@ struct RoomView: View {
                         // Array([room.allParticipants.values, room.allParticipants.values].joined())
                         ParticipantLayout(sortedParticipants(), spacing: 5) { participant in
                             ParticipantView(participant: participant,
-                                            videoViewMode: appCtx.videoViewMode) { participant in
+                                            videoViewMode: appCtx.videoViewMode)
+                            { participant in
                                 roomCtx.focusParticipant = participant
-
                             }
                         }
                     }
@@ -247,24 +255,19 @@ struct RoomView: View {
     }
 
     var body: some View {
-
         GeometryReader { geometry in
             content(geometry: geometry)
         }
         .toolbar {
             ToolbarItemGroup(placement: toolbarPlacement) {
-
-                // Text("(\(room.room.remoteParticipants.count)) ")
-
                 #if os(macOS)
-                if let name = room.name {
-                    Text(name)
-                        .fontWeight(.bold)
-                }
+                    if let name = room.name {
+                        Text(name)
+                            .fontWeight(.bold)
+                    }
 
-                if let identity = room.localParticipant?.identity {
-                    Text(identity)
-                }
+                    Text(room.localParticipant.identity ?? "")
+
                 #endif
 
                 // #if os(macOS)
@@ -285,18 +288,19 @@ struct RoomView: View {
                 Spacer()
 
                 Group {
-                    let isCameraEnabled = room.localParticipant?.isCameraEnabled() ?? false
-                    let isMicrophoneEnabled = room.localParticipant?.isMicrophoneEnabled() ?? false
-                    let isScreenShareEnabled = room.localParticipant?.isScreenShareEnabled() ?? false
+                    let isCameraEnabled = room.localParticipant.isCameraEnabled()
+                    let isMicrophoneEnabled = room.localParticipant.isMicrophoneEnabled()
+                    let isScreenShareEnabled = room.localParticipant.isScreenShareEnabled()
 
-                    if (isCameraEnabled) && CameraCapturer.canSwitchPosition() {
+                    if isCameraEnabled, CameraCapturer.canSwitchPosition() {
                         Menu {
                             Button("Switch position") {
                                 Task {
                                     isCameraPublishingBusy = true
                                     defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                                    if let track = room.localParticipant?.firstCameraVideoTrack as? LocalVideoTrack,
-                                       let cameraCapturer = track.capturer as? CameraCapturer {
+                                    if let track = room.localParticipant.firstCameraVideoTrack as? LocalVideoTrack,
+                                       let cameraCapturer = track.capturer as? CameraCapturer
+                                    {
                                         try await cameraCapturer.switchCameraPosition()
                                     }
                                 }
@@ -305,7 +309,7 @@ struct RoomView: View {
                                 Task {
                                     isCameraPublishingBusy = true
                                     defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                                    try await room.localParticipant?.setCamera(enabled: !isCameraEnabled)
+                                    try await room.localParticipant.setCamera(enabled: !isCameraEnabled)
                                 }
                             }
                         } label: {
@@ -317,113 +321,112 @@ struct RoomView: View {
                     } else {
                         // Toggle camera enabled
                         Button(action: {
-                            Task {
-                                isCameraPublishingBusy = true
-                                defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                                try await room.localParticipant?.setCamera(enabled: !isCameraEnabled)
-                            }
-                        },
-                        label: {
-                            Image(systemSymbol: .videoFill)
-                                .renderingMode(isCameraEnabled ? .original : .template)
-                        })
-                        // disable while publishing/un-publishing
-                        .disabled(isCameraPublishingBusy)
+                                   Task {
+                                       isCameraPublishingBusy = true
+                                       defer { Task { @MainActor in isCameraPublishingBusy = false } }
+                                       try await room.localParticipant.setCamera(enabled: !isCameraEnabled)
+                                   }
+                               },
+                               label: {
+                                   Image(systemSymbol: .videoFill)
+                                       .renderingMode(isCameraEnabled ? .original : .template)
+                               })
+                               // disable while publishing/un-publishing
+                               .disabled(isCameraPublishingBusy)
                     }
 
                     // Toggle microphone enabled
                     Button(action: {
-                        Task {
-                            isMicrophonePublishingBusy = true
-                            defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
-                            try await room.localParticipant?.setMicrophone(enabled: !isMicrophoneEnabled)
-                        }
-                    },
-                    label: {
-                        Image(systemSymbol: .micFill)
-                            .renderingMode(isMicrophoneEnabled ? .original : .template)
-                    })
-                    // disable while publishing/un-publishing
-                    .disabled(isMicrophonePublishingBusy)
+                               Task {
+                                   isMicrophonePublishingBusy = true
+                                   defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
+                                   try await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled)
+                               }
+                           },
+                           label: {
+                               Image(systemSymbol: .micFill)
+                                   .renderingMode(isMicrophoneEnabled ? .original : .template)
+                           })
+                           // disable while publishing/un-publishing
+                           .disabled(isMicrophonePublishingBusy)
 
                     #if os(iOS)
-                    Button(action: {
-                        Task {
-                            isScreenSharePublishingBusy = true
-                            defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                            try await room.localParticipant?.setScreenShare(enabled: !isScreenShareEnabled)
-                        }
-                    },
-                    label: {
-                        Image(systemSymbol: .rectangleFillOnRectangleFill)
-                            .renderingMode(isScreenShareEnabled ? .original : .template)
-                    })
-                    // disable while publishing/un-publishing
-                    .disabled(isScreenSharePublishingBusy)
+                        Button(action: {
+                                   Task {
+                                       isScreenSharePublishingBusy = true
+                                       defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
+                                       try await room.localParticipant?.setScreenShare(enabled: !isScreenShareEnabled)
+                                   }
+                               },
+                               label: {
+                                   Image(systemSymbol: .rectangleFillOnRectangleFill)
+                                       .renderingMode(isScreenShareEnabled ? .original : .template)
+                               })
+                               // disable while publishing/un-publishing
+                               .disabled(isScreenSharePublishingBusy)
                     #elseif os(macOS)
-                    Button(action: {
-                        if #available(macOS 12.3, *) {
-                            if isScreenShareEnabled {
-                                // Turn off screen share
-                                Task {
-                                    isScreenSharePublishingBusy = true
-                                    defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                    try await roomCtx.setScreenShareMacOS(enabled: false)
-                                }
-                            } else {
-                                screenPickerPresented = true
+                        Button(action: {
+                                   if #available(macOS 12.3, *) {
+                                       if isScreenShareEnabled {
+                                           // Turn off screen share
+                                           Task {
+                                               isScreenSharePublishingBusy = true
+                                               defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
+                                               try await roomCtx.setScreenShareMacOS(enabled: false)
+                                           }
+                                       } else {
+                                           screenPickerPresented = true
+                                       }
+                                   }
+                               },
+                               label: {
+                                   Image(systemSymbol: .rectangleFillOnRectangleFill)
+                                       .renderingMode(isScreenShareEnabled ? .original : .template)
+                                       .foregroundColor(isScreenShareEnabled ? Color.green : Color.white)
+                               }).popover(isPresented: $screenPickerPresented) {
+                            if #available(macOS 12.3, *) {
+                                ScreenShareSourcePickerView { source in
+                                    Task {
+                                        isScreenSharePublishingBusy = true
+                                        defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
+                                        try await roomCtx.setScreenShareMacOS(enabled: true, screenShareSource: source)
+                                    }
+                                    screenPickerPresented = false
+                                }.padding()
                             }
                         }
-                    },
-                    label: {
-                        Image(systemSymbol: .rectangleFillOnRectangleFill)
-                            .renderingMode(isScreenShareEnabled ? .original : .template)
-                            .foregroundColor(isScreenShareEnabled ? Color.green : Color.white)
-                    }).popover(isPresented: $screenPickerPresented) {
-                        if #available(macOS 12.3, *) {
-                            ScreenShareSourcePickerView { source in
-                                Task {
-                                    isScreenSharePublishingBusy = true
-                                    defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                    try await roomCtx.setScreenShareMacOS(enabled: true, screenShareSource: source)
-                                }
-                                screenPickerPresented = false
-                            }.padding()
-                        }
-                    }
-                    .disabled(isScreenSharePublishingBusy)
+                        .disabled(isScreenSharePublishingBusy)
                     #endif
 
                     // Toggle messages view (chat example)
                     Button(action: {
-                        withAnimation {
-                            roomCtx.showMessagesView.toggle()
-                        }
-                    },
-                    label: {
-                        Image(systemSymbol: .messageFill)
-                            .renderingMode(roomCtx.showMessagesView ? .original : .template)
-                    })
+                               withAnimation {
+                                   roomCtx.showMessagesView.toggle()
+                               }
+                           },
+                           label: {
+                               Image(systemSymbol: .messageFill)
+                                   .renderingMode(roomCtx.showMessagesView ? .original : .template)
+                           })
                 }
 
                 // Spacer()
 
                 #if os(iOS)
-                SwiftUIAudioRoutePickerButton()
+                    SwiftUIAudioRoutePickerButton()
                 #endif
 
                 Menu {
-
                     #if os(macOS)
-                    Button {
-                        if let url = URL(string: "livekit://") {
-                            NSWorkspace.shared.open(url)
+                        Button {
+                            if let url = URL(string: "livekit://") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        } label: {
+                            Text("New window")
                         }
-                    } label: {
-                        Text("New window")
-                    }
 
-                    Divider()
+                        Divider()
 
                     #endif
 
@@ -438,25 +441,25 @@ struct RoomView: View {
 
                     #if os(macOS)
 
-                    Group {
-                        Picker("Output device", selection: $appCtx.outputDevice) {
-                            ForEach(AudioManager.shared.outputDevices) { device in
-                                Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                        Group {
+                            Picker("Output device", selection: $appCtx.outputDevice) {
+                                ForEach(AudioManager.shared.outputDevices) { device in
+                                    Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                                }
+                            }
+                            Picker("Input device", selection: $appCtx.inputDevice) {
+                                ForEach(AudioManager.shared.inputDevices) { device in
+                                    Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                                }
                             }
                         }
-                        Picker("Input device", selection: $appCtx.inputDevice) {
-                            ForEach(AudioManager.shared.inputDevices) { device in
-                                Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
-                            }
-                        }
-                    }
                     #endif
 
                     Divider()
 
                     Button {
                         Task {
-                            await room.localParticipant?.unpublishAll()
+                            await room.localParticipant.unpublishAll()
                         }
                     } label: {
                         Text("Unpublish all")
@@ -518,7 +521,7 @@ struct RoomView: View {
                         Menu {
                             Button {
                                 Task {
-                                    try await room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                                    try await room.localParticipant.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
                                 }
                             } label: {
                                 Text("Allow all")
@@ -526,7 +529,7 @@ struct RoomView: View {
 
                             Button {
                                 Task {
-                                    try await room.localParticipant?.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
+                                    try await room.localParticipant.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
                                 }
                             } label: {
                                 Text("Disallow all")
@@ -545,14 +548,14 @@ struct RoomView: View {
 
                 // Disconnect
                 Button(action: {
-                    Task {
-                        await roomCtx.disconnect()
-                    }
-                },
-                label: {
-                    Image(systemSymbol: .xmarkCircleFill)
-                        .renderingMode(.original)
-                })
+                           Task {
+                               await roomCtx.disconnect()
+                           }
+                       },
+                       label: {
+                           Image(systemSymbol: .xmarkCircleFill)
+                               .renderingMode(.original)
+                       })
             }
         }
         // #if os(macOS)
@@ -563,7 +566,7 @@ struct RoomView: View {
             Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
                 DispatchQueue.main.async {
                     withAnimation {
-                        self.showConnectionTime = false
+                        showConnectionTime = false
                     }
                 }
             }
@@ -572,7 +575,6 @@ struct RoomView: View {
 }
 
 struct ParticipantLayout<Content: View>: View {
-
     let views: [AnyView]
     let spacing: CGFloat
 
@@ -580,9 +582,10 @@ struct ParticipantLayout<Content: View>: View {
         _ data: Data,
         id: KeyPath<Data.Element, Data.Element> = \.self,
         spacing: CGFloat,
-        @ViewBuilder content: @escaping (Data.Element) -> Content) {
+        @ViewBuilder content: @escaping (Data.Element) -> Content
+    ) {
         self.spacing = spacing
-        self.views = data.map { AnyView(content($0[keyPath: id])) }
+        views = data.map { AnyView(content($0[keyPath: id])) }
     }
 
     func computeColumn(with geometry: GeometryProxy) -> (x: Int, y: Int) {
@@ -593,16 +596,16 @@ struct ParticipantLayout<Content: View>: View {
     }
 
     func grid(axis: Axis, geometry: GeometryProxy) -> some View {
-        ScrollView([ axis == .vertical ? .vertical : .horizontal ]) {
+        ScrollView([axis == .vertical ? .vertical : .horizontal]) {
             HorVGrid(axis: axis, columns: [GridItem(.flexible())], spacing: spacing) {
-                ForEach(0..<views.count, id: \.self) { i in
+                ForEach(0 ..< views.count, id: \.self) { i in
                     views[i]
                         .aspectRatio(1, contentMode: .fill)
                 }
             }
             .padding(axis == .horizontal ? [.leading, .trailing] : [.top, .bottom],
                      max(0, ((axis == .horizontal ? geometry.size.width : geometry.size.height)
-                                - ((axis == .horizontal ? geometry.size.height : geometry.size.width) * CGFloat(views.count)) - (spacing * CGFloat(views.count - 1))) / 2))
+                             - ((axis == .horizontal ? geometry.size.height : geometry.size.width) * CGFloat(views.count)) - (spacing * CGFloat(views.count - 1))) / 2))
         }
     }
 
@@ -615,7 +618,6 @@ struct ParticipantLayout<Content: View>: View {
             } else if geometry.size.height <= 300 {
                 grid(axis: .horizontal, geometry: geometry)
             } else {
-
                 let verticalWhenTall: Axis = geometry.isTall ? .vertical : .horizontal
                 let horizontalWhenTall: Axis = geometry.isTall ? .horizontal : .vertical
 
@@ -623,35 +625,34 @@ struct ParticipantLayout<Content: View>: View {
                 // simply return first view
                 case 1: views[0]
                 case 3: HorVStack(axis: verticalWhenTall, spacing: spacing) {
-                    views[0]
-                    HorVStack(axis: horizontalWhenTall, spacing: spacing) {
-                        views[1]
-                        views[2]
+                        views[0]
+                        HorVStack(axis: horizontalWhenTall, spacing: spacing) {
+                            views[1]
+                            views[2]
+                        }
                     }
-                }
                 case 5: HorVStack(axis: verticalWhenTall, spacing: spacing) {
-                    views[0]
-                    if geometry.isTall {
-                        HStack(spacing: spacing) {
-                            views[1]
-                            views[2]
-                        }
-                        HStack(spacing: spacing) {
-                            views[3]
-                            views[4]
-
-                        }
-                    } else {
-                        VStack(spacing: spacing) {
-                            views[1]
-                            views[3]
-                        }
-                        VStack(spacing: spacing) {
-                            views[2]
-                            views[4]
+                        views[0]
+                        if geometry.isTall {
+                            HStack(spacing: spacing) {
+                                views[1]
+                                views[2]
+                            }
+                            HStack(spacing: spacing) {
+                                views[3]
+                                views[4]
+                            }
+                        } else {
+                            VStack(spacing: spacing) {
+                                views[1]
+                                views[3]
+                            }
+                            VStack(spacing: spacing) {
+                                views[2]
+                                views[4]
+                            }
                         }
                     }
-                }
                 //            case 6:
                 //                if geometry.isTall {
                 //                    VStack {
@@ -685,9 +686,9 @@ struct ParticipantLayout<Content: View>: View {
                 default:
                     let c = computeColumn(with: geometry)
                     VStack(spacing: spacing) {
-                        ForEach(0...(c.y - 1), id: \.self) { y in
+                        ForEach(0 ... (c.y - 1), id: \.self) { y in
                             HStack(spacing: spacing) {
-                                ForEach(0...(c.x - 1), id: \.self) { x in
+                                ForEach(0 ... (c.x - 1), id: \.self) { x in
                                     let index = (y * c.x) + x
                                     if index < views.count {
                                         views[index]
@@ -696,7 +697,6 @@ struct ParticipantLayout<Content: View>: View {
                             }
                         }
                     }
-
                 }
             }
         }
@@ -714,8 +714,8 @@ struct HorVStack<Content: View>: View {
          horizontalAlignment: HorizontalAlignment = .center,
          verticalAlignment: VerticalAlignment = .center,
          spacing: CGFloat? = nil,
-         @ViewBuilder content: @escaping () -> Content) {
-
+         @ViewBuilder content: @escaping () -> Content)
+    {
         self.axis = axis
         self.horizontalAlignment = horizontalAlignment
         self.verticalAlignment = verticalAlignment
@@ -743,8 +743,8 @@ struct HorVGrid<Content: View>: View {
     init(axis: Axis = .horizontal,
          columns: [GridItem],
          spacing: CGFloat? = nil,
-         @ViewBuilder content: @escaping () -> Content) {
-
+         @ViewBuilder content: @escaping () -> Content)
+    {
         self.axis = axis
         self.spacing = spacing
         self.columns = columns
@@ -763,7 +763,6 @@ struct HorVGrid<Content: View>: View {
 }
 
 extension GeometryProxy {
-
     public var isTall: Bool {
         size.height > size.width
     }
