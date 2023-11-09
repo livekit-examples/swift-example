@@ -45,7 +45,7 @@ extension CIImage {
 
         deinit {
             // reset changed properties
-            DispatchQueue.main.async { [weak window] in
+            Task { @MainActor in
                 window?.level = .normal
             }
         }
@@ -60,16 +60,18 @@ extension CIImage {
         private var level: NSWindow.Level {
             get { window?.level ?? .normal }
             set {
-                DispatchQueue.main.async {
-                    self.window?.level = newValue
-                    self.objectWillChange.send()
+                Task { @MainActor in
+                    window?.level = newValue
+                    objectWillChange.send()
                 }
             }
         }
 
         public func set(window: NSWindow?) {
             self.window = window
-            DispatchQueue.main.async { self.objectWillChange.send() }
+            Task { @MainActor in
+                objectWillChange.send()
+            }
         }
     }
 #endif
@@ -564,7 +566,7 @@ struct RoomView: View {
         .onAppear {
             //
             Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     withAnimation {
                         showConnectionTime = false
                     }

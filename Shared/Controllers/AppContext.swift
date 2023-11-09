@@ -19,12 +19,6 @@ import LiveKit
 import SwiftUI
 import WebRTC
 
-extension ObservableObject where Self.ObjectWillChangePublisher == ObservableObjectPublisher {
-    func notify() {
-        DispatchQueue.main.async { self.objectWillChange.send() }
-    }
-}
-
 // This class contains the logic to control behavior of the whole app.
 final class AppContext: ObservableObject {
     private let store: ValueStore<Preferences>
@@ -81,10 +75,11 @@ final class AppContext: ObservableObject {
         videoViewMirrored = store.value.videoViewMirrored
         connectionHistory = store.value.connectionHistory
 
-        AudioManager.shared.onDeviceUpdate = { audioManager in
+        AudioManager.shared.onDeviceUpdate = { [weak self] audioManager in
+            guard let self else { return }
             print("devices did update")
             // force UI update for outputDevice / inputDevice
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self.outputDevice = audioManager.outputDevice
                 self.inputDevice = audioManager.inputDevice
             }

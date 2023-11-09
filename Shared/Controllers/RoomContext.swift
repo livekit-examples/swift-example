@@ -216,24 +216,23 @@ extension RoomContext: RoomDelegate {
 
         if case let .disconnected(reason) = connectionState, reason != .user {
             latestError = reason
-            DispatchQueue.main.async {
-                self.shouldShowDisconnectReason = true
+
+            Task { @MainActor in
+                shouldShowDisconnectReason = true
                 // Reset state
-                self.focusParticipant = nil
-                self.showMessagesView = false
-                self.textFieldString = ""
-                self.messages.removeAll()
+                focusParticipant = nil
+                showMessagesView = false
+                textFieldString = ""
+                messages.removeAll()
                 // self.objectWillChange.send()
             }
         }
     }
 
     func room(_: Room, participantDidLeave participant: RemoteParticipant) {
-        DispatchQueue.main.async {
+        Task { @MainActor in
             // self.participants.removeValue(forKey: participant.sid)
-            if let focusParticipant = self.focusParticipant,
-               focusParticipant.sid == participant.sid
-            {
+            if let focusParticipant, focusParticipant.sid == participant.sid {
                 self.focusParticipant = nil
             }
         }
@@ -243,13 +242,13 @@ extension RoomContext: RoomDelegate {
         do {
             let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
             // Update UI from main queue
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 withAnimation {
                     // Add messages to the @Published messages property
                     // which will trigger the UI to update
-                    self.messages.append(roomMessage)
+                    messages.append(roomMessage)
                     // Show the messages view when new messages arrive
-                    self.showMessagesView = true
+                    showMessagesView = true
                 }
             }
 
