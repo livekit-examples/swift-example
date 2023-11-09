@@ -45,7 +45,7 @@ extension CIImage {
 
         deinit {
             // reset changed properties
-            Task { @MainActor in
+            DispatchQueue.main.async { [weak window] in
                 window?.level = .normal
             }
         }

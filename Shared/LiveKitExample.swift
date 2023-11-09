@@ -191,8 +191,8 @@ struct LiveKitExample: App {
 
         func makeNSView(context _: Context) -> NSView {
             let view = NSView()
-            Task { @MainActor in
-                if let window = view.window {
+            DispatchQueue.main.async { [weak view] in
+                if let window = view?.window {
                     callback(window)
                 }
             }
