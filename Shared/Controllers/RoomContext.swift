@@ -81,6 +81,8 @@ final class RoomContext: ObservableObject {
 
     @Published var textFieldString: String = ""
 
+    var _connectTask: Task<Void, Error>?
+
     public init(store: ValueStore<Preferences>) {
         self.store = store
         room.add(delegate: self)
@@ -106,6 +108,10 @@ final class RoomContext: ObservableObject {
             UIApplication.shared.isIdleTimerDisabled = false
         #endif
         print("RoomContext.deinit")
+    }
+
+    func cancelConnect() {
+        _connectTask?.cancel()
     }
 
     @MainActor
@@ -145,10 +151,16 @@ final class RoomContext: ObservableObject {
             e2eeOptions: e2eeOptions
         )
 
-        try await room.connect(url: url,
-                               token: token,
-                               connectOptions: connectOptions,
-                               roomOptions: roomOptions)
+        let connectTask = Task {
+            try await room.connect(url: url,
+                                   token: token,
+                                   connectOptions: connectOptions,
+                                   roomOptions: roomOptions)
+        }
+
+        _connectTask = connectTask
+        try await connectTask.value
+
         return room
     }
 

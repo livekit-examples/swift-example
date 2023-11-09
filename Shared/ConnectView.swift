@@ -96,7 +96,13 @@ struct ConnectView: View {
                     }.frame(maxWidth: 350)
 
                     if case .connecting = room.connectionState {
-                        ProgressView()
+                        HStack(alignment: .center) {
+                            ProgressView()
+
+                            LKButton(title: "Cancel") {
+                                roomCtx.cancelConnect()
+                            }
+                        }
                     } else {
                         HStack(alignment: .center) {
                             Spacer()
