@@ -357,7 +357,7 @@ struct RoomView: View {
                                    Task {
                                        isScreenSharePublishingBusy = true
                                        defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                       try await room.localParticipant?.setScreenShare(enabled: !isScreenShareEnabled)
+                                       try await room.localParticipant.setScreenShare(enabled: !isScreenShareEnabled)
                                    }
                                },
                                label: {

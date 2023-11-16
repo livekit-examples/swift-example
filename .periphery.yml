@@ -1,0 +1,6 @@
+retain_objc_accessible: true
+schemes:
+- Example (macOS Debug)
+targets:
+- LiveKitExample (macOS)
+workspace: LiveKitExample-dev.xcworkspace
