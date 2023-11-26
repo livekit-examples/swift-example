@@ -194,7 +194,7 @@ struct RoomView: View {
     func content(geometry: GeometryProxy) -> some View {
         VStack {
             if showConnectionTime {
-                Text("Connected (\([room.serverRegion, "\(String(describing: room.connectStopwatch.total().rounded(to: 2)))s"].compactMap { $0 }.joined(separator: ", ")))")
+                Text("Connected (\([room.serverRegion, room.serverNodeId, "\(String(describing: room.connectStopwatch.total().rounded(to: 2)))s"].compactMap { $0 }.joined(separator: ", ")))")
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white)
                     .padding()
