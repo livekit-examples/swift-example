@@ -86,6 +86,10 @@ struct RoomView: View {
     @State var isScreenSharePublishingBusy = false
 
     @State private var screenPickerPresented = false
+    @State private var publishOptionsPickerPresented = false
+
+    @State private var cameraPublishOptions = VideoPublishOptions()
+
     #if os(macOS)
         @ObservedObject private var windowAccess = WindowAccess()
     #endif
@@ -294,47 +298,64 @@ struct RoomView: View {
                     let isMicrophoneEnabled = room.localParticipant.isMicrophoneEnabled()
                     let isScreenShareEnabled = room.localParticipant.isScreenShareEnabled()
 
-                    if isCameraEnabled, CameraCapturer.canSwitchPosition() {
-                        Menu {
-                            Button("Switch position") {
-                                Task {
-                                    isCameraPublishingBusy = true
-                                    defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                                    if let track = room.localParticipant.firstCameraVideoTrack as? LocalVideoTrack,
-                                       let cameraCapturer = track.capturer as? CameraCapturer
-                                    {
-                                        try await cameraCapturer.switchCameraPosition()
+                    Group {
+                        if isCameraEnabled, CameraCapturer.canSwitchPosition() {
+                            Menu {
+                                Button("Switch position") {
+                                    Task {
+                                        isCameraPublishingBusy = true
+                                        defer { Task { @MainActor in isCameraPublishingBusy = false } }
+                                        if let track = room.localParticipant.firstCameraVideoTrack as? LocalVideoTrack,
+                                           let cameraCapturer = track.capturer as? CameraCapturer
+                                        {
+                                            try await cameraCapturer.switchCameraPosition()
+                                        }
                                     }
                                 }
-                            }
-                            Button("Disable") {
-                                Task {
-                                    isCameraPublishingBusy = true
-                                    defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                                    try await room.localParticipant.setCamera(enabled: !isCameraEnabled)
+                                Button("Disable") {
+                                    Task {
+                                        isCameraPublishingBusy = true
+                                        defer { Task { @MainActor in isCameraPublishingBusy = false } }
+                                        try await room.localParticipant.setCamera(enabled: !isCameraEnabled)
+                                    }
                                 }
+                            } label: {
+                                Image(systemSymbol: .videoFill)
+                                    .renderingMode(.original)
                             }
-                        } label: {
-                            Image(systemSymbol: .videoFill)
-                                .renderingMode(.original)
+                            // disable while publishing/un-publishing
+                            .disabled(isCameraPublishingBusy)
+                        } else {
+                            // Toggle camera enabled
+                            Button(action: {
+                                       if isCameraEnabled {
+                                           Task {
+                                               isCameraPublishingBusy = true
+                                               defer { Task { @MainActor in isCameraPublishingBusy = false } }
+                                               try await room.localParticipant.setCamera(enabled: false)
+                                           }
+                                       } else {
+                                           publishOptionsPickerPresented = true
+                                       }
+                                   },
+                                   label: {
+                                       Image(systemSymbol: .videoFill)
+                                           .renderingMode(isCameraEnabled ? .original : .template)
+                                   })
+                                   // disable while publishing/un-publishing
+                                   .disabled(isCameraPublishingBusy)
                         }
-                        // disable while publishing/un-publishing
-                        .disabled(isCameraPublishingBusy)
-                    } else {
-                        // Toggle camera enabled
-                        Button(action: {
-                                   Task {
-                                       isCameraPublishingBusy = true
-                                       defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                                       try await room.localParticipant.setCamera(enabled: !isCameraEnabled)
-                                   }
-                               },
-                               label: {
-                                   Image(systemSymbol: .videoFill)
-                                       .renderingMode(isCameraEnabled ? .original : .template)
-                               })
-                               // disable while publishing/un-publishing
-                               .disabled(isCameraPublishingBusy)
+                    }.popover(isPresented: $publishOptionsPickerPresented) {
+                        PublishOptionsView(publishOptions: cameraPublishOptions) { pickerResult in
+                            publishOptionsPickerPresented = false
+                            isCameraPublishingBusy = true
+                            cameraPublishOptions = pickerResult
+                            Task {
+                                defer { Task { @MainActor in isCameraPublishingBusy = false } }
+                                try await room.localParticipant.setCamera(enabled: true, publishOptions: pickerResult)
+                            }
+                        }
+                        .padding()
                     }
 
                     // Toggle microphone enabled
