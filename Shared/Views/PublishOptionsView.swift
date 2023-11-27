@@ -41,9 +41,9 @@ struct PublishOptionsView: View {
                 .fontWeight(.bold)
 
             Picker("Codec", selection: $preferredVideoCodec) {
-                Text("Auto")
+                Text("Auto").tag(nil as VideoCodec?)
                 ForEach(VideoCodec.all) {
-                    Text($0.id.uppercased())
+                    Text($0.id.uppercased()).tag($0 as VideoCodec?)
                 }
             }.onChange(of: preferredVideoCodec) { newValue in
                 if newValue == .av1 {
@@ -55,9 +55,9 @@ struct PublishOptionsView: View {
 
             if preferredVideoCodec != nil {
                 Picker("Backup Codec", selection: $preferredBackupVideoCodec) {
-                    Text("Off")
-                    ForEach(VideoCodec.all.filter { $0 != .av1 && $0 != preferredVideoCodec }, id: \.self) {
-                        Text($0.id.uppercased())
+                    Text("Off").tag(nil as VideoCodec?)
+                    ForEach(VideoCodec.all.filter { $0 != preferredVideoCodec }) {
+                        Text($0.id.uppercased()).tag($0 as VideoCodec?)
                     }
                 }
             }
