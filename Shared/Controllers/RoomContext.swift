@@ -148,7 +148,8 @@ final class RoomContext: ObservableObject {
             ),
             adaptiveStream: adaptiveStream,
             dynacast: dynacast,
-            e2eeOptions: e2eeOptions
+            e2eeOptions: e2eeOptions,
+            reportTrackStatistics: true
         )
 
         let connectTask = Task {

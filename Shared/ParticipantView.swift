@@ -298,25 +298,40 @@ struct StatsView: View {
                 }
 
                 if let trackStats = viewModel.statistics {
-                    //                    if trackStats.bpsSent != 0 {
-                    //                        HStack(spacing: 3) {
-                    //                            if let codecName = trackStats.codecName {
-                    //                                Text(codecName.uppercased()).fontWeight(.bold)
-                    //                            }
-                    //                            Image(systemSymbol: .arrowUpCircle)
-                    //                            Text(trackStats.formattedBpsSent())
-                    //                        }
-                    //                    }
-                    //
-                    //                    if trackStats.bpsReceived != 0 {
-                    //                        HStack(spacing: 3) {
-                    //                            if let codecName = trackStats.codecName {
-                    //                                Text(codecName.uppercased()).fontWeight(.bold)
-                    //                            }
-                    //                            Image(systemSymbol: .arrowDownCircle)
-                    //                            Text(trackStats.formattedBpsReceived())
-                    //                        }
-                    //                    }
+                    ForEach(trackStats.outboundRtpStream.sortedByRidIndex()) { stream in
+
+                        HStack(spacing: 3) {
+                            Image(systemSymbol: .arrowUp)
+
+                            if let codec = trackStats.codec.first(where: { $0.id == stream.codecId }) {
+                                Text(codec.mimeType ?? "?")
+                            }
+
+                            if let rid = stream.rid, !rid.isEmpty {
+                                Text(rid.uppercased())
+                            }
+
+                            Text(stream.formattedBps())
+
+                            if stream.qualityLimitationReason != QualityLimitationReason.none {
+                                Image(systemSymbol: .exclamationmarkTriangleFill)
+                                Text(stream.qualityLimitationReason!.rawValue.capitalized)
+                            }
+                        }
+                    }
+
+                    ForEach(trackStats.inboundRtpStream) { stream in
+
+                        HStack(spacing: 3) {
+                            Image(systemSymbol: .arrowDown)
+
+                            if let codec = trackStats.codec.first(where: { $0.id == stream.codecId }) {
+                                Text(codec.mimeType ?? "?")
+                            }
+
+                            Text(stream.formattedBps())
+                        }
+                    }
                 }
             }
             .font(.system(size: 10))
