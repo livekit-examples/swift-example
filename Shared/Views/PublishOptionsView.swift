@@ -21,6 +21,7 @@ import SwiftUI
 struct PublishOptionsView: View {
     typealias OnPublish = (_ publishOptions: VideoPublishOptions) -> Void
 
+    @State private var simulcast: Bool = true
     @State private var preferredVideoCodec: VideoCodec?
     @State private var preferredBackupVideoCodec: VideoCodec?
 
@@ -31,6 +32,7 @@ struct PublishOptionsView: View {
         providedPublishOptions = publishOptions
         self.onPublish = onPublish
 
+        simulcast = publishOptions.simulcast
         preferredVideoCodec = publishOptions.preferredCodec
         preferredBackupVideoCodec = publishOptions.preferredBackupCodec
     }
@@ -46,33 +48,36 @@ struct PublishOptionsView: View {
                     Text($0.id.uppercased()).tag($0 as VideoCodec?)
                 }
             }.onChange(of: preferredVideoCodec) { newValue in
-                if newValue == .av1 {
+                if newValue?.isSVC ?? false {
                     preferredBackupVideoCodec = .vp8
+                    simulcast = false
                 } else {
                     preferredBackupVideoCodec = nil
+                    simulcast = true
                 }
             }
 
-            if preferredVideoCodec != nil {
-                Picker("Backup Codec", selection: $preferredBackupVideoCodec) {
-                    Text("Off").tag(nil as VideoCodec?)
-                    ForEach(VideoCodec.all.filter { $0 != preferredVideoCodec }) {
-                        Text($0.id.uppercased()).tag($0 as VideoCodec?)
-                    }
+            Picker("Backup Codec", selection: $preferredBackupVideoCodec) {
+                Text("Off").tag(nil as VideoCodec?)
+                ForEach(VideoCodec.allBackup.filter { $0 != preferredVideoCodec }) {
+                    Text($0.id.uppercased()).tag($0 as VideoCodec?)
                 }
-            }
+            }.disabled(!(preferredVideoCodec?.isSVC ?? false))
+
+            Toggle(isOn: $simulcast, label: {
+                Text("Simulcast")
+            })
 
             Button("Publish") {
                 let result = VideoPublishOptions(
                     name: providedPublishOptions.name,
                     encoding: providedPublishOptions.encoding,
                     screenShareEncoding: providedPublishOptions.screenShareEncoding,
-                    simulcast: providedPublishOptions.simulcast,
+                    simulcast: simulcast,
                     simulcastLayers: providedPublishOptions.simulcastLayers,
                     screenShareSimulcastLayers: providedPublishOptions.screenShareSimulcastLayers,
                     preferredCodec: preferredVideoCodec,
                     preferredBackupCodec: preferredBackupVideoCodec
-                    // backupEncoding: providedPublishOptions.backupEncoding
                 )
 
                 onPublish(result)
