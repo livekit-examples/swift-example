@@ -146,9 +146,9 @@ final class RoomContext: ObservableObject {
             defaultVideoPublishOptions: VideoPublishOptions(
                 simulcast: publish ? false : simulcast
             ),
-            adaptiveStream: adaptiveStream,
-            dynacast: dynacast,
-            e2eeOptions: e2eeOptions,
+            adaptiveStream: true,
+            dynacast: true,
+            // e2eeOptions: e2eeOptions,
             reportTrackStatistics: true
         )
 

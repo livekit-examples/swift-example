@@ -50,10 +50,8 @@ struct PublishOptionsView: View {
             }.onChange(of: preferredVideoCodec) { newValue in
                 if newValue?.isSVC ?? false {
                     preferredBackupVideoCodec = .vp8
-                    simulcast = false
                 } else {
                     preferredBackupVideoCodec = nil
-                    simulcast = true
                 }
             }
 
