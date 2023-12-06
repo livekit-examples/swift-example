@@ -122,7 +122,7 @@ struct ParticipantView: View {
 
                     // Bottom user info bar
                     HStack {
-                        Text(participant.identity ?? "") //  (\(participant.publish ?? "-"))
+                        Text("\(participant.identity)(\(participant.sid))")
                             .lineLimit(1)
                             .truncationMode(.tail)
 
@@ -314,9 +314,9 @@ struct StatsView: View {
 
                             Text(stream.formattedBps())
 
-                            if stream.qualityLimitationReason != QualityLimitationReason.none {
+                            if let reason = stream.qualityLimitationReason, reason != QualityLimitationReason.none {
                                 Image(systemSymbol: .exclamationmarkTriangleFill)
-                                Text(stream.qualityLimitationReason!.rawValue.capitalized)
+                                Text(reason.rawValue.capitalized)
                             }
                         }
                     }
