@@ -297,7 +297,8 @@ struct StatsView: View {
                     Text("Unknown").fontWeight(.bold)
                 }
 
-                if let trackStats = viewModel.statistics {
+                // if let trackStats = viewModel.statistics {
+                ForEach(viewModel.allStatisticts, id: \.self) { trackStats in
                     ForEach(trackStats.outboundRtpStream.sortedByRidIndex()) { stream in
 
                         HStack(spacing: 3) {
@@ -319,7 +320,6 @@ struct StatsView: View {
                             }
                         }
                     }
-
                     ForEach(trackStats.inboundRtpStream) { stream in
 
                         HStack(spacing: 3) {
@@ -348,12 +348,23 @@ extension StatsView {
         private let track: Track
         @Published var dimensions: Dimensions?
         @Published var statistics: TrackStatistics?
+        @Published var simulcastStatistics: [VideoCodec: TrackStatistics]
+
+        var allStatisticts: [TrackStatistics] {
+            var result: [TrackStatistics] = []
+            if let statistics {
+                result.append(statistics)
+            }
+            result.append(contentsOf: simulcastStatistics.values)
+            return result
+        }
 
         init(track: Track) {
             self.track = track
 
             dimensions = track.dimensions
             statistics = track.statistics
+            simulcastStatistics = track.simulcastStatistics
 
             track.add(delegate: self)
         }
@@ -364,9 +375,10 @@ extension StatsView {
             }
         }
 
-        func track(_: Track, didUpdateStatistics statistics: TrackStatistics) {
+        func track(_: Track, didUpdateStatistics statistics: TrackStatistics, simulcastStatistics: [VideoCodec: TrackStatistics]) {
             Task.detached { @MainActor in
                 self.statistics = statistics
+                self.simulcastStatistics = simulcastStatistics
             }
         }
     }
