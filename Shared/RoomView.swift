@@ -272,7 +272,7 @@ struct RoomView: View {
                             .fontWeight(.bold)
                     }
 
-                    Text(room.localParticipant.identity ?? "")
+                    Text(room.localParticipant.identity)
 
                 #endif
 
