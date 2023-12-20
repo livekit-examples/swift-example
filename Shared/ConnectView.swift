@@ -168,9 +168,7 @@ struct ConnectView: View {
         #endif
         .alert(isPresented: $roomCtx.shouldShowDisconnectReason) {
             Alert(title: Text("Disconnected"),
-                  message: Text("Reason: " + (roomCtx.latestError != nil
-                          ? String(describing: roomCtx.latestError!)
-                          : "Unknown")))
+                  message: Text("Reason: " + String(describing: roomCtx.latestError)))
         }
     }
 }

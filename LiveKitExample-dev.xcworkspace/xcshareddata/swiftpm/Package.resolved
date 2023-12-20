@@ -33,17 +33,17 @@
         "repositoryURL": "https://github.com/apple/swift-protobuf.git",
         "state": {
           "branch": null,
-          "revision": "07f7f26ded8df9645c072f220378879c4642e063",
-          "version": "1.25.1"
+          "revision": "65e8f29b2d63c4e38e736b25c27b83e012159be8",
+          "version": "1.25.2"
         }
       },
       {
         "package": "WebRTC",
-        "repositoryURL": "https://github.com/livekit/webrtc-xcframework-static.git",
+        "repositoryURL": "https://github.com/livekit/webrtc-xcframework.git",
         "state": {
           "branch": null,
-          "revision": "05fb98380b8c2c43041050be6170ffa3dbc64174",
-          "version": "114.5735.9"
+          "revision": "da80ea5be0a2b92ca805ab7ee9ad191f6d938a5f",
+          "version": "114.5735.10"
         }
       }
     ]

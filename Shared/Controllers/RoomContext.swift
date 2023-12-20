@@ -28,7 +28,7 @@ final class RoomContext: ObservableObject {
     // Used to show connection error dialog
     // private var didClose: Bool = false
     @Published var shouldShowDisconnectReason: Bool = false
-    public var latestError: DisconnectReason?
+    public var latestError: LiveKitError?
 
     public let room = Room()
 
@@ -149,7 +149,7 @@ final class RoomContext: ObservableObject {
             adaptiveStream: true,
             dynacast: true,
             // e2eeOptions: e2eeOptions,
-            reportTrackStatistics: true
+            reportRemoteTrackStatistics: true
         )
 
         let connectTask = Task {
@@ -194,13 +194,13 @@ final class RoomContext: ObservableObject {
         weak var screenShareTrack: LocalTrackPublication?
 
         @available(macOS 12.3, *)
-        func setScreenShareMacOS(enabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
-            if enabled, let screenShareSource {
+        func setScreenShareMacOS(isEnabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
+            if isEnabled, let screenShareSource {
                 let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource)
                 screenShareTrack = try await room.localParticipant.publish(videoTrack: track)
             }
 
-            if !enabled, let screenShareTrack {
+            if !isEnabled, let screenShareTrack {
                 try await room.localParticipant.unpublish(publication: screenShareTrack)
             }
         }
@@ -212,11 +212,13 @@ extension RoomContext: RoomDelegate {
         print("Did update e2eeState = [\(e2eeState.toString())] for publication \(publication.sid)")
     }
 
-    func room(_: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
+    func room(_ room: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
         print("Did update connectionState \(oldValue) -> \(connectionState)")
 
-        if case let .disconnected(reason) = connectionState, reason != .user {
-            latestError = reason
+        if case .disconnected = connectionState,
+           let error = room.disconnectError,
+           error.type != .cancelled {
+            latestError = room.disconnectError
 
             Task { @MainActor in
                 shouldShowDisconnectReason = true

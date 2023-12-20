@@ -29,7 +29,7 @@ struct RoomSwitchView: View {
     @EnvironmentObject var room: Room
 
     var shouldShowRoomView: Bool {
-        room.connectionState.isConnected || room.connectionState.isReconnecting
+        room.connectionState == .connected || room.connectionState == .reconnecting
     }
 
     func computeTitle() -> String {

@@ -62,7 +62,7 @@ final class AppContext: ObservableObject {
     }
 
     @Published var preferSpeakerOutput: Bool = true {
-        didSet { AudioManager.shared.preferSpeakerOutput = preferSpeakerOutput }
+        didSet { AudioManager.shared.isSpeakerOutputPreferred = preferSpeakerOutput }
     }
 
     public init(store: ValueStore<Preferences>) {

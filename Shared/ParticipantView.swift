@@ -51,7 +51,7 @@ struct ParticipantView: View {
 
                 // VideoView for the Participant
                 if let publication = participant.mainVideoPublication,
-                   !publication.muted,
+                   !publication.isMuted,
                    let track = publication.track as? VideoTrack,
                    appCtx.videoViewVisible
                 {
@@ -84,14 +84,14 @@ struct ParticipantView: View {
                     VStack(alignment: .leading, spacing: 5) {
                         // Video stats
                         if let publication = participant.mainVideoPublication,
-                           !publication.muted,
+                           !publication.isMuted,
                            let track = publication.track as? VideoTrack
                         {
                             StatsView(track: track)
                         }
                         // Audio stats
                         if let publication = participant.firstAudioPublication,
-                           !publication.muted,
+                           !publication.isMuted,
                            let track = publication.track as? AudioTrack
                         {
                             StatsView(track: track)
@@ -127,7 +127,7 @@ struct ParticipantView: View {
                             .truncationMode(.tail)
 
                         if let publication = participant.mainVideoPublication,
-                           !publication.muted
+                           !publication.isMuted
                         {
                             // is remote
                             if let remotePub = publication as? RemoteTrackPublication {
@@ -178,7 +178,7 @@ struct ParticipantView: View {
                         }
 
                         if let publication = participant.firstAudioPublication,
-                           !publication.muted
+                           !publication.isMuted
                         {
                             // is remote
                             if let remotePub = publication as? RemoteTrackPublication {

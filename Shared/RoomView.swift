@@ -395,7 +395,7 @@ struct RoomView: View {
                                            Task {
                                                isScreenSharePublishingBusy = true
                                                defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                               try await roomCtx.setScreenShareMacOS(enabled: false)
+                                               try await roomCtx.setScreenShareMacOS(isEnabled: false)
                                            }
                                        } else {
                                            screenPickerPresented = true
@@ -412,7 +412,7 @@ struct RoomView: View {
                                     Task {
                                         isScreenSharePublishingBusy = true
                                         defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                        try await roomCtx.setScreenShareMacOS(enabled: true, screenShareSource: source)
+                                        try await roomCtx.setScreenShareMacOS(isEnabled: true, screenShareSource: source)
                                     }
                                     screenPickerPresented = false
                                 }.padding()
