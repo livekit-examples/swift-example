@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 LiveKit
+ * Copyright 2024 LiveKit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -217,7 +217,8 @@ extension RoomContext: RoomDelegate {
 
         if case .disconnected = connectionState,
            let error = room.disconnectError,
-           error.type != .cancelled {
+           error.type != .cancelled
+        {
             latestError = room.disconnectError
 
             Task { @MainActor in
