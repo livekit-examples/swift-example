@@ -208,11 +208,12 @@ final class RoomContext: ObservableObject {
 }
 
 extension RoomContext: RoomDelegate {
-    func room(_: Room, publication: TrackPublication, didUpdateE2EEState e2eeState: E2EEState) {
+
+    func room(_ room: Room, track publication: TrackPublication, didUpdateE2EEState e2eeState: E2EEState) {
         print("Did update e2eeState = [\(e2eeState.toString())] for publication \(publication.sid)")
     }
 
-    func room(_ room: Room, didUpdate connectionState: ConnectionState, oldValue: ConnectionState) {
+    func room(_ room: Room, didUpdateConnectionState connectionState: ConnectionState, from oldValue: ConnectionState) {
         print("Did update connectionState \(oldValue) -> \(connectionState)")
 
         if case .disconnected = connectionState,
@@ -233,7 +234,7 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    func room(_: Room, participantDidLeave participant: RemoteParticipant) {
+    func room(_: Room, participantDidDisconnect participant: RemoteParticipant) {
         Task { @MainActor in
             // self.participants.removeValue(forKey: participant.sid)
             if let focusParticipant, focusParticipant.sid == participant.sid {
@@ -242,7 +243,7 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    func room(_: Room, participant _: RemoteParticipant?, didReceiveData data: Data, topic _: String) {
+    func room(_: Room, participant _: RemoteParticipant?, didReceiveData data: Data, forTopic _: String) {
         do {
             let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
             // Update UI from main queue
