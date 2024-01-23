@@ -66,6 +66,8 @@ final class RoomContext: ObservableObject {
 
     @Published var textFieldString: String = ""
 
+    var audioProcessor: AudioProcessor? = nil
+
     public init(store: ValueStore<Preferences>) {
         self.store = store
         room.add(delegate: self)
@@ -114,6 +116,8 @@ final class RoomContext: ObservableObject {
             keyProvider.setKey(key: e2eeKey)
             e2eeOptions = E2EEOptions(keyProvider: keyProvider)
         }
+        
+        audioProcessor = FakeAudioProcessor()
 
         let roomOptions = RoomOptions(
             defaultCameraCaptureOptions: CameraCaptureOptions(
@@ -129,7 +133,8 @@ final class RoomContext: ObservableObject {
             adaptiveStream: adaptiveStream,
             dynacast: dynacast,
             reportStats: reportStats,
-            e2eeOptions: e2eeOptions
+            e2eeOptions: e2eeOptions,
+            audioProcessor: audioProcessor
         )
 
         return try await room.connect(url,
