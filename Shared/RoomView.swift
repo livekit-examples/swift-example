@@ -95,6 +95,8 @@ struct RoomView: View {
     #endif
 
     @State private var showConnectionTime = true
+    
+    @State private var audioProcessorPickerPresented = false
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
         let isMe = message.senderSid == room.localParticipant.sid
@@ -442,6 +444,18 @@ struct RoomView: View {
                                Image(systemSymbol: .messageFill)
                                    .renderingMode(roomCtx.showMessagesView ? .original : .template)
                            })
+                    Button(action: {
+                            audioProcessorPickerPresented = true
+                           },
+                           label: {
+                               Image(systemSymbol: .waveform)
+                                   .renderingMode(roomCtx.room.audioProcessorIsEnabled ? .original : .template)
+                           })
+                           .popover(isPresented: $audioProcessorPickerPresented) {
+                               AudioProcessorOptionsView(roomCtx: roomCtx) { pickerResult in
+                                   publishOptionsPickerPresented = false
+                               }.padding()
+                           }.disabled(!roomCtx.room.audioProcessorIsEnabled)
                 }
 
                 // Spacer()
