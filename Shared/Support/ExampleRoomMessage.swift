@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-import Foundation
+struct ExampleRoomMessage: Identifiable, Equatable, Hashable, Codable {
+    // Identifiable protocol needs param named id
+    var id: String {
+        messageId
+    }
 
-public extension Bundle {
-    var appName: String { getInfo("CFBundleName") }
-    var displayName: String { getInfo("CFBundleDisplayName") }
-    var language: String { getInfo("CFBundleDevelopmentRegion") }
-    var identifier: String { getInfo("CFBundleIdentifier") }
+    // message id
+    let messageId: String
 
-    var appBuild: String { getInfo("CFBundleVersion") }
-    var appVersionLong: String { getInfo("CFBundleShortVersionString") }
-    var appVersionShort: String { getInfo("CFBundleShortVersion") }
+    let senderSid: String
+    let senderIdentity: String?
+    let text: String
 
-    private func getInfo(_ str: String) -> String { infoDictionary?[str] as? String ?? "⚠️" }
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.messageId == rhs.messageId
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(messageId)
+    }
 }

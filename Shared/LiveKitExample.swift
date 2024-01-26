@@ -1,27 +1,42 @@
-import SwiftUI
-import Logging
-import LiveKit
+/*
+ * Copyright 2024 LiveKit
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import KeychainAccess
+import LiveKit
+import Logging
+import SwiftUI
 
 let sync = ValueStore<Preferences>(store: Keychain(service: "io.livekit.example.SwiftSDK.1"),
                                    key: "preferences",
                                    default: Preferences())
 
 struct RoomSwitchView: View {
-
     @EnvironmentObject var appCtx: AppContext
     @EnvironmentObject var roomCtx: RoomContext
     @EnvironmentObject var room: Room
 
     var shouldShowRoomView: Bool {
-        room.connectionState.isConnected || room.connectionState.isReconnecting
+        room.connectionState == .connected || room.connectionState == .reconnecting
     }
 
     func computeTitle() -> String {
         if shouldShowRoomView {
             let elements = [room.name,
-                            room.localParticipant?.name,
-                            room.localParticipant?.identity]
+                            room.localParticipant.name,
+                            room.localParticipant.identity]
             return elements.compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
         }
 
@@ -45,7 +60,6 @@ struct RoomSwitchView: View {
 
 // Attaches RoomContext and Room to the environment
 struct RoomContextView: View {
-
     @EnvironmentObject var appCtx: AppContext
     @StateObject var roomCtx = RoomContext(store: sync)
 
@@ -58,7 +72,7 @@ struct RoomContextView: View {
             .onDisappear {
                 print("\(String(describing: type(of: self))) onDisappear")
                 Task {
-                    try await roomCtx.disconnect()
+                    await roomCtx.disconnect()
                 }
             }
             .onOpenURL(perform: { url in
@@ -129,11 +143,9 @@ extension Decimal {
 
 @main
 struct LiveKitExample: App {
-
     @StateObject var appCtx = AppContext(store: sync)
 
     func nearestSafeScale(for target: Int, scale: Double) -> Decimal {
-
         let p = Decimal(sign: .plus, exponent: -3, significand: 1)
         let t = Decimal(target)
         var s = Decimal(scale).rounded(3, .down)
@@ -146,11 +158,11 @@ struct LiveKitExample: App {
     }
 
     init() {
-        LoggingSystem.bootstrap({
+        LoggingSystem.bootstrap {
             var logHandler = StreamLogHandler.standardOutput(label: $0)
             logHandler.logLevel = .debug
             return logHandler
-        })
+        }
     }
 
     var body: some Scene {
@@ -160,33 +172,33 @@ struct LiveKitExample: App {
         }
         .handlesExternalEvents(matching: Set(arrayLiteral: "*"))
         #if os(macOS)
-        .windowStyle(.hiddenTitleBar)
-        .windowToolbarStyle(.unifiedCompact)
+            .windowStyle(.hiddenTitleBar)
+            .windowToolbarStyle(.unifiedCompact)
         #endif
     }
 }
 
 #if os(macOS)
 
-extension View {
-    func withHostingWindow(_ callback: @escaping (NSWindow) -> Void) -> some View {
-        self.background(HostingWindowFinder(callback: callback))
-    }
-}
-
-struct HostingWindowFinder: NSViewRepresentable {
-    var callback: (NSWindow) -> Void
-
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView()
-        DispatchQueue.main.async { [weak view] in
-            if let window = view?.window {
-                self.callback(window)
-            }
+    extension View {
+        func withHostingWindow(_ callback: @escaping (NSWindow) -> Void) -> some View {
+            background(HostingWindowFinder(callback: callback))
         }
-        return view
     }
 
-    func updateNSView(_ uiView: NSView, context: Context) {}
-}
+    struct HostingWindowFinder: NSViewRepresentable {
+        var callback: (NSWindow) -> Void
+
+        func makeNSView(context _: Context) -> NSView {
+            let view = NSView()
+            DispatchQueue.main.async { [weak view] in
+                if let window = view?.window {
+                    callback(window)
+                }
+            }
+            return view
+        }
+
+        func updateNSView(_: NSView, context _: Context) {}
+    }
 #endif
