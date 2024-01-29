@@ -22,6 +22,7 @@ class FakeAudioProcessor: AudioProcessor {
     public init() {
 
     }
+
     func isEnabled(url: String, token: String) -> Bool {
         print("check \(getName()) isEnabled: url: \(url) token: \(token)")
         return true

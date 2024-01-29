@@ -449,13 +449,13 @@ struct RoomView: View {
                            },
                            label: {
                                Image(systemSymbol: .waveform)
-                                   .renderingMode(roomCtx.room.audioProcessorIsEnabled ? .original : .template)
+                            .renderingMode(roomCtx.room.audioProcessorOptions != nil ? .original : .template)
                            })
                            .popover(isPresented: $audioProcessorPickerPresented) {
-                               AudioProcessorOptionsView(roomCtx: roomCtx) { pickerResult in
-                                   publishOptionsPickerPresented = false
+                               AudioProcessorOptionsView(roomCtx: roomCtx) { _ in
+                                   audioProcessorPickerPresented = false
                                }.padding()
-                           }.disabled(!roomCtx.room.audioProcessorIsEnabled)
+                           }.disabled(roomCtx.room.audioProcessorOptions == nil)
                 }
 
                 // Spacer()

@@ -80,6 +80,7 @@ final class RoomContext: ObservableObject {
     @Published var messages: [ExampleRoomMessage] = []
 
     @Published var textFieldString: String = ""
+    
 
     var audioProcessor: AudioProcessor? = nil
 
@@ -136,8 +137,11 @@ final class RoomContext: ObservableObject {
             keyProvider.setKey(key: e2eeKey)
             e2eeOptions = E2EEOptions(keyProvider: keyProvider)
         }
-        
-        audioProcessor = FakeAudioProcessor()
+
+        let audioProcessorOptions = AudioProcessorOptions(
+            capturePost: FakeAudioProcessor(),
+            bypassCapturePost: true
+        )
 
         let roomOptions = RoomOptions(
             defaultCameraCaptureOptions: CameraCaptureOptions(
@@ -153,7 +157,7 @@ final class RoomContext: ObservableObject {
             adaptiveStream: true,
             dynacast: true,
             // e2eeOptions: e2eeOptions,
-            audioProcessor: audioProcessor,
+            audioProcessorOptions: audioProcessorOptions,
             reportRemoteTrackStatistics: true
         )
 

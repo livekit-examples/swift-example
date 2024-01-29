@@ -35,7 +35,7 @@ struct AudioProcessorOptionsView: View {
         VStack(alignment: .center, spacing: 10) {
             Text("Audio Processor")
                 .fontWeight(.bold)
-            Text("name: \(roomCtx.room.audioProcessor?.getName() ?? "")")
+            Text("name: \(roomCtx.room.audioProcessorOptions?.getCapturePostProcessor()?.getName() ?? "")")
             
             Toggle(isOn: $enabled, label: {
                 Text("Toggle")
