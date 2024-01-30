@@ -139,8 +139,7 @@ final class RoomContext: ObservableObject {
         }
 
         let audioProcessorOptions = AudioProcessorOptions(
-            capturePost: FakeAudioProcessor(),
-            bypassCapturePost: true
+            capturePostProcessor: FakeAudioProcessor()
         )
 
         let roomOptions = RoomOptions(
