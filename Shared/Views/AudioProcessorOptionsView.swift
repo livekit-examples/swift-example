@@ -41,6 +41,7 @@ struct AudioProcessorOptionsView: View {
                 Text("Toggle")
             }).onChange(of: enabled) { newValue in
                 LiveKit.AudioManager.shared.bypassForCapturePostProcessing = !newValue
+                onEnabled(newValue);
             }
             .keyboardShortcut(.defaultAction)
         }
