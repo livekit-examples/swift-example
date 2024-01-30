@@ -80,6 +80,9 @@ final class RoomContext: ObservableObject {
     @Published var messages: [ExampleRoomMessage] = []
 
     @Published var textFieldString: String = ""
+    
+
+    var audioProcessor: AudioProcessor? = nil
 
     var _connectTask: Task<Void, Error>?
 
@@ -135,6 +138,10 @@ final class RoomContext: ObservableObject {
             e2eeOptions = E2EEOptions(keyProvider: keyProvider)
         }
 
+        let audioProcessorOptions = AudioProcessorOptions(
+            capturePostProcessor: FakeAudioProcessor()
+        )
+
         let roomOptions = RoomOptions(
             defaultCameraCaptureOptions: CameraCaptureOptions(
                 dimensions: .h1080_169
@@ -149,6 +156,7 @@ final class RoomContext: ObservableObject {
             adaptiveStream: true,
             dynacast: true,
             // e2eeOptions: e2eeOptions,
+            audioProcessorOptions: audioProcessorOptions,
             reportRemoteTrackStatistics: true
         )
 

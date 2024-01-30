@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C13AA9E2B5F886700E7BB18 /* FakeAudioProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C13AA9D2B5F886700E7BB18 /* FakeAudioProcessor.swift */; };
+		2C13AA9F2B5F886700E7BB18 /* FakeAudioProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C13AA9D2B5F886700E7BB18 /* FakeAudioProcessor.swift */; };
+		2C8910302B640DA60058BECE /* AudioProcessorOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C89102F2B640DA60058BECE /* AudioProcessorOptionsView.swift */; };
+		2C8910312B640DA60058BECE /* AudioProcessorOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C89102F2B640DA60058BECE /* AudioProcessorOptionsView.swift */; };
 		680FE2F227A8EF7700B6F6DB /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 680FE2F127A8EF7700B6F6DB /* SFSafeSymbols */; };
 		680FE2F427A8EFF700B6F6DB /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 680FE2F327A8EFF700B6F6DB /* SFSafeSymbols */; };
 		6816968E2AF96240008ED486 /* Participant+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816968D2AF96240008ED486 /* Participant+Helpers.swift */; };
@@ -76,6 +80,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2C13AA9D2B5F886700E7BB18 /* FakeAudioProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeAudioProcessor.swift; sourceTree = "<group>"; };
+		2C89102F2B640DA60058BECE /* AudioProcessorOptionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioProcessorOptionsView.swift; sourceTree = "<group>"; };
 		6816968D2AF96240008ED486 /* Participant+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Participant+Helpers.swift"; sourceTree = "<group>"; };
 		6816B1A7272D45DF005ADB85 /* ExampleRoomMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleRoomMessage.swift; sourceTree = "<group>"; };
 		6816B1AF272D9198005ADB85 /* ParticipantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantView.swift; sourceTree = "<group>"; };
@@ -196,6 +202,7 @@
 		6884B77A2750505B00732D47 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2C89102F2B640DA60058BECE /* AudioProcessorOptionsView.swift */,
 				6884B77B2750507400732D47 /* ScreenShareSourcePickerView.swift */,
 				687230F72B14AE0A0098CCE6 /* PublishOptionsView.swift */,
 			);
@@ -221,6 +228,7 @@
 				685271EA27443907006B4D6A /* Controllers */,
 				681E3F3E271FC795007BB547 /* Custom.swift */,
 				681E3F42271FC7AD007BB547 /* ConnectView.swift */,
+				2C13AA9D2B5F886700E7BB18 /* FakeAudioProcessor.swift */,
 				681E3F41271FC7AC007BB547 /* RoomView.swift */,
 				68B3853C271E780600711D5F /* LiveKitExample.swift */,
 				6816B1AF272D9198005ADB85 /* ParticipantView.swift */,
@@ -407,6 +415,8 @@
 				681E3F45271FC7AD007BB547 /* ConnectView.swift in Sources */,
 				6867533B27A65652003707B9 /* AppContext.swift in Sources */,
 				681E3F39271FC772007BB547 /* RoomContext.swift in Sources */,
+				2C8910302B640DA60058BECE /* AudioProcessorOptionsView.swift in Sources */,
+				2C13AA9E2B5F886700E7BB18 /* FakeAudioProcessor.swift in Sources */,
 				683720D227A06404007DA986 /* ConnectionHistory.swift in Sources */,
 				681E3F43271FC7AD007BB547 /* RoomView.swift in Sources */,
 				6816B1B0272D9198005ADB85 /* ParticipantView.swift in Sources */,
@@ -428,6 +438,8 @@
 				681E3F46271FC7AD007BB547 /* ConnectView.swift in Sources */,
 				6867533C27A65652003707B9 /* AppContext.swift in Sources */,
 				681E3F3A271FC772007BB547 /* RoomContext.swift in Sources */,
+				2C8910312B640DA60058BECE /* AudioProcessorOptionsView.swift in Sources */,
+				2C13AA9F2B5F886700E7BB18 /* FakeAudioProcessor.swift in Sources */,
 				683720D327A06404007DA986 /* ConnectionHistory.swift in Sources */,
 				681E3F44271FC7AD007BB547 /* RoomView.swift in Sources */,
 				6816B1B1272D9198005ADB85 /* ParticipantView.swift in Sources */,
