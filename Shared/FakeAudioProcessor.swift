@@ -29,7 +29,7 @@ class FakeAudioProcessor: AudioProcessor {
     }
 
     func getName() -> String {
-        "facke_audio_processor"
+        "fake_audio_processor"
     }
 
     func audioProcessingInitialize(sampleRate sampleRateHz: Int, channels: Int) {
