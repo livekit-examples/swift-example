@@ -79,7 +79,8 @@ final class AppContext: ObservableObject {
             guard let self else { return }
             print("devices did update")
             // force UI update for outputDevice / inputDevice
-            Task { @MainActor in
+            Task.detached { @MainActor [weak self] in
+                guard let self else { return }
                 self.outputDevice = audioManager.outputDevice
                 self.inputDevice = audioManager.inputDevice
             }

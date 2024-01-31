@@ -148,11 +148,12 @@ final class RoomContext: ObservableObject {
             ),
             adaptiveStream: true,
             dynacast: true,
-            // e2eeOptions: e2eeOptions,
+            e2eeOptions: e2eeOptions,
             reportRemoteTrackStatistics: true
         )
 
-        let connectTask = Task {
+        let connectTask = Task.detached { [weak self] in
+            guard let self else { return }
             try await room.connect(url: url,
                                    token: token,
                                    connectOptions: connectOptions,
@@ -180,7 +181,8 @@ final class RoomContext: ObservableObject {
         textFieldString = ""
         messages.append(roomMessage)
 
-        Task {
+        Task.detached { [weak self] in
+            guard let self else { return }
             do {
                 let json = try jsonEncoder.encode(roomMessage)
                 try await room.localParticipant.publish(data: json)
@@ -222,7 +224,8 @@ extension RoomContext: RoomDelegate {
         {
             latestError = room.disconnectError
 
-            Task { @MainActor in
+            Task.detached { @MainActor [weak self] in
+                guard let self else { return }
                 shouldShowDisconnectReason = true
                 // Reset state
                 focusParticipant = nil
@@ -235,7 +238,8 @@ extension RoomContext: RoomDelegate {
     }
 
     func room(_: Room, participantDidDisconnect participant: RemoteParticipant) {
-        Task { @MainActor in
+        Task.detached { @MainActor [weak self] in
+            guard let self else { return }
             // self.participants.removeValue(forKey: participant.sid)
             if let focusParticipant, focusParticipant.sid == participant.sid {
                 self.focusParticipant = nil
@@ -247,13 +251,15 @@ extension RoomContext: RoomDelegate {
         do {
             let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
             // Update UI from main queue
-            Task { @MainActor in
+            Task.detached { @MainActor [weak self] in
+                guard let self else { return }
+                
                 withAnimation {
                     // Add messages to the @Published messages property
                     // which will trigger the UI to update
-                    messages.append(roomMessage)
+                    self.messages.append(roomMessage)
                     // Show the messages view when new messages arrive
-                    showMessagesView = true
+                    self.showMessagesView = true
                 }
             }
 

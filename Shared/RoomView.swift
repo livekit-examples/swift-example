@@ -504,7 +504,7 @@ struct RoomView: View {
                     Menu {
                         Button {
                             Task {
-                                try await room.sendSimulate(scenario: .nodeFailure)
+                                try await room.debug_sendSimulate(scenario: .nodeFailure)
                             }
                         } label: {
                             Text("Node failure")
@@ -512,7 +512,7 @@ struct RoomView: View {
 
                         Button {
                             Task {
-                                try await room.sendSimulate(scenario: .serverLeave)
+                                try await room.debug_sendSimulate(scenario: .serverLeave)
                             }
                         } label: {
                             Text("Server leave")
@@ -520,7 +520,7 @@ struct RoomView: View {
 
                         Button {
                             Task {
-                                try await room.sendSimulate(scenario: .migration)
+                                try await room.debug_sendSimulate(scenario: .migration)
                             }
                         } label: {
                             Text("Migration")
@@ -528,21 +528,21 @@ struct RoomView: View {
 
                         Button {
                             Task {
-                                try await room.sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                                try await room.debug_sendSimulate(scenario: .speakerUpdate(seconds: 3))
                             }
                         } label: {
                             Text("Speaker update")
                         }
                         Button {
                             Task {
-                                try await room.sendSimulate(scenario: .forceTCP)
+                                try await room.debug_sendSimulate(scenario: .forceTCP)
                             }
                         } label: {
                             Text("Force TCP")
                         }
                         Button {
                             Task {
-                                try await room.sendSimulate(scenario: .forceTLS)
+                                try await room.debug_sendSimulate(scenario: .forceTLS)
                             }
                         } label: {
                             Text("Force TLS")
@@ -596,7 +596,6 @@ struct RoomView: View {
         // .withHostingWindow { self.windowAccess.set(window: $0) }
         // #endif
         .onAppear {
-            //
             Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
                 Task { @MainActor in
                     withAnimation {

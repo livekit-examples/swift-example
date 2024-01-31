@@ -34,7 +34,7 @@ struct ConnectView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 30)
                             .padding(.bottom, 10)
-                        Text("SDK Version \(LiveKit.version)")
+                        Text("SDK Version \(LiveKitSDK.version)")
                             .opacity(0.5)
                         Text("Example App Version \(Bundle.main.appVersionLong) (\(Bundle.main.appBuild))")
                             .opacity(0.5)
@@ -108,7 +108,7 @@ struct ConnectView: View {
                             Spacer()
 
                             LKButton(title: "Connect") {
-                                Task {
+                                Task.detached { @MainActor in
                                     let room = try await roomCtx.connect()
                                     appCtx.connectionHistory.update(room: room, e2ee: roomCtx.e2ee, e2eeKey: roomCtx.e2eeKey)
                                 }
@@ -118,7 +118,7 @@ struct ConnectView: View {
                                 Menu {
                                     ForEach(appCtx.connectionHistory.sortedByUpdated) { entry in
                                         Button {
-                                            Task {
+                                            Task.detached { @MainActor in
                                                 let room = try await roomCtx.connect(entry: entry)
                                                 appCtx.connectionHistory.update(room: room, e2ee: roomCtx.e2ee, e2eeKey: roomCtx.e2eeKey)
                                             }

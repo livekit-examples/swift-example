@@ -27,7 +27,8 @@ import SwiftUI
         @Published var mode: ScreenShareSourcePickerView.Mode = .display {
             didSet {
                 guard oldValue != mode else { return }
-                Task {
+                Task.detached { [weak self] in
+                    guard let self else { return }
                     try await restartTracks()
                 }
             }
