@@ -272,8 +272,9 @@ struct RoomView: View {
                             .fontWeight(.bold)
                     }
 
-                    Text(room.localParticipant.identity)
-
+                    if let identity = room.localParticipant.identity {
+                        Text(String(describing: identity))
+                    }
                 #endif
 
                 // #if os(macOS)

@@ -122,9 +122,11 @@ struct ParticipantView: View {
 
                     // Bottom user info bar
                     HStack {
-                        Text("\(participant.identity)(\(participant.sid))")
-                            .lineLimit(1)
-                            .truncationMode(.tail)
+                        if let identity = participant.identity {
+                            Text(String(describing: identity))
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                        }
 
                         if let publication = participant.mainVideoPublication,
                            !publication.isMuted

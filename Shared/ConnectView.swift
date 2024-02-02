@@ -127,7 +127,7 @@ struct ConnectView: View {
                                                 .renderingMode(.original)
                                             Text([entry.roomName,
                                                   entry.participantIdentity,
-                                                  entry.url].compactMap { $0 }.joined(separator: " "))
+                                                  entry.url].compactMap { String(describing: $0) }.joined(separator: " "))
                                         }
                                     }
 

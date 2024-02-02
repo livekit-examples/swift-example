@@ -148,7 +148,7 @@ final class RoomContext: ObservableObject {
             ),
             adaptiveStream: true,
             dynacast: true,
-            e2eeOptions: e2eeOptions,
+            // e2eeOptions: e2eeOptions,
             reportRemoteTrackStatistics: true
         )
 
@@ -210,8 +210,7 @@ final class RoomContext: ObservableObject {
 }
 
 extension RoomContext: RoomDelegate {
-
-    func room(_ room: Room, track publication: TrackPublication, didUpdateE2EEState e2eeState: E2EEState) {
+    func room(_: Room, track publication: TrackPublication, didUpdateE2EEState e2eeState: E2EEState) {
         print("Did update e2eeState = [\(e2eeState.toString())] for publication \(publication.sid)")
     }
 
@@ -241,7 +240,7 @@ extension RoomContext: RoomDelegate {
         Task.detached { @MainActor [weak self] in
             guard let self else { return }
             // self.participants.removeValue(forKey: participant.sid)
-            if let focusParticipant, focusParticipant.sid == participant.sid {
+            if let focusParticipant, focusParticipant.identity == participant.identity {
                 self.focusParticipant = nil
             }
         }
@@ -253,7 +252,7 @@ extension RoomContext: RoomDelegate {
             // Update UI from main queue
             Task.detached { @MainActor [weak self] in
                 guard let self else { return }
-                
+
                 withAnimation {
                     // Add messages to the @Published messages property
                     // which will trigger the UI to update

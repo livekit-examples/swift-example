@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 LiveKit
+ * Copyright 2024 LiveKit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ struct ConnectionHistory: Codable {
     let token: String
     let e2ee: Bool
     let e2eeKey: String
-    let roomSid: String?
+    let roomSid: Room.Sid?
     let roomName: String?
-    let participantSid: String
-    let participantIdentity: String?
+    let participantSid: Participant.Sid?
+    let participantIdentity: Participant.Identity?
     let participantName: String?
 }
 

@@ -36,8 +36,8 @@ struct RoomSwitchView: View {
         if shouldShowRoomView {
             let elements = [room.name,
                             room.localParticipant.name,
-                            room.localParticipant.identity]
-            return elements.compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " ")
+                            room.localParticipant.identity] as [Any]
+            return elements.compactMap { String(describing: $0) }.filter { !$0.isEmpty }.joined(separator: " ")
         }
 
         return "LiveKit"

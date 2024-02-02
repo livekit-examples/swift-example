@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 LiveKit
+ * Copyright 2024 LiveKit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import LiveKit
+
 struct ExampleRoomMessage: Identifiable, Equatable, Hashable, Codable {
     // Identifiable protocol needs param named id
     var id: String {
@@ -23,8 +25,8 @@ struct ExampleRoomMessage: Identifiable, Equatable, Hashable, Codable {
     // message id
     let messageId: String
 
-    let senderSid: String
-    let senderIdentity: String?
+    let senderSid: Participant.Sid?
+    let senderIdentity: Participant.Identity?
     let text: String
 
     static func == (lhs: Self, rhs: Self) -> Bool {
