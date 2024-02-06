@@ -29,7 +29,7 @@ import SwiftUI
                 guard oldValue != mode else { return }
                 Task.detached { [weak self] in
                     guard let self else { return }
-                    try await restartTracks()
+                    try await self.restartTracks()
                 }
             }
         }

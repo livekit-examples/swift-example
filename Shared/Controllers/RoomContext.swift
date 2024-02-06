@@ -154,10 +154,10 @@ final class RoomContext: ObservableObject {
 
         let connectTask = Task.detached { [weak self] in
             guard let self else { return }
-            try await room.connect(url: url,
-                                   token: token,
-                                   connectOptions: connectOptions,
-                                   roomOptions: roomOptions)
+            try await self.room.connect(url: self.url,
+                                        token: self.token,
+                                        connectOptions: connectOptions,
+                                        roomOptions: roomOptions)
         }
 
         _connectTask = connectTask
@@ -184,8 +184,8 @@ final class RoomContext: ObservableObject {
         Task.detached { [weak self] in
             guard let self else { return }
             do {
-                let json = try jsonEncoder.encode(roomMessage)
-                try await room.localParticipant.publish(data: json)
+                let json = try self.jsonEncoder.encode(roomMessage)
+                try await self.room.localParticipant.publish(data: json)
             } catch {
                 print("Failed to encode data \(error)")
             }
@@ -225,12 +225,12 @@ extension RoomContext: RoomDelegate {
 
             Task.detached { @MainActor [weak self] in
                 guard let self else { return }
-                shouldShowDisconnectReason = true
+                self.shouldShowDisconnectReason = true
                 // Reset state
-                focusParticipant = nil
-                showMessagesView = false
-                textFieldString = ""
-                messages.removeAll()
+                self.focusParticipant = nil
+                self.showMessagesView = false
+                self.textFieldString = ""
+                self.messages.removeAll()
                 // self.objectWillChange.send()
             }
         }
@@ -239,8 +239,7 @@ extension RoomContext: RoomDelegate {
     func room(_: Room, participantDidDisconnect participant: RemoteParticipant) {
         Task.detached { @MainActor [weak self] in
             guard let self else { return }
-            // self.participants.removeValue(forKey: participant.sid)
-            if let focusParticipant, focusParticipant.identity == participant.identity {
+            if let focusParticipant = self.focusParticipant, focusParticipant.identity == participant.identity {
                 self.focusParticipant = nil
             }
         }
