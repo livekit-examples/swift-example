@@ -1,10 +1,25 @@
+/*
+ * Copyright 2024 LiveKit
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import Foundation
-import SwiftUI
 import LiveKit
 import SFSafeSymbols
+import SwiftUI
 
 struct ConnectView: View {
-
     @EnvironmentObject var appCtx: AppContext
     @EnvironmentObject var roomCtx: RoomContext
     @EnvironmentObject var room: Room
@@ -13,14 +28,13 @@ struct ConnectView: View {
         GeometryReader { geometry in
             ScrollView {
                 VStack(alignment: .center, spacing: 40.0) {
-
                     VStack(spacing: 10) {
                         Image("logo")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 30)
                             .padding(.bottom, 10)
-                        Text("SDK Version \(LiveKit.version)")
+                        Text("SDK Version \(LiveKitSDK.version)")
                             .opacity(0.5)
                         Text("Example App Version \(Bundle.main.appVersionLong) (\(Bundle.main.appBuild))")
                             .opacity(0.5)
@@ -82,13 +96,19 @@ struct ConnectView: View {
                     }.frame(maxWidth: 350)
 
                     if case .connecting = room.connectionState {
-                        ProgressView()
+                        HStack(alignment: .center) {
+                            ProgressView()
+
+                            LKButton(title: "Cancel") {
+                                roomCtx.cancelConnect()
+                            }
+                        }
                     } else {
                         HStack(alignment: .center) {
                             Spacer()
 
                             LKButton(title: "Connect") {
-                                Task {
+                                Task.detached { @MainActor in
                                     let room = try await roomCtx.connect()
                                     appCtx.connectionHistory.update(room: room, e2ee: roomCtx.e2ee, e2eeKey: roomCtx.e2eeKey)
                                 }
@@ -98,7 +118,7 @@ struct ConnectView: View {
                                 Menu {
                                     ForEach(appCtx.connectionHistory.sortedByUpdated) { entry in
                                         Button {
-                                            Task {
+                                            Task.detached { @MainActor in
                                                 let room = try await roomCtx.connect(entry: entry)
                                                 appCtx.connectionHistory.update(room: room, e2ee: roomCtx.e2ee, e2eeKey: roomCtx.e2eeKey)
                                             }
@@ -107,7 +127,7 @@ struct ConnectView: View {
                                                 .renderingMode(.original)
                                             Text([entry.roomName,
                                                   entry.participantIdentity,
-                                                  entry.url].compactMap { $0 }.joined(separator: " "))
+                                                  entry.url].compactMap { String(describing: $0) }.joined(separator: " "))
                                         }
                                     }
 
@@ -135,13 +155,11 @@ struct ConnectView: View {
                             }
 
                             Spacer()
-
                         }
-
                     }
                 }
                 .padding()
-                .frame(width: geometry.size.width)      // Make the scroll view full-width
+                .frame(width: geometry.size.width) // Make the scroll view full-width
                 .frame(minHeight: geometry.size.height) // Set the content’s min height to the parent
             }
         }
@@ -150,9 +168,7 @@ struct ConnectView: View {
         #endif
         .alert(isPresented: $roomCtx.shouldShowDisconnectReason) {
             Alert(title: Text("Disconnected"),
-                  message: Text("Reason: " + (roomCtx.latestError != nil
-                                                ? String(describing: roomCtx.latestError!)
-                                                : "Unknown")))
+                  message: Text("Reason: " + String(describing: roomCtx.latestError)))
         }
     }
 }

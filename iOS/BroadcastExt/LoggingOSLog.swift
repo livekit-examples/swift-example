@@ -1,26 +1,41 @@
+/*
+ * Copyright 2024 LiveKit
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import Foundation
 import Logging
 import os
 
 public struct LoggingOSLog: LogHandler {
-
     public var logLevel: Logging.Logger.Level = .debug
     private let oslogger: OSLog
 
     public init(label: String) {
-        self.oslogger = OSLog(subsystem: label, category: "")
+        oslogger = OSLog(subsystem: label, category: "")
     }
 
-    public init(label: String, log: OSLog) {
-        self.oslogger = log
+    public init(label _: String, log: OSLog) {
+        oslogger = log
     }
 
-    public func log(level: Logging.Logger.Level, message: Logging.Logger.Message, metadata: Logging.Logger.Metadata?, file: String, function: String, line: UInt) {
-        var combinedPrettyMetadata = self.prettyMetadata
+    public func log(level _: Logging.Logger.Level, message: Logging.Logger.Message, metadata: Logging.Logger.Metadata?, file _: String, function _: String, line _: UInt) {
+        var combinedPrettyMetadata = prettyMetadata
         if let metadataOverride = metadata, !metadataOverride.isEmpty {
-            combinedPrettyMetadata = self.prettify(
+            combinedPrettyMetadata = prettify(
                 self.metadata.merging(metadataOverride) {
-                    return $1
+                    $1
                 }
             )
         }
@@ -29,13 +44,13 @@ public struct LoggingOSLog: LogHandler {
         if combinedPrettyMetadata != nil {
             formedMessage += " -- " + combinedPrettyMetadata!
         }
-        os_log("%{public}@", log: self.oslogger, type: OSLogType.from(loggerLevel: .info), formedMessage as NSString)
+        os_log("%{public}@", log: oslogger, type: OSLogType.from(loggerLevel: .info), formedMessage as NSString)
     }
 
     private var prettyMetadata: String?
     public var metadata = Logger.Metadata() {
         didSet {
-            self.prettyMetadata = self.prettify(self.metadata)
+            prettyMetadata = prettify(metadata)
         }
     }
 
@@ -44,10 +59,10 @@ public struct LoggingOSLog: LogHandler {
     ///    - metadataKey: the key for the metadata item.
     public subscript(metadataKey metadataKey: String) -> Logging.Logger.Metadata.Value? {
         get {
-            return self.metadata[metadataKey]
+            metadata[metadataKey]
         }
         set {
-            self.metadata[metadataKey] = newValue
+            metadata[metadataKey] = newValue
         }
     }
 
