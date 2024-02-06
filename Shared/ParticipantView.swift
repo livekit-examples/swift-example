@@ -26,8 +26,6 @@ struct ParticipantView: View {
     var onTap: ((_ participant: Participant) -> Void)?
 
     @State private var isRendering: Bool = false
-    @State private var dimensions: Dimensions?
-    @State private var videoTrackStats: TrackStatistics?
 
     func bgView(systemSymbol: SFSymbol, geometry: GeometryProxy) -> some View {
         Image(systemSymbol: systemSymbol)
@@ -60,10 +58,8 @@ struct ParticipantView: View {
                                          layoutMode: videoViewMode,
                                          mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto,
                                          renderMode: appCtx.preferSampleBufferRendering ? .sampleBuffer : .auto,
-                                         debugMode: appCtx.showInformationOverlay,
-                                         isRendering: $isRendering,
-                                         dimensions: $dimensions,
-                                         trackStatistics: $videoTrackStats)
+                                         isDebugMode: appCtx.showInformationOverlay,
+                                         isRendering: $isRendering)
 
                         if !isRendering {
                             ProgressView().progressViewStyle(CircularProgressViewStyle())
@@ -271,12 +267,12 @@ struct ParticipantView: View {
 }
 
 struct StatsView: View {
-    @ObservedObject private var viewModel: DelegateObserver
     private let track: Track
+    @ObservedObject private var observer: TrackDelegateObserver
 
     init(track: Track) {
         self.track = track
-        viewModel = DelegateObserver(track: track)
+        observer = TrackDelegateObserver(track: track)
     }
 
     var body: some View {
@@ -286,7 +282,7 @@ struct StatsView: View {
                     HStack(spacing: 3) {
                         Image(systemSymbol: .videoFill)
                         Text("Video").fontWeight(.bold)
-                        if let dimensions = viewModel.dimensions {
+                        if let dimensions = observer.dimensions {
                             Text("\(dimensions.width)×\(dimensions.height)")
                         }
                     }
@@ -300,7 +296,7 @@ struct StatsView: View {
                 }
 
                 // if let trackStats = viewModel.statistics {
-                ForEach(viewModel.allStatisticts, id: \.self) { trackStats in
+                ForEach(observer.allStatisticts, id: \.self) { trackStats in
                     ForEach(trackStats.outboundRtpStream.sortedByRidIndex()) { stream in
 
                         HStack(spacing: 3) {
@@ -341,47 +337,6 @@ struct StatsView: View {
             .padding(5)
             .background(Color.black.opacity(0.5))
             .cornerRadius(8)
-        }
-    }
-}
-
-extension StatsView {
-    class DelegateObserver: ObservableObject, TrackDelegate {
-        private let track: Track
-        @Published var dimensions: Dimensions?
-        @Published var statistics: TrackStatistics?
-        @Published var simulcastStatistics: [VideoCodec: TrackStatistics]
-
-        var allStatisticts: [TrackStatistics] {
-            var result: [TrackStatistics] = []
-            if let statistics {
-                result.append(statistics)
-            }
-            result.append(contentsOf: simulcastStatistics.values)
-            return result
-        }
-
-        init(track: Track) {
-            self.track = track
-
-            dimensions = track.dimensions
-            statistics = track.statistics
-            simulcastStatistics = track.simulcastStatistics
-
-            track.add(delegate: self)
-        }
-
-        func track(_: VideoTrack, didUpdateDimensions dimensions: Dimensions?) {
-            Task.detached { @MainActor in
-                self.dimensions = dimensions
-            }
-        }
-
-        func track(_: Track, didUpdateStatistics statistics: TrackStatistics, simulcastStatistics: [VideoCodec: TrackStatistics]) {
-            Task.detached { @MainActor in
-                self.statistics = statistics
-                self.simulcastStatistics = simulcastStatistics
-            }
         }
     }
 }
