@@ -294,16 +294,16 @@ struct RoomView: View {
 
                 Spacer()
 
-                Group {
-                    Button {
-                        Task {
-                            try await room.debug_triggerReconnect(reason: .transport)
-                        }
-                    } label: {
-                        Image(systemSymbol: .repeat)
-                            .renderingMode(.original)
-                    }
-                }
+//                Group {
+//                    Button {
+//                        Task {
+//                            try await room.debug_triggerReconnect(reason: .transport)
+//                        }
+//                    } label: {
+//                        Image(systemSymbol: .repeat)
+//                            .renderingMode(.original)
+//                    }
+//                }
 
                 Group {
                     let isCameraEnabled = room.localParticipant.isCameraEnabled()

@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/client-sdk-swift",
       "state" : {
-        "revision" : "b2353db06eefa15468c4b2e0f546c5022f8bd266",
-        "version" : "1.1.2"
+        "revision" : "b708b87a9bc63dc138e6a0b2d173b1f0d9b0b9f9",
+        "version" : "2.0.1"
       }
     },
     {
@@ -19,15 +19,6 @@
       }
     },
     {
-      "identity" : "promises",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/promises.git",
-      "state" : {
-        "revision" : "e70e889c0196c76d22759eb50d6a0270ca9f1d9e",
-        "version" : "2.3.1"
-      }
-    },
-    {
       "identity" : "sfsafesymbols",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
@@ -37,21 +28,12 @@
       }
     },
     {
-      "identity" : "specs",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/webrtc-sdk/Specs.git",
-      "state" : {
-        "revision" : "4fa8d6d647fc759cdd0265fd413d2f28ea2e0e08",
-        "version" : "114.5735.8"
-      }
-    },
-    {
       "identity" : "swift-log",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "532d8b529501fb73a2455b179e0bbb6d49b652ed",
-        "version" : "1.5.3"
+        "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
+        "version" : "1.5.4"
       }
     },
     {
@@ -59,8 +41,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "cf62cdaea48b77f1a631e5cb3aeda6047c2cba1d",
-        "version" : "1.23.0"
+        "revision" : "65e8f29b2d63c4e38e736b25c27b83e012159be8",
+        "version" : "1.25.2"
+      }
+    },
+    {
+      "identity" : "webrtc-xcframework",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/livekit/webrtc-xcframework.git",
+      "state" : {
+        "revision" : "da80ea5be0a2b92ca805ab7ee9ad191f6d938a5f",
+        "version" : "114.5735.10"
       }
     }
   ],
