@@ -487,7 +487,7 @@ struct RoomView: View {
 
                     Button {
                         Task {
-                            try await room.debug_triggerReconnect(reason: .debug)
+                            try await room.debug_triggerReconnect(reason: .websocket)
                         }
                     } label: {
                         Text("Force a reconnect")
