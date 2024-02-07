@@ -286,6 +286,8 @@ struct RoomView: View {
                 // #endif
 
                 // VideoView mode switcher
+                // insufficient space on iOS bar
+                #if os(macOS)
                 Picker("Mode", selection: $appCtx.videoViewMode) {
                     Text("Fit").tag(VideoView.LayoutMode.fit)
                     Text("Fill").tag(VideoView.LayoutMode.fill)
@@ -293,6 +295,7 @@ struct RoomView: View {
                 .pickerStyle(SegmentedPickerStyle())
 
                 Spacer()
+                #endif
 
                 Group {
                     let isCameraEnabled = room.localParticipant.isCameraEnabled()
