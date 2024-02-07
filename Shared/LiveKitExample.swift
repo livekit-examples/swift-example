@@ -101,7 +101,7 @@ struct RoomContextView: View {
                 Task { @MainActor in
                     roomCtx.url = builtUrl
                     roomCtx.token = tokenValue
-                    roomCtx.e2ee = e2ee
+                    roomCtx.isE2eeEnabled = e2ee
                     roomCtx.e2eeKey = e2eeKey
                     if !roomCtx.token.isEmpty {
                         let room = try await roomCtx.connect()

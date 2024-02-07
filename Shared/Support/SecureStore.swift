@@ -23,7 +23,7 @@ struct Preferences: Codable, Equatable {
     var url = ""
     var token = ""
     var e2eeKey = ""
-    var e2ee = false
+    var isE2eeEnabled = false
 
     // Connect options
     var autoSubscribe = true

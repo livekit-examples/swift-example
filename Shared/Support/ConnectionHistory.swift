@@ -30,6 +30,20 @@ struct ConnectionHistory: Codable {
     let participantName: String?
 }
 
+extension ConnectionHistory: CustomStringConvertible {
+    var description: String {
+        var segments: [String] = []
+        if let roomName {
+            segments.append(String(describing: roomName))
+        }
+        if let participantIdentity {
+            segments.append(String(describing: participantIdentity))
+        }
+        segments.append(url)
+        return segments.joined(separator: " ")
+    }
+}
+
 extension ConnectionHistory: Identifiable {
     var id: Int {
         hashValue

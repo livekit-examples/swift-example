@@ -44,8 +44,8 @@ final class RoomContext: ObservableObject {
         didSet { store.value.e2eeKey = e2eeKey }
     }
 
-    @Published var e2ee: Bool = false {
-        didSet { store.value.e2ee = e2ee }
+    @Published var isE2eeEnabled: Bool = false {
+        didSet { store.value.isE2eeEnabled = isE2eeEnabled }
     }
 
     // RoomOptions
@@ -89,7 +89,7 @@ final class RoomContext: ObservableObject {
 
         url = store.value.url
         token = store.value.token
-        e2ee = store.value.e2ee
+        isE2eeEnabled = store.value.isE2eeEnabled
         e2eeKey = store.value.e2eeKey
         simulcast = store.value.simulcast
         adaptiveStream = store.value.adaptiveStream
@@ -119,7 +119,7 @@ final class RoomContext: ObservableObject {
         if let entry {
             url = entry.url
             token = entry.token
-            e2ee = entry.e2ee
+            isE2eeEnabled = entry.e2ee
             e2eeKey = entry.e2eeKey
         }
 
@@ -129,7 +129,7 @@ final class RoomContext: ObservableObject {
         )
 
         var e2eeOptions: E2EEOptions?
-        if e2ee {
+        if isE2eeEnabled {
             let keyProvider = BaseKeyProvider(isSharedKey: true)
             keyProvider.setKey(key: e2eeKey)
             e2eeOptions = E2EEOptions(keyProvider: keyProvider)
@@ -148,7 +148,7 @@ final class RoomContext: ObservableObject {
             ),
             adaptiveStream: true,
             dynacast: true,
-            // e2eeOptions: e2eeOptions,
+            e2eeOptions: e2eeOptions,
             reportRemoteTrackStatistics: true
         )
 

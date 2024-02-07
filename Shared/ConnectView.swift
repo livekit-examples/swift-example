@@ -53,7 +53,7 @@ struct ConnectView: View {
                                 Toggle(isOn: $roomCtx.publish) {
                                     Text("Publish only mode")
                                 }
-                                Toggle(isOn: $roomCtx.e2ee) {
+                                Toggle(isOn: $roomCtx.isE2eeEnabled) {
                                     Text("Enable E2EE")
                                 }
                             } label: {
@@ -110,7 +110,7 @@ struct ConnectView: View {
                             LKButton(title: "Connect") {
                                 Task.detached { @MainActor in
                                     let room = try await roomCtx.connect()
-                                    appCtx.connectionHistory.update(room: room, e2ee: roomCtx.e2ee, e2eeKey: roomCtx.e2eeKey)
+                                    appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
                                 }
                             }
 
@@ -120,14 +120,12 @@ struct ConnectView: View {
                                         Button {
                                             Task.detached { @MainActor in
                                                 let room = try await roomCtx.connect(entry: entry)
-                                                appCtx.connectionHistory.update(room: room, e2ee: roomCtx.e2ee, e2eeKey: roomCtx.e2eeKey)
+                                                appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
                                             }
                                         } label: {
                                             Image(systemSymbol: .boltFill)
                                                 .renderingMode(.original)
-                                            Text([entry.roomName,
-                                                  entry.participantIdentity,
-                                                  entry.url].compactMap { String(describing: $0) }.joined(separator: " "))
+                                            Text(String(describing: entry))
                                         }
                                     }
 
