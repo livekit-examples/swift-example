@@ -268,22 +268,24 @@ struct RoomView: View {
             ToolbarItemGroup(placement: toolbarPlacement) {
                 // Insufficient space on iOS bar
                 #if os(macOS)
-                    if let name = room.name {
-                        Text(name)
-                            .fontWeight(.bold)
-                    }
+                    Group {
+                        if let name = room.name {
+                            Text(name)
+                                .fontWeight(.bold)
+                        }
 
-                    if let identity = room.localParticipant.identity {
-                        Text(String(describing: identity))
-                    }
+                        if let identity = room.localParticipant.identity {
+                            Text(String(describing: identity))
+                        }
 
-                    Spacer()
+                        Spacer()
 
-                    Picker("Mode", selection: $appCtx.videoViewMode) {
-                        Text("Fit").tag(VideoView.LayoutMode.fit)
-                        Text("Fill").tag(VideoView.LayoutMode.fill)
+                        Picker("Mode", selection: $appCtx.videoViewMode) {
+                            Text("Fit").tag(VideoView.LayoutMode.fit)
+                            Text("Fill").tag(VideoView.LayoutMode.fill)
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
                     }
-                    .pickerStyle(SegmentedPickerStyle())
                 #else
                     Spacer()
                 #endif
@@ -473,76 +475,78 @@ struct RoomView: View {
                         }
                     #endif
 
-                    Divider()
-
-                    Button {
-                        Task {
-                            await room.localParticipant.unpublishAll()
-                        }
-                    } label: {
-                        Text("Unpublish all")
-                    }
-
-                    Divider()
-
-                    Button {
-                        Task {
-                            try await room.debug_triggerReconnect(reason: .websocket)
-                        }
-                    } label: {
-                        Text("Force a reconnect")
-                    }
-
-                    Divider()
-
-                    Menu {
+                    Group {
+                        Divider()
+                        
                         Button {
                             Task {
-                                try await room.debug_sendSimulate(scenario: .nodeFailure)
+                                await room.localParticipant.unpublishAll()
                             }
                         } label: {
-                            Text("Node failure")
+                            Text("Unpublish all")
                         }
-
+                        
+                        Divider()
+                        
                         Button {
                             Task {
-                                try await room.debug_sendSimulate(scenario: .serverLeave)
+                                try await room.debug_triggerReconnect(reason: .websocket)
                             }
                         } label: {
-                            Text("Server leave")
+                            Text("Force a reconnect")
                         }
-
-                        Button {
-                            Task {
-                                try await room.debug_sendSimulate(scenario: .migration)
+                        
+                        Divider()
+                        
+                        Menu {
+                            Button {
+                                Task {
+                                    try await room.debug_sendSimulate(scenario: .nodeFailure)
+                                }
+                            } label: {
+                                Text("Node failure")
+                            }
+                            
+                            Button {
+                                Task {
+                                    try await room.debug_sendSimulate(scenario: .serverLeave)
+                                }
+                            } label: {
+                                Text("Server leave")
+                            }
+                            
+                            Button {
+                                Task {
+                                    try await room.debug_sendSimulate(scenario: .migration)
+                                }
+                            } label: {
+                                Text("Migration")
+                            }
+                            
+                            Button {
+                                Task {
+                                    try await room.debug_sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                                }
+                            } label: {
+                                Text("Speaker update")
+                            }
+                            Button {
+                                Task {
+                                    try await room.debug_sendSimulate(scenario: .forceTCP)
+                                }
+                            } label: {
+                                Text("Force TCP")
+                            }
+                            Button {
+                                Task {
+                                    try await room.debug_sendSimulate(scenario: .forceTLS)
+                                }
+                            } label: {
+                                Text("Force TLS")
                             }
                         } label: {
-                            Text("Migration")
+                            Text("Simulate scenario")
                         }
-
-                        Button {
-                            Task {
-                                try await room.debug_sendSimulate(scenario: .speakerUpdate(seconds: 3))
-                            }
-                        } label: {
-                            Text("Speaker update")
-                        }
-                        Button {
-                            Task {
-                                try await room.debug_sendSimulate(scenario: .forceTCP)
-                            }
-                        } label: {
-                            Text("Force TCP")
-                        }
-                        Button {
-                            Task {
-                                try await room.debug_sendSimulate(scenario: .forceTLS)
-                            }
-                        } label: {
-                            Text("Force TLS")
-                        }
-                    } label: {
-                        Text("Simulate scenario")
                     }
 
                     Group {
