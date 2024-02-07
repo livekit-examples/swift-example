@@ -266,6 +266,7 @@ struct RoomView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: toolbarPlacement) {
+                // Insufficient space on iOS bar
                 #if os(macOS)
                     if let name = room.name {
                         Text(name)
@@ -275,26 +276,16 @@ struct RoomView: View {
                     if let identity = room.localParticipant.identity {
                         Text(String(describing: identity))
                     }
-                #endif
 
-                // #if os(macOS)
-                // // Pin on top
-                // Toggle(isOn: $windowAccess.pinned) {
-                //     Image(systemSymbol: windowAccess.pinned ? .pinFill : .pin)
-                //         .renderingMode(.original)
-                // }
-                // #endif
+                    Spacer()
 
-                // VideoView mode switcher
-                // insufficient space on iOS bar
-                #if os(macOS)
-                Picker("Mode", selection: $appCtx.videoViewMode) {
-                    Text("Fit").tag(VideoView.LayoutMode.fit)
-                    Text("Fill").tag(VideoView.LayoutMode.fill)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-
-                Spacer()
+                    Picker("Mode", selection: $appCtx.videoViewMode) {
+                        Text("Fit").tag(VideoView.LayoutMode.fit)
+                        Text("Fill").tag(VideoView.LayoutMode.fill)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                #else
+                    Spacer()
                 #endif
 
                 Group {
