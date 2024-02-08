@@ -477,7 +477,7 @@ struct RoomView: View {
 
                     Group {
                         Divider()
-                        
+
                         Button {
                             Task {
                                 await room.localParticipant.unpublishAll()
@@ -485,9 +485,9 @@ struct RoomView: View {
                         } label: {
                             Text("Unpublish all")
                         }
-                        
+
                         Divider()
-                        
+
                         Button {
                             Task {
                                 try await room.debug_triggerReconnect(reason: .websocket)
@@ -495,9 +495,9 @@ struct RoomView: View {
                         } label: {
                             Text("Force a reconnect")
                         }
-                        
+
                         Divider()
-                        
+
                         Menu {
                             Button {
                                 Task {
@@ -506,7 +506,7 @@ struct RoomView: View {
                             } label: {
                                 Text("Node failure")
                             }
-                            
+
                             Button {
                                 Task {
                                     try await room.debug_sendSimulate(scenario: .serverLeave)
@@ -514,7 +514,7 @@ struct RoomView: View {
                             } label: {
                                 Text("Server leave")
                             }
-                            
+
                             Button {
                                 Task {
                                     try await room.debug_sendSimulate(scenario: .migration)
@@ -522,7 +522,7 @@ struct RoomView: View {
                             } label: {
                                 Text("Migration")
                             }
-                            
+
                             Button {
                                 Task {
                                     try await room.debug_sendSimulate(scenario: .speakerUpdate(seconds: 3))
