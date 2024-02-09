@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/client-sdk-swift",
       "state" : {
-        "revision" : "b708b87a9bc63dc138e6a0b2d173b1f0d9b0b9f9",
-        "version" : "2.0.1"
+        "revision" : "ed1b89c6bf9a64c3a673f7bb1faefc77a8d57662",
+        "version" : "2.0.2"
       }
     },
     {
