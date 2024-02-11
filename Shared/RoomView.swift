@@ -494,7 +494,15 @@ struct RoomView: View {
                                     try await room.debug_simulate(scenario: .quickReconnect)
                                 }
                             } label: {
-                                Text("Force reconnect")
+                                Text("Quick reconnect")
+                            }
+
+                            Button {
+                                Task {
+                                    try await room.debug_simulate(scenario: .fullReconnect)
+                                }
+                            } label: {
+                                Text("Full reconnect")
                             }
 
                             Button {
