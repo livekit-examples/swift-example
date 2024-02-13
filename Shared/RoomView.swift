@@ -577,6 +577,8 @@ struct RoomView: View {
                         }
 
                         Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
+
+                        Toggle("E2EE enabled", isOn: $roomCtx.isE2eeEnabled)
                     }
 
                 } label: {
