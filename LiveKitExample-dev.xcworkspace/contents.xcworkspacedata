@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../client-sdk-swift">
+      location = "group:../../livekit/client-sdk-swift">
    </FileRef>
    <FileRef
       location = "group:LiveKitExample.xcodeproj">
