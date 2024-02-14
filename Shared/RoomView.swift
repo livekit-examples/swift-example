@@ -17,7 +17,6 @@
 import LiveKit
 import SFSafeSymbols
 import SwiftUI
-import WebRTC
 
 #if !os(macOS)
     let adaptiveMin = 170.0

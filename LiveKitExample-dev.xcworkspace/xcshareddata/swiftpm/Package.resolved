@@ -56,12 +56,12 @@
         }
       },
       {
-        "package": "WebRTC",
+        "package": "LiveKitWebRTC",
         "repositoryURL": "https://github.com/livekit/webrtc-xcframework.git",
         "state": {
           "branch": null,
-          "revision": "da80ea5be0a2b92ca805ab7ee9ad191f6d938a5f",
-          "version": "114.5735.10"
+          "revision": "a91f505233e26c5ab595fc698509d09bd2481bf5",
+          "version": "114.5735.11"
         }
       }
     ]
