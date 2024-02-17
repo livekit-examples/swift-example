@@ -130,9 +130,12 @@ final class RoomContext: ObservableObject {
             publishOnlyMode: publish ? "publish_\(UUID().uuidString)" : nil
         )
 
-        let keyProvider = BaseKeyProvider(isSharedKey: true)
-        keyProvider.setKey(key: e2eeKey)
-        let e2eeOptions = E2EEOptions(keyProvider: keyProvider)
+        var e2eeOptions: E2EEOptions?
+        if isE2eeEnabled {
+            let keyProvider = BaseKeyProvider(isSharedKey: true)
+            keyProvider.setKey(key: e2eeKey)
+            e2eeOptions = E2EEOptions(keyProvider: keyProvider)
+        }
 
         let roomOptions = RoomOptions(
             defaultCameraCaptureOptions: CameraCaptureOptions(
