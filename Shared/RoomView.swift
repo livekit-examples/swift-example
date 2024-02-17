@@ -17,7 +17,6 @@
 import LiveKit
 import SFSafeSymbols
 import SwiftUI
-import WebRTC
 
 #if !os(macOS)
     let adaptiveMin = 170.0
@@ -488,20 +487,26 @@ struct RoomView: View {
 
                         Divider()
 
-                        Button {
-                            Task {
-                                try await room.debug_triggerReconnect(reason: .websocket)
-                            }
-                        } label: {
-                            Text("Force a reconnect")
-                        }
-
-                        Divider()
-
                         Menu {
                             Button {
                                 Task {
-                                    try await room.debug_sendSimulate(scenario: .nodeFailure)
+                                    try await room.debug_simulate(scenario: .quickReconnect)
+                                }
+                            } label: {
+                                Text("Quick reconnect")
+                            }
+
+                            Button {
+                                Task {
+                                    try await room.debug_simulate(scenario: .fullReconnect)
+                                }
+                            } label: {
+                                Text("Full reconnect")
+                            }
+
+                            Button {
+                                Task {
+                                    try await room.debug_simulate(scenario: .nodeFailure)
                                 }
                             } label: {
                                 Text("Node failure")
@@ -509,7 +514,7 @@ struct RoomView: View {
 
                             Button {
                                 Task {
-                                    try await room.debug_sendSimulate(scenario: .serverLeave)
+                                    try await room.debug_simulate(scenario: .serverLeave)
                                 }
                             } label: {
                                 Text("Server leave")
@@ -517,7 +522,7 @@ struct RoomView: View {
 
                             Button {
                                 Task {
-                                    try await room.debug_sendSimulate(scenario: .migration)
+                                    try await room.debug_simulate(scenario: .migration)
                                 }
                             } label: {
                                 Text("Migration")
@@ -525,21 +530,21 @@ struct RoomView: View {
 
                             Button {
                                 Task {
-                                    try await room.debug_sendSimulate(scenario: .speakerUpdate(seconds: 3))
+                                    try await room.debug_simulate(scenario: .speakerUpdate(seconds: 3))
                                 }
                             } label: {
                                 Text("Speaker update")
                             }
                             Button {
                                 Task {
-                                    try await room.debug_sendSimulate(scenario: .forceTCP)
+                                    try await room.debug_simulate(scenario: .forceTCP)
                                 }
                             } label: {
                                 Text("Force TCP")
                             }
                             Button {
                                 Task {
-                                    try await room.debug_sendSimulate(scenario: .forceTLS)
+                                    try await room.debug_simulate(scenario: .forceTLS)
                                 }
                             } label: {
                                 Text("Force TLS")
@@ -571,6 +576,8 @@ struct RoomView: View {
                         }
 
                         Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
+
+                        Toggle("E2EE enabled", isOn: $roomCtx.isE2eeEnabled)
                     }
 
                 } label: {

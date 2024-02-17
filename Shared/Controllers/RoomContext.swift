@@ -16,7 +16,6 @@
 
 import LiveKit
 import SwiftUI
-import WebRTC
 
 // This class contains the logic to control behavior of the whole app.
 final class RoomContext: ObservableObject {
@@ -45,7 +44,10 @@ final class RoomContext: ObservableObject {
     }
 
     @Published var isE2eeEnabled: Bool = false {
-        didSet { store.value.isE2eeEnabled = isE2eeEnabled }
+        didSet {
+            store.value.isE2eeEnabled = isE2eeEnabled
+            // room.set(isE2eeEnabled: isE2eeEnabled)
+        }
     }
 
     // RoomOptions
@@ -148,6 +150,7 @@ final class RoomContext: ObservableObject {
             ),
             adaptiveStream: true,
             dynacast: true,
+            // isE2eeEnabled: isE2eeEnabled,
             e2eeOptions: e2eeOptions,
             reportRemoteTrackStatistics: true
         )
@@ -211,7 +214,7 @@ final class RoomContext: ObservableObject {
 
 extension RoomContext: RoomDelegate {
     func room(_: Room, track publication: TrackPublication, didUpdateE2EEState e2eeState: E2EEState) {
-        print("Did update e2eeState = [\(e2eeState.toString())] for publication \(publication.sid)")
+        print("Did update e2eeState = [\(String(describing: e2eeState))] for publication \(publication.sid)")
     }
 
     func room(_ room: Room, didUpdateConnectionState connectionState: ConnectionState, from oldValue: ConnectionState) {

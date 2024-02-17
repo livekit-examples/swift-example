@@ -457,8 +457,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/BroadcastExt/BroadcastExt.entitlements";
-				CURRENT_PROJECT_VERSION = 2024020804;
+				CURRENT_PROJECT_VERSION = 2024021701;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
+				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/BroadcastExt/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -467,11 +468,12 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1.BroadcastExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -481,8 +483,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/BroadcastExt/BroadcastExt.entitlements";
-				CURRENT_PROJECT_VERSION = 2024020804;
+				CURRENT_PROJECT_VERSION = 2024021701;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
+				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/BroadcastExt/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BroadcastExt;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -491,11 +494,12 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1.BroadcastExt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -631,8 +635,10 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024020804;
+				CURRENT_PROJECT_VERSION = 2024021701;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
+				ENABLE_HARDENED_RUNTIME = NO;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
@@ -646,11 +652,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -665,8 +673,10 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024020804;
+				CURRENT_PROJECT_VERSION = 2024021701;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
+				ENABLE_HARDENED_RUNTIME = NO;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iOS/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow Camera access";
@@ -680,11 +690,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -700,7 +712,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2024020804;
+				CURRENT_PROJECT_VERSION = 2024021701;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -714,7 +726,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -732,7 +744,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2024020804;
+				CURRENT_PROJECT_VERSION = 2024021701;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -746,7 +758,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.0.2;
+				MARKETING_VERSION = 2.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -826,7 +838,7 @@
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.2;
+				minimumVersion = 2.0.3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

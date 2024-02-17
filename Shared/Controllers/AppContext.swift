@@ -17,7 +17,6 @@
 import Combine
 import LiveKit
 import SwiftUI
-import WebRTC
 
 // This class contains the logic to control behavior of the whole app.
 final class AppContext: ObservableObject {
