@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/client-sdk-swift",
       "state" : {
-        "revision" : "08c9f31791149ca4dce66120775eb19b1f54f9a8",
-        "version" : "2.0.3"
+        "revision" : "cb7b520c3846e8e61f70898317df330e8ca644c4",
+        "version" : "2.0.4"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/webrtc-xcframework.git",
       "state" : {
-        "revision" : "a91f505233e26c5ab595fc698509d09bd2481bf5",
-        "version" : "114.5735.11"
+        "revision" : "56e5119f00daa2e42e10670d29ae2edbff6be961",
+        "version" : "114.5735.13"
       }
     }
   ],
