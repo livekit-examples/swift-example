@@ -5,6 +5,9 @@
       location = "group:../../livekit/client-sdk-swift">
    </FileRef>
    <FileRef
+      location = "group:../../livekit/krisp-noise-filter/packages/swift">
+   </FileRef>
+   <FileRef
       location = "group:LiveKitExample.xcodeproj">
    </FileRef>
 </Workspace>

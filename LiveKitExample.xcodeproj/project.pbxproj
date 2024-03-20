@@ -35,6 +35,7 @@
 		6867533C27A65652003707B9 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6867533A27A65652003707B9 /* AppContext.swift */; };
 		687230F82B14AE0A0098CCE6 /* PublishOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687230F72B14AE0A0098CCE6 /* PublishOptionsView.swift */; };
 		687230F92B14AE0A0098CCE6 /* PublishOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687230F72B14AE0A0098CCE6 /* PublishOptionsView.swift */; };
+		687B93942BA7307D00FDD013 /* LiveKitKrispNoiseFilter in Frameworks */ = {isa = PBXBuildFile; productRef = 687B93932BA7307D00FDD013 /* LiveKitKrispNoiseFilter */; };
 		68816CC127B4D6BC00E24622 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 68816CC027B4D6BC00E24622 /* KeychainAccess */; };
 		68816CC327B4D94200E24622 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 68816CC227B4D94200E24622 /* KeychainAccess */; };
 		68816CC527B4DCD500E24622 /* SecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68816CC427B4DCD500E24622 /* SecureStore.swift */; };
@@ -62,6 +63,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		683522152BA705A100FD50A9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		68EA18EB27F2E91100F9AE48 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -121,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				687B93942BA7307D00FDD013 /* LiveKitKrispNoiseFilter in Frameworks */,
 				68FBA43F2A38B49C0015853E /* LiveKit in Frameworks */,
 				680FE2F227A8EF7700B6F6DB /* SFSafeSymbols in Frameworks */,
 				68816CC127B4D6BC00E24622 /* KeychainAccess in Frameworks */,
@@ -279,6 +291,7 @@
 				68B38540271E780700711D5F /* Frameworks */,
 				68B38541271E780700711D5F /* Resources */,
 				68EA18EB27F2E91100F9AE48 /* Embed Foundation Extensions */,
+				683522152BA705A100FD50A9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -290,6 +303,7 @@
 				680FE2F127A8EF7700B6F6DB /* SFSafeSymbols */,
 				68816CC027B4D6BC00E24622 /* KeychainAccess */,
 				68FBA43E2A38B49C0015853E /* LiveKit */,
+				687B93932BA7307D00FDD013 /* LiveKitKrispNoiseFilter */,
 			);
 			productName = "Multiplatform-SwiftUI (iOS)";
 			productReference = 68B38543271E780700711D5F /* LiveKitExample.app */;
@@ -861,6 +875,10 @@
 		6845DD5527DEBDD90009B5CD /* LiveKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LiveKit;
+		};
+		687B93932BA7307D00FDD013 /* LiveKitKrispNoiseFilter */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LiveKitKrispNoiseFilter;
 		};
 		68816CC027B4D6BC00E24622 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;

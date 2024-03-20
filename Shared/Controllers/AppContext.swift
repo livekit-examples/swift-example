@@ -18,6 +18,10 @@ import Combine
 import LiveKit
 import SwiftUI
 
+#if os(iOS)
+    import LiveKitKrispNoiseFilter
+#endif
+
 // This class contains the logic to control behavior of the whole app.
 final class AppContext: ObservableObject {
     private let store: ValueStore<Preferences>
@@ -63,6 +67,18 @@ final class AppContext: ObservableObject {
     @Published var preferSpeakerOutput: Bool = true {
         didSet { AudioManager.shared.isSpeakerOutputPreferred = preferSpeakerOutput }
     }
+
+#if os(iOS)
+    // Krisp noise filter example
+    private lazy var krispProcessor = try? LiveKitKrispNoiseFilter()
+    
+    @Published var isKrispEnabled: Bool = false {
+        didSet {
+            // Runtime toggling of audio processor
+            AudioManager.shared.capturePostProcessingDelegate = isKrispEnabled ? krispProcessor : nil
+        }
+    }
+    #endif
 
     public init(store: ValueStore<Preferences>) {
         self.store = store
