@@ -579,7 +579,7 @@ struct RoomView: View {
 
                         Toggle("E2EE enabled", isOn: $roomCtx.isE2eeEnabled)
                         #if os(iOS)
-                        Toggle("Krisp Audio Filter Enabled", isOn: $appCtx.isKrispEnabled)
+                            Toggle("Krisp Audio Filter Enabled", isOn: $appCtx.isKrispEnabled)
                         #endif
                     }
 

@@ -68,16 +68,16 @@ final class AppContext: ObservableObject {
         didSet { AudioManager.shared.isSpeakerOutputPreferred = preferSpeakerOutput }
     }
 
-#if os(iOS)
-    // Krisp noise filter example
-    private lazy var krispProcessor = try? LiveKitKrispNoiseFilter()
-    
-    @Published var isKrispEnabled: Bool = false {
-        didSet {
-            // Runtime toggling of audio processor
-            AudioManager.shared.capturePostProcessingDelegate = isKrispEnabled ? krispProcessor : nil
+    #if os(iOS)
+        // Krisp noise filter example
+        lazy var krispProcessor = LiveKitKrispNoiseFilter()
+
+        @Published var isKrispEnabled: Bool = false {
+            didSet {
+                // Runtime toggling of audio processor
+                krispProcessor.isEnabled = isKrispEnabled
+            }
         }
-    }
     #endif
 
     public init(store: ValueStore<Preferences>) {
@@ -100,5 +100,9 @@ final class AppContext: ObservableObject {
                 self.inputDevice = audioManager.inputDevice
             }
         }
+
+        #if os(iOS)
+            AudioManager.shared.capturePostProcessingDelegate = krispProcessor
+        #endif
     }
 }

@@ -76,6 +76,12 @@ struct RoomContextView: View {
             .environmentObject(roomCtx.room)
             .environment(\.colorScheme, .dark)
             .foregroundColor(Color.white)
+            .onAppear {
+                #if os(iOS)
+                    // Attach RoomDelegate to KrispProcessor
+                    roomCtx.room.add(delegate: appCtx.krispProcessor)
+                #endif
+            }
             .onDisappear {
                 print("\(String(describing: type(of: self))) onDisappear")
                 Task {
