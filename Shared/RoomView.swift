@@ -342,13 +342,15 @@ struct RoomView: View {
                                    .disabled(isCameraPublishingBusy)
                         }
                     }.popover(isPresented: $publishOptionsPickerPresented) {
-                        PublishOptionsView(publishOptions: cameraPublishOptions) { pickerResult in
+                        PublishOptionsView(publishOptions: cameraPublishOptions) { captureOptions, publishOptions in
                             publishOptionsPickerPresented = false
                             isCameraPublishingBusy = true
-                            cameraPublishOptions = pickerResult
+                            cameraPublishOptions = publishOptions
                             Task {
                                 defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                                try await room.localParticipant.setCamera(enabled: true, publishOptions: pickerResult)
+                                try await room.localParticipant.setCamera(enabled: true,
+                                                                          captureOptions: captureOptions,
+                                                                          publishOptions: publishOptions)
                             }
                         }
                         .padding()

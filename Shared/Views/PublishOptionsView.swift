@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-import Foundation
+import AVFoundation
 import LiveKit
 import SwiftUI
 
-struct PublishOptionsView: View {
-    typealias OnPublish = (_ publishOptions: VideoPublishOptions) -> Void
+extension AVCaptureDevice: Identifiable {
+    public var id: String { uniqueID }
+}
 
+struct PublishOptionsView: View {
+    typealias OnPublish = (_ captureOptions: CameraCaptureOptions, _ publishOptions: VideoPublishOptions) -> Void
+
+    @State private var device: AVCaptureDevice?
     @State private var simulcast: Bool = true
     @State private var preferredVideoCodec: VideoCodec?
     @State private var preferredBackupVideoCodec: VideoCodec?
@@ -41,6 +46,13 @@ struct PublishOptionsView: View {
         VStack(alignment: .center, spacing: 10) {
             Text("Publish options")
                 .fontWeight(.bold)
+
+            Picker("Device", selection: $device) {
+                Text("Auto").tag(nil as AVCaptureDevice?)
+                ForEach(CameraCapturer.captureDevices()) {
+                    Text($0.localizedName).tag($0 as AVCaptureDevice?)
+                }
+            }
 
             Picker("Codec", selection: $preferredVideoCodec) {
                 Text("Auto").tag(nil as VideoCodec?)
@@ -67,7 +79,11 @@ struct PublishOptionsView: View {
             })
 
             Button("Publish") {
-                let result = VideoPublishOptions(
+                let captureOptions = CameraCaptureOptions(
+                    device: device
+                )
+
+                let publishOptions = VideoPublishOptions(
                     name: providedPublishOptions.name,
                     encoding: providedPublishOptions.encoding,
                     screenShareEncoding: providedPublishOptions.screenShareEncoding,
@@ -78,7 +94,7 @@ struct PublishOptionsView: View {
                     preferredBackupCodec: preferredBackupVideoCodec
                 )
 
-                onPublish(result)
+                onPublish(captureOptions, publishOptions)
             }
             .keyboardShortcut(.defaultAction)
         }
