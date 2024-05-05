@@ -50,9 +50,6 @@ struct ConnectView: View {
                                 Toggle(isOn: $roomCtx.autoSubscribe) {
                                     Text("Auto-Subscribe")
                                 }
-                                Toggle(isOn: $roomCtx.publish) {
-                                    Text("Publish only mode")
-                                }
                                 Toggle(isOn: $roomCtx.isE2eeEnabled) {
                                     Text("Enable E2EE")
                                 }
