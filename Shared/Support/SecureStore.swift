@@ -27,7 +27,6 @@ struct Preferences: Codable, Equatable {
 
     // Connect options
     var autoSubscribe = true
-    var publishMode = false
 
     // Room options
     var simulcast = true

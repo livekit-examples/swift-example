@@ -72,10 +72,6 @@ final class RoomContext: ObservableObject {
         didSet { store.value.autoSubscribe = autoSubscribe }
     }
 
-    @Published var publish: Bool = false {
-        didSet { store.value.publishMode = publish }
-    }
-
     @Published var focusParticipant: Participant?
 
     @Published var showMessagesView: Bool = false
@@ -98,7 +94,6 @@ final class RoomContext: ObservableObject {
         dynacast = store.value.dynacast
         reportStats = store.value.reportStats
         autoSubscribe = store.value.autoSubscribe
-        publish = store.value.publishMode
 
         #if os(iOS)
             UIApplication.shared.isIdleTimerDisabled = true
@@ -126,8 +121,7 @@ final class RoomContext: ObservableObject {
         }
 
         let connectOptions = ConnectOptions(
-            autoSubscribe: !publish && autoSubscribe, // don't autosubscribe if publish mode
-            publishOnlyMode: publish ? "publish_\(UUID().uuidString)" : nil
+            autoSubscribe: autoSubscribe
         )
 
         var e2eeOptions: E2EEOptions?
@@ -146,7 +140,7 @@ final class RoomContext: ObservableObject {
                 useBroadcastExtension: true
             ),
             defaultVideoPublishOptions: VideoPublishOptions(
-                simulcast: publish ? false : simulcast
+                simulcast: simulcast
             ),
             adaptiveStream: true,
             dynacast: true,
