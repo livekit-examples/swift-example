@@ -449,6 +449,8 @@ struct RoomView: View {
 
                     #endif
 
+                    Toggle("Recorder enabled", isOn: $appCtx.isRecorderEnabled)
+
                     Toggle("Show info overlay", isOn: $appCtx.showInformationOverlay)
 
                     Group {
