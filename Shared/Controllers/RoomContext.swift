@@ -196,7 +196,8 @@ final class RoomContext: ObservableObject {
         func setScreenShareMacOS(isEnabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
             if isEnabled, let screenShareSource {
                 let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource)
-                screenShareTrack = try await room.localParticipant.publish(videoTrack: track)
+                let options = VideoPublishOptions(preferredCodec: VideoCodec.h264)
+                screenShareTrack = try await room.localParticipant.publish(videoTrack: track, options: options)
             }
 
             if !isEnabled, let screenShareTrack {

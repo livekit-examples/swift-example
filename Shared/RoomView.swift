@@ -94,6 +94,7 @@ struct RoomView: View {
     #endif
 
     @State private var showConnectionTime = true
+    @State private var canSwitchCameraPosition = false
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
         let isMe = message.senderSid == room.localParticipant.sid
@@ -295,7 +296,7 @@ struct RoomView: View {
                     let isScreenShareEnabled = room.localParticipant.isScreenShareEnabled()
 
                     Group {
-                        if isCameraEnabled, CameraCapturer.canSwitchPosition() {
+                        if isCameraEnabled, canSwitchCameraPosition {
                             Menu {
                                 Button("Switch position") {
                                     Task {
@@ -308,6 +309,7 @@ struct RoomView: View {
                                         }
                                     }
                                 }
+
                                 Button("Disable") {
                                     Task {
                                         isCameraPublishingBusy = true
@@ -603,6 +605,9 @@ struct RoomView: View {
         // .withHostingWindow { self.windowAccess.set(window: $0) }
         // #endif
         .onAppear {
+            Task { @MainActor in
+                canSwitchCameraPosition = try await CameraCapturer.canSwitchPosition()
+            }
             Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
                 Task { @MainActor in
                     withAnimation {
