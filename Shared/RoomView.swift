@@ -459,6 +459,13 @@ struct RoomView: View {
                         Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
                         Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
                         Toggle("VideoView renderMode: .sampleBuffer", isOn: $appCtx.preferSampleBufferRendering)
+                        #if os(iOS)
+                            Menu("Pinch to zoom") {
+                                Toggle("Zoom In", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.zoomIn))
+                                Toggle("Zoom Out", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.zoomOut))
+                                Toggle("Auto Reset", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.resetOnRelease))
+                            }
+                        #endif
                         Divider()
                     }
 

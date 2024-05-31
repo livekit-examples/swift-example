@@ -42,6 +42,8 @@ final class AppContext: ObservableObject {
         didSet { store.value.videoViewMirrored = videoViewMirrored }
     }
 
+    @Published var videoViewPinchToZoomOptions: VideoView.PinchToZoomOptions = []
+
     @Published var connectionHistory: Set<ConnectionHistory> = [] {
         didSet { store.value.connectionHistory = connectionHistory }
     }

@@ -27,7 +27,7 @@ struct PublishOptionsView: View {
 
     @State private var devices: [AVCaptureDevice] = []
     @State private var device: AVCaptureDevice?
-    @State private var simulcast: Bool = true
+    @State private var simulcast: Bool
     @State private var preferredVideoCodec: VideoCodec?
     @State private var preferredBackupVideoCodec: VideoCodec?
     @State private var maxFPS: Int = 30

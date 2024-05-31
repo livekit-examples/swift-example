@@ -124,7 +124,7 @@ final class RoomContext: ObservableObject {
             autoSubscribe: autoSubscribe
         )
 
-        var e2eeOptions: E2EEOptions?
+        var e2eeOptions: E2EEOptions? = nil
         if isE2eeEnabled {
             let keyProvider = BaseKeyProvider(isSharedKey: true)
             keyProvider.setKey(key: e2eeKey)

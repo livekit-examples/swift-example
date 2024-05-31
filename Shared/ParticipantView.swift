@@ -58,6 +58,7 @@ struct ParticipantView: View {
                                          layoutMode: videoViewMode,
                                          mirrorMode: appCtx.videoViewMirrored ? .mirror : .auto,
                                          renderMode: appCtx.preferSampleBufferRendering ? .sampleBuffer : .auto,
+                                         pinchToZoomOptions: appCtx.videoViewPinchToZoomOptions,
                                          isDebugMode: appCtx.showInformationOverlay,
                                          isRendering: $isRendering)
 
