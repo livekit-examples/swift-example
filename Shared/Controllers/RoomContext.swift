@@ -143,7 +143,7 @@ final class RoomContext: ObservableObject {
                 simulcast: simulcast
             ),
             adaptiveStream: true,
-            dynacast: true,
+            dynacast: dynacast,
             // isE2eeEnabled: isE2eeEnabled,
             e2eeOptions: e2eeOptions,
             reportRemoteTrackStatistics: true
