@@ -92,7 +92,6 @@ struct RoomContextView: View {
 
                 let tokenValue = urlComponent.queryItems?.first(where: { $0.name == "token" })?.value ?? ""
 
-                let e2eeValue = urlComponent.queryItems?.first(where: { $0.name == "e2ee" })?.value?.lowercased()
                 let e2ee = ["true", "1"].contains { $0 == secureValue }
                 let e2eeKey = urlComponent.queryItems?.first(where: { $0.name == "e2eeKey" })?.value ?? ""
 
@@ -184,28 +183,3 @@ struct LiveKitExample: App {
         #endif
     }
 }
-
-#if os(macOS)
-
-    extension View {
-        func withHostingWindow(_ callback: @escaping (NSWindow) -> Void) -> some View {
-            background(HostingWindowFinder(callback: callback))
-        }
-    }
-
-    struct HostingWindowFinder: NSViewRepresentable {
-        var callback: (NSWindow) -> Void
-
-        func makeNSView(context _: Context) -> NSView {
-            let view = NSView()
-            DispatchQueue.main.async { [weak view] in
-                if let window = view?.window {
-                    callback(window)
-                }
-            }
-            return view
-        }
-
-        func updateNSView(_: NSView, context _: Context) {}
-    }
-#endif
