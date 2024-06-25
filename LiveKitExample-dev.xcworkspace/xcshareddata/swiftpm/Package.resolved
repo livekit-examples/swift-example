@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
       "state" : {
-        "revision" : "7cca2d60925876b5953a2cf7341cd80fbeac983c",
-        "version" : "4.1.1"
+        "revision" : "e2e28f4e56e1769c2ec3c61c9355fc64eb7a535a",
+        "version" : "5.3.0"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
-        "version" : "1.5.4"
+        "revision" : "9cb486020ebf03bfa5b5df985387a14a98744537",
+        "version" : "1.6.1"
       }
     },
     {
@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/webrtc-xcframework.git",
       "state" : {
-        "revision" : "c0bfd23439c915b79ad8e6253b212896b395f3fb",
-        "version" : "114.5735.19"
+        "revision" : "5640582dbac33b193608574d4aa2a8d5d825db74",
+        "version" : "125.6422.2"
       }
     }
   ],
