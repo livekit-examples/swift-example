@@ -42,8 +42,8 @@ struct ConnectView: View {
 
                     VStack(spacing: 15) {
                         LKTextField(title: "Server URL", text: $roomCtx.url, type: .URL)
-                        LKTextField(title: "Token", text: $roomCtx.token, type: .ascii)
-                        LKTextField(title: "E2EE Key", text: $roomCtx.e2eeKey, type: .ascii)
+                        LKTextField(title: "Token", text: $roomCtx.token, type: .secret)
+                        LKTextField(title: "E2EE Key", text: $roomCtx.e2eeKey, type: .secret)
 
                         HStack {
                             Menu {
