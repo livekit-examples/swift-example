@@ -94,6 +94,7 @@ struct RoomView: View {
     #endif
 
     @State private var showConnectionTime = true
+    @State private var canSwitchCameraPosition = false
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
         let isMe = message.senderSid == room.localParticipant.sid
@@ -295,7 +296,7 @@ struct RoomView: View {
                     let isScreenShareEnabled = room.localParticipant.isScreenShareEnabled()
 
                     Group {
-                        if isCameraEnabled, CameraCapturer.canSwitchPosition() {
+                        if isCameraEnabled, canSwitchCameraPosition {
                             Menu {
                                 Button("Switch position") {
                                     Task {
@@ -308,6 +309,7 @@ struct RoomView: View {
                                         }
                                     }
                                 }
+
                                 Button("Disable") {
                                     Task {
                                         isCameraPublishingBusy = true
@@ -342,13 +344,15 @@ struct RoomView: View {
                                    .disabled(isCameraPublishingBusy)
                         }
                     }.popover(isPresented: $publishOptionsPickerPresented) {
-                        PublishOptionsView(publishOptions: cameraPublishOptions) { pickerResult in
+                        PublishOptionsView(publishOptions: cameraPublishOptions) { captureOptions, publishOptions in
                             publishOptionsPickerPresented = false
                             isCameraPublishingBusy = true
-                            cameraPublishOptions = pickerResult
+                            cameraPublishOptions = publishOptions
                             Task {
                                 defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                                try await room.localParticipant.setCamera(enabled: true, publishOptions: pickerResult)
+                                try await room.localParticipant.setCamera(enabled: true,
+                                                                          captureOptions: captureOptions,
+                                                                          publishOptions: publishOptions)
                             }
                         }
                         .padding()
@@ -455,6 +459,13 @@ struct RoomView: View {
                         Toggle("VideoView visible", isOn: $appCtx.videoViewVisible)
                         Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
                         Toggle("VideoView renderMode: .sampleBuffer", isOn: $appCtx.preferSampleBufferRendering)
+                        #if os(iOS)
+                            Menu("Pinch to zoom") {
+                                Toggle("Zoom In", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.zoomIn))
+                                Toggle("Zoom Out", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.zoomOut))
+                                Toggle("Auto Reset", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.resetOnRelease))
+                            }
+                        #endif
                         Divider()
                     }
 
@@ -604,6 +615,9 @@ struct RoomView: View {
         // .withHostingWindow { self.windowAccess.set(window: $0) }
         // #endif
         .onAppear {
+            Task { @MainActor in
+                canSwitchCameraPosition = try await CameraCapturer.canSwitchPosition()
+            }
             Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
                 Task { @MainActor in
                     withAnimation {

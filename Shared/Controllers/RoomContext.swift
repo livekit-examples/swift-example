@@ -124,7 +124,7 @@ final class RoomContext: ObservableObject {
             autoSubscribe: autoSubscribe
         )
 
-        var e2eeOptions: E2EEOptions?
+        var e2eeOptions: E2EEOptions? = nil
         if isE2eeEnabled {
             let keyProvider = BaseKeyProvider(isSharedKey: true)
             keyProvider.setKey(key: e2eeKey)
@@ -143,7 +143,7 @@ final class RoomContext: ObservableObject {
                 simulcast: simulcast
             ),
             adaptiveStream: true,
-            dynacast: true,
+            dynacast: dynacast,
             // isE2eeEnabled: isE2eeEnabled,
             e2eeOptions: e2eeOptions,
             reportRemoteTrackStatistics: true
@@ -196,7 +196,8 @@ final class RoomContext: ObservableObject {
         func setScreenShareMacOS(isEnabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
             if isEnabled, let screenShareSource {
                 let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource)
-                screenShareTrack = try await room.localParticipant.publish(videoTrack: track)
+                let options = VideoPublishOptions(preferredCodec: VideoCodec.h264)
+                screenShareTrack = try await room.localParticipant.publish(videoTrack: track, options: options)
             }
 
             if !isEnabled, let screenShareTrack {

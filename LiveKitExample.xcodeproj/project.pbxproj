@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		680FE2F227A8EF7700B6F6DB /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 680FE2F127A8EF7700B6F6DB /* SFSafeSymbols */; };
 		680FE2F427A8EFF700B6F6DB /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 680FE2F327A8EFF700B6F6DB /* SFSafeSymbols */; };
+		6813CEFD2C09D2E30025091A /* Binding+OptionSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6813CEFC2C09D2E30025091A /* Binding+OptionSet.swift */; };
+		6813CEFE2C09D2E30025091A /* Binding+OptionSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6813CEFC2C09D2E30025091A /* Binding+OptionSet.swift */; };
 		6816968E2AF96240008ED486 /* Participant+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816968D2AF96240008ED486 /* Participant+Helpers.swift */; };
 		6816968F2AF96240008ED486 /* Participant+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816968D2AF96240008ED486 /* Participant+Helpers.swift */; };
 		6816B1A8272D45DF005ADB85 /* ExampleRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6816B1A7272D45DF005ADB85 /* ExampleRoomMessage.swift */; };
@@ -87,6 +89,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6813CEFC2C09D2E30025091A /* Binding+OptionSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+OptionSet.swift"; sourceTree = "<group>"; };
 		6816968D2AF96240008ED486 /* Participant+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Participant+Helpers.swift"; sourceTree = "<group>"; };
 		6816B1A7272D45DF005ADB85 /* ExampleRoomMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleRoomMessage.swift; sourceTree = "<group>"; };
 		6816B1AF272D9198005ADB85 /* ParticipantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantView.swift; sourceTree = "<group>"; };
@@ -171,6 +174,7 @@
 				6847616327B44A1A001611BE /* Bundle.swift */,
 				68816CC427B4DCD500E24622 /* SecureStore.swift */,
 				6816968D2AF96240008ED486 /* Participant+Helpers.swift */,
+				6813CEFC2C09D2E30025091A /* Binding+OptionSet.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -425,6 +429,7 @@
 				681E3F43271FC7AD007BB547 /* RoomView.swift in Sources */,
 				6816B1B0272D9198005ADB85 /* ParticipantView.swift in Sources */,
 				68816CC527B4DCD500E24622 /* SecureStore.swift in Sources */,
+				6813CEFD2C09D2E30025091A /* Binding+OptionSet.swift in Sources */,
 				6816968E2AF96240008ED486 /* Participant+Helpers.swift in Sources */,
 				68B3854C271E780700711D5F /* LiveKitExample.swift in Sources */,
 				681E3F3F271FC795007BB547 /* Custom.swift in Sources */,
@@ -446,6 +451,7 @@
 				681E3F44271FC7AD007BB547 /* RoomView.swift in Sources */,
 				6816B1B1272D9198005ADB85 /* ParticipantView.swift in Sources */,
 				68816CC627B4DCD500E24622 /* SecureStore.swift in Sources */,
+				6813CEFE2C09D2E30025091A /* Binding+OptionSet.swift in Sources */,
 				6816968F2AF96240008ED486 /* Participant+Helpers.swift in Sources */,
 				68B3854D271E780700711D5F /* LiveKitExample.swift in Sources */,
 				681E3F40271FC795007BB547 /* Custom.swift in Sources */,
@@ -649,7 +655,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024031101;
+				CURRENT_PROJECT_VERSION = 2025070101;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = NO;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
@@ -666,7 +672,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.5;
+				MARKETING_VERSION = 2.0.11;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -687,7 +693,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024031101;
+				CURRENT_PROJECT_VERSION = 2025070101;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = NO;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
@@ -704,7 +710,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.5;
+				MARKETING_VERSION = 2.0.11;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -726,7 +732,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2024031101;
+				CURRENT_PROJECT_VERSION = 2025070101;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -740,7 +746,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.0.5;
+				MARKETING_VERSION = 2.0.11;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -758,7 +764,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2024031101;
+				CURRENT_PROJECT_VERSION = 2025070101;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -772,7 +778,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.0.5;
+				MARKETING_VERSION = 2.0.11;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = LiveKitExample;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -828,7 +834,7 @@
 			repositoryURL = "https://github.com/SFSafeSymbols/SFSafeSymbols";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 4.1.1;
+				minimumVersion = 5.3.0;
 			};
 		};
 		685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
@@ -836,7 +842,7 @@
 			repositoryURL = "https://github.com/apple/swift-protobuf.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.18.0;
+				minimumVersion = 1.26.0;
 			};
 		};
 		68816CBF27B4D6BC00E24622 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
@@ -851,8 +857,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.5;
+				kind = exactVersion;
+				version = 2.0.11;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

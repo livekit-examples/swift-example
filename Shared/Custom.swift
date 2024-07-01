@@ -57,9 +57,9 @@ struct LKButton: View {
     extension LKTextField.`Type` {
         func toiOSType() -> UIKeyboardType {
             switch self {
-            case .default: return .default
             case .URL: return .URL
             case .ascii: return .asciiCapable
+            default: return .default
             }
         }
     }
@@ -80,6 +80,7 @@ struct LKTextField: View {
         case `default`
         case URL
         case ascii
+        case secret
     }
 
     let title: String
@@ -91,18 +92,23 @@ struct LKTextField: View {
             Text(title)
                 .fontWeight(.bold)
 
-            TextField("", text: $text)
-                .textFieldStyle(PlainTextFieldStyle())
-                .disableAutocorrection(true)
-                // TODO: add iOS unique view modifiers
-                // #if os(iOS)
-                // .autocapitalization(.none)
-                // .keyboardType(type.toiOSType())
-                // #endif
-                .padding()
-                .overlay(RoundedRectangle(cornerRadius: 10.0)
-                    .strokeBorder(Color.white.opacity(0.3),
-                                  style: StrokeStyle(lineWidth: 1.0)))
+            Group {
+                if type == .secret {
+                    SecureField("", text: $text)
+                } else {
+                    TextField("", text: $text)
+                }
+            }
+            .textFieldStyle(.plain)
+            .disableAutocorrection(true)
+            .padding()
+            .overlay(RoundedRectangle(cornerRadius: 10.0)
+                .strokeBorder(Color.white.opacity(0.3),
+                              style: StrokeStyle(lineWidth: 1.0)))
+            #if os(iOS)
+                .autocapitalization(.none)
+                .keyboardType(type.toiOSType())
+            #endif
 
         }.frame(maxWidth: .infinity)
     }
