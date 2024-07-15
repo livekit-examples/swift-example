@@ -97,7 +97,8 @@ struct RoomView: View {
     @State private var canSwitchCameraPosition = false
 
     func messageView(_ message: ExampleRoomMessage) -> some View {
-        let isMe = message.senderSid == room.localParticipant.sid
+        let localSidString = String(describing: room.localParticipant.sid)
+        let isMe = message.id == localSidString
 
         return HStack {
             if isMe {
@@ -106,7 +107,7 @@ struct RoomView: View {
 
             //            VStack(alignment: isMe ? .trailing : .leading) {
             //                Text(message.identity)
-            Text(message.text)
+            Text(message.message)
                 .padding(8)
                 .background(isMe ? Color.lkRed : Color.lkGray3)
                 .foregroundColor(Color.white)

@@ -17,23 +17,15 @@
 import LiveKit
 
 struct ExampleRoomMessage: Identifiable, Equatable, Hashable, Codable {
-    // Identifiable protocol needs param named id
-    var id: String {
-        messageId
-    }
-
-    // message id
-    let messageId: String
-
-    let senderSid: Participant.Sid?
-    let senderIdentity: Participant.Identity?
-    let text: String
+    let id: String
+    let message: String
+    let timestamp: Int
 
     static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.messageId == rhs.messageId
+        lhs.id == rhs.id
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(messageId)
+        hasher.combine(id)
     }
 }
