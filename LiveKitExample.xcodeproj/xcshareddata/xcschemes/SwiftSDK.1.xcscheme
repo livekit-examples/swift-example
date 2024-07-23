@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "68A50E8E2C4C1C4C00D2DE17"
-               BuildableName = "LiveKitExample (Multiplatform).app"
-               BlueprintName = "LiveKitExample (Multiplatform)"
+               BuildableName = "LiveKitExample.app"
+               BlueprintName = "LiveKitExample"
                ReferencedContainer = "container:LiveKitExample.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "68A50E8E2C4C1C4C00D2DE17"
-            BuildableName = "LiveKitExample (Multiplatform).app"
-            BlueprintName = "LiveKitExample (Multiplatform)"
+            BuildableName = "LiveKitExample.app"
+            BlueprintName = "LiveKitExample"
             ReferencedContainer = "container:LiveKitExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "68A50E8E2C4C1C4C00D2DE17"
-            BuildableName = "LiveKitExample (Multiplatform).app"
-            BlueprintName = "LiveKitExample (Multiplatform)"
+            BuildableName = "LiveKitExample.app"
+            BlueprintName = "LiveKitExample"
             ReferencedContainer = "container:LiveKitExample.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

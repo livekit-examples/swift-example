@@ -41,7 +41,7 @@
 		683F0604273FADC20080C7AC /* BroadcastExt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BroadcastExt.entitlements; sourceTree = "<group>"; };
 		6865EA2527513B4500FFAFC3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		68698E602C4C204800221782 /* Multiplatform-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Multiplatform-Info.plist"; sourceTree = "<group>"; };
-		68A50E8F2C4C1C4C00D2DE17 /* LiveKitExample (Multiplatform).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LiveKitExample (Multiplatform).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		68A50E8F2C4C1C4C00D2DE17 /* LiveKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		68A50EC82C4C1ED500D2DE17 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		68A50EC92C4C1ED500D2DE17 /* RoomContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomContext.swift; sourceTree = "<group>"; };
 		68A50ECB2C4C1ED500D2DE17 /* Binding+OptionSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+OptionSet.swift"; sourceTree = "<group>"; };
@@ -184,7 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				683F05F3273F96B20080C7AC /* BroadcastExt.appex */,
-				68A50E8F2C4C1C4C00D2DE17 /* LiveKitExample (Multiplatform).app */,
+				68A50E8F2C4C1C4C00D2DE17 /* LiveKitExample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,9 +212,9 @@
 			productReference = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		68A50E8E2C4C1C4C00D2DE17 /* LiveKitExample (Multiplatform) */ = {
+		68A50E8E2C4C1C4C00D2DE17 /* LiveKitExample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 68A50E9D2C4C1C4D00D2DE17 /* Build configuration list for PBXNativeTarget "LiveKitExample (Multiplatform)" */;
+			buildConfigurationList = 68A50E9D2C4C1C4D00D2DE17 /* Build configuration list for PBXNativeTarget "LiveKitExample" */;
 			buildPhases = (
 				68A50E8B2C4C1C4C00D2DE17 /* Sources */,
 				68A50E8C2C4C1C4C00D2DE17 /* Frameworks */,
@@ -224,14 +224,14 @@
 			);
 			dependencies = (
 			);
-			name = "LiveKitExample (Multiplatform)";
+			name = LiveKitExample;
 			packageProductDependencies = (
 				68698E612C4C218B00221782 /* LiveKit */,
 				68698E632C4C219500221782 /* KeychainAccess */,
 				68698E652C4C219A00221782 /* SFSafeSymbols */,
 			);
 			productName = SwiftSDK.1;
-			productReference = 68A50E8F2C4C1C4C00D2DE17 /* LiveKitExample (Multiplatform).app */;
+			productReference = 68A50E8F2C4C1C4C00D2DE17 /* LiveKitExample.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -271,7 +271,7 @@
 			projectRoot = "";
 			targets = (
 				683F05F2273F96B20080C7AC /* BroadcastExt */,
-				68A50E8E2C4C1C4C00D2DE17 /* LiveKitExample (Multiplatform) */,
+				68A50E8E2C4C1C4C00D2DE17 /* LiveKitExample */,
 			);
 		};
 /* End PBXProject section */
@@ -614,7 +614,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		68A50E9D2C4C1C4D00D2DE17 /* Build configuration list for PBXNativeTarget "LiveKitExample (Multiplatform)" */ = {
+		68A50E9D2C4C1C4D00D2DE17 /* Build configuration list for PBXNativeTarget "LiveKitExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				68A50E9B2C4C1C4D00D2DE17 /* Debug */,
