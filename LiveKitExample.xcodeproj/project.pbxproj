@@ -22,7 +22,6 @@
 		68A50EE62C4C1ED500D2DE17 /* ExampleRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ECE2C4C1ED500D2DE17 /* ExampleRoomMessage.swift */; };
 		68A50EE72C4C1ED500D2DE17 /* RoomContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50EC92C4C1ED500D2DE17 /* RoomContext.swift */; };
 		68A50EE82C4C1ED500D2DE17 /* ScreenShareSourcePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ED32C4C1ED500D2DE17 /* ScreenShareSourcePickerView.swift */; };
-		68A50EE92C4C1ED500D2DE17 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ED72C4C1ED500D2DE17 /* ContentView.swift */; };
 		68A50EEA2C4C1ED500D2DE17 /* Participant+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ECF2C4C1ED500D2DE17 /* Participant+Helpers.swift */; };
 		68A50EEB2C4C1ED500D2DE17 /* Binding+OptionSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ECB2C4C1ED500D2DE17 /* Binding+OptionSet.swift */; };
 		68A50EEC2C4C1ED500D2DE17 /* ParticipantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50EDA2C4C1ED500D2DE17 /* ParticipantView.swift */; };
@@ -54,7 +53,6 @@
 		68A50ED32C4C1ED500D2DE17 /* ScreenShareSourcePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenShareSourcePickerView.swift; sourceTree = "<group>"; };
 		68A50ED52C4C1ED500D2DE17 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		68A50ED62C4C1ED500D2DE17 /* ConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
-		68A50ED72C4C1ED500D2DE17 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		68A50ED82C4C1ED500D2DE17 /* Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Custom.swift; sourceTree = "<group>"; };
 		68A50ED92C4C1ED500D2DE17 /* LiveKitExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveKitExample.swift; sourceTree = "<group>"; };
 		68A50EDA2C4C1ED500D2DE17 /* ParticipantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantView.swift; sourceTree = "<group>"; };
@@ -159,7 +157,6 @@
 				68A50ED42C4C1ED500D2DE17 /* Views */,
 				68A50ED52C4C1ED500D2DE17 /* Assets.xcassets */,
 				68A50ED62C4C1ED500D2DE17 /* ConnectView.swift */,
-				68A50ED72C4C1ED500D2DE17 /* ContentView.swift */,
 				68A50ED82C4C1ED500D2DE17 /* Custom.swift */,
 				68A50ED92C4C1ED500D2DE17 /* LiveKitExample.swift */,
 				68A50EDA2C4C1ED500D2DE17 /* ParticipantView.swift */,
@@ -317,7 +314,6 @@
 				68A50EE62C4C1ED500D2DE17 /* ExampleRoomMessage.swift in Sources */,
 				68A50EE72C4C1ED500D2DE17 /* RoomContext.swift in Sources */,
 				68A50EE82C4C1ED500D2DE17 /* ScreenShareSourcePickerView.swift in Sources */,
-				68A50EE92C4C1ED500D2DE17 /* ContentView.swift in Sources */,
 				68A50EEA2C4C1ED500D2DE17 /* Participant+Helpers.swift in Sources */,
 				68A50EEB2C4C1ED500D2DE17 /* Binding+OptionSet.swift in Sources */,
 				68A50EEC2C4C1ED500D2DE17 /* ParticipantView.swift in Sources */,
