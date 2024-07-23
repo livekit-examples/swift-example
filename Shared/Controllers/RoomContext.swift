@@ -170,11 +170,10 @@ final class RoomContext: ObservableObject {
     func sendMessage() {
         // Make sure the message is not empty
         guard !textFieldString.isEmpty else { return }
-
-        let roomMessage = ExampleRoomMessage(messageId: UUID().uuidString,
-                                             senderSid: room.localParticipant.sid,
-                                             senderIdentity: room.localParticipant.identity,
-                                             text: textFieldString)
+        let currentDate = Date()
+        let roomMessage = ExampleRoomMessage(id: UUID().uuidString,
+                                             message: textFieldString,
+                                             timestamp: Int(currentDate.timeIntervalSince1970))
         textFieldString = ""
         messages.append(roomMessage)
 
@@ -244,8 +243,12 @@ extension RoomContext: RoomDelegate {
     }
 
     func room(_: Room, participant _: RemoteParticipant?, didReceiveData data: Data, forTopic _: String) {
+        //print("Debug: Received raw data: \(String(data: data, encoding: .utf8) ?? "Invalid data")")
+
         do {
             let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
+            //print("Debug: Decoded message: \(roomMessage)")
+
             // Update UI from main queue
             Task.detached { @MainActor [weak self] in
                 guard let self else { return }
