@@ -370,6 +370,7 @@
 				680FE2F027A8EF7700B6F6DB /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 				68816CBF27B4D6BC00E24622 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				68FBA43D2A38B49C0015853E /* XCRemoteSwiftPackageReference "client-sdk-swift" */,
+				68A4AEFC2C51E6A3001F3DA9 /* XCRemoteSwiftPackageReference "swift-krisp-noise-filter" */,
 			);
 			productRefGroup = 68B38544271E780700711D5F /* Products */;
 			projectDirPath = "";
@@ -851,6 +852,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 4.2.2;
+			};
+		};
+		68A4AEFC2C51E6A3001F3DA9 /* XCRemoteSwiftPackageReference "swift-krisp-noise-filter" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/livekit/swift-krisp-noise-filter";
+			requirement = {
+				kind = exactVersion;
+				version = 0.0.3;
 			};
 		};
 		68FBA43D2A38B49C0015853E /* XCRemoteSwiftPackageReference "client-sdk-swift" */ = {

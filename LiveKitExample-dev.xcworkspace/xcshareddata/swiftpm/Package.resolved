@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "33f65a3cbc52f8c19295723af9cbecc2195484e1",
-        "version" : "3.5.0"
+        "revision" : "46072478ca365fe48370993833cb22de9b41567f",
+        "version" : "3.5.2"
       }
     },
     {
@@ -55,6 +55,15 @@
       }
     },
     {
+      "identity" : "swift-krisp-noise-filter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/livekit/swift-krisp-noise-filter",
+      "state" : {
+        "revision" : "5c4608111033f1ac13edf64a335a1b9902c5496e",
+        "version" : "0.0.3"
+      }
+    },
+    {
       "identity" : "swift-log",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
@@ -68,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "9f0c76544701845ad98716f3f6a774a892152bcb",
-        "version" : "1.26.0"
+        "revision" : "e17d61f26df0f0e06f58f6977ba05a097a720106",
+        "version" : "1.27.1"
       }
     },
     {
@@ -77,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/webrtc-xcframework.git",
       "state" : {
-        "revision" : "5640582dbac33b193608574d4aa2a8d5d825db74",
-        "version" : "125.6422.2"
+        "revision" : "c0395fecffce2bc694835501aec11b17d793afaf",
+        "version" : "125.6422.4"
       }
     }
   ],
