@@ -167,6 +167,10 @@ extension Decimal {
 struct LiveKitExample: App {
     @StateObject var appCtx = AppContext(store: sync)
 
+    #if os(visionOS)
+        @Environment(\.openWindow) var openWindow
+    #endif
+
     func nearestSafeScale(for target: Int, scale: Double) -> Decimal {
         let p = Decimal(sign: .plus, exponent: -3, significand: 1)
         let t = Decimal(target)

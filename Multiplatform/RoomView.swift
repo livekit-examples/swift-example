@@ -83,6 +83,7 @@ struct RoomView: View {
     @State var isCameraPublishingBusy = false
     @State var isMicrophonePublishingBusy = false
     @State var isScreenSharePublishingBusy = false
+    @State var isARCameraPublishingBusy = false
 
     @State private var screenPickerPresented = false
     @State private var publishOptionsPickerPresented = false
@@ -296,6 +297,24 @@ struct RoomView: View {
                     let isScreenShareEnabled = room.localParticipant.isScreenShareEnabled()
 
                     Group {
+                        #if os(visionOS)
+                            // Toggle camera enabled
+                            Button(action: {
+                                       Task {
+                                           isARCameraPublishingBusy = true
+                                           defer { Task { @MainActor in isARCameraPublishingBusy = false } }
+                                           try await roomCtx.setARCamera(isEnabled: true)
+                                       }
+
+                                   },
+                                   label: {
+                                       Image(systemSymbol: .sunglassesFill)
+                                           .renderingMode(isCameraEnabled ? .original : .template)
+                                   })
+                                   // disable while publishing/un-publishing
+                                   .disabled(isARCameraPublishingBusy)
+                        #endif
+
                         if isCameraEnabled, canSwitchCameraPosition {
                             Menu {
                                 Button("Switch position") {

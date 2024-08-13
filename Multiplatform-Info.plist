@@ -4,10 +4,18 @@
 <dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>NSCameraUsageDescription</key>
-	<string>Please allow for camera access</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Please allow for camera access</string>
+    <key>NSWorldSensingUsageDescription</key>
+    <string>Please allow for main camera access</string>
+    <key>NSHandsTrackingUsageDescription</key>
+    <string>Please allow for main camera access</string>
+    <key>NSEnterpriseMCAMUsageDescription</key>
+    <string>Please allow for main camera access</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Please allow for microphone access</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationPreferredDefaultSceneSessionRole</key>
