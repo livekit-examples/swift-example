@@ -1,13 +1,13 @@
 {
-  "originHash" : "bf59b79f5d4ea0a54ef7e929b035c5821f5094ee990a7a369ad0cb3713f6c62d",
+  "originHash" : "a80e9a84fb4334e6fc61cbb1333878b49ca9969f815e21f7dce9bf2f0452fe1d",
   "pins" : [
     {
       "identity" : "client-sdk-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/client-sdk-swift",
       "state" : {
-        "revision" : "2ef58ab19eb653d631286c35fa1f1ef3bef34c78",
-        "version" : "2.0.12"
+        "revision" : "478c2813daaf5fb910933b0fde857eae29ba7a35",
+        "version" : "2.0.13"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
       "state" : {
-        "revision" : "e2e28f4e56e1769c2ec3c61c9355fc64eb7a535a",
-        "version" : "5.3.0"
+        "revision" : "7cca2d60925876b5953a2cf7341cd80fbeac983c",
+        "version" : "4.1.1"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/webrtc-xcframework.git",
       "state" : {
-        "revision" : "d2e233b034cac7489aa4c86baa5ce7fb8ca70711",
-        "version" : "125.6422.3"
+        "revision" : "323ebd181a69ec5899837ae07dca1e0e713f5bd4",
+        "version" : "125.6422.5"
       }
     }
   ],
