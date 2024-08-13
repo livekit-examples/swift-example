@@ -263,4 +263,8 @@ extension RoomContext: RoomDelegate {
             print("Failed to decode data \(error)")
         }
     }
+
+    func room(_: Room, participant _: Participant, trackPublication _: TrackPublication, didReceiveTranscriptionSegments segments: [TranscriptionSegment]) {
+        print("didReceiveTranscriptionSegments: \(segments.map { "(\($0.id): \($0.text), \($0.startTime)-\($0.endTime), \($0.isFinal))" }.joined(separator: ", "))")
+    }
 }

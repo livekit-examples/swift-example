@@ -28,6 +28,11 @@ struct RoomSwitchView: View {
     @EnvironmentObject var roomCtx: RoomContext
     @EnvironmentObject var room: Room
 
+    #if os(visionOS)
+        @Environment(\.openImmersiveSpace) var openImmersiveSpace
+        @Environment(\.dismissImmersiveSpace) var dismissImmersiveSpace
+    #endif
+
     var shouldShowRoomView: Bool {
         room.connectionState == .connected || room.connectionState == .reconnecting
     }
@@ -62,6 +67,17 @@ struct RoomSwitchView: View {
             }
         }
         .navigationTitle(computeTitle())
+        .onChange(of: shouldShowRoomView) { newValue in
+            #if os(visionOS)
+                Task {
+                    if newValue {
+                        await openImmersiveSpace(id: "ImmersiveSpace")
+                    } else {
+                        await dismissImmersiveSpace()
+                    }
+                }
+            #endif
+        }
     }
 }
 
@@ -180,6 +196,13 @@ struct LiveKitExample: App {
         #if os(macOS)
             .windowStyle(.hiddenTitleBar)
             .windowToolbarStyle(.unifiedCompact)
+        #endif
+
+        #if os(visionOS)
+            ImmersiveSpace(id: "ImmersiveSpace") {
+                ImmersiveView()
+            }
+            .immersionStyle(selection: .constant(.full), in: .full)
         #endif
     }
 }
