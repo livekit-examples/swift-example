@@ -16,14 +16,6 @@
 
 import SwiftUI
 
-extension Color {
-    static let lkRed = Color("lkRed")
-    static let lkDarkRed = Color("lkDarkRed")
-    static let lkGray1 = Color("lkGray1")
-    static let lkGray2 = Color("lkGray2")
-    static let lkGray3 = Color("lkGray3")
-}
-
 struct LazyView<Content: View>: View {
     let build: () -> Content
     init(_ build: @autoclosure @escaping () -> Content) {

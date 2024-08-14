@@ -2,12 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>com.apple.developer.arkit.main-camera-access.allow</key>
+	<true/>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
-	<key>com.apple.security.application-groups</key>
-	<array>
-		<string>group.io.livekit.example.SwiftSDK.1</string>
-	</array>
 	<key>com.apple.security.device.audio-input</key>
 	<true/>
 	<key>com.apple.security.device.camera</key>
@@ -18,9 +16,5 @@
 	<true/>
 	<key>com.apple.security.network.server</key>
 	<true/>
-	<key>keychain-access-groups</key>
-	<array>
-		<string>$(AppIdentifierPrefix)keychain-group.io.livekit.example.SwiftSDK.1</string>
-	</array>
 </dict>
 </plist>

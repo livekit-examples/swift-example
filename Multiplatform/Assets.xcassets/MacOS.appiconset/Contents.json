@@ -1,61 +1,61 @@
 {
   "images" : [
     {
-      "filename" : "Twitter Icon-16.png",
+      "filename" : "LiveKit-16.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "16x16"
     },
     {
-      "filename" : "Twitter Icon-32.png",
+      "filename" : "LiveKit-32.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "16x16"
     },
     {
-      "filename" : "Twitter Icon-32.png",
+      "filename" : "LiveKit-32.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "32x32"
     },
     {
-      "filename" : "Twitter Icon-64.png",
+      "filename" : "LiveKit-64.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
     },
     {
-      "filename" : "Twitter Icon-128.png",
+      "filename" : "LiveKit-128.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
-      "filename" : "Twitter Icon-256.png",
+      "filename" : "LiveKit-256.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
-      "filename" : "Twitter Icon-256.png",
+      "filename" : "LiveKit-256.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
     },
     {
-      "filename" : "Twitter Icon-512.png",
+      "filename" : "LiveKit-512.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
-      "filename" : "Twitter Icon-512.png",
+      "filename" : "LiveKit-512.png",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
-      "filename" : "Twitter Icon-1024.png",
+      "filename" : "LiveKit-1024.png",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"

@@ -205,6 +205,24 @@ final class RoomContext: ObservableObject {
             }
         }
     #endif
+
+    #if os(visionOS)
+        weak var arCameraTrack: LocalTrackPublication?
+
+        func setARCamera(isEnabled: Bool) async throws {
+            if #available(visionOS 2.0, *) {
+                if isEnabled {
+                    let track = LocalVideoTrack.createARCameraTrack()
+                    arCameraTrack = try await room.localParticipant.publish(videoTrack: track)
+                }
+            }
+
+            if !isEnabled, let arCameraTrack {
+                try await room.localParticipant.unpublish(publication: arCameraTrack)
+                self.arCameraTrack = nil
+            }
+        }
+    #endif
 }
 
 extension RoomContext: RoomDelegate {
@@ -262,5 +280,9 @@ extension RoomContext: RoomDelegate {
         } catch {
             print("Failed to decode data \(error)")
         }
+    }
+
+    func room(_: Room, participant _: Participant, trackPublication _: TrackPublication, didReceiveTranscriptionSegments segments: [TranscriptionSegment]) {
+        print("didReceiveTranscriptionSegments: \(segments.map { "(\($0.id): \($0.text), \($0.firstReceivedTime)-\($0.lastReceivedTime), \($0.isFinal))" }.joined(separator: ", "))")
     }
 }

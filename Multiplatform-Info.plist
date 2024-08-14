@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+    <key>NSCameraUsageDescription</key>
+    <string>Please allow for camera access</string>
+    <key>NSWorldSensingUsageDescription</key>
+    <string>Please allow for main camera access</string>
+    <key>NSHandsTrackingUsageDescription</key>
+    <string>Please allow for main camera access</string>
+    <key>NSEnterpriseMCAMUsageDescription</key>
+    <string>Please allow for main camera access</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Please allow for microphone access</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationPreferredDefaultSceneSessionRole</key>
+		<string>UIWindowSceneSessionRoleApplication</string>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<true/>
+		<key>UISceneConfigurations</key>
+		<dict/>
+	</dict>
+</dict>
+</plist>

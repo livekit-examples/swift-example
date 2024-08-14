@@ -28,6 +28,11 @@ struct RoomSwitchView: View {
     @EnvironmentObject var roomCtx: RoomContext
     @EnvironmentObject var room: Room
 
+    #if os(visionOS)
+        @Environment(\.openImmersiveSpace) var openImmersiveSpace
+        @Environment(\.dismissImmersiveSpace) var dismissImmersiveSpace
+    #endif
+
     var shouldShowRoomView: Bool {
         room.connectionState == .connected || room.connectionState == .reconnecting
     }
@@ -62,6 +67,17 @@ struct RoomSwitchView: View {
             }
         }
         .navigationTitle(computeTitle())
+        .onChange(of: shouldShowRoomView) { newValue in
+            #if os(visionOS)
+                Task {
+                    if newValue {
+                        await openImmersiveSpace(id: "ImmersiveSpace")
+                    } else {
+                        await dismissImmersiveSpace()
+                    }
+                }
+            #endif
+        }
     }
 }
 
@@ -151,6 +167,10 @@ extension Decimal {
 struct LiveKitExample: App {
     @StateObject var appCtx = AppContext(store: sync)
 
+    #if os(visionOS)
+        @Environment(\.openWindow) var openWindow
+    #endif
+
     func nearestSafeScale(for target: Int, scale: Double) -> Decimal {
         let p = Decimal(sign: .plus, exponent: -3, significand: 1)
         let t = Decimal(target)
@@ -180,6 +200,13 @@ struct LiveKitExample: App {
         #if os(macOS)
             .windowStyle(.hiddenTitleBar)
             .windowToolbarStyle(.unifiedCompact)
+        #endif
+
+        #if os(visionOS)
+            ImmersiveSpace(id: "ImmersiveSpace") {
+                ImmersiveView()
+            }
+            .immersionStyle(selection: .constant(.full), in: .full)
         #endif
     }
 }
