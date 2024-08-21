@@ -18,7 +18,7 @@ import LiveKit
 import SFSafeSymbols
 import SwiftUI
 
-#if !os(macOS)
+#if !os(macOS) && !os(tvOS)
     let adaptiveMin = 170.0
     let toolbarPlacement: ToolbarItemPlacement = .bottomBar
 #else
@@ -362,7 +362,9 @@ struct RoomView: View {
                                    // disable while publishing/un-publishing
                                    .disabled(isCameraPublishingBusy)
                         }
-                    }.popover(isPresented: $publishOptionsPickerPresented) {
+                    }
+                    #if !os(tvOS)
+                    .popover(isPresented: $publishOptionsPickerPresented) {
                         PublishOptionsView(publishOptions: cameraPublishOptions) { captureOptions, publishOptions in
                             publishOptionsPickerPresented = false
                             isCameraPublishingBusy = true
@@ -376,6 +378,7 @@ struct RoomView: View {
                         }
                         .padding()
                     }
+                    #endif
 
                     // Toggle microphone enabled
                     Button(action: {
