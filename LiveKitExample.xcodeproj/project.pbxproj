@@ -404,7 +404,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = Multiplatform/SwiftSDK_1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024081302;
+				CURRENT_PROJECT_VERSION = 2024082101;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -430,7 +430,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.0.13;
+				MARKETING_VERSION = 2.0.14;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -457,7 +457,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = Multiplatform/SwiftSDK_1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2024081302;
+				CURRENT_PROJECT_VERSION = 2024082101;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -479,7 +479,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.0.13;
+				MARKETING_VERSION = 2.0.14;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -675,7 +675,7 @@
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 2.0.13;
+				version = 2.0.14;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
