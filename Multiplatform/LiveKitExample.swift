@@ -196,10 +196,12 @@ struct LiveKitExample: App {
             RoomContextView()
                 .environmentObject(appCtx)
         }
+        #if !os(tvOS)
         .handlesExternalEvents(matching: Set(arrayLiteral: "*"))
+        #endif
         #if os(macOS)
-            .windowStyle(.hiddenTitleBar)
-            .windowToolbarStyle(.unifiedCompact)
+        .windowStyle(.hiddenTitleBar)
+        .windowToolbarStyle(.unifiedCompact)
         #endif
 
         #if os(visionOS)
