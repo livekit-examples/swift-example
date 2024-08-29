@@ -297,7 +297,7 @@ struct RoomView: View {
                     let isScreenShareEnabled = room.localParticipant.isScreenShareEnabled()
 
                     Group {
-                        #if os(visionOS)
+                        #if os(visionOS) && compiler(>=6.0)
                             // Toggle camera enabled
                             Button(action: {
                                        Task {
@@ -308,7 +308,7 @@ struct RoomView: View {
 
                                    },
                                    label: {
-                                       Image(systemSymbol: .sunglassesFill)
+                                       Image(systemSymbol: .eyeglasses)
                                            .renderingMode(isCameraEnabled ? .original : .template)
                                    })
                                    // disable while publishing/un-publishing

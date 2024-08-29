@@ -206,7 +206,7 @@ final class RoomContext: ObservableObject {
         }
     #endif
 
-    #if os(visionOS)
+    #if os(visionOS) && compiler(>=6.0)
         weak var arCameraTrack: LocalTrackPublication?
 
         func setARCamera(isEnabled: Bool) async throws {
