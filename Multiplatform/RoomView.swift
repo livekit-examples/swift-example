@@ -608,7 +608,9 @@ struct RoomView: View {
                             Text("Track permissions")
                         }
 
-                        Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
+                        #if os(iOS) || os(visionOS) || os(tvOS)
+                            Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
+                        #endif
 
                         Toggle("E2EE enabled", isOn: $roomCtx.isE2eeEnabled)
                     }

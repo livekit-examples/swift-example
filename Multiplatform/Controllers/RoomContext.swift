@@ -285,4 +285,8 @@ extension RoomContext: RoomDelegate {
     func room(_: Room, participant _: Participant, trackPublication _: TrackPublication, didReceiveTranscriptionSegments segments: [TranscriptionSegment]) {
         print("didReceiveTranscriptionSegments: \(segments.map { "(\($0.id): \($0.text), \($0.firstReceivedTime)-\($0.lastReceivedTime), \($0.isFinal))" }.joined(separator: ", "))")
     }
+
+    func room(_: Room, trackPublication _: TrackPublication, didUpdateE2EEState state: E2EEState) {
+        print("didUpdateE2EEState: \(state)")
+    }
 }

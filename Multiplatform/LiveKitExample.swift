@@ -19,9 +19,9 @@ import LiveKit
 import Logging
 import SwiftUI
 
-let sync = ValueStore<Preferences>(store: Keychain(service: "io.livekit.example.SwiftSDK.1"),
-                                   key: "preferences",
-                                   default: Preferences())
+@MainActor let sync = ValueStore<Preferences>(store: Keychain(service: "io.livekit.example.SwiftSDK.1"),
+                                              key: "preferences",
+                                              default: Preferences())
 
 struct RoomSwitchView: View {
     @EnvironmentObject var appCtx: AppContext

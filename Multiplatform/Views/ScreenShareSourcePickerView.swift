@@ -91,7 +91,7 @@ import SwiftUI
 
     @available(macOS 12.3, *)
     struct ScreenShareSourcePickerView: View {
-        public enum Mode {
+        public enum Mode: Sendable {
             case display
             case window
         }
