@@ -88,5 +88,9 @@ final class AppContext: ObservableObject {
                 self.inputDevice = audioManager.inputDevice
             }
         }
+
+        AudioManager.shared.onSpeechEvent = { [weak self] _, speechEvent in
+            print("Speech event: \(speechEvent)")
+        }
     }
 }
