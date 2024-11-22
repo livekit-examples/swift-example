@@ -32,6 +32,10 @@ struct PublishOptionsView: View {
     @State private var preferredBackupVideoCodec: VideoCodec?
     @State private var maxFPS: Int = 30
 
+    @State private var presetDimensions: Dimensions? = .h1080_169
+    @State private var customWidth: String = "1920"
+    @State private var customHeight: String = "1080"
+
     private let providedPublishOptions: VideoPublishOptions
     private let onPublish: OnPublish
 
@@ -82,6 +86,37 @@ struct PublishOptionsView: View {
                     }
                 }
 
+                Picker("Dimensions", selection: $presetDimensions) {
+                    let items: [Dimensions?] = [Dimensions.h2160_169,
+                                                Dimensions.h1440_169,
+                                                Dimensions.h1080_169,
+                                                Dimensions.h720_169,
+                                                Dimensions.h540_169,
+                                                Dimensions.h360_169,
+                                                Dimensions.h216_169,
+                                                Dimensions.h180_169,
+                                                Dimensions.h90_169,
+                                                nil]
+                    ForEach(items, id: \.self) {
+                        if let dimensions = $0 {
+                            Text("\(dimensions.width)x\(dimensions.height)").tag(dimensions)
+                        } else {
+                            Text("Custom").tag(nil as Dimensions?)
+                        }
+                    }
+                }
+
+                if presetDimensions == nil {
+                    TextField("Width", text: Binding(
+                        get: { customWidth },
+                        set: { customWidth = $0.filter { "0123456789".contains($0) }}))
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextField("Height", text: Binding(
+                        get: { customHeight },
+                        set: { customHeight = $0.filter { "0123456789".contains($0) }}))
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                }
+
                 Toggle(isOn: $simulcast, label: {
                     Text("Simulcast")
                 })
@@ -90,7 +125,8 @@ struct PublishOptionsView: View {
             Button("Publish") {
                 let captureOptions = CameraCaptureOptions(
                     device: device,
-                    dimensions: .h1080_169
+                    dimensions: presetDimensions ?? Dimensions(width: Int32(customWidth) ?? 1920,
+                                                               height: Int32(customHeight) ?? 1080)
                 )
 
                 let publishOptions = VideoPublishOptions(
