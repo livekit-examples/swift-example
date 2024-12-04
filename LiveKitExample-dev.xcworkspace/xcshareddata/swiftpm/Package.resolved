@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "components-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/livekit/components-swift",
+      "state" : {
+        "revision" : "f640b51cf38687b77e598df035ce93720d04365a",
+        "version" : "0.1.1"
+      }
+    },
+    {
       "identity" : "jwt-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/jwt-kit.git",
