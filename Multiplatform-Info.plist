@@ -13,7 +13,7 @@
 	<key>RTCAppGroupIdentifier</key>
 	<string>group.io.livekit.example.SwiftSDK.1</string>
 	<key>RTCScreenSharingExtension</key>
-	<string>group.io.livekit.example.SwiftSDK.1</string>
+	<string>io.livekit.example.SwiftSDK.1.BroadcastExt</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationPreferredDefaultSceneSessionRole</key>
