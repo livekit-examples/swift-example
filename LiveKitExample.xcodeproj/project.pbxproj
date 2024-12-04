@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		681A0AB727D888D80097E3F4 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 681A0AB627D888D80097E3F4 /* LiveKit */; };
 		681A0AB827D88B190097E3F4 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 683F05F4273F96B20080C7AC /* ReplayKit.framework */; platformFilter = maccatalyst; };
-		68698E622C4C218B00221782 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 68698E612C4C218B00221782 /* LiveKit */; };
 		68698E642C4C219500221782 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 68698E632C4C219500221782 /* KeychainAccess */; };
 		68698E662C4C219A00221782 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 68698E652C4C219A00221782 /* SFSafeSymbols */; };
 		6888FBE12C66B7B400AB93C1 /* Immersive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6888FBE02C66B7B100AB93C1 /* Immersive.swift */; };
@@ -29,9 +28,35 @@
 		68A50EED2C4C1ED500D2DE17 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ECD2C4C1ED500D2DE17 /* ConnectionHistory.swift */; };
 		68A50EEF2C4C1ED500D2DE17 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ECC2C4C1ED500D2DE17 /* Bundle.swift */; };
 		68A50EF02C4C1ED500D2DE17 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50EC82C4C1ED500D2DE17 /* AppContext.swift */; };
+		B5BCF77E2CFE7FDE00BCD4D8 /* BroadcastExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B5BCF7842CFE859A00BCD4D8 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = B5BCF7832CFE859A00BCD4D8 /* LiveKit */; };
 		D7AA477B285A0FFC00EB41AE /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */; };
 		D7FECD462860B42700D04D1C /* LoggingOSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FECD452860B42700D04D1C /* LoggingOSLog.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B5BCF77B2CFE7FD200BCD4D8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 68B38537271E780600711D5F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 683F05F2273F96B20080C7AC;
+			remoteInfo = BroadcastExt;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B5BCF77D2CFE7FD600BCD4D8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				B5BCF77E2CFE7FDE00BCD4D8 /* BroadcastExt.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		683F05F3273F96B20080C7AC /* BroadcastExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BroadcastExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,7 +107,7 @@
 			files = (
 				68698E662C4C219A00221782 /* SFSafeSymbols in Frameworks */,
 				68698E642C4C219500221782 /* KeychainAccess in Frameworks */,
-				68698E622C4C218B00221782 /* LiveKit in Frameworks */,
+				B5BCF7842CFE859A00BCD4D8 /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,16 +244,19 @@
 				68A50E8B2C4C1C4C00D2DE17 /* Sources */,
 				68A50E8C2C4C1C4C00D2DE17 /* Frameworks */,
 				68A50E8D2C4C1C4C00D2DE17 /* Resources */,
+				B5BCF77D2CFE7FD600BCD4D8 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B5BCF77C2CFE7FD200BCD4D8 /* PBXTargetDependency */,
 			);
 			name = LiveKitExample;
 			packageProductDependencies = (
 				68698E612C4C218B00221782 /* LiveKit */,
 				68698E632C4C219500221782 /* KeychainAccess */,
 				68698E652C4C219A00221782 /* SFSafeSymbols */,
+				B5BCF7832CFE859A00BCD4D8 /* LiveKit */,
 			);
 			productName = SwiftSDK.1;
 			productReference = 68A50E8F2C4C1C4C00D2DE17 /* LiveKitExample.app */;
@@ -265,7 +293,7 @@
 				685271E727407BBC006B4D6A /* XCRemoteSwiftPackageReference "swift-protobuf" */,
 				680FE2F027A8EF7700B6F6DB /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 				68816CBF27B4D6BC00E24622 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				68D912F02C6BEEC700C3A5F6 /* XCRemoteSwiftPackageReference "client-sdk-swift" */,
+				B5BCF7852CFE8A7400BCD4D8 /* XCRemoteSwiftPackageReference "client-sdk-swift" */,
 			);
 			productRefGroup = 68B38544271E780700711D5F /* Products */;
 			projectDirPath = "";
@@ -329,6 +357,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B5BCF77C2CFE7FD200BCD4D8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 683F05F2273F96B20080C7AC /* BroadcastExt */;
+			targetProxy = B5BCF77B2CFE7FD200BCD4D8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		683F05FE273F96B20080C7AC /* Debug */ = {
@@ -415,6 +451,8 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Multiplatform-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow for camera access";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Please allow for microphone access";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -464,6 +502,8 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Multiplatform-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Please allow for camera access";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Please allow for microphone access";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -672,7 +712,7 @@
 				minimumVersion = 4.2.2;
 			};
 		};
-		68D912F02C6BEEC700C3A5F6 /* XCRemoteSwiftPackageReference "client-sdk-swift" */ = {
+		B5BCF7852CFE8A7400BCD4D8 /* XCRemoteSwiftPackageReference "client-sdk-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
@@ -700,6 +740,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 680FE2F027A8EF7700B6F6DB /* XCRemoteSwiftPackageReference "SFSafeSymbols" */;
 			productName = SFSafeSymbols;
+		};
+		B5BCF7832CFE859A00BCD4D8 /* LiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LiveKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
