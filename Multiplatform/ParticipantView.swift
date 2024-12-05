@@ -15,9 +15,9 @@
  */
 
 import LiveKit
+import LiveKitComponents
 import SFSafeSymbols
 import SwiftUI
-import LiveKitComponents
 
 struct ParticipantView: View {
     @ObservedObject var participant: Participant

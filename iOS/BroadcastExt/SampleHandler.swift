@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-import Foundation
-import LiveKit
-import Logging
-import OSLog
+#if os(iOS)
 
-private let broadcastLogger = OSLog(subsystem: "io.livekit.example.SwiftSDK", category: "Broadcast")
+    import Foundation
+    import LiveKit
+    import Logging
+    import OSLog
 
-@available(macCatalyst 13.1, *)
-class SampleHandler: LKSampleHandler {
-    override public init() {
-        // Turn on logging for the Broadcast Extension
-        LoggingSystem.bootstrap { label in
-            var logHandler = LoggingOSLog(label: label, log: broadcastLogger)
-            logHandler.logLevel = .debug
-            return logHandler
+    private let broadcastLogger = OSLog(subsystem: "io.livekit.example.SwiftSDK", category: "Broadcast")
+
+    @available(macCatalyst 13.1, *)
+    class SampleHandler: LKSampleHandler {
+        override public init() {
+            // Turn on logging for the Broadcast Extension
+            LoggingSystem.bootstrap { label in
+                var logHandler = LoggingOSLog(label: label, log: broadcastLogger)
+                logHandler.logLevel = .debug
+                return logHandler
+            }
         }
     }
-}
+#endif
