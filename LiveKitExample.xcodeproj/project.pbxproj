@@ -31,6 +31,7 @@
 		68A50EF02C4C1ED500D2DE17 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50EC82C4C1ED500D2DE17 /* AppContext.swift */; };
 		B5BCF77E2CFE7FDE00BCD4D8 /* BroadcastExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B5BCF7842CFE859A00BCD4D8 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = B5BCF7832CFE859A00BCD4D8 /* LiveKit */; };
+		B5C2EF162D0114C800FAC766 /* LiveKitComponents in Frameworks */ = {isa = PBXBuildFile; productRef = B5C2EF152D0114C800FAC766 /* LiveKitComponents */; };
 		D7AA477B285A0FFC00EB41AE /* SampleHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */; };
 		D7FECD462860B42700D04D1C /* LoggingOSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FECD452860B42700D04D1C /* LoggingOSLog.swift */; };
 /* End PBXBuildFile section */
@@ -109,6 +110,7 @@
 				68019B9C2D00343700721481 /* LiveKit in Frameworks */,
 				68698E662C4C219A00221782 /* SFSafeSymbols in Frameworks */,
 				68698E642C4C219500221782 /* KeychainAccess in Frameworks */,
+				B5C2EF162D0114C800FAC766 /* LiveKitComponents in Frameworks */,
 				B5BCF7842CFE859A00BCD4D8 /* LiveKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,6 +261,7 @@
 				68698E632C4C219500221782 /* KeychainAccess */,
 				68698E652C4C219A00221782 /* SFSafeSymbols */,
 				B5BCF7832CFE859A00BCD4D8 /* LiveKit */,
+				B5C2EF152D0114C800FAC766 /* LiveKitComponents */,
 			);
 			productName = SwiftSDK.1;
 			productReference = 68A50E8F2C4C1C4C00D2DE17 /* LiveKitExample.app */;
@@ -296,6 +299,7 @@
 				680FE2F027A8EF7700B6F6DB /* XCRemoteSwiftPackageReference "SFSafeSymbols" */,
 				68816CBF27B4D6BC00E24622 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				B5BCF7852CFE8A7400BCD4D8 /* XCRemoteSwiftPackageReference "client-sdk-swift" */,
+				B5C2EF142D0114C800FAC766 /* XCRemoteSwiftPackageReference "components-swift" */,
 			);
 			productRefGroup = 68B38544271E780700711D5F /* Products */;
 			projectDirPath = "";
@@ -722,6 +726,14 @@
 				version = 2.0.18;
 			};
 		};
+		B5C2EF142D0114C800FAC766 /* XCRemoteSwiftPackageReference "components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/livekit/components-swift";
+			requirement = {
+				kind = exactVersion;
+				version = 0.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -746,6 +758,11 @@
 		B5BCF7832CFE859A00BCD4D8 /* LiveKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LiveKit;
+		};
+		B5C2EF152D0114C800FAC766 /* LiveKitComponents */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B5C2EF142D0114C800FAC766 /* XCRemoteSwiftPackageReference "components-swift" */;
+			productName = LiveKitComponents;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

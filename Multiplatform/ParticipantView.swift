@@ -17,6 +17,7 @@
 import LiveKit
 import SFSafeSymbols
 import SwiftUI
+import LiveKitComponents
 
 struct ParticipantView: View {
     @ObservedObject var participant: Participant
@@ -72,6 +73,8 @@ struct ParticipantView: View {
                 {
                     // Show no permission icon
                     bgView(systemSymbol: .exclamationmarkCircle, geometry: geometry)
+                } else if let publication = participant.firstAudioPublication, let track = publication.track as? AudioTrack {
+                    BarAudioVisualizer(audioTrack: track)
                 } else {
                     // Show no camera icon
                     bgView(systemSymbol: .videoSlashFill, geometry: geometry)
