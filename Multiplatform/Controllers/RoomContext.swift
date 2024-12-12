@@ -290,7 +290,7 @@ extension RoomContext: RoomDelegate {
         print("didUpdateE2EEState: \(state)")
     }
 
-    func room(_ room: Room, participant: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
+    func room(_: Room, participant _: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
         print("didPublishTrack: \(publication)")
         guard let localVideoTrack = publication.track as? LocalVideoTrack else { return }
 
@@ -317,9 +317,9 @@ extension RoomContext: VideoProcessor {
 
         // Re-construct a VideoFrame
         return VideoFrame(dimensions: frame.dimensions,
-                   rotation: frame.rotation,
-                   timeStampNs: frame.timeStampNs,
-                   buffer: CVPixelVideoBuffer(pixelBuffer: newPixelBuffer))
+                          rotation: frame.rotation,
+                          timeStampNs: frame.timeStampNs,
+                          buffer: CVPixelVideoBuffer(pixelBuffer: newPixelBuffer))
     }
 }
 
