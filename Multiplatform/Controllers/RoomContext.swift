@@ -301,6 +301,7 @@ extension RoomContext: RoomDelegate {
 
 extension RoomContext: VideoProcessor {
     func process(frame: VideoFrame) -> VideoFrame? {
+        // TODO: Check if previous processing has completed, if not drop this frame.
         print("process(frame:) \(frame)")
 
         guard let pixelBuffer = frame.toCVPixelBuffer() else {
@@ -314,7 +315,7 @@ extension RoomContext: VideoProcessor {
             return nil
         }
 
-        // Re-construct a pixelbuffer
+        // Re-construct a VideoFrame
         return VideoFrame(dimensions: frame.dimensions,
                    rotation: frame.rotation,
                    timeStampNs: frame.timeStampNs,
