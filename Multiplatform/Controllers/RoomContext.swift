@@ -289,4 +289,92 @@ extension RoomContext: RoomDelegate {
     func room(_: Room, trackPublication _: TrackPublication, didUpdateE2EEState state: E2EEState) {
         print("didUpdateE2EEState: \(state)")
     }
+
+    func room(_ room: Room, participant: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
+        print("didPublishTrack: \(publication)")
+        guard let localVideoTrack = publication.track as? LocalVideoTrack else { return }
+
+        // Attach example processor.
+        localVideoTrack.capturer.processor = self
+    }
+}
+
+extension RoomContext: VideoProcessor {
+    func process(frame: VideoFrame) -> VideoFrame? {
+        print("process(frame:) \(frame)")
+
+        guard let pixelBuffer = frame.toCVPixelBuffer() else {
+            print("Failed to get pixel buffer")
+            return nil
+        }
+
+        // Do something with pixel buffer.
+        guard let newPixelBuffer = processPixelBuffer(pixelBuffer) else {
+            print("Failed to proces the pixel buffer")
+            return nil
+        }
+
+        // Re-construct a pixelbuffer
+        return VideoFrame(dimensions: frame.dimensions,
+                   rotation: frame.rotation,
+                   timeStampNs: frame.timeStampNs,
+                   buffer: CVPixelVideoBuffer(pixelBuffer: newPixelBuffer))
+    }
+}
+
+// Example
+func processPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
+    // Lock the buffer for reading
+    CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+
+    // Create CIImage from the pixel buffer
+    let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+
+    // Create Core Image context
+    let context = CIContext()
+
+    // Apply dramatic filters
+
+    // 1. Gaussian blur effect
+    // let blurFilter = CIFilter(name: "CIGaussianBlur")!
+    // blurFilter.setValue(ciImage, forKey: kCIInputImageKey)
+    // blurFilter.setValue(10.0, forKey: kCIInputRadiusKey) // Larger radius = more blur
+
+    // 2. Color inversion
+    // let colorInvertFilter = CIFilter(name: "CIColorInvert")!
+    // colorInvertFilter.setValue(blurFilter.outputImage, forKey: kCIInputImageKey)
+
+    // 3. Add a sepia tone effect
+    let sepiaFilter = CIFilter(name: "CISepiaTone")!
+    sepiaFilter.setValue(ciImage, forKey: kCIInputImageKey)
+    sepiaFilter.setValue(0.8, forKey: kCIInputIntensityKey)
+
+    // Create output pixel buffer
+    var outputPixelBuffer: CVPixelBuffer?
+    let status = CVPixelBufferCreate(
+        kCFAllocatorDefault,
+        CVPixelBufferGetWidth(pixelBuffer),
+        CVPixelBufferGetHeight(pixelBuffer),
+        CVPixelBufferGetPixelFormatType(pixelBuffer),
+        nil,
+        &outputPixelBuffer
+    )
+
+    guard status == kCVReturnSuccess, let outputBuffer = outputPixelBuffer else {
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+        return nil
+    }
+
+    // Render the processed image to the output buffer
+    context.render(
+        sepiaFilter.outputImage!,
+        to: outputBuffer,
+        bounds: ciImage.extent,
+        colorSpace: CGColorSpaceCreateDeviceRGB()
+    )
+
+    // Unlock the original buffer
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+
+    return outputBuffer
 }
