@@ -73,7 +73,7 @@ struct ParticipantView: View {
                 {
                     // Show no permission icon
                     bgView(systemSymbol: .exclamationmarkCircle, geometry: geometry)
-                } else if let publication = participant.firstAudioPublication, let track = publication.track as? AudioTrack {
+                } else if let publication = participant.firstAudioPublication, !publication.isMuted, let track = publication.track as? AudioTrack {
                     BarAudioVisualizer(audioTrack: track)
                 } else {
                     // Show no camera icon
