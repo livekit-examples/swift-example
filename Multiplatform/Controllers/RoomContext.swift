@@ -79,6 +79,14 @@ final class RoomContext: ObservableObject {
 
     @Published var textFieldString: String = ""
 
+    @Published var isVideoProcessingEnabled: Bool = false {
+        didSet {
+            if let track = room.localParticipant.firstCameraVideoTrack as? LocalVideoTrack {
+                track.capturer.processor = isVideoProcessingEnabled ? self : nil
+            }
+        }
+    }
+
     var _connectTask: Task<Void, Error>?
 
     public init(store: ValueStore<Preferences>) {
@@ -292,18 +300,15 @@ extension RoomContext: RoomDelegate {
 
     func room(_: Room, participant _: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
         print("didPublishTrack: \(publication)")
-        guard let localVideoTrack = publication.track as? LocalVideoTrack else { return }
+        guard let localVideoTrack = publication.track as? LocalVideoTrack, localVideoTrack.source == .camera else { return }
 
         // Attach example processor.
-        localVideoTrack.capturer.processor = self
+        localVideoTrack.capturer.processor = isVideoProcessingEnabled ? self : nil
     }
 }
 
 extension RoomContext: VideoProcessor {
     func process(frame: VideoFrame) -> VideoFrame? {
-        // TODO: Check if previous processing has completed, if not drop this frame.
-        print("process(frame:) \(frame)")
-
         guard let pixelBuffer = frame.toCVPixelBuffer() else {
             print("Failed to get pixel buffer")
             return nil
@@ -332,7 +337,8 @@ func processPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
     let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
 
     // Create Core Image context
-    let context = CIContext()
+    let device = MTLCreateSystemDefaultDevice()!
+    let context = CIContext(mtlDevice: device, options: nil)
 
     // Apply dramatic filters
 
@@ -350,6 +356,10 @@ func processPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
     sepiaFilter.setValue(ciImage, forKey: kCIInputImageKey)
     sepiaFilter.setValue(0.8, forKey: kCIInputIntensityKey)
 
+    let pixelBufferAttributes: [String: Any] = [
+        kCVPixelBufferMetalCompatibilityKey as String: true,
+    ]
+
     // Create output pixel buffer
     var outputPixelBuffer: CVPixelBuffer?
     let status = CVPixelBufferCreate(
@@ -357,7 +367,7 @@ func processPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
         CVPixelBufferGetWidth(pixelBuffer),
         CVPixelBufferGetHeight(pixelBuffer),
         CVPixelBufferGetPixelFormatType(pixelBuffer),
-        nil,
+        pixelBufferAttributes as CFDictionary,
         &outputPixelBuffer
     )
 
