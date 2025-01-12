@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 LiveKit
+ * Copyright 2025 LiveKit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ struct ParticipantView: View {
                 {
                     // Show no permission icon
                     bgView(systemSymbol: .exclamationmarkCircle, geometry: geometry)
-                } else if let publication = participant.firstAudioPublication, let track = publication.track as? AudioTrack {
+                } else if let publication = participant.firstAudioPublication, !publication.isMuted, let track = publication.track as? AudioTrack {
                     BarAudioVisualizer(audioTrack: track)
                 } else {
                     // Show no camera icon
