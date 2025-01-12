@@ -491,6 +491,10 @@ struct RoomView: View {
                         Divider()
                     }
 
+                    Group {
+                        Toggle("Video processing", isOn: $roomCtx.isVideoProcessingEnabled)
+                    }
+
                     #if os(macOS)
 
                         Group {
