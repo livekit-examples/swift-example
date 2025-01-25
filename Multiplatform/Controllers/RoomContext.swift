@@ -343,18 +343,18 @@ func processPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
     // Apply dramatic filters
 
     // 1. Gaussian blur effect
-    // let blurFilter = CIFilter(name: "CIGaussianBlur")!
-    // blurFilter.setValue(ciImage, forKey: kCIInputImageKey)
-    // blurFilter.setValue(10.0, forKey: kCIInputRadiusKey) // Larger radius = more blur
+    let blurFilter = CIFilter(name: "CIGaussianBlur")!
+    blurFilter.setValue(ciImage, forKey: kCIInputImageKey)
+    blurFilter.setValue(8.0, forKey: kCIInputRadiusKey) // Larger radius = more blur
 
     // 2. Color inversion
     // let colorInvertFilter = CIFilter(name: "CIColorInvert")!
     // colorInvertFilter.setValue(blurFilter.outputImage, forKey: kCIInputImageKey)
 
     // 3. Add a sepia tone effect
-    let sepiaFilter = CIFilter(name: "CISepiaTone")!
-    sepiaFilter.setValue(ciImage, forKey: kCIInputImageKey)
-    sepiaFilter.setValue(0.8, forKey: kCIInputIntensityKey)
+//    let sepiaFilter = CIFilter(name: "CISepiaTone")!
+//    sepiaFilter.setValue(ciImage, forKey: kCIInputImageKey)
+//    sepiaFilter.setValue(0.8, forKey: kCIInputIntensityKey)
 
     let pixelBufferAttributes: [String: Any] = [
         kCVPixelBufferMetalCompatibilityKey as String: true,
@@ -378,7 +378,7 @@ func processPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
 
     // Render the processed image to the output buffer
     context.render(
-        sepiaFilter.outputImage!,
+        blurFilter.outputImage!,
         to: outputBuffer,
         bounds: ciImage.extent,
         colorSpace: CGColorSpaceCreateDeviceRGB()
