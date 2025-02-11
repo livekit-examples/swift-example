@@ -76,6 +76,14 @@ final class AppContext: ObservableObject {
         didSet { AudioManager.shared.isVoiceProcessingBypassed = isVoiceProcessingBypassed }
     }
 
+    @Published var micVolume: Float = 1.0 {
+        didSet { AudioManager.shared.mixer.micVolume = micVolume }
+    }
+
+    @Published var appVolume: Float = 1.0 {
+        didSet { AudioManager.shared.mixer.appVolume = appVolume }
+    }
+
     public init(store: ValueStore<Preferences>) {
         self.store = store
 
