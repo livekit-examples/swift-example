@@ -328,7 +328,7 @@ extension RoomContext: VideoProcessor {
     }
 }
 
-// Example
+// Processing example
 func processPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
     // Lock the buffer for reading
     CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
@@ -352,9 +352,9 @@ func processPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
     // colorInvertFilter.setValue(blurFilter.outputImage, forKey: kCIInputImageKey)
 
     // 3. Add a sepia tone effect
-//    let sepiaFilter = CIFilter(name: "CISepiaTone")!
-//    sepiaFilter.setValue(ciImage, forKey: kCIInputImageKey)
-//    sepiaFilter.setValue(0.8, forKey: kCIInputIntensityKey)
+    // let sepiaFilter = CIFilter(name: "CISepiaTone")!
+    // sepiaFilter.setValue(ciImage, forKey: kCIInputImageKey)
+    // sepiaFilter.setValue(0.8, forKey: kCIInputIntensityKey)
 
     let pixelBufferAttributes: [String: Any] = [
         kCVPixelBufferMetalCompatibilityKey as String: true,
