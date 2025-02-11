@@ -48,15 +48,19 @@ final class AppContext: ObservableObject {
         didSet { store.value.connectionHistory = connectionHistory }
     }
 
+    @Published var outputDevices: [AudioDevice] = []
     @Published var outputDevice: AudioDevice = AudioManager.shared.defaultOutputDevice {
         didSet {
+            guard oldValue != outputDevice else { return }
             print("didSet outputDevice: \(String(describing: outputDevice))")
             AudioManager.shared.outputDevice = outputDevice
         }
     }
 
+    @Published var inputDevices: [AudioDevice] = []
     @Published var inputDevice: AudioDevice = AudioManager.shared.defaultInputDevice {
         didSet {
+            guard oldValue != inputDevice else { return }
             print("didSet inputDevice: \(String(describing: inputDevice))")
             AudioManager.shared.inputDevice = inputDevice
         }
@@ -78,15 +82,21 @@ final class AppContext: ObservableObject {
         videoViewMirrored = store.value.videoViewMirrored
         connectionHistory = store.value.connectionHistory
 
-        AudioManager.shared.onDeviceUpdate = { [weak self] audioManager in
+        AudioManager.shared.onDeviceUpdate = { [weak self] _ in
             guard let self else { return }
-            print("devices did update")
             // force UI update for outputDevice / inputDevice
-            Task.detached { @MainActor [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                self.outputDevice = audioManager.outputDevice
-                self.inputDevice = audioManager.inputDevice
+                self.outputDevices = AudioManager.shared.outputDevices
+                self.inputDevices = AudioManager.shared.inputDevices
+                self.outputDevice = AudioManager.shared.outputDevice
+                self.inputDevice = AudioManager.shared.inputDevice
             }
         }
+
+        outputDevices = AudioManager.shared.outputDevices
+        inputDevices = AudioManager.shared.inputDevices
+        outputDevice = AudioManager.shared.outputDevice
+        inputDevice = AudioManager.shared.inputDevice
     }
 }
