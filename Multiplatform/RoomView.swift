@@ -87,6 +87,7 @@ struct RoomView: View {
 
     @State private var screenPickerPresented = false
     @State private var publishOptionsPickerPresented = false
+    @State private var audioMixerOptionsPresented = false
 
     @State private var cameraPublishOptions = VideoPublishOptions()
 
@@ -395,6 +396,19 @@ struct RoomView: View {
                            })
                            // disable while publishing/un-publishing
                            .disabled(isMicrophonePublishingBusy)
+
+                    Button {
+                        audioMixerOptionsPresented = true
+                    } label: {
+                        Image(systemSymbol: .switch2)
+                    }
+                    .disabled(!isMicrophoneEnabled)
+                    #if !os(tvOS)
+                        .popover(isPresented: $audioMixerOptionsPresented) {
+                            AudioMixerView()
+                                .padding()
+                        }
+                    #endif
 
                     #if os(iOS)
                         Button(action: {
