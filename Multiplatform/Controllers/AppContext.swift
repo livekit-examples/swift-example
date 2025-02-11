@@ -76,6 +76,10 @@ final class AppContext: ObservableObject {
         didSet { AudioManager.shared.isVoiceProcessingBypassed = isVoiceProcessingBypassed }
     }
 
+    @Published var isLegacyMuteMode: Bool = false {
+        didSet { AudioManager.shared.isLegacyMuteMode = isLegacyMuteMode }
+    }
+
     public init(store: ValueStore<Preferences>) {
         self.store = store
 
