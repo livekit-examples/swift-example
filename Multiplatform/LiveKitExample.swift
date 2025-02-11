@@ -66,6 +66,7 @@ struct RoomSwitchView: View {
                 ConnectView()
             }
         }
+        .preferredColorScheme(.dark)
         .navigationTitle(computeTitle())
         .onChange(of: shouldShowRoomView) { newValue in
             #if os(visionOS)

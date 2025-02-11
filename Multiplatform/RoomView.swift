@@ -385,7 +385,8 @@ struct RoomView: View {
                                Task {
                                    isMicrophonePublishingBusy = true
                                    defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
-                                   try await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled)
+                                   let options = AudioCaptureOptions(noiseSuppression: false, highpassFilter: false)
+                                   try await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled, captureOptions: options)
                                }
                            },
                            label: {
@@ -496,16 +497,15 @@ struct RoomView: View {
                     }
 
                     #if os(macOS)
-
                         Group {
                             Picker("Output device", selection: $appCtx.outputDevice) {
-                                ForEach(AudioManager.shared.outputDevices) { device in
-                                    Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                                ForEach($appCtx.outputDevices) { device in
+                                    Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : "\(device.wrappedValue.name)").tag(device.wrappedValue)
                                 }
                             }
                             Picker("Input device", selection: $appCtx.inputDevice) {
-                                ForEach(AudioManager.shared.inputDevices) { device in
-                                    Text(device.isDefault ? "Default" : "\(device.name)").tag(device)
+                                ForEach($appCtx.inputDevices) { device in
+                                    Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : "\(device.wrappedValue.name)").tag(device.wrappedValue)
                                 }
                             }
                         }
@@ -615,6 +615,8 @@ struct RoomView: View {
                         #if os(iOS) || os(visionOS) || os(tvOS)
                             Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
                         #endif
+
+                        Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
 
                         Toggle("E2EE enabled", isOn: $roomCtx.isE2eeEnabled)
                     }

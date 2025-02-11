@@ -15,23 +15,10 @@
  */
 
 #if os(iOS)
-
-    import Foundation
     import LiveKit
-    import Logging
-    import OSLog
-
-    private let broadcastLogger = OSLog(subsystem: "io.livekit.example.SwiftSDK", category: "Broadcast")
 
     @available(macCatalyst 13.1, *)
     class SampleHandler: LKSampleHandler {
-        override public init() {
-            // Turn on logging for the Broadcast Extension
-            LoggingSystem.bootstrap { label in
-                var logHandler = LoggingOSLog(label: label, log: broadcastLogger)
-                logHandler.logLevel = .debug
-                return logHandler
-            }
-        }
+        override var enableLogging: Bool { true }
     }
 #endif
