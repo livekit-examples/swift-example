@@ -72,6 +72,10 @@ final class AppContext: ObservableObject {
         }
     #endif
 
+    @Published var isVoiceProcessingBypassed: Bool = false {
+        didSet { AudioManager.shared.isVoiceProcessingBypassed = isVoiceProcessingBypassed }
+    }
+
     public init(store: ValueStore<Preferences>) {
         self.store = store
 

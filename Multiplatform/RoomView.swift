@@ -612,6 +612,8 @@ struct RoomView: View {
                             Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
                         #endif
 
+                        Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
+
                         Toggle("E2EE enabled", isOn: $roomCtx.isE2eeEnabled)
                     }
 
