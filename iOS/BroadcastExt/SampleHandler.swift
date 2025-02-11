@@ -15,10 +15,10 @@
  */
 
 #if os(iOS)
-import LiveKit
+    import LiveKit
 
-@available(macCatalyst 13.1, *)
-class SampleHandler: LKSampleHandler {
-    override var enableLogging: Bool { true }
-}
+    @available(macCatalyst 13.1, *)
+    class SampleHandler: LKSampleHandler {
+        override var enableLogging: Bool { true }
+    }
 #endif
