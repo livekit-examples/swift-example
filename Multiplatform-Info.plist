@@ -10,10 +10,6 @@
 	<string>Please allow for main camera access</string>
 	<key>NSWorldSensingUsageDescription</key>
 	<string>Please allow for main camera access</string>
-	<key>RTCAppGroupIdentifier</key>
-	<string>group.io.livekit.example.SwiftSDK.1</string>
-	<key>RTCScreenSharingExtension</key>
-	<string>io.livekit.example.SwiftSDK.1.BroadcastExt</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationPreferredDefaultSceneSessionRole</key>
