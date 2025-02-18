@@ -79,6 +79,14 @@ final class RoomContext: ObservableObject {
 
     @Published var textFieldString: String = ""
 
+    @Published var isVideoProcessingEnabled: Bool = false {
+        didSet {
+            if let track = room.localParticipant.firstCameraVideoTrack as? LocalVideoTrack {
+                track.capturer.processor = isVideoProcessingEnabled ? self : nil
+            }
+        }
+    }
+
     var _connectTask: Task<Void, Error>?
 
     public init(store: ValueStore<Preferences>) {
@@ -289,4 +297,95 @@ extension RoomContext: RoomDelegate {
     func room(_: Room, trackPublication _: TrackPublication, didUpdateE2EEState state: E2EEState) {
         print("didUpdateE2EEState: \(state)")
     }
+
+    func room(_: Room, participant _: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
+        print("didPublishTrack: \(publication)")
+        guard let localVideoTrack = publication.track as? LocalVideoTrack, localVideoTrack.source == .camera else { return }
+
+        // Attach example processor.
+        localVideoTrack.capturer.processor = isVideoProcessingEnabled ? self : nil
+    }
+}
+
+extension RoomContext: VideoProcessor {
+    func process(frame: VideoFrame) -> VideoFrame? {
+        guard let pixelBuffer = frame.toCVPixelBuffer() else {
+            print("Failed to get pixel buffer")
+            return nil
+        }
+
+        // Do something with pixel buffer.
+        guard let newPixelBuffer = processPixelBuffer(pixelBuffer) else {
+            print("Failed to proces the pixel buffer")
+            return nil
+        }
+
+        // Re-construct a VideoFrame
+        return VideoFrame(dimensions: frame.dimensions,
+                          rotation: frame.rotation,
+                          timeStampNs: frame.timeStampNs,
+                          buffer: CVPixelVideoBuffer(pixelBuffer: newPixelBuffer))
+    }
+}
+
+// Processing example
+func processPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CVPixelBuffer? {
+    // Lock the buffer for reading
+    CVPixelBufferLockBaseAddress(pixelBuffer, .readOnly)
+
+    // Create CIImage from the pixel buffer
+    let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+
+    // Create Core Image context
+    let device = MTLCreateSystemDefaultDevice()!
+    let context = CIContext(mtlDevice: device, options: nil)
+
+    // Apply dramatic filters
+
+    // 1. Gaussian blur effect
+    let blurFilter = CIFilter(name: "CIGaussianBlur")!
+    blurFilter.setValue(ciImage, forKey: kCIInputImageKey)
+    blurFilter.setValue(8.0, forKey: kCIInputRadiusKey) // Larger radius = more blur
+
+    // 2. Color inversion
+    // let colorInvertFilter = CIFilter(name: "CIColorInvert")!
+    // colorInvertFilter.setValue(blurFilter.outputImage, forKey: kCIInputImageKey)
+
+    // 3. Add a sepia tone effect
+    // let sepiaFilter = CIFilter(name: "CISepiaTone")!
+    // sepiaFilter.setValue(ciImage, forKey: kCIInputImageKey)
+    // sepiaFilter.setValue(0.8, forKey: kCIInputIntensityKey)
+
+    let pixelBufferAttributes: [String: Any] = [
+        kCVPixelBufferMetalCompatibilityKey as String: true,
+    ]
+
+    // Create output pixel buffer
+    var outputPixelBuffer: CVPixelBuffer?
+    let status = CVPixelBufferCreate(
+        kCFAllocatorDefault,
+        CVPixelBufferGetWidth(pixelBuffer),
+        CVPixelBufferGetHeight(pixelBuffer),
+        CVPixelBufferGetPixelFormatType(pixelBuffer),
+        pixelBufferAttributes as CFDictionary,
+        &outputPixelBuffer
+    )
+
+    guard status == kCVReturnSuccess, let outputBuffer = outputPixelBuffer else {
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+        return nil
+    }
+
+    // Render the processed image to the output buffer
+    context.render(
+        blurFilter.outputImage!,
+        to: outputBuffer,
+        bounds: ciImage.extent,
+        colorSpace: CGColorSpaceCreateDeviceRGB()
+    )
+
+    // Unlock the original buffer
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, .readOnly)
+
+    return outputBuffer
 }
