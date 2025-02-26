@@ -78,6 +78,13 @@ final class AppContext: ObservableObject {
 
     @Published var isLegacyMuteMode: Bool = false {
         didSet { AudioManager.shared.isLegacyMuteMode = isLegacyMuteMode }
+
+    @Published var micVolume: Float = 1.0 {
+        didSet { AudioManager.shared.mixer.micVolume = micVolume }
+    }
+
+    @Published var appVolume: Float = 1.0 {
+        didSet { AudioManager.shared.mixer.appVolume = appVolume }
     }
 
     public init(store: ValueStore<Preferences>) {
