@@ -632,6 +632,8 @@ struct RoomView: View {
 
                         Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
 
+                        Toggle("Legacy mute mode", isOn: $appCtx.isLegacyMuteMode)
+
                         Toggle("E2EE enabled", isOn: $roomCtx.isE2eeEnabled)
                     }
 

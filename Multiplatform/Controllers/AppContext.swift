@@ -76,6 +76,10 @@ final class AppContext: ObservableObject {
         didSet { AudioManager.shared.isVoiceProcessingBypassed = isVoiceProcessingBypassed }
     }
 
+    @Published var isLegacyMuteMode: Bool = false {
+        didSet { AudioManager.shared.isLegacyMuteMode = isLegacyMuteMode }
+    }
+
     @Published var micVolume: Float = 1.0 {
         didSet { AudioManager.shared.mixer.micVolume = micVolume }
     }
