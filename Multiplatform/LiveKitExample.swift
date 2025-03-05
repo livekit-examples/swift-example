@@ -31,14 +31,6 @@ struct LiveKitExample: App {
     @Environment(\.openWindow) var openWindow
     #endif
 
-    init() {
-        LoggingSystem.bootstrap {
-            var logHandler = StreamLogHandler.standardOutput(label: $0)
-            logHandler.logLevel = .debug
-            return logHandler
-        }
-    }
-
     var body: some Scene {
         WindowGroup {
             RoomContextView()
@@ -58,5 +50,13 @@ struct LiveKitExample: App {
         }
         .immersionStyle(selection: .constant(.full), in: .full)
         #endif
+    }
+    
+    init() {
+        LoggingSystem.bootstrap {
+            var logHandler = StreamLogHandler.standardOutput(label: $0)
+            logHandler.logLevel = .debug
+            return logHandler
+        }
     }
 }
