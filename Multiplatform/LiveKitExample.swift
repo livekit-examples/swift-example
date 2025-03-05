@@ -28,7 +28,7 @@ struct LiveKitExample: App {
     @StateObject var appCtx = AppContext(store: sync)
 
     #if os(visionOS)
-        @Environment(\.openWindow) var openWindow
+    @Environment(\.openWindow) var openWindow
     #endif
 
     init() {
@@ -53,10 +53,10 @@ struct LiveKitExample: App {
         #endif
 
         #if os(visionOS)
-            ImmersiveSpace(id: "ImmersiveSpace") {
-                ImmersiveView()
-            }
-            .immersionStyle(selection: .constant(.full), in: .full)
+        ImmersiveSpace(id: "ImmersiveSpace") {
+            ImmersiveView()
+        }
+        .immersionStyle(selection: .constant(.full), in: .full)
         #endif
     }
 }

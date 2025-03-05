@@ -46,25 +46,25 @@ struct LKButton: View {
 }
 
 #if os(iOS)
-    extension LKTextField.`Type` {
-        func toiOSType() -> UIKeyboardType {
-            switch self {
-            case .URL: return .URL
-            case .ascii: return .asciiCapable
-            default: return .default
-            }
+extension LKTextField.`Type` {
+    func toiOSType() -> UIKeyboardType {
+        switch self {
+        case .URL: return .URL
+        case .ascii: return .asciiCapable
+        default: return .default
         }
     }
+}
 #endif
 
 #if os(macOS)
-    // Avoid showing focus border around textfield for macOS
-    extension NSTextField {
-        override open var focusRingType: NSFocusRingType {
-            get { .none }
-            set {}
-        }
+// Avoid showing focus border around textfield for macOS
+extension NSTextField {
+    override open var focusRingType: NSFocusRingType {
+        get { .none }
+        set {}
     }
+}
 #endif
 
 struct LKTextField: View {

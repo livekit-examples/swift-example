@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import SwiftUI
 import LiveKit
+import SwiftUI
 
 struct RoomSwitchView: View {
     @EnvironmentObject var appCtx: AppContext
@@ -23,8 +23,8 @@ struct RoomSwitchView: View {
     @EnvironmentObject var room: Room
 
     #if os(visionOS)
-        @Environment(\.openImmersiveSpace) var openImmersiveSpace
-        @Environment(\.dismissImmersiveSpace) var dismissImmersiveSpace
+    @Environment(\.openImmersiveSpace) var openImmersiveSpace
+    @Environment(\.dismissImmersiveSpace) var dismissImmersiveSpace
     #endif
 
     var shouldShowRoomView: Bool {
@@ -64,13 +64,13 @@ struct RoomSwitchView: View {
         .navigationTitle(computeTitle())
         .onChange(of: shouldShowRoomView) { newValue in
             #if os(visionOS)
-                Task {
-                    if newValue {
-                        await openImmersiveSpace(id: "ImmersiveSpace")
-                    } else {
-                        await dismissImmersiveSpace()
-                    }
+            Task {
+                if newValue {
+                    await openImmersiveSpace(id: "ImmersiveSpace")
+                } else {
+                    await dismissImmersiveSpace()
                 }
+            }
             #endif
         }
     }
