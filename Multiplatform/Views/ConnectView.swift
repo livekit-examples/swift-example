@@ -47,12 +47,8 @@ struct ConnectView: View {
 
                         HStack {
                             Menu {
-                                Toggle(isOn: $roomCtx.autoSubscribe) {
-                                    Text("Auto-Subscribe")
-                                }
-                                Toggle(isOn: $roomCtx.isE2eeEnabled) {
-                                    Text("Enable E2EE")
-                                }
+                                Toggle("Auto-Subscribe", isOn: $roomCtx.autoSubscribe)
+                                Toggle("Enable E2EE", isOn: $roomCtx.isE2eeEnabled)
                             } label: {
                                 Image(systemSymbol: .boltFill)
                                     .renderingMode(.original)
@@ -66,18 +62,10 @@ struct ConnectView: View {
                             .fixedSize()
 
                             Menu {
-                                Toggle(isOn: $roomCtx.simulcast) {
-                                    Text("Simulcast")
-                                }
-                                Toggle(isOn: $roomCtx.adaptiveStream) {
-                                    Text("AdaptiveStream")
-                                }
-                                Toggle(isOn: $roomCtx.dynacast) {
-                                    Text("Dynacast")
-                                }
-                                Toggle(isOn: $roomCtx.reportStats) {
-                                    Text("Report stats")
-                                }
+                                Toggle("Simulcast", isOn: $roomCtx.simulcast)
+                                Toggle("AdaptiveStream", isOn: $roomCtx.adaptiveStream)
+                                Toggle("Dynacast", isOn: $roomCtx.dynacast)
+                                Toggle("Report stats", isOn: $roomCtx.reportStats)
                             } label: {
                                 Image(systemSymbol: .gear)
                                     .renderingMode(.original)

@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-#if os(iOS)
-import LiveKit
+import SwiftUI
 
-@available(macCatalyst 13.1, *)
-class SampleHandler: LKSampleHandler {
-    override var enableLogging: Bool { true }
+extension CIImage {
+    // helper to create a `CIImage` for both platforms
+    convenience init(named name: String) {
+        #if !os(macOS)
+        self.init(cgImage: UIImage(named: name)!.cgImage!)
+        #else
+        self.init(data: NSImage(named: name)!.tiffRepresentation!)!
+        #endif
+    }
 }
-#endif

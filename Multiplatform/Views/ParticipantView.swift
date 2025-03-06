@@ -135,20 +135,12 @@ struct ParticipantView: View {
                             if let remotePub = publication as? RemoteTrackPublication {
                                 Menu {
                                     if case .subscribed = remotePub.subscriptionState {
-                                        Button {
-                                            Task {
-                                                try await remotePub.set(subscribed: false)
-                                            }
-                                        } label: {
-                                            Text("Unsubscribe")
+                                        Button("Unsubscribe") {
+                                            Task { try await remotePub.set(subscribed: false) }
                                         }
                                     } else if case .unsubscribed = remotePub.subscriptionState {
-                                        Button {
-                                            Task {
-                                                try await remotePub.set(subscribed: true)
-                                            }
-                                        } label: {
-                                            Text("Subscribe")
+                                        Button("Subscribe") {
+                                            Task { try await remotePub.set(subscribed: true) }
                                         }
                                     }
                                 } label: {
@@ -186,20 +178,12 @@ struct ParticipantView: View {
                             if let remotePub = publication as? RemoteTrackPublication {
                                 Menu {
                                     if case .subscribed = remotePub.subscriptionState {
-                                        Button {
-                                            Task {
-                                                try await remotePub.set(subscribed: false)
-                                            }
-                                        } label: {
-                                            Text("Unsubscribe")
+                                        Button("Unsubscribe") {
+                                            Task { try await remotePub.set(subscribed: false) }
                                         }
                                     } else if case .unsubscribed = remotePub.subscriptionState {
-                                        Button {
-                                            Task {
-                                                try await remotePub.set(subscribed: true)
-                                            }
-                                        } label: {
-                                            Text("Subscribe")
+                                        Button("Subscribe") {
+                                            Task { try await remotePub.set(subscribed: true) }
                                         }
                                     }
                                 } label: {

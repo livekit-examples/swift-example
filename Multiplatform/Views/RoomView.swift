@@ -19,60 +19,49 @@ import SFSafeSymbols
 import SwiftUI
 
 #if !os(macOS) && !os(tvOS)
-    let adaptiveMin = 170.0
-    let toolbarPlacement: ToolbarItemPlacement = .bottomBar
+let adaptiveMin = 170.0
+let toolbarPlacement: ToolbarItemPlacement = .bottomBar
 #else
-    let adaptiveMin = 300.0
-    let toolbarPlacement: ToolbarItemPlacement = .primaryAction
+let adaptiveMin = 300.0
+let toolbarPlacement: ToolbarItemPlacement = .primaryAction
 #endif
 
-extension CIImage {
-    // helper to create a `CIImage` for both platforms
-    convenience init(named name: String) {
-        #if !os(macOS)
-            self.init(cgImage: UIImage(named: name)!.cgImage!)
-        #else
-            self.init(data: NSImage(named: name)!.tiffRepresentation!)!
-        #endif
-    }
-}
-
 #if os(macOS)
-    // keeps weak reference to NSWindow
-    class WindowAccess: ObservableObject {
-        private weak var window: NSWindow?
+// keeps weak reference to NSWindow
+class WindowAccess: ObservableObject {
+    private weak var window: NSWindow?
 
-        deinit {
-            // reset changed properties
-            DispatchQueue.main.async { [weak window] in
-                window?.level = .normal
-            }
+    deinit {
+        // reset changed properties
+        DispatchQueue.main.async { [weak window] in
+            window?.level = .normal
         }
+    }
 
-        @Published public var pinned: Bool = false {
-            didSet {
-                guard oldValue != pinned else { return }
-                level = pinned ? .floating : .normal
-            }
+    @Published public var pinned: Bool = false {
+        didSet {
+            guard oldValue != pinned else { return }
+            level = pinned ? .floating : .normal
         }
+    }
 
-        private var level: NSWindow.Level {
-            get { window?.level ?? .normal }
-            set {
-                Task { @MainActor in
-                    window?.level = newValue
-                    objectWillChange.send()
-                }
-            }
-        }
-
-        public func set(window: NSWindow?) {
-            self.window = window
+    private var level: NSWindow.Level {
+        get { window?.level ?? .normal }
+        set {
             Task { @MainActor in
+                window?.level = newValue
                 objectWillChange.send()
             }
         }
     }
+
+    public func set(window: NSWindow?) {
+        self.window = window
+        Task { @MainActor in
+            objectWillChange.send()
+        }
+    }
+}
 #endif
 
 struct RoomView: View {
@@ -92,7 +81,7 @@ struct RoomView: View {
     @State private var cameraPublishOptions = VideoPublishOptions()
 
     #if os(macOS)
-        @ObservedObject private var windowAccess = WindowAccess()
+    @ObservedObject private var windowAccess = WindowAccess()
     #endif
 
     @State private var showConnectionTime = true
@@ -270,26 +259,26 @@ struct RoomView: View {
             ToolbarItemGroup(placement: toolbarPlacement) {
                 // Insufficient space on iOS bar
                 #if os(macOS)
-                    Group {
-                        if let name = room.name {
-                            Text(name)
-                                .fontWeight(.bold)
-                        }
-
-                        if let identity = room.localParticipant.identity {
-                            Text(String(describing: identity))
-                        }
-
-                        Spacer()
-
-                        Picker("Mode", selection: $appCtx.videoViewMode) {
-                            Text("Fit").tag(VideoView.LayoutMode.fit)
-                            Text("Fill").tag(VideoView.LayoutMode.fill)
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
+                Group {
+                    if let name = room.name {
+                        Text(name)
+                            .fontWeight(.bold)
                     }
-                #else
+
+                    if let identity = room.localParticipant.identity {
+                        Text(String(describing: identity))
+                    }
+
                     Spacer()
+
+                    Picker("Mode", selection: $appCtx.videoViewMode) {
+                        Text("Fit").tag(VideoView.LayoutMode.fit)
+                        Text("Fill").tag(VideoView.LayoutMode.fill)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                #else
+                Spacer()
                 #endif
 
                 Group {
@@ -299,21 +288,21 @@ struct RoomView: View {
 
                     Group {
                         #if os(visionOS) && compiler(>=6.0)
-                            // Toggle camera enabled
-                            Button(action: {
-                                       Task {
-                                           isARCameraPublishingBusy = true
-                                           defer { Task { @MainActor in isARCameraPublishingBusy = false } }
-                                           try await roomCtx.setARCamera(isEnabled: true)
-                                       }
+                        // Toggle camera enabled
+                        Button(action: {
+                                   Task {
+                                       isARCameraPublishingBusy = true
+                                       defer { Task { @MainActor in isARCameraPublishingBusy = false } }
+                                       try await roomCtx.setARCamera(isEnabled: true)
+                                   }
 
-                                   },
-                                   label: {
-                                       Image(systemSymbol: .eyeglasses)
-                                           .renderingMode(isCameraEnabled ? .original : .template)
-                                   })
-                                   // disable while publishing/un-publishing
-                                   .disabled(isARCameraPublishingBusy)
+                               },
+                               label: {
+                                   Image(systemSymbol: .eyeglasses)
+                                       .renderingMode(isCameraEnabled ? .original : .template)
+                               })
+                               // disable while publishing/un-publishing
+                               .disabled(isARCameraPublishingBusy)
                         #endif
 
                         if isCameraEnabled, canSwitchCameraPosition {
@@ -411,51 +400,51 @@ struct RoomView: View {
                     #endif
 
                     #if os(iOS)
-                        Button(action: {
-                                   Task {
-                                       isScreenSharePublishingBusy = true
-                                       defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                       try await room.localParticipant.setScreenShare(enabled: !isScreenShareEnabled)
-                                   }
-                               },
-                               label: {
-                                   Image(systemSymbol: .rectangleFillOnRectangleFill)
-                                       .renderingMode(isScreenShareEnabled ? .original : .template)
-                               })
-                               // disable while publishing/un-publishing
-                               .disabled(isScreenSharePublishingBusy)
+                    Button(action: {
+                               Task {
+                                   isScreenSharePublishingBusy = true
+                                   defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
+                                   try await room.localParticipant.setScreenShare(enabled: !isScreenShareEnabled)
+                               }
+                           },
+                           label: {
+                               Image(systemSymbol: .rectangleFillOnRectangleFill)
+                                   .renderingMode(isScreenShareEnabled ? .original : .template)
+                           })
+                           // disable while publishing/un-publishing
+                           .disabled(isScreenSharePublishingBusy)
                     #elseif os(macOS)
-                        Button(action: {
-                                   if #available(macOS 12.3, *) {
-                                       if isScreenShareEnabled {
-                                           // Turn off screen share
-                                           Task {
-                                               isScreenSharePublishingBusy = true
-                                               defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                               try await roomCtx.setScreenShareMacOS(isEnabled: false)
-                                           }
-                                       } else {
-                                           screenPickerPresented = true
+                    Button(action: {
+                               if #available(macOS 12.3, *) {
+                                   if isScreenShareEnabled {
+                                       // Turn off screen share
+                                       Task {
+                                           isScreenSharePublishingBusy = true
+                                           defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
+                                           try await roomCtx.setScreenShareMacOS(isEnabled: false)
                                        }
+                                   } else {
+                                       screenPickerPresented = true
                                    }
-                               },
-                               label: {
-                                   Image(systemSymbol: .rectangleFillOnRectangleFill)
-                                       .renderingMode(isScreenShareEnabled ? .original : .template)
-                                       .foregroundColor(isScreenShareEnabled ? Color.green : Color.white)
-                               }).popover(isPresented: $screenPickerPresented) {
-                            if #available(macOS 12.3, *) {
-                                ScreenShareSourcePickerView { source in
-                                    Task {
-                                        isScreenSharePublishingBusy = true
-                                        defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                        try await roomCtx.setScreenShareMacOS(isEnabled: true, screenShareSource: source)
-                                    }
-                                    screenPickerPresented = false
-                                }.padding()
-                            }
+                               }
+                           },
+                           label: {
+                               Image(systemSymbol: .rectangleFillOnRectangleFill)
+                                   .renderingMode(isScreenShareEnabled ? .original : .template)
+                                   .foregroundColor(isScreenShareEnabled ? Color.green : Color.white)
+                           }).popover(isPresented: $screenPickerPresented) {
+                        if #available(macOS 12.3, *) {
+                            ScreenShareSourcePickerView { source in
+                                Task {
+                                    isScreenSharePublishingBusy = true
+                                    defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
+                                    try await roomCtx.setScreenShareMacOS(isEnabled: true, screenShareSource: source)
+                                }
+                                screenPickerPresented = false
+                            }.padding()
                         }
-                        .disabled(isScreenSharePublishingBusy)
+                    }
+                    .disabled(isScreenSharePublishingBusy)
                     #endif
 
                     // Toggle messages view (chat example)
@@ -473,20 +462,18 @@ struct RoomView: View {
                 // Spacer()
 
                 #if os(iOS)
-                    SwiftUIAudioRoutePickerButton()
+                SwiftUIAudioRoutePickerButton()
                 #endif
 
                 Menu {
                     #if os(macOS)
-                        Button {
-                            if let url = URL(string: "livekit://") {
-                                NSWorkspace.shared.open(url)
-                            }
-                        } label: {
-                            Text("New window")
+                    Button("New window") {
+                        if let url = URL(string: "livekit://") {
+                            NSWorkspace.shared.open(url)
                         }
+                    }
 
-                        Divider()
+                    Divider()
 
                     #endif
 
@@ -497,11 +484,11 @@ struct RoomView: View {
                         Toggle("VideoView flip", isOn: $appCtx.videoViewMirrored)
                         Toggle("VideoView renderMode: .sampleBuffer", isOn: $appCtx.preferSampleBufferRendering)
                         #if os(iOS)
-                            Menu("Pinch to zoom") {
-                                Toggle("Zoom In", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.zoomIn))
-                                Toggle("Zoom Out", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.zoomOut))
-                                Toggle("Auto Reset", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.resetOnRelease))
-                            }
+                        Menu("Pinch to zoom") {
+                            Toggle("Zoom In", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.zoomIn))
+                            Toggle("Zoom Out", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.zoomOut))
+                            Toggle("Auto Reset", isOn: $appCtx.videoViewPinchToZoomOptions.bind(.resetOnRelease))
+                        }
                         #endif
                         Divider()
                     }
@@ -511,123 +498,75 @@ struct RoomView: View {
                     }
 
                     #if os(macOS)
-                        Group {
-                            Picker("Output device", selection: $appCtx.outputDevice) {
-                                ForEach($appCtx.outputDevices) { device in
-                                    Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : "\(device.wrappedValue.name)").tag(device.wrappedValue)
-                                }
-                            }
-                            Picker("Input device", selection: $appCtx.inputDevice) {
-                                ForEach($appCtx.inputDevices) { device in
-                                    Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : "\(device.wrappedValue.name)").tag(device.wrappedValue)
-                                }
+                    Group {
+                        Picker("Output device", selection: $appCtx.outputDevice) {
+                            ForEach($appCtx.outputDevices) { device in
+                                Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : "\(device.wrappedValue.name)").tag(device.wrappedValue)
                             }
                         }
+                        Picker("Input device", selection: $appCtx.inputDevice) {
+                            ForEach($appCtx.inputDevices) { device in
+                                Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : "\(device.wrappedValue.name)").tag(device.wrappedValue)
+                            }
+                        }
+                    }
                     #endif
 
                     Group {
                         Divider()
 
-                        Button {
-                            Task {
-                                await room.localParticipant.unpublishAll()
-                            }
-                        } label: {
-                            Text("Unpublish all")
+                        Button("Unpublish all") {
+                            Task { await room.localParticipant.unpublishAll() }
                         }
 
                         Divider()
 
-                        Menu {
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .quickReconnect)
-                                }
-                            } label: {
-                                Text("Quick reconnect")
+                        Menu("Simulate scenario") {
+                            Button("Quick reconnect") {
+                                Task { try await room.debug_simulate(scenario: .quickReconnect) }
                             }
-
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .fullReconnect)
-                                }
-                            } label: {
-                                Text("Full reconnect")
+                            Button("Full reconnect") {
+                                Task { try await room.debug_simulate(scenario: .fullReconnect) }
                             }
-
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .nodeFailure)
-                                }
-                            } label: {
-                                Text("Node failure")
+                            Button("Node failure") {
+                                Task { try await room.debug_simulate(scenario: .nodeFailure) }
                             }
-
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .serverLeave)
-                                }
-                            } label: {
-                                Text("Server leave")
+                            Button("Server leave") {
+                                Task { try await room.debug_simulate(scenario: .serverLeave) }
                             }
-
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .migration)
-                                }
-                            } label: {
-                                Text("Migration")
+                            Button("Migration") {
+                                Task { try await room.debug_simulate(scenario: .migration) }
                             }
-
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .speakerUpdate(seconds: 3))
-                                }
-                            } label: {
-                                Text("Speaker update")
+                            Button("Speaker update") {
+                                Task { try await room.debug_simulate(scenario: .speakerUpdate(seconds: 3)) }
                             }
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .forceTCP)
-                                }
-                            } label: {
-                                Text("Force TCP")
+                            Button("Force TCP") {
+                                Task { try await room.debug_simulate(scenario: .forceTCP) }
                             }
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .forceTLS)
-                                }
-                            } label: {
-                                Text("Force TLS")
+                            Button("Force TLS") {
+                                Task { try await room.debug_simulate(scenario: .forceTLS) }
                             }
-                        } label: {
-                            Text("Simulate scenario")
                         }
                     }
 
                     Group {
-                        Menu {
-                            Button {
+                        Menu("Track permissions") {
+                            Button("Allow all") {
                                 Task {
-                                    try await room.localParticipant.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                                    try await room.localParticipant
+                                        .setTrackSubscriptionPermissions(allParticipantsAllowed: true)
                                 }
-                            } label: {
-                                Text("Allow all")
                             }
-
-                            Button {
+                            Button("Disallow all") {
                                 Task {
-                                    try await room.localParticipant.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
+                                    try await room.localParticipant
+                                        .setTrackSubscriptionPermissions(allParticipantsAllowed: false)
                                 }
-                            } label: {
-                                Text("Disallow all")
                             }
-                        } label: {
-                            Text("Track permissions")
                         }
 
                         #if os(iOS) || os(visionOS) || os(tvOS)
-                            Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
+                        Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
                         #endif
 
                         Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
