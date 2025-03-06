@@ -31,22 +31,15 @@ struct RoomSwitchView: View {
         room.connectionState == .connected || room.connectionState == .reconnecting
     }
 
-    func computeTitle() -> String {
-        if shouldShowRoomView {
-            var elements: [String] = []
-            if let roomName = room.name {
-                elements.append(roomName)
-            }
-            if let localParticipantName = room.localParticipant.name {
-                elements.append(localParticipantName)
-            }
-            if let localParticipantIdentity = room.localParticipant.identity {
-                elements.append(String(describing: localParticipantIdentity))
-            }
-            return elements.joined(separator: " ")
-        }
-
-        return "LiveKit"
+    private var navigatonTitle: String {
+        guard shouldShowRoomView else { return "LiveKit" }
+        return [
+            room.name,
+            room.localParticipant.name,
+            room.localParticipant.identity.map { $0.stringValue }
+        ]
+        .compactMap { $0 }
+        .joined(separator: " ")
     }
 
     var body: some View {
@@ -61,7 +54,7 @@ struct RoomSwitchView: View {
             }
         }
         .preferredColorScheme(.dark)
-        .navigationTitle(computeTitle())
+        .navigationTitle(navigatonTitle)
         .onChange(of: shouldShowRoomView) { newValue in
             #if os(visionOS)
             Task {
