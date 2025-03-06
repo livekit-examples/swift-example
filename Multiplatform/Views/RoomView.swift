@@ -467,12 +467,10 @@ struct RoomView: View {
 
                 Menu {
                     #if os(macOS)
-                    Button {
+                    Button("New window") {
                         if let url = URL(string: "livekit://") {
                             NSWorkspace.shared.open(url)
                         }
-                    } label: {
-                        Text("New window")
                     }
 
                     Divider()
@@ -517,102 +515,54 @@ struct RoomView: View {
                     Group {
                         Divider()
 
-                        Button {
-                            Task {
-                                await room.localParticipant.unpublishAll()
-                            }
-                        } label: {
-                            Text("Unpublish all")
+                        Button("Unpublish all") {
+                            Task { await room.localParticipant.unpublishAll() }
                         }
 
                         Divider()
 
-                        Menu {
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .quickReconnect)
-                                }
-                            } label: {
-                                Text("Quick reconnect")
+                        Menu("Simulate scenario") {
+                            Button("Quick reconnect") {
+                                Task { try await room.debug_simulate(scenario: .quickReconnect) }
                             }
-
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .fullReconnect)
-                                }
-                            } label: {
-                                Text("Full reconnect")
+                            Button("Full reconnect") {
+                                Task { try await room.debug_simulate(scenario: .fullReconnect) }
                             }
-
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .nodeFailure)
-                                }
-                            } label: {
-                                Text("Node failure")
+                            Button("Node failure") {
+                                Task { try await room.debug_simulate(scenario: .nodeFailure) }
                             }
-
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .serverLeave)
-                                }
-                            } label: {
-                                Text("Server leave")
+                            Button("Server leave") {
+                                Task { try await room.debug_simulate(scenario: .serverLeave) }
                             }
-
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .migration)
-                                }
-                            } label: {
-                                Text("Migration")
+                            Button("Migration") {
+                                Task { try await room.debug_simulate(scenario: .migration) }
                             }
-
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .speakerUpdate(seconds: 3))
-                                }
-                            } label: {
-                                Text("Speaker update")
+                            Button("Speaker update") {
+                                Task { try await room.debug_simulate(scenario: .speakerUpdate(seconds: 3)) }
                             }
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .forceTCP)
-                                }
-                            } label: {
-                                Text("Force TCP")
+                            Button("Force TCP") {
+                                Task { try await room.debug_simulate(scenario: .forceTCP) }
                             }
-                            Button {
-                                Task {
-                                    try await room.debug_simulate(scenario: .forceTLS)
-                                }
-                            } label: {
-                                Text("Force TLS")
+                            Button("Force TLS") {
+                                Task { try await room.debug_simulate(scenario: .forceTLS) }
                             }
-                        } label: {
-                            Text("Simulate scenario")
                         }
                     }
 
                     Group {
-                        Menu {
-                            Button {
+                        Menu("Track permissions") {
+                            Button("Allow all") {
                                 Task {
-                                    try await room.localParticipant.setTrackSubscriptionPermissions(allParticipantsAllowed: true)
+                                    try await room.localParticipant
+                                        .setTrackSubscriptionPermissions(allParticipantsAllowed: true)
                                 }
-                            } label: {
-                                Text("Allow all")
                             }
-
-                            Button {
+                            Button("Disallow all") {
                                 Task {
-                                    try await room.localParticipant.setTrackSubscriptionPermissions(allParticipantsAllowed: false)
+                                    try await room.localParticipant
+                                        .setTrackSubscriptionPermissions(allParticipantsAllowed: false)
                                 }
-                            } label: {
-                                Text("Disallow all")
                             }
-                        } label: {
-                            Text("Track permissions")
                         }
 
                         #if os(iOS) || os(visionOS) || os(tvOS)
