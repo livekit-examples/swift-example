@@ -16,17 +16,6 @@
 
 import SwiftUI
 
-struct LazyView<Content: View>: View {
-    let build: () -> Content
-    init(_ build: @autoclosure @escaping () -> Content) {
-        self.build = build
-    }
-
-    var body: Content {
-        build()
-    }
-}
-
 // Default button style for this example
 struct LKButton: View {
     let title: String
