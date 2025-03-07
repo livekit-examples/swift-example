@@ -107,13 +107,13 @@ final class RoomContext: ObservableObject {
         autoSubscribe = store.value.autoSubscribe
 
         #if os(iOS)
-            UIApplication.shared.isIdleTimerDisabled = true
+        UIApplication.shared.isIdleTimerDisabled = true
         #endif
     }
 
     deinit {
         #if os(iOS)
-            UIApplication.shared.isIdleTimerDisabled = false
+        UIApplication.shared.isIdleTimerDisabled = false
         #endif
         print("RoomContext.deinit")
     }
@@ -148,6 +148,7 @@ final class RoomContext: ObservableObject {
             ),
             defaultScreenShareCaptureOptions: ScreenShareCaptureOptions(
                 dimensions: .h1080_169,
+                appAudio: true,
                 useBroadcastExtension: true
             ),
             defaultVideoPublishOptions: VideoPublishOptions(
@@ -231,38 +232,38 @@ final class RoomContext: ObservableObject {
     }
 
     #if os(macOS)
-        weak var screenShareTrack: LocalTrackPublication?
+    weak var screenShareTrack: LocalTrackPublication?
 
-        @available(macOS 12.3, *)
-        func setScreenShareMacOS(isEnabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
-            if isEnabled, let screenShareSource {
-                let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource, options: ScreenShareCaptureOptions(appAudio: true))
-                let options = VideoPublishOptions(preferredCodec: VideoCodec.h264)
-                screenShareTrack = try await room.localParticipant.publish(videoTrack: track, options: options)
-            }
-
-            if !isEnabled, let screenShareTrack {
-                try await room.localParticipant.unpublish(publication: screenShareTrack)
-            }
+    @available(macOS 12.3, *)
+    func setScreenShareMacOS(isEnabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
+        if isEnabled, let screenShareSource {
+            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource, options: ScreenShareCaptureOptions(appAudio: true))
+            let options = VideoPublishOptions(preferredCodec: VideoCodec.h264)
+            screenShareTrack = try await room.localParticipant.publish(videoTrack: track, options: options)
         }
+
+        if !isEnabled, let screenShareTrack {
+            try await room.localParticipant.unpublish(publication: screenShareTrack)
+        }
+    }
     #endif
 
     #if os(visionOS) && compiler(>=6.0)
-        weak var arCameraTrack: LocalTrackPublication?
+    weak var arCameraTrack: LocalTrackPublication?
 
-        func setARCamera(isEnabled: Bool) async throws {
-            if #available(visionOS 2.0, *) {
-                if isEnabled {
-                    let track = LocalVideoTrack.createARCameraTrack()
-                    arCameraTrack = try await room.localParticipant.publish(videoTrack: track)
-                }
-            }
-
-            if !isEnabled, let arCameraTrack {
-                try await room.localParticipant.unpublish(publication: arCameraTrack)
-                self.arCameraTrack = nil
+    func setARCamera(isEnabled: Bool) async throws {
+        if #available(visionOS 2.0, *) {
+            if isEnabled {
+                let track = LocalVideoTrack.createARCameraTrack()
+                arCameraTrack = try await room.localParticipant.publish(videoTrack: track)
             }
         }
+
+        if !isEnabled, let arCameraTrack {
+            try await room.localParticipant.unpublish(publication: arCameraTrack)
+            self.arCameraTrack = nil
+        }
+    }
     #endif
 }
 

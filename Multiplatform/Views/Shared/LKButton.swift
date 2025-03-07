@@ -14,11 +14,22 @@
  * limitations under the License.
  */
 
-#if os(iOS)
-import LiveKit
+import SwiftUI
 
-@available(macCatalyst 13.1, *)
-class SampleHandler: LKSampleHandler {
-    override var enableLogging: Bool { true }
+// Default button style for this example
+struct LKButton: View {
+    let title: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action,
+               label: {
+                   Text(title.uppercased())
+                       .fontWeight(.bold)
+                       .padding(.horizontal, 12)
+                       .padding(.vertical, 10)
+               })
+               .background(Color.lkRed)
+               .cornerRadius(8)
+    }
 }
-#endif
