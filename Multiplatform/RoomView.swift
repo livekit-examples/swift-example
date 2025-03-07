@@ -381,7 +381,7 @@ struct RoomView: View {
                         .padding()
                     }
                     #endif
-                    
+
                     Button {
                         sendFilePresented.toggle()
                     } label: {
@@ -392,7 +392,6 @@ struct RoomView: View {
                             .frame(minWidth: 300)
                             .padding()
                     }
-                    
 
                     // Toggle microphone enabled
                     Button(action: {

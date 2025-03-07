@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct SendFileView: View {
-
     @EnvironmentObject var roomCtx: RoomContext
     @State private var isPickerPresented = false
 
@@ -38,7 +37,7 @@ struct SendFileView: View {
             )
             .padding(8)
             .onTapGesture { isPickerPresented.toggle() }
-            
+
             SendButton {
                 roomCtx.sendFile()
             }
@@ -52,7 +51,6 @@ struct SendFileView: View {
 }
 
 private struct FileInfo: View {
-
     let url: URL
     @State private var fileSize: Int?
 
@@ -74,17 +72,16 @@ private struct FileInfo: View {
 }
 
 private struct SendButton: View {
-
     let action: @MainActor () -> Void
-  
+
     var body: some View {
         Button("Send", systemImage: "paperplane.fill", action: action)
             .buttonStyle(Style())
     }
+
     private struct Style: ButtonStyle {
-        
         @Environment(\.isEnabled) private var isEnabled
-        
+
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
                 .labelStyle(.iconOnly)
