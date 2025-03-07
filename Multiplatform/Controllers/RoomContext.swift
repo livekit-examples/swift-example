@@ -79,6 +79,10 @@ final class RoomContext: ObservableObject {
 
     @Published var textFieldString: String = ""
 
+    @Published var selectedFile: URL?
+    @Published private(set) var isFileSending = false
+    
+    
     @Published var isVideoProcessingEnabled: Bool = false {
         didSet {
             if let track = room.localParticipant.firstCameraVideoTrack as? LocalVideoTrack {
@@ -167,6 +171,11 @@ final class RoomContext: ObservableObject {
 
         _connectTask = connectTask
         try await connectTask.value
+        
+        try await room.registerByteStreamHandler(for: "file-broadcast") { reader, identity in
+            let fileURL = try await reader.writeToFile()
+            print("Recicived file from \(identity): \(fileURL)")
+        }
 
         return room
     }
@@ -193,6 +202,31 @@ final class RoomContext: ObservableObject {
                 try await self.room.localParticipant.publish(data: json)
             } catch {
                 print("Failed to encode data \(error)")
+            }
+        }
+    }
+    
+    @MainActor
+    func sendFile() {
+        guard let selectedFile, !isFileSending else { return }
+        
+        Task {
+            defer {
+                isFileSending = false
+                selectedFile.stopAccessingSecurityScopedResource()
+            }
+            
+            isFileSending = true
+            guard selectedFile.startAccessingSecurityScopedResource() else {
+                print("Unable to access resource")
+                return
+            }
+            do {
+                try await self.room.localParticipant
+                    .sendFile(selectedFile, for: "file-broadcast")
+                print("File sent successfully")
+            } catch {
+                print("Error sending file: \(error)")
             }
         }
     }

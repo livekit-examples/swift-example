@@ -88,6 +88,7 @@ struct RoomView: View {
     @State private var screenPickerPresented = false
     @State private var publishOptionsPickerPresented = false
     @State private var audioMixerOptionsPresented = false
+    @State private var sendFilePresented = false
 
     @State private var cameraPublishOptions = VideoPublishOptions()
 
@@ -380,6 +381,18 @@ struct RoomView: View {
                         .padding()
                     }
                     #endif
+                    
+                    Button {
+                        sendFilePresented.toggle()
+                    } label: {
+                        Image(systemSymbol: .paperplane)
+                    }
+                    .popover(isPresented: $sendFilePresented) {
+                        SendFileView()
+                            .frame(minWidth: 300)
+                            .padding()
+                    }
+                    
 
                     // Toggle microphone enabled
                     Button(action: {
