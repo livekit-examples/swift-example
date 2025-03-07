@@ -371,17 +371,6 @@ struct RoomView: View {
                     }
                     #endif
 
-                    Button {
-                        sendFilePresented.toggle()
-                    } label: {
-                        Image(systemSymbol: .paperplane)
-                    }
-                    .popover(isPresented: $sendFilePresented) {
-                        SendFileView()
-                            .frame(minWidth: 300)
-                            .padding()
-                    }
-
                     // Toggle microphone enabled
                     Button(action: {
                                Task {
@@ -469,6 +458,17 @@ struct RoomView: View {
                                Image(systemSymbol: .messageFill)
                                    .renderingMode(roomCtx.showMessagesView ? .original : .template)
                            })
+                    
+                    Button {
+                        sendFilePresented.toggle()
+                    } label: {
+                        Image(systemSymbol: .docFill)
+                    }
+                    .popover(isPresented: $sendFilePresented) {
+                        SendFileView()
+                            .frame(minWidth: 300)
+                            .padding()
+                    }
                 }
 
                 // Spacer()
