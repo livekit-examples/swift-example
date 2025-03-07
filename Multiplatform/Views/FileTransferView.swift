@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct SendFileView: View {
+struct FileTransferView: View {
     @EnvironmentObject var roomCtx: RoomContext
     @State private var isPickerPresented = false
 
@@ -91,10 +91,4 @@ private struct SendButton: View {
                 .foregroundColor(.white)
         }
     }
-}
-
-#Preview {
-    SendFileView()
-        .padding()
-        .frame(width: 300)
 }

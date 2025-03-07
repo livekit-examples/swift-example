@@ -77,7 +77,7 @@ struct RoomView: View {
     @State private var screenPickerPresented = false
     @State private var publishOptionsPickerPresented = false
     @State private var audioMixerOptionsPresented = false
-    @State private var sendFilePresented = false
+    @State private var fileTransferViewPresented = false
 
     @State private var cameraPublishOptions = VideoPublishOptions()
 
@@ -460,12 +460,12 @@ struct RoomView: View {
                            })
                     
                     Button {
-                        sendFilePresented.toggle()
+                        fileTransferViewPresented.toggle()
                     } label: {
                         Image(systemSymbol: .docFill)
                     }
-                    .popover(isPresented: $sendFilePresented) {
-                        SendFileView()
+                    .popover(isPresented: $fileTransferViewPresented) {
+                        FileTransferView()
                             .frame(minWidth: 300)
                             .padding()
                     }
