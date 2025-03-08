@@ -117,9 +117,7 @@ struct PublishOptionsView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
 
-                Toggle(isOn: $simulcast, label: {
-                    Text("Simulcast")
-                })
+                Toggle("Simulcast", isOn: $simulcast)
             }
 
             Button("Publish") {

@@ -79,6 +79,30 @@ final class RoomContext: ObservableObject {
 
     @Published var textFieldString: String = ""
 
+
+    struct IncomingFile: Identifiable {
+        enum Phase {
+            case transferring
+            case received(URL)
+            case failed(Error)
+        }
+
+        let id: String
+        let fileName: String
+        let senderIdentity: String
+        var phase: Phase
+
+        var fileURL: URL? {
+            guard case .received(let url) = phase else { return nil }
+            return url
+        }
+    }
+
+    @Published var selectedFile: URL?
+    @Published private(set) var isFileSending = false
+
+    @Published var incomingFiles: [IncomingFile] = []
+
     @Published var isVideoProcessingEnabled: Bool = false {
         didSet {
             if let track = room.localParticipant.firstCameraVideoTrack as? LocalVideoTrack {
@@ -104,13 +128,13 @@ final class RoomContext: ObservableObject {
         autoSubscribe = store.value.autoSubscribe
 
         #if os(iOS)
-            UIApplication.shared.isIdleTimerDisabled = true
+        UIApplication.shared.isIdleTimerDisabled = true
         #endif
     }
 
     deinit {
         #if os(iOS)
-            UIApplication.shared.isIdleTimerDisabled = false
+        UIApplication.shared.isIdleTimerDisabled = false
         #endif
         print("RoomContext.deinit")
     }
@@ -145,6 +169,7 @@ final class RoomContext: ObservableObject {
             ),
             defaultScreenShareCaptureOptions: ScreenShareCaptureOptions(
                 dimensions: .h1080_169,
+                appAudio: true,
                 useBroadcastExtension: true
             ),
             defaultVideoPublishOptions: VideoPublishOptions(
@@ -167,6 +192,25 @@ final class RoomContext: ObservableObject {
 
         _connectTask = connectTask
         try await connectTask.value
+
+        try await room.registerByteStreamHandler(for: "file-broadcast") { [weak self] reader, identity in
+
+            guard let self else { return }
+
+            let info = reader.info
+            registerIncomingFile(streamInfo: info, senderIdentity: identity.stringValue)
+
+            do {
+
+                let fileURL = try await reader.writeToFile()
+
+                print("Succesfuly received file")
+                updateIncomingFile(id: info.id, newPhase: .received(fileURL))
+            } catch {
+                print("Error receiving file: \(error)")
+                updateIncomingFile(id: info.id, newPhase: .failed(error))
+            }
+        }
 
         return room
     }
@@ -196,40 +240,94 @@ final class RoomContext: ObservableObject {
             }
         }
     }
+    
+    private func indexOfIncomingFile(_ id: String) -> Int? {
+        incomingFiles.firstIndex(where: { $0.id == id })
+    }
 
-    #if os(macOS)
-        weak var screenShareTrack: LocalTrackPublication?
+    @MainActor
+    private func registerIncomingFile(streamInfo: ByteStreamInfo, senderIdentity: String) {
+        let file = IncomingFile(
+            id: streamInfo.id,
+            fileName: streamInfo.name ?? "Unknown Name",
+            senderIdentity: senderIdentity,
+            phase: .transferring
+        )
+        incomingFiles.append(file)
+    }
 
-        @available(macOS 12.3, *)
-        func setScreenShareMacOS(isEnabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
-            if isEnabled, let screenShareSource {
-                let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource, options: ScreenShareCaptureOptions(appAudio: true))
-                let options = VideoPublishOptions(preferredCodec: VideoCodec.h264)
-                screenShareTrack = try await room.localParticipant.publish(videoTrack: track, options: options)
+    @MainActor
+    private func updateIncomingFile(id: String, newPhase: IncomingFile.Phase) {
+        guard let index = indexOfIncomingFile(id) else { return }
+        incomingFiles[index].phase = newPhase
+    }
+    
+    @MainActor
+    func removeIncomingFile(id: String) {
+        guard let index = indexOfIncomingFile(id) else { return }
+        incomingFiles.remove(at: index)
+    }
+
+    @MainActor
+    func sendFile() {
+        guard let selectedFile, !isFileSending else { return }
+
+        Task {
+            defer {
+                isFileSending = false
+                selectedFile.stopAccessingSecurityScopedResource()
             }
 
-            if !isEnabled, let screenShareTrack {
-                try await room.localParticipant.unpublish(publication: screenShareTrack)
+            isFileSending = true
+            guard selectedFile.startAccessingSecurityScopedResource() else {
+                print("Unable to access resource")
+                return
+            }
+            do {
+                try await self.room.localParticipant
+                    .sendFile(selectedFile, for: "file-broadcast")
+                print("File sent successfully")
+                
+                self.selectedFile = nil
+            } catch {
+                print("Error sending file: \(error)")
             }
         }
+    }
+
+    #if os(macOS)
+    weak var screenShareTrack: LocalTrackPublication?
+
+    @available(macOS 12.3, *)
+    func setScreenShareMacOS(isEnabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
+        if isEnabled, let screenShareSource {
+            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource, options: ScreenShareCaptureOptions(appAudio: true))
+            let options = VideoPublishOptions(preferredCodec: VideoCodec.h264)
+            screenShareTrack = try await room.localParticipant.publish(videoTrack: track, options: options)
+        }
+
+        if !isEnabled, let screenShareTrack {
+            try await room.localParticipant.unpublish(publication: screenShareTrack)
+        }
+    }
     #endif
 
     #if os(visionOS) && compiler(>=6.0)
-        weak var arCameraTrack: LocalTrackPublication?
+    weak var arCameraTrack: LocalTrackPublication?
 
-        func setARCamera(isEnabled: Bool) async throws {
-            if #available(visionOS 2.0, *) {
-                if isEnabled {
-                    let track = LocalVideoTrack.createARCameraTrack()
-                    arCameraTrack = try await room.localParticipant.publish(videoTrack: track)
-                }
-            }
-
-            if !isEnabled, let arCameraTrack {
-                try await room.localParticipant.unpublish(publication: arCameraTrack)
-                self.arCameraTrack = nil
+    func setARCamera(isEnabled: Bool) async throws {
+        if #available(visionOS 2.0, *) {
+            if isEnabled {
+                let track = LocalVideoTrack.createARCameraTrack()
+                arCameraTrack = try await room.localParticipant.publish(videoTrack: track)
             }
         }
+
+        if !isEnabled, let arCameraTrack {
+            try await room.localParticipant.unpublish(publication: arCameraTrack)
+            self.arCameraTrack = nil
+        }
+    }
     #endif
 }
 
