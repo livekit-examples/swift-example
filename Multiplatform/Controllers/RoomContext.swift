@@ -79,8 +79,29 @@ final class RoomContext: ObservableObject {
 
     @Published var textFieldString: String = ""
 
+
+    struct IncomingFile: Identifiable {
+        enum Phase {
+            case transferring
+            case received(URL)
+            case failed(Error)
+        }
+
+        let id: String
+        let fileName: String
+        let senderIdentity: String
+        var phase: Phase
+
+        var fileURL: URL? {
+            guard case .received(let url) = phase else { return nil }
+            return url
+        }
+    }
+
     @Published var selectedFile: URL?
     @Published private(set) var isFileSending = false
+
+    @Published var incomingFiles: [IncomingFile] = []
 
     @Published var isVideoProcessingEnabled: Bool = false {
         didSet {
@@ -172,9 +193,23 @@ final class RoomContext: ObservableObject {
         _connectTask = connectTask
         try await connectTask.value
 
-        try await room.registerByteStreamHandler(for: "file-broadcast") { reader, identity in
-            let fileURL = try await reader.writeToFile()
-            print("Recicived file from \(identity): \(fileURL)")
+        try await room.registerByteStreamHandler(for: "file-broadcast") { [weak self] reader, identity in
+
+            guard let self else { return }
+
+            let info = reader.info
+            registerIncomingFile(streamInfo: info, senderIdentity: identity.stringValue)
+
+            do {
+
+                let fileURL = try await reader.writeToFile()
+
+                print("Succesfuly received file")
+                updateIncomingFile(id: info.id, newPhase: .received(fileURL))
+            } catch {
+                print("Error receiving file: \(error)")
+                updateIncomingFile(id: info.id, newPhase: .failed(error))
+            }
         }
 
         return room
@@ -205,6 +240,33 @@ final class RoomContext: ObservableObject {
             }
         }
     }
+    
+    private func indexOfIncomingFile(_ id: String) -> Int? {
+        incomingFiles.firstIndex(where: { $0.id == id })
+    }
+
+    @MainActor
+    private func registerIncomingFile(streamInfo: ByteStreamInfo, senderIdentity: String) {
+        let file = IncomingFile(
+            id: streamInfo.id,
+            fileName: streamInfo.name ?? "Unknown Name",
+            senderIdentity: senderIdentity,
+            phase: .transferring
+        )
+        incomingFiles.append(file)
+    }
+
+    @MainActor
+    private func updateIncomingFile(id: String, newPhase: IncomingFile.Phase) {
+        guard let index = indexOfIncomingFile(id) else { return }
+        incomingFiles[index].phase = newPhase
+    }
+    
+    @MainActor
+    func removeIncomingFile(id: String) {
+        guard let index = indexOfIncomingFile(id) else { return }
+        incomingFiles.remove(at: index)
+    }
 
     @MainActor
     func sendFile() {
@@ -225,6 +287,8 @@ final class RoomContext: ObservableObject {
                 try await self.room.localParticipant
                     .sendFile(selectedFile, for: "file-broadcast")
                 print("File sent successfully")
+                
+                self.selectedFile = nil
             } catch {
                 print("Error sending file: \(error)")
             }

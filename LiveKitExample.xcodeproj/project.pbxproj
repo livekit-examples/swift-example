@@ -34,6 +34,7 @@
 		7BBEBA832D791CB300586EC4 /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBEBA822D791CAF00586EC4 /* CIImage.swift */; };
 		7BBEBA892D79219600586EC4 /* LKButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBEBA882D79219600586EC4 /* LKButton.swift */; };
 		7BBEBA8B2D7921AA00586EC4 /* LKTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBEBA8A2D7921AA00586EC4 /* LKTextField.swift */; };
+		7BE2CC9E2D7BA3D20070E252 /* FileTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE2CC9D2D7BA3D20070E252 /* FileTransferView.swift */; };
 		B5BCF77E2CFE7FDE00BCD4D8 /* BroadcastExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; platformFilters = (ios, tvos, xros, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B5BCF7842CFE859A00BCD4D8 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = B5BCF7832CFE859A00BCD4D8 /* LiveKit */; };
 		B5C2EF162D0114C800FAC766 /* LiveKitComponents in Frameworks */ = {isa = PBXBuildFile; productRef = B5C2EF152D0114C800FAC766 /* LiveKitComponents */; };
@@ -97,6 +98,7 @@
 		7BBEBA822D791CAF00586EC4 /* CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImage.swift; sourceTree = "<group>"; };
 		7BBEBA882D79219600586EC4 /* LKButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LKButton.swift; sourceTree = "<group>"; };
 		7BBEBA8A2D7921AA00586EC4 /* LKTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LKTextField.swift; sourceTree = "<group>"; };
+		7BE2CC9D2D7BA3D20070E252 /* FileTransferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTransferView.swift; sourceTree = "<group>"; };
 		9E7835E62751A71500559DEC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,6 +187,7 @@
 				6830E6BD2D5BE5DF001C5E83 /* AudioMixerView.swift */,
 				68A50ED22C4C1ED500D2DE17 /* PublishOptionsView.swift */,
 				68A50ED32C4C1ED500D2DE17 /* ScreenShareSourcePickerView.swift */,
+				7BE2CC9D2D7BA3D20070E252 /* FileTransferView.swift */,
 				6888FBE02C66B7B100AB93C1 /* ImmersiveView.swift */,
 				68A50ED62C4C1ED500D2DE17 /* ConnectView.swift */,
 				68A50EDA2C4C1ED500D2DE17 /* ParticipantView.swift */,
@@ -370,6 +373,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7BE2CC9E2D7BA3D20070E252 /* FileTransferView.swift in Sources */,
 				68A50EE02C4C1ED500D2DE17 /* LiveKitExample.swift in Sources */,
 				6830E6BE2D5BE5E2001C5E83 /* AudioMixerView.swift in Sources */,
 				7BBEBA7A2D79103800586EC4 /* RoomContextView.swift in Sources */,
