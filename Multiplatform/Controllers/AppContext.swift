@@ -67,9 +67,9 @@ final class AppContext: ObservableObject {
     }
 
     #if os(iOS) || os(visionOS) || os(tvOS)
-        @Published var preferSpeakerOutput: Bool = true {
-            didSet { AudioManager.shared.isSpeakerOutputPreferred = preferSpeakerOutput }
-        }
+    @Published var preferSpeakerOutput: Bool = true {
+        didSet { AudioManager.shared.isSpeakerOutputPreferred = preferSpeakerOutput }
+    }
     #endif
 
     @Published var isVoiceProcessingBypassed: Bool = false {
