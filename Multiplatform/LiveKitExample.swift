@@ -51,7 +51,7 @@ struct LiveKitExample: App {
         .immersionStyle(selection: .constant(.full), in: .full)
         #endif
     }
-    
+
     init() {
         LoggingSystem.bootstrap {
             var logHandler = StreamLogHandler.standardOutput(label: $0)

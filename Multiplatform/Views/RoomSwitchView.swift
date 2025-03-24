@@ -36,7 +36,7 @@ struct RoomSwitchView: View {
         return [
             room.name,
             room.localParticipant.name,
-            room.localParticipant.identity.map { $0.stringValue }
+            room.localParticipant.identity.map(\.stringValue),
         ]
         .compactMap { $0 }
         .joined(separator: " ")
