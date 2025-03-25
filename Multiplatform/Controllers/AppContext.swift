@@ -77,7 +77,13 @@ final class AppContext: ObservableObject {
     }
 
     @Published var isLegacyMuteMode: Bool = false {
-        didSet { AudioManager.shared.isLegacyMuteMode = isLegacyMuteMode }
+        didSet {
+            do {
+                try AudioManager.shared.setLegacyMuteMode(isLegacyMuteMode)
+            } catch {
+                print("Failed to set legacy mute mode: \(error)")
+            }
+        }
     }
 
     @Published var micVolume: Float = 1.0 {

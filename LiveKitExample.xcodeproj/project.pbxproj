@@ -414,7 +414,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/BroadcastExt/BroadcastExt.entitlements";
-				CURRENT_PROJECT_VERSION = 2024120501;
+				CURRENT_PROJECT_VERSION = 2025032401;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/BroadcastExt/Info.plist";
@@ -425,8 +425,8 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.19;
-				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1.broadcast;
+				MARKETING_VERSION = 2.4.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.SwiftSDK.1.broadcast-ext";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = NO;
 				SDKROOT = iphoneos;
@@ -444,7 +444,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/iOS/BroadcastExt/BroadcastExt.entitlements";
-				CURRENT_PROJECT_VERSION = 2024120501;
+				CURRENT_PROJECT_VERSION = 2025032401;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/BroadcastExt/Info.plist";
@@ -455,8 +455,8 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.19;
-				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1.broadcast;
+				MARKETING_VERSION = 2.4.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.livekit.example.SwiftSDK.1.broadcast-ext";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = NO;
 				SDKROOT = iphoneos;
@@ -483,7 +483,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = Multiplatform/SwiftSDK_1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2025022401;
+				CURRENT_PROJECT_VERSION = 2025032401;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -512,7 +512,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = NO;
@@ -540,7 +540,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_ENTITLEMENTS = Multiplatform/SwiftSDK_1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2025022401;
+				CURRENT_PROJECT_VERSION = 2025032401;
 				DEVELOPMENT_TEAM = 76TVFCUKK7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -565,7 +565,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = NO;
@@ -764,7 +764,7 @@
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 2.2.1;
+				version = 2.4.0;
 			};
 		};
 		B5C2EF142D0114C800FAC766 /* XCRemoteSwiftPackageReference "components-swift" */ = {

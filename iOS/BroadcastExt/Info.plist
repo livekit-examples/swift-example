@@ -29,9 +29,5 @@
 		<key>RPBroadcastProcessMode</key>
 		<string>RPBroadcastProcessModeSampleBuffer</string>
 	</dict>
-    <!-- No longer required by default; see iOS screen sharing docs
-	<key>RTCAppGroupIdentifier</key>
-	<string>group.io.livekit.example.SwiftSDK.1</string>
-    -->
 </dict>
 </plist>
