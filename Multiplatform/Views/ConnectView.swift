@@ -95,7 +95,7 @@ struct ConnectView: View {
                             Spacer()
 
                             LKButton(title: "Connect") {
-                                Task.detached { @MainActor in
+                                Task { @MainActor in
                                     let room = try await roomCtx.connect()
                                     appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
                                 }
@@ -105,7 +105,7 @@ struct ConnectView: View {
                                 Menu {
                                     ForEach(appCtx.connectionHistory.sortedByUpdated) { entry in
                                         Button {
-                                            Task.detached { @MainActor in
+                                            Task { @MainActor in
                                                 let room = try await roomCtx.connect(entry: entry)
                                                 appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
                                             }

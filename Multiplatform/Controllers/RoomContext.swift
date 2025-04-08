@@ -18,6 +18,7 @@ import LiveKit
 import SwiftUI
 
 // This class contains the logic to control behavior of the whole app.
+@MainActor
 final class RoomContext: ObservableObject {
     let jsonEncoder = JSONEncoder()
     let jsonDecoder = JSONDecoder()
@@ -119,7 +120,6 @@ final class RoomContext: ObservableObject {
         _connectTask?.cancel()
     }
 
-    @MainActor
     func connect(entry: ConnectionHistory? = nil) async throws -> Room {
         if let entry {
             url = entry.url
@@ -239,17 +239,16 @@ extension RoomContext: RoomDelegate {
         print("Did update e2eeState = [\(String(describing: e2eeState))] for publication \(publication.sid)")
     }
 
-    func room(_ room: Room, didUpdateConnectionState connectionState: ConnectionState, from oldValue: ConnectionState) {
+    nonisolated func room(_ room: Room, didUpdateConnectionState connectionState: ConnectionState, from oldValue: ConnectionState) {
         print("Did update connectionState \(oldValue) -> \(connectionState)")
 
         if case .disconnected = connectionState,
            let error = room.disconnectError,
            error.type != .cancelled
         {
-            latestError = room.disconnectError
-
-            Task.detached { @MainActor [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
+                latestError = room.disconnectError
                 self.shouldShowDisconnectReason = true
                 // Reset state
                 self.focusParticipant = nil
@@ -261,8 +260,8 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    func room(_: Room, participantDidDisconnect participant: RemoteParticipant) {
-        Task.detached { @MainActor [weak self] in
+    nonisolated func room(_: Room, participantDidDisconnect participant: RemoteParticipant) {
+        Task { @MainActor [weak self] in
             guard let self else { return }
             if let focusParticipant = self.focusParticipant, focusParticipant.identity == participant.identity {
                 self.focusParticipant = nil
@@ -270,11 +269,11 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    func room(_: Room, participant _: RemoteParticipant?, didReceiveData data: Data, forTopic _: String) {
+    nonisolated func room(_: Room, participant _: RemoteParticipant?, didReceiveData data: Data, forTopic _: String) {
         do {
             let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
             // Update UI from main queue
-            Task.detached { @MainActor [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
 
                 withAnimation {
@@ -291,25 +290,26 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    func room(_: Room, participant _: Participant, trackPublication _: TrackPublication, didReceiveTranscriptionSegments segments: [TranscriptionSegment]) {
+    nonisolated func room(_: Room, participant _: Participant, trackPublication _: TrackPublication, didReceiveTranscriptionSegments segments: [TranscriptionSegment]) {
         print("didReceiveTranscriptionSegments: \(segments.map { "(\($0.id): \($0.text), \($0.firstReceivedTime)-\($0.lastReceivedTime), \($0.isFinal))" }.joined(separator: ", "))")
     }
 
-    func room(_: Room, trackPublication _: TrackPublication, didUpdateE2EEState state: E2EEState) {
+    nonisolated func room(_: Room, trackPublication _: TrackPublication, didUpdateE2EEState state: E2EEState) {
         print("didUpdateE2EEState: \(state)")
     }
 
-    func room(_: Room, participant _: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
+    nonisolated func room(_: Room, participant _: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
         print("didPublishTrack: \(publication)")
         guard let localVideoTrack = publication.track as? LocalVideoTrack, localVideoTrack.source == .camera else { return }
 
-        // Attach example processor.
-        localVideoTrack.capturer.processor = isVideoProcessingEnabled ? self : nil
+        Task { @MainActor in
+            localVideoTrack.capturer.processor = isVideoProcessingEnabled ? self : nil
+        }
     }
 }
 
 extension RoomContext: VideoProcessor {
-    func process(frame: VideoFrame) -> VideoFrame? {
+    nonisolated func process(frame: VideoFrame) -> VideoFrame? {
         guard let pixelBuffer = frame.toCVPixelBuffer() else {
             print("Failed to get pixel buffer")
             return nil
