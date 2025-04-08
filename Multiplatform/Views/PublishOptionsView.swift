@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import AVFoundation
+@preconcurrency import AVFoundation
 import LiveKit
 import SwiftUI
 
-extension AVCaptureDevice: Identifiable {
+extension AVCaptureDevice: Swift.Identifiable {
     public var id: String { uniqueID }
 }
 
