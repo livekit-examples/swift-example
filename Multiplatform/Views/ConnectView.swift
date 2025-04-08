@@ -55,7 +55,8 @@ struct ConnectView: View {
                                 Text("Connect Options")
                             }
                             #if os(macOS)
-                            .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                            .menuIndicator(.visible)
+                            .menuStyle(BorderlessButtonMenuStyle())
                             #elseif os(iOS)
                             .menuStyle(BorderlessButtonMenuStyle())
                             #endif
@@ -72,7 +73,8 @@ struct ConnectView: View {
                                 Text("Room Options")
                             }
                             #if os(macOS)
-                            .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                            .menuIndicator(.visible)
+                            .menuStyle(BorderlessButtonMenuStyle())
                             #elseif os(iOS)
                             .menuStyle(BorderlessButtonMenuStyle())
                             #endif
@@ -130,7 +132,8 @@ struct ConnectView: View {
                                     Text("Recent")
                                 }
                                 #if os(macOS)
-                                .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                                .menuIndicator(.visible)
+                                .menuStyle(BorderlessButtonMenuStyle())
                                 #elseif os(iOS)
                                 .menuStyle(BorderlessButtonMenuStyle())
                                 #endif
