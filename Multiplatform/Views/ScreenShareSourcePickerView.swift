@@ -34,24 +34,23 @@ final class ScreenShareSourcePickerCtrl: ObservableObject {
             }
         }
     }
-    
+
     init() {
         Task {
             try await restartTracks()
         }
     }
-    
+
     nonisolated func stopTracks() async throws {
-            // stop in parallel
-            await withThrowingTaskGroup(of: Void.self) { group in
-                for track in await tracks {
-                    group.addTask {
-                        try await track.stop()
-                    }
+        // stop in parallel
+        await withThrowingTaskGroup(of: Void.self) { group in
+            for track in await tracks {
+                group.addTask {
+                    try await track.stop()
                 }
             }
+        }
     }
-
 
     private nonisolated func restartTracks() async throws {
         try await stopTracks()
