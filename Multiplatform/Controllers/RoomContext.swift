@@ -111,7 +111,9 @@ final class RoomContext: ObservableObject {
 
     deinit {
         #if os(iOS)
-        UIApplication.shared.isIdleTimerDisabled = false
+        Task { @MainActor in
+            UIApplication.shared.isIdleTimerDisabled = false
+        }
         #endif
         print("RoomContext.deinit")
     }
