@@ -47,11 +47,12 @@ struct Preferences: Codable, Equatable {
 let encoder = JSONEncoder()
 let decoder = JSONDecoder()
 
-class ValueStore<T: Codable & Equatable>: ObservableObject {
+@MainActor
+final class ValueStore<T: Codable & Equatable> {
     private let store: Keychain
     private let key: String
     private let message = ""
-    private weak var timer: Timer?
+    private var syncTask: Task<Void, Never>?
 
     public var value: T {
         didSet {
@@ -79,14 +80,16 @@ class ValueStore<T: Codable & Equatable>: ObservableObject {
     }
 
     deinit {
-        timer?.invalidate()
+        syncTask?.cancel()
     }
 
     public func lazySync() {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 1,
-                                     repeats: false,
-                                     block: { _ in self.sync() })
+        syncTask?.cancel()
+        syncTask = Task {
+            try? await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC)
+            guard !Task.isCancelled else { return }
+            sync()
+        }
     }
 
     public func sync() {
