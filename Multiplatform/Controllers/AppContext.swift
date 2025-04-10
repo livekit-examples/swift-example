@@ -76,12 +76,12 @@ final class AppContext: ObservableObject {
         didSet { AudioManager.shared.isVoiceProcessingBypassed = isVoiceProcessingBypassed }
     }
 
-    @Published var isLegacyMuteMode: Bool = false {
+    @Published var micMuteMode: MicrophoneMuteMode = .voiceProcessing {
         didSet {
             do {
-                try AudioManager.shared.setLegacyMuteMode(isLegacyMuteMode)
+                try AudioManager.shared.set(microphoneMuteMode: micMuteMode)
             } catch {
-                print("Failed to set legacy mute mode: \(error)")
+                print("Failed to set mic mute mode: \(error)")
             }
         }
     }

@@ -571,7 +571,14 @@ struct RoomView: View {
 
                         Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
 
-                        Toggle("Legacy mute mode", isOn: $appCtx.isLegacyMuteMode)
+                        Picker("Mic mute mode", selection: $appCtx.micMuteMode) {
+                            ForEach([MicrophoneMuteMode.voiceProcessing,
+                                     MicrophoneMuteMode.restart,
+                                     MicrophoneMuteMode.inputMixer], id: \.self)
+                            { mode in
+                                Text("\(mode)").tag(mode)
+                            }
+                        }
 
                         Toggle("E2EE enabled", isOn: $roomCtx.isE2eeEnabled)
                     }
