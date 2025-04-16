@@ -576,7 +576,7 @@ struct RoomView: View {
                                      MicrophoneMuteMode.restart,
                                      MicrophoneMuteMode.inputMixer], id: \.self)
                             { mode in
-                                Text("\(mode)").tag(mode)
+                                Text("Mute: \(mode)").tag(mode)
                             }
                         }
 
