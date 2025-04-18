@@ -21,28 +21,39 @@ import SwiftUI
 
 #if os(macOS)
 
+@MainActor
 @available(macOS 12.3, *)
-class ScreenShareSourcePickerCtrl: ObservableObject {
+final class ScreenShareSourcePickerCtrl: ObservableObject {
     @Published var tracks = [LocalVideoTrack]()
     @Published var mode: ScreenShareSourcePickerView.Mode = .display {
         didSet {
             guard oldValue != mode else { return }
-            Task.detached { [weak self] in
+            Task { [weak self] in
                 guard let self else { return }
                 try await self.restartTracks()
             }
         }
     }
 
-    private func restartTracks() async throws {
+    init() {
+        Task {
+            try await restartTracks()
+        }
+    }
+
+    nonisolated func stopTracks() async throws {
         // stop in parallel
         await withThrowingTaskGroup(of: Void.self) { group in
-            for track in tracks {
+            for track in await tracks {
                 group.addTask {
                     try await track.stop()
                 }
             }
         }
+    }
+
+    private nonisolated func restartTracks() async throws {
+        try await stopTracks()
 
         let sources = try await MacOSScreenCapturer.sources(for: mode == .display ? .display : .window)
         let options = ScreenShareCaptureOptions(dimensions: .h360_43, fps: 5)
@@ -57,30 +68,6 @@ class ScreenShareSourcePickerCtrl: ObservableObject {
             for track in _newTracks {
                 group.addTask {
                     try await track.start()
-                }
-            }
-        }
-    }
-
-    init() {
-        Task {
-            try await restartTracks()
-        }
-    }
-
-    deinit {
-        print("\(type(of: self)) deinit")
-
-        // copy
-        let _tracks = tracks
-
-        Task {
-            // stop in parallel
-            await withThrowingTaskGroup(of: Void.self) { group in
-                for track in _tracks {
-                    group.addTask {
-                        try await track.stop()
-                    }
                 }
             }
         }
@@ -144,6 +131,11 @@ struct ScreenShareSourcePickerView: View {
                 }
             }
             .frame(minHeight: 350)
+        }
+        .onDisappear {
+            Task {
+                try? await ctrl.stopTracks()
+            }
         }
     }
 }

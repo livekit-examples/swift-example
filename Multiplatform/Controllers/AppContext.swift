@@ -19,6 +19,7 @@ import LiveKit
 import SwiftUI
 
 // This class contains the logic to control behavior of the whole app.
+@MainActor
 final class AppContext: ObservableObject {
     private let store: ValueStore<Preferences>
 

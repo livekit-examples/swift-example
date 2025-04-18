@@ -16,6 +16,7 @@
 
 import SwiftUI
 
+#if !os(tvOS)
 struct AudioMixerView: View {
     @EnvironmentObject var appCtx: AppContext
 
@@ -31,3 +32,4 @@ struct AudioMixerView: View {
         }
     }
 }
+#endif

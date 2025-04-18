@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-extension Binding where Value: OptionSet, Value == Value.Element {
+extension Binding where Value: OptionSet & Sendable, Value == Value.Element {
     func bindedValue(_ options: Value) -> Bool {
         wrappedValue.contains(options)
     }
