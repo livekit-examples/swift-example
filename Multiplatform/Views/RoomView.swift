@@ -26,9 +26,12 @@ let adaptiveMin = 300.0
 let toolbarPlacement: ToolbarItemPlacement = .primaryAction
 #endif
 
+extension ToolbarItemPlacement: @unchecked Swift.Sendable {}
+
 #if os(macOS)
 // keeps weak reference to NSWindow
-class WindowAccess: ObservableObject {
+@MainActor
+final class WindowAccess: ObservableObject {
     private weak var window: NSWindow?
 
     deinit {

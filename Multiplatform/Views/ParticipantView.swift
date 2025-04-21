@@ -155,7 +155,8 @@ struct ParticipantView: View {
                                     }
                                 }
                                 #if os(macOS)
-                                .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                                .menuIndicator(.visible)
+                                .menuStyle(BorderlessButtonMenuStyle())
                                 #elseif os(iOS)
                                 .menuStyle(BorderlessButtonMenuStyle())
                                 #endif
@@ -198,7 +199,8 @@ struct ParticipantView: View {
                                     }
                                 }
                                 #if os(macOS)
-                                .menuStyle(BorderlessButtonMenuStyle(showsMenuIndicator: true))
+                                .menuIndicator(.visible)
+                                .menuStyle(BorderlessButtonMenuStyle())
                                 #elseif os(iOS)
                                 .menuStyle(BorderlessButtonMenuStyle())
                                 #endif
