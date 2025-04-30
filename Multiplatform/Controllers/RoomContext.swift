@@ -87,7 +87,14 @@ final class RoomContext: ObservableObject {
             }
         }
     }
-    private lazy var backgroundBlurProcessor = BackgroundBlurVideoProcessor()
+    
+    private lazy var backgroundBlurProcessor: BackgroundBlurVideoProcessor? = {
+        if #available(iOS 15.0, *) {
+            BackgroundBlurVideoProcessor()
+        } else {
+            nil
+        }
+    }()
     
     var _connectTask: Task<Void, Error>?
 
