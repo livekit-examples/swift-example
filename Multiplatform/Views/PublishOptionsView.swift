@@ -151,8 +151,11 @@ struct PublishOptionsView: View {
             Spacer()
         }
         .onAppear(perform: {
-            Task { @MainActor in
-                devices = try await CameraCapturer.captureDevices().singleDeviceforEachPosition()
+            Task {
+                devices = try await CameraCapturer.captureDevices()
+                #if !os(macOS)
+                    .singleDeviceforEachPosition()
+                #endif
             }
         })
     }
