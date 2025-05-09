@@ -497,7 +497,7 @@ struct RoomView: View {
                     }
 
                     Group {
-                        Toggle("Video processing", isOn: $roomCtx.isVideoProcessingEnabled)
+                        Toggle("Background blur", isOn: $roomCtx.isVideoProcessingEnabled)
                     }
 
                     #if os(macOS)
