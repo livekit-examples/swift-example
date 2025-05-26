@@ -1,14 +1,6 @@
 {
+  "originHash" : "aac832500a4575ceb352d1e4a7205e95d9cfc77eb2c166554aad476cfd7985b5",
   "pins" : [
-    {
-      "identity" : "components-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/livekit/components-swift",
-      "state" : {
-        "revision" : "f640b51cf38687b77e598df035ce93720d04365a",
-        "version" : "0.1.1"
-      }
-    },
     {
       "identity" : "jwt-kit",
       "kind" : "remoteSourceControl",
@@ -16,24 +8,6 @@
       "state" : {
         "revision" : "13e7513b3ba0afa13967daf77af2fb4ad087306c",
         "version" : "4.13.5"
-      }
-    },
-    {
-      "identity" : "keychainaccess",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kishikawakatsumi/KeychainAccess.git",
-      "state" : {
-        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
-        "version" : "4.2.2"
-      }
-    },
-    {
-      "identity" : "sfsafesymbols",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
-      "state" : {
-        "revision" : "7cca2d60925876b5953a2cf7341cd80fbeac983c",
-        "version" : "4.1.1"
       }
     },
     {
@@ -104,10 +78,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/webrtc-xcframework.git",
       "state" : {
-        "revision" : "9529b898a1578ebef944a9bd69c5e41e2ae3756c",
-        "version" : "125.6422.26"
+        "revision" : "5e93f981d3af01addbd5c4998e58bd7441c9ae95",
+        "version" : "125.6422.32"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
