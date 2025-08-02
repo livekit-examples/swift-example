@@ -5,6 +5,9 @@
       location = "group:../../livekit/client-sdk-swift">
    </FileRef>
    <FileRef
+      location = "absolute:/Users/hiroshi/repos/livekit/components-swift">
+   </FileRef>
+   <FileRef
       location = "group:LiveKitExample.xcodeproj">
    </FileRef>
 </Workspace>
