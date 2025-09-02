@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import AVFAudio
 import LiveKit
 import SwiftUI
 
@@ -174,6 +175,63 @@ final class RoomContext: ObservableObject {
                                         token: self.token,
                                         connectOptions: connectOptions,
                                         roomOptions: roomOptions)
+
+            try await self.room.registerByteStreamHandler(for: "lk.agent.pre-connect-audio-buffer") { reader, _ in
+                print("Reader: Starting ...")
+                do {
+                    guard let totalLength = reader.info.totalLength else {
+                        print("Reader: totalLength missing")
+                        return
+                    }
+
+                    guard let sampleRateString = reader.info.attributes["sampleRate"], let sampleRate = Double(sampleRateString) else {
+                        print("Reader: sampleRate missing")
+                        return
+                    }
+
+                    let channelCount: AVAudioChannelCount = 1
+
+                    let bytesPerSample = MemoryLayout<Int16>.size
+                    let frameLength = totalLength / (bytesPerSample * Int(channelCount))
+
+                    let pcmFormat = AVAudioFormat(commonFormat: .pcmFormatInt16, sampleRate: sampleRate, channels: channelCount, interleaved: false)!
+                    let pcmBuffer = AVAudioPCMBuffer(pcmFormat: pcmFormat, frameCapacity: AVAudioFrameCount(frameLength))!
+
+                    let buffer = try await reader.readAll() // Data
+
+                    buffer.withUnsafeBytes { raw in
+                        guard let src = raw.bindMemory(to: Int16.self).baseAddress else { return }
+                        // For mono, there is exactly one channel pointer.
+                        let dst = pcmBuffer.int16ChannelData![0]
+                        dst.update(from: src, count: frameLength) // samples == frames for mono
+                    }
+
+                    pcmBuffer.frameLength = AVAudioFrameCount(frameLength)
+
+                    print("Reader: Writing buffer: \(pcmBuffer)")
+
+                    let tempDir = FileManager.default.temporaryDirectory
+                    let audioFileURL = tempDir.appendingPathComponent("\(UUID().uuidString).wav")
+
+                    let audioSettings24k: [String: Any] = [
+                        AVFormatIDKey: kAudioFormatLinearPCM,
+                        AVSampleRateKey: sampleRate,
+                        AVNumberOfChannelsKey: 1,
+                        AVLinearPCMBitDepthKey: 16,
+                        AVLinearPCMIsFloatKey: false,
+                        AVLinearPCMIsNonInterleaved: false,
+                        AVLinearPCMIsBigEndianKey: false,
+                    ]
+
+                    let audioFile = try AVAudioFile(forWriting: audioFileURL, settings: audioSettings24k, commonFormat: .pcmFormatInt16, interleaved: false)
+                    print("Reader: Audio file created at: \(audioFileURL.path)")
+                    try audioFile.write(from: pcmBuffer)
+
+                    print("Reader: Complete with buffer: \(buffer)")
+                } catch {
+                    print("Reader: Error: \(error)")
+                }
+            }
         }
 
         _connectTask = connectTask
