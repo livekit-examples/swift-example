@@ -41,7 +41,7 @@ final class WindowAccess: ObservableObject {
         }
     }
 
-    @Published public var pinned: Bool = false {
+    @Published var pinned: Bool = false {
         didSet {
             guard oldValue != pinned else { return }
             level = pinned ? .floating : .normal
@@ -58,7 +58,7 @@ final class WindowAccess: ObservableObject {
         }
     }
 
-    public func set(window: NSWindow?) {
+    func set(window: NSWindow?) {
         self.window = window
         Task { @MainActor in
             objectWillChange.send()
@@ -394,12 +394,12 @@ struct RoomView: View {
                     } label: {
                         Image(systemSymbol: .switch2)
                     }
-                    .disabled(!isMicrophoneEnabled)
+//                    .disabled(!isMicrophoneEnabled)
                     #if !os(tvOS)
-                        .popover(isPresented: $audioMixerOptionsPresented) {
-                            AudioMixerView()
-                                .padding()
-                        }
+                    .popover(isPresented: $audioMixerOptionsPresented) {
+                        AudioMixerView()
+                            .padding()
+                    }
                     #endif
 
                     #if os(iOS)
