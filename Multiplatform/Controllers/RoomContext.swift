@@ -140,11 +140,11 @@ final class RoomContext: ObservableObject {
             autoSubscribe: autoSubscribe
         )
 
-        var e2eeOptions: E2EEOptions? = nil
+        var encryptionOptions: EncryptionOptions? = nil
         if isE2eeEnabled {
             let keyProvider = BaseKeyProvider(isSharedKey: true)
             keyProvider.setKey(key: e2eeKey)
-            e2eeOptions = E2EEOptions(keyProvider: keyProvider)
+            encryptionOptions = EncryptionOptions(keyProvider: keyProvider)
         }
 
         let roomOptions = RoomOptions(
@@ -161,8 +161,7 @@ final class RoomContext: ObservableObject {
             ),
             adaptiveStream: true,
             dynacast: dynacast,
-            // isE2eeEnabled: isE2eeEnabled,
-            e2eeOptions: e2eeOptions,
+            encryptionOptions: encryptionOptions,
             reportRemoteTrackStatistics: true
         )
 
@@ -277,7 +276,7 @@ extension RoomContext: RoomDelegate {
         }
     }
 
-    nonisolated func room(_: Room, participant _: RemoteParticipant?, didReceiveData data: Data, forTopic _: String) {
+    nonisolated func room(_: Room, participant _: RemoteParticipant?, didReceiveData data: Data, forTopic _: String, encryptionType _: EncryptionType) {
         do {
             let roomMessage = try jsonDecoder.decode(ExampleRoomMessage.self, from: data)
             // Update UI from main queue
