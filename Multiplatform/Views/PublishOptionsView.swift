@@ -109,15 +109,17 @@ struct PublishOptionsView: View {
                 if presetDimensions == nil {
                     TextField("Width", text: Binding(
                         get: { customWidth },
-                        set: { customWidth = $0.filter { "0123456789".contains($0) }}))
+                        set: { customWidth = $0.filter { "0123456789".contains($0) }}
+                    ))
                     #if !os(tvOS)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                     #endif
                     TextField("Height", text: Binding(
                         get: { customHeight },
-                        set: { customHeight = $0.filter { "0123456789".contains($0) }}))
+                        set: { customHeight = $0.filter { "0123456789".contains($0) }}
+                    ))
                     #if !os(tvOS)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                     #endif
                 }
 

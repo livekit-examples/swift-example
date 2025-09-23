@@ -30,7 +30,7 @@ final class ScreenShareSourcePickerCtrl: ObservableObject {
             guard oldValue != mode else { return }
             Task { [weak self] in
                 guard let self else { return }
-                try await self.restartTracks()
+                try await restartTracks()
             }
         }
     }
@@ -78,7 +78,7 @@ typealias OnPickScreenShareSource = (MacOSScreenCaptureSource) -> Void
 
 @available(macOS 12.3, *)
 struct ScreenShareSourcePickerView: View {
-    public enum Mode: Sendable {
+    enum Mode: Sendable {
         case display
         case window
     }

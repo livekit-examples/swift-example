@@ -33,7 +33,6 @@ struct RoomContextView: View {
                 }
             }
             .onOpenURL(perform: { url in
-
                 guard let urlComponent = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
                 guard let host = url.host else { return }
 

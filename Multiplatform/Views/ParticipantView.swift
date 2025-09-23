@@ -42,7 +42,6 @@ struct ParticipantView: View {
 
     var body: some View {
         GeometryReader { geometry in
-
             ZStack(alignment: .bottom) {
                 // Background color
                 Color.lkGray1
@@ -288,7 +287,6 @@ struct StatsView: View {
                 // if let trackStats = viewModel.statistics {
                 ForEach(observer.allStatisticts, id: \.self) { trackStats in
                     ForEach(trackStats.outboundRtpStream.sortedByRidIndex()) { stream in
-
                         HStack(spacing: 3) {
                             Image(systemSymbol: .arrowUp)
 
@@ -309,7 +307,6 @@ struct StatsView: View {
                         }
                     }
                     ForEach(trackStats.inboundRtpStream) { stream in
-
                         HStack(spacing: 3) {
                             Image(systemSymbol: .arrowDown)
 
