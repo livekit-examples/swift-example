@@ -497,6 +497,14 @@ struct RoomView: View {
                     }
 
                     Group {
+                        Menu("AudioEngine availability") {
+                            Toggle("Input", isOn: $appCtx.isAudioEngineInputAvailable)
+                            Toggle("Output", isOn: $appCtx.isAudioEngineOutputAvailable)
+                        }
+                        Divider()
+                    }
+
+                    Group {
                         Toggle("Background blur", isOn: $roomCtx.isVideoProcessingEnabled)
                     }
 

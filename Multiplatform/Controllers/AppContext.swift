@@ -77,6 +77,28 @@ final class AppContext: ObservableObject {
         didSet { AudioManager.shared.isVoiceProcessingBypassed = isVoiceProcessingBypassed }
     }
 
+    @Published var isAudioEngineInputAvailable: Bool = true {
+        didSet {
+            do {
+                try AudioManager.shared.setEngineAvailability(.init(isInputAvailable: isAudioEngineInputAvailable,
+                                                                    isOutputAvailable: isAudioEngineOutputAvailable))
+            } catch {
+                print("Failed to set audio engine IO permissions: \(error)")
+            }
+        }
+    }
+
+    @Published var isAudioEngineOutputAvailable: Bool = true {
+        didSet {
+            do {
+                try AudioManager.shared.setEngineAvailability(.init(isInputAvailable: isAudioEngineInputAvailable,
+                                                                    isOutputAvailable: isAudioEngineOutputAvailable))
+            } catch {
+                print("Failed to set audio engine IO permissions: \(error)")
+            }
+        }
+    }
+
     @Published var micMuteMode: MicrophoneMuteMode = .voiceProcessing {
         didSet {
             do {
@@ -95,7 +117,7 @@ final class AppContext: ObservableObject {
         didSet { AudioManager.shared.mixer.appVolume = appVolume }
     }
 
-    public init(store: ValueStore<Preferences>) {
+    init(store: ValueStore<Preferences>) {
         self.store = store
 
         videoViewVisible = store.value.videoViewVisible
