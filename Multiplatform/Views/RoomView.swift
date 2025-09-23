@@ -394,12 +394,12 @@ struct RoomView: View {
                     } label: {
                         Image(systemSymbol: .switch2)
                     }
-                    .disabled(!isMicrophoneEnabled)
+//                    .disabled(!isMicrophoneEnabled)
                     #if !os(tvOS)
-                        .popover(isPresented: $audioMixerOptionsPresented) {
-                            AudioMixerView()
-                                .padding()
-                        }
+                    .popover(isPresented: $audioMixerOptionsPresented) {
+                        AudioMixerView()
+                            .padding()
+                    }
                     #endif
 
                     #if os(iOS)
