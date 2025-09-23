@@ -54,7 +54,7 @@ final class ValueStore<T: Codable & Equatable> {
     private let message = ""
     private var syncTask: Task<Void, Never>?
 
-    public var value: T {
+    var value: T {
         didSet {
             guard oldValue != value else { return }
             lazySync()
@@ -67,7 +67,7 @@ final class ValueStore<T: Codable & Equatable> {
             .synchronizable(true)
     }
 
-    public init(store: Keychain, key: String, default: T) {
+    init(store: Keychain, key: String, default: T) {
         self.store = store
         self.key = key
         value = `default`
@@ -83,7 +83,7 @@ final class ValueStore<T: Codable & Equatable> {
         syncTask?.cancel()
     }
 
-    public func lazySync() {
+    func lazySync() {
         syncTask?.cancel()
         syncTask = Task {
             try? await Task.sleep(nanoseconds: 1 * NSEC_PER_SEC)
@@ -92,7 +92,7 @@ final class ValueStore<T: Codable & Equatable> {
         }
     }
 
-    public func sync() {
+    func sync() {
         do {
             let data = try encoder.encode(value)
             try storeWithOptions.set(data, key: key)

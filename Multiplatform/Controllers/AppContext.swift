@@ -132,10 +132,10 @@ final class AppContext: ObservableObject {
             // force UI update for outputDevice / inputDevice
             Task { @MainActor [weak self] in
                 guard let self else { return }
-                self.outputDevices = AudioManager.shared.outputDevices
-                self.inputDevices = AudioManager.shared.inputDevices
-                self.outputDevice = AudioManager.shared.outputDevice
-                self.inputDevice = AudioManager.shared.inputDevice
+                outputDevices = AudioManager.shared.outputDevices
+                inputDevices = AudioManager.shared.inputDevices
+                outputDevice = AudioManager.shared.outputDevice
+                inputDevice = AudioManager.shared.inputDevice
             }
         }
 

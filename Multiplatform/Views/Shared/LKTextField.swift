@@ -59,9 +59,9 @@ struct LKTextField: View {
 extension LKTextField.`Type` {
     func toiOSType() -> UIKeyboardType {
         switch self {
-        case .URL: return .URL
-        case .ascii: return .asciiCapable
-        default: return .default
+        case .URL: .URL
+        case .ascii: .asciiCapable
+        default: .default
         }
     }
 }
