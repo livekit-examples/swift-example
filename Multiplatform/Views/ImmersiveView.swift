@@ -23,7 +23,6 @@ struct ImmersiveView: View {
     var body: some View {
         ZStack {
             RealityView { content in
-
                 let entity = Entity()
                 entity.components.set(ModelComponent(
                     mesh: .generateSphere(radius: 1000),

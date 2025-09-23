@@ -28,9 +28,9 @@ final class RoomContext: ObservableObject {
     // Used to show connection error dialog
     // private var didClose: Bool = false
     @Published var shouldShowDisconnectReason: Bool = false
-    public var latestError: LiveKitError?
+    var latestError: LiveKitError?
 
-    public let room = Room()
+    let room = Room()
 
     @Published var url: String = "" {
         didSet { store.value.url = url }
@@ -88,17 +88,15 @@ final class RoomContext: ObservableObject {
         }
     }
 
-    private lazy var backgroundBlurProcessor: (some VideoProcessor)? = {
-        if #available(iOS 15.0, *) {
-            BackgroundBlurVideoProcessor()
-        } else {
-            nil
-        }
-    }()
+    private lazy var backgroundBlurProcessor: (some VideoProcessor)? = if #available(iOS 15.0, *) {
+        BackgroundBlurVideoProcessor()
+    } else {
+        nil
+    }
 
     var _connectTask: Task<Void, Error>?
 
-    public init(store: ValueStore<Preferences>) {
+    init(store: ValueStore<Preferences>) {
         self.store = store
         room.add(delegate: self)
 
@@ -170,10 +168,10 @@ final class RoomContext: ObservableObject {
 
         let connectTask = Task.detached { [weak self] in
             guard let self else { return }
-            try await self.room.connect(url: self.url,
-                                        token: self.token,
-                                        connectOptions: connectOptions,
-                                        roomOptions: roomOptions)
+            try await room.connect(url: url,
+                                   token: token,
+                                   connectOptions: connectOptions,
+                                   roomOptions: roomOptions)
         }
 
         _connectTask = connectTask
@@ -200,8 +198,8 @@ final class RoomContext: ObservableObject {
         Task.detached { [weak self] in
             guard let self else { return }
             do {
-                let json = try self.jsonEncoder.encode(roomMessage)
-                try await self.room.localParticipant.publish(data: json)
+                let json = try jsonEncoder.encode(roomMessage)
+                try await room.localParticipant.publish(data: json)
             } catch {
                 print("Failed to encode data \(error)")
             }
@@ -259,12 +257,12 @@ extension RoomContext: RoomDelegate {
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 latestError = room.disconnectError
-                self.shouldShowDisconnectReason = true
+                shouldShowDisconnectReason = true
                 // Reset state
-                self.focusParticipant = nil
-                self.showMessagesView = false
-                self.textFieldString = ""
-                self.messages.removeAll()
+                focusParticipant = nil
+                showMessagesView = false
+                textFieldString = ""
+                messages.removeAll()
                 // self.objectWillChange.send()
             }
         }
@@ -273,7 +271,7 @@ extension RoomContext: RoomDelegate {
     nonisolated func room(_: Room, participantDidDisconnect participant: RemoteParticipant) {
         Task { @MainActor [weak self] in
             guard let self else { return }
-            if let focusParticipant = self.focusParticipant, focusParticipant.identity == participant.identity {
+            if let focusParticipant, focusParticipant.identity == participant.identity {
                 self.focusParticipant = nil
             }
         }
