@@ -48,11 +48,17 @@ struct PublishOptionsView: View {
         preferredBackupVideoCodec = publishOptions.preferredBackupCodec
     }
 
+    #if targetEnvironment(macCatalyst)
+    typealias Container = VStack
+    #else
+    typealias Container = Form
+    #endif
+
     var body: some View {
         VStack(alignment: .center, spacing: 10) {
             Text("Publish options")
                 .fontWeight(.bold)
-            Form {
+            Container {
                 Picker("Device", selection: $device) {
                     Text("Auto").tag(nil as AVCaptureDevice?)
                     ForEach(devices) {
