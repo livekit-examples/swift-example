@@ -1,5 +1,5 @@
 {
-  "originHash" : "356e81c8903f83142418286add259548b607c4d0eedeb8e8b69548f928bf1e16",
+  "originHash" : "f4d08983a90380a6e5bb0db48e835cd578e5e6a9b2b74c9ac261d3d0bab1d7c2",
   "pins" : [
     {
       "identity" : "jwt-kit",
@@ -87,8 +87,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-protobuf.git",
       "state" : {
-        "revision" : "102a647b573f60f73afdce5613a51d71349fe507",
-        "version" : "1.30.0"
+        "revision" : "2547102afd04fe49f1b286090f13ebce07284980",
+        "version" : "1.31.1"
+      }
+    },
+    {
+      "identity" : "webrtc-xcframework",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/livekit/webrtc-xcframework.git",
+      "state" : {
+        "revision" : "26be1457f076237df4d42c15c3bc23b0841d3c21",
+        "version" : "137.7151.9"
       }
     }
   ],
