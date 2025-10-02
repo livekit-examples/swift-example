@@ -612,7 +612,12 @@ struct RoomView: View {
                     }
                 }
 
-                Toggle("E2EE enabled", isOn: $roomCtx.isE2eeEnabled)
+                Menu("Encryption") {
+                    Toggle("E2EE enabled", isOn: $roomCtx.isE2eeEnabled)
+                    Button("Ratchet key") {
+                        _ = room.e2eeManager?.keyProvider.ratchetKey()
+                    }
+                }
             }
 
         } label: {
