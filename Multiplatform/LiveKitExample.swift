@@ -25,6 +25,7 @@ import SwiftUI
 @main
 struct LiveKitExample: App {
     @StateObject var appCtx = AppContext(store: sync)
+    @State var roomID = 0
 
     #if os(visionOS)
     @Environment(\.openWindow) var openWindow
@@ -32,8 +33,9 @@ struct LiveKitExample: App {
 
     var body: some Scene {
         WindowGroup {
-            RoomContextView()
+            RoomContextView(roomID: $roomID)
                 .environmentObject(appCtx)
+                .id(roomID)
         }
         #if !os(tvOS)
         .handlesExternalEvents(matching: Set(arrayLiteral: "*"))

@@ -21,6 +21,7 @@ struct RoomSwitchView: View {
     @EnvironmentObject var appCtx: AppContext
     @EnvironmentObject var roomCtx: RoomContext
     @EnvironmentObject var room: Room
+    @Binding var roomID: Int
 
     #if os(visionOS)
     @Environment(\.openImmersiveSpace) var openImmersiveSpace
@@ -50,7 +51,7 @@ struct RoomSwitchView: View {
             if shouldShowRoomView {
                 RoomView()
             } else {
-                ConnectView()
+                ConnectView(roomID: $roomID)
             }
         }
         .preferredColorScheme(.dark)

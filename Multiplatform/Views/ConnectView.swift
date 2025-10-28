@@ -23,6 +23,7 @@ struct ConnectView: View {
     @EnvironmentObject var appCtx: AppContext
     @EnvironmentObject var roomCtx: RoomContext
     @EnvironmentObject var room: Room
+    @Binding var roomID: Int
 
     var body: some View {
         GeometryReader { geometry in
@@ -99,6 +100,10 @@ struct ConnectView: View {
                                     let room = try await roomCtx.connect()
                                     appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
                                 }
+                            }
+
+                            LKButton(title: "New Room") {
+                                roomID += 1
                             }
 
                             if !appCtx.connectionHistory.isEmpty {

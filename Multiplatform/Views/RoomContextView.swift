@@ -20,9 +20,10 @@ import SwiftUI
 struct RoomContextView: View {
     @EnvironmentObject var appCtx: AppContext
     @StateObject var roomCtx = RoomContext(store: sync)
+    @Binding var roomID: Int
 
     var body: some View {
-        RoomSwitchView()
+        RoomSwitchView(roomID: $roomID)
             .environmentObject(roomCtx)
             .environmentObject(roomCtx.room)
             .foregroundColor(Color.white)
