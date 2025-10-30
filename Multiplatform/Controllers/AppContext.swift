@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
+import AVFAudio
 import Combine
 import LiveKit
 import SwiftUI
+
+let soundPlayer = SoundPlayer()
+
+nonisolated(unsafe) var audioPlayer: AVAudioPlayer?
 
 // This class contains the logic to control behavior of the whole app.
 @MainActor
@@ -95,6 +100,21 @@ final class AppContext: ObservableObject {
         didSet { AudioManager.shared.mixer.appVolume = appVolume }
     }
 
+    func playSoundEffectNormal() async throws {
+        guard let url = Bundle.main.url(forResource: "tadaa-mono", withExtension: "caf") else {
+            throw NSError(domain: "Audio", code: 1, userInfo: [NSLocalizedDescriptionKey: "tadaa.caf not found in bundle"])
+        }
+
+        // Create and play the audio player
+        audioPlayer = try AVAudioPlayer(contentsOf: url)
+        audioPlayer?.prepareToPlay()
+        audioPlayer?.play()
+    }
+
+    func playSoundEffectAPI() async throws {
+        try await soundPlayer.play(id: "tadaa")
+    }
+
     init(store: ValueStore<Preferences>) {
         self.store = store
 
@@ -121,5 +141,18 @@ final class AppContext: ObservableObject {
         inputDevices = AudioManager.shared.inputDevices
         outputDevice = AudioManager.shared.outputDevice
         inputDevice = AudioManager.shared.inputDevice
+
+        // Prepare audio effects
+
+        if let audioUrl = Bundle.main.url(forResource: "tadaa-mono", withExtension: "caf") {
+            Task {
+                do {
+                    try soundPlayer.prepare(url: audioUrl, withId: "tadaa")
+                    try await soundPlayer.startEngine()
+                } catch {
+                    print("Error preparing sound: \(error)")
+                }
+            }
+        }
     }
 }

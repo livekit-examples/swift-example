@@ -16,7 +16,6 @@
 
 import KeychainAccess
 import LiveKit
-import Logging
 import SwiftUI
 
 @MainActor let sync = ValueStore<Preferences>(store: Keychain(service: "io.livekit.example.SwiftSDK.1"),
@@ -53,10 +52,6 @@ struct LiveKitExample: App {
     }
 
     init() {
-        LoggingSystem.bootstrap {
-            var logHandler = StreamLogHandler.standardOutput(label: $0)
-            logHandler.logLevel = .debug
-            return logHandler
-        }
+        LiveKitSDK.setLogLevel(.debug)
     }
 }
