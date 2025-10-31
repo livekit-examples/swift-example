@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -100,6 +100,21 @@
 		9E7835E62751A71500559DEC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		689958FD2EB4B9C20037CECF /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"tadaa-mono.caf",
+				"tadaa-stereo.caf",
+			);
+			target = 68A50E8E2C4C1C4C00D2DE17 /* LiveKitExample */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		684A6D8A2EB40C1A00FF6EB1 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (689958FD2EB4B9C20037CECF /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		683F05F0273F96B20080C7AC /* Frameworks */ = {
@@ -210,6 +225,7 @@
 		68B38536271E780600711D5F = {
 			isa = PBXGroup;
 			children = (
+				684A6D8A2EB40C1A00FF6EB1 /* Resources */,
 				68A50EDE2C4C1ED500D2DE17 /* Multiplatform */,
 				6865EA2427513B4500FFAFC3 /* iOS */,
 				68B38544271E780700711D5F /* Products */,
@@ -754,8 +770,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
-				kind = exactVersion;
-				version = 2.8.1;
+				branch = "hiroshi/sound-player";
+				kind = branch;
 			};
 		};
 		B5C2EF142D0114C800FAC766 /* XCRemoteSwiftPackageReference "components-swift" */ = {

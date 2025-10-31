@@ -30,6 +30,24 @@ struct AudioMixerView: View {
             Text("App")
             Slider(value: $appCtx.appVolume, in: 0.0 ... 1.0)
         }
+        Button("Play sound effect (Normal)") {
+            Task {
+                do {
+                    try await appCtx.playSoundEffectNormal()
+                } catch {
+                    print("Failed to play sound effect: \(error)")
+                }
+            }
+        }
+        Button("Play sound effect (API)") {
+            Task {
+                do {
+                    try await appCtx.playSoundEffectAPI()
+                } catch {
+                    print("Failed to play sound effect: \(error)")
+                }
+            }
+        }
     }
 }
 #endif
