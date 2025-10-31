@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/client-sdk-swift",
       "state" : {
-        "revision" : "57448c954a87ed827803914e9fee5e45ef359ba2",
-        "version" : "2.8.1"
+        "branch" : "hiroshi/sound-player",
+        "revision" : "b21ae42d7ac07f021116892b2c75052d71fcc41f"
       }
     },
     {
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "f756f3696f4a9b208430e0e239ee7b7b337222ce",
         "version" : "0.1.5"
+      }
+    },
+    {
+      "identity" : "jwt-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/jwt-kit.git",
+      "state" : {
+        "revision" : "13e7513b3ba0afa13967daf77af2fb4ad087306c",
+        "version" : "4.13.5"
       }
     },
     {
@@ -38,6 +47,15 @@
       }
     },
     {
+      "identity" : "swift-asn1",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-asn1.git",
+      "state" : {
+        "revision" : "40d25bbb2fc5b557a9aa8512210bded327c0f60d",
+        "version" : "1.5.0"
+      }
+    },
+    {
       "identity" : "swift-collections",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",
@@ -47,12 +65,12 @@
       }
     },
     {
-      "identity" : "swift-log",
+      "identity" : "swift-crypto",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-log.git",
+      "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "ce592ae52f982c847a4efc0dd881cc9eb32d29f2",
-        "version" : "1.6.4"
+        "revision" : "95ba0316a9b733e92bb6b071255ff46263bbe7dc",
+        "version" : "3.15.1"
       }
     },
     {
@@ -69,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/webrtc-xcframework.git",
       "state" : {
-        "revision" : "26be1457f076237df4d42c15c3bc23b0841d3c21",
-        "version" : "137.7151.9"
+        "revision" : "5b40f56c637369064b9c82e8f9cfa820f942658f",
+        "version" : "137.7151.10"
       }
     }
   ],
