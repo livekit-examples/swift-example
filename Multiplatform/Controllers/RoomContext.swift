@@ -94,6 +94,8 @@ final class RoomContext: ObservableObject {
         nil
     }
 
+    private var resamplerProcessor: ResamplerAudioProcessor?
+
     var _connectTask: Task<Void, Error>?
 
     init(store: ValueStore<Preferences>) {
@@ -180,6 +182,17 @@ final class RoomContext: ObservableObject {
     }
 
     func disconnect() async {
+        // Clean up resampler processor
+        if let processor = resamplerProcessor {
+            processor.stop()
+
+            // Remove from AudioManager
+            if AudioManager.shared.capturePostProcessingDelegate === processor {
+                AudioManager.shared.capturePostProcessingDelegate = nil
+            }
+
+            resamplerProcessor = nil
+        }
         await room.disconnect()
     }
 
@@ -255,6 +268,19 @@ extension RoomContext: RoomDelegate {
         {
             Task { @MainActor [weak self] in
                 guard let self else { return }
+
+                // Clean up resampler processor on disconnect
+                if let processor = resamplerProcessor {
+                    processor.stop()
+
+                    // Remove from AudioManager
+                    if AudioManager.shared.capturePostProcessingDelegate === processor {
+                        AudioManager.shared.capturePostProcessingDelegate = nil
+                    }
+
+                    resamplerProcessor = nil
+                }
+
                 latestError = room.disconnectError
                 shouldShowDisconnectReason = true
                 // Reset state
@@ -307,10 +333,61 @@ extension RoomContext: RoomDelegate {
 
     nonisolated func room(_: Room, participant _: LocalParticipant, didPublishTrack publication: LocalTrackPublication) {
         print("didPublishTrack: \(publication)")
-        guard let localVideoTrack = publication.track as? LocalVideoTrack, localVideoTrack.source == .camera else { return }
 
-        Task { @MainActor in
-            localVideoTrack.capturer.processor = isVideoProcessingEnabled ? backgroundBlurProcessor : nil
+        // Handle video track (camera)
+        if let localVideoTrack = publication.track as? LocalVideoTrack, localVideoTrack.source == .camera {
+            Task { @MainActor in
+                localVideoTrack.capturer.processor = isVideoProcessingEnabled ? backgroundBlurProcessor : nil
+            }
+        }
+
+        // Handle audio track (microphone)
+        if let localAudioTrack = publication.track as? LocalAudioTrack, localAudioTrack.source == .microphone {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+
+                // Create and configure resampler processor
+                let processor = ResamplerAudioProcessor()
+                resamplerProcessor = processor
+
+                // Start the audio engine for playback
+                do {
+                    try await processor.start()
+
+                    // Set as capturePostProcessingDelegate to resample on the fly
+                    // This replaces the buffer content with resampled audio (sent to WebRTC)
+                    // and also plays it back via AVAudioEngine
+                    AudioManager.shared.capturePostProcessingDelegate = processor
+                    print("[RoomContext] Attached resampler processor to microphone track")
+                } catch {
+                    print("[RoomContext] Failed to start resampler processor: \(error)")
+                    resamplerProcessor = nil
+                }
+            }
+        }
+    }
+
+    nonisolated func room(_: Room, participant _: LocalParticipant, didUnpublishTrack publication: LocalTrackPublication) {
+        print("didUnpublishTrack: \(publication)")
+
+        // Handle audio track unpublish
+        if publication.track?.kind == .audio, publication.track?.source == .microphone {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+
+                // Clean up resampler processor
+                if let processor = resamplerProcessor {
+                    processor.stop()
+
+                    // Remove from AudioManager to restore original audio
+                    if AudioManager.shared.capturePostProcessingDelegate === processor {
+                        AudioManager.shared.capturePostProcessingDelegate = nil
+                    }
+
+                    resamplerProcessor = nil
+                    print("[RoomContext] Detached resampler processor from microphone track and restored original audio")
+                }
+            }
         }
     }
 }

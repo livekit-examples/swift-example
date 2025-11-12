@@ -52,6 +52,9 @@ struct LiveKitExample: App {
     }
 
     init() {
+        Task {
+            try await AudioManager.shared.setRecordingAlwaysPreparedMode(true)
+        }
         LiveKitSDK.setLogLevel(.debug)
     }
 }
