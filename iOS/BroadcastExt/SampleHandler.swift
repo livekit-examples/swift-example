@@ -18,7 +18,7 @@
 import LiveKit
 
 @available(macCatalyst 13.1, *)
-class SampleHandler: LKSampleHandler {
+class SampleHandler: LKSampleHandler, @unchecked Sendable {
     override var enableLogging: Bool { true }
 }
 #endif
