@@ -21,6 +21,28 @@ import SwiftUI
 struct AudioControlsPanel: View {
     @EnvironmentObject var appCtx: AppContext
 
+    private var inputDeviceSelection: Binding<AudioDevice.ID> {
+        Binding(
+            get: { appCtx.inputDevice.id },
+            set: { newId in
+                if let match = appCtx.inputDevices.first(where: { $0.id == newId }) {
+                    appCtx.inputDevice = match
+                }
+            }
+        )
+    }
+
+    private var outputDeviceSelection: Binding<AudioDevice.ID> {
+        Binding(
+            get: { appCtx.outputDevice.id },
+            set: { newId in
+                if let match = appCtx.outputDevices.first(where: { $0.id == newId }) {
+                    appCtx.outputDevice = match
+                }
+            }
+        )
+    }
+
     var body: some View {
         Form {
             Section(header: Text("Audio Mixer")) {
@@ -36,18 +58,18 @@ struct AudioControlsPanel: View {
 
             Section(header: Text("Audio Devices")) {
                 if !appCtx.inputDevices.isEmpty {
-                    Picker("Input", selection: $appCtx.inputDevice) {
-                        ForEach($appCtx.inputDevices) { device in
-                            Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : device.wrappedValue.name)
-                                .tag(device.wrappedValue)
+                    Picker("Input", selection: inputDeviceSelection) {
+                        ForEach(appCtx.inputDevices) { device in
+                            Text(device.isDefault ? "Default (\(device.name))" : device.name)
+                                .tag(device.id)
                         }
                     }
                 }
                 if !appCtx.outputDevices.isEmpty {
-                    Picker("Output", selection: $appCtx.outputDevice) {
-                        ForEach($appCtx.outputDevices) { device in
-                            Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : device.wrappedValue.name)
-                                .tag(device.wrappedValue)
+                    Picker("Output", selection: outputDeviceSelection) {
+                        ForEach(appCtx.outputDevices) { device in
+                            Text(device.isDefault ? "Default (\(device.name))" : device.name)
+                                .tag(device.id)
                         }
                     }
                 }

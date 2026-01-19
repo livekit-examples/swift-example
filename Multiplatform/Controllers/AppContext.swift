@@ -136,6 +136,7 @@ final class AppContext: NSObject, ObservableObject {
                 inputDevices = AudioManager.shared.inputDevices
                 outputDevice = AudioManager.shared.outputDevice
                 inputDevice = AudioManager.shared.inputDevice
+                updateAudioDeviceSelections()
             }
         }
 
@@ -143,6 +144,27 @@ final class AppContext: NSObject, ObservableObject {
         inputDevices = AudioManager.shared.inputDevices
         outputDevice = AudioManager.shared.outputDevice
         inputDevice = AudioManager.shared.inputDevice
+        updateAudioDeviceSelections()
+    }
+}
+
+private extension AppContext {
+    func updateAudioDeviceSelections() {
+        if !inputDevices.contains(where: { $0.id == inputDevice.id }) {
+            if let defaultInput = inputDevices.first(where: { $0.isDefault }) {
+                inputDevice = defaultInput
+            } else if let firstInput = inputDevices.first {
+                inputDevice = firstInput
+            }
+        }
+
+        if !outputDevices.contains(where: { $0.id == outputDevice.id }) {
+            if let defaultOutput = outputDevices.first(where: { $0.isDefault }) {
+                outputDevice = defaultOutput
+            } else if let firstOutput = outputDevices.first {
+                outputDevice = firstOutput
+            }
+        }
     }
 }
 
