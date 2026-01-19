@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 LiveKit
+ * Copyright 2026 LiveKit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,6 +79,8 @@ final class RoomContext: ObservableObject {
     @Published var messages: [ExampleRoomMessage] = []
 
     @Published var textFieldString: String = ""
+
+    @Published var showAudioPanel: Bool = false
 
     @Published var isVideoProcessingEnabled: Bool = false {
         didSet {
@@ -260,6 +262,7 @@ extension RoomContext: RoomDelegate {
                 // Reset state
                 focusParticipant = nil
                 showMessagesView = false
+                showAudioPanel = false
                 textFieldString = ""
                 messages.removeAll()
                 // self.objectWillChange.send()

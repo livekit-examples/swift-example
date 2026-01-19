@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 LiveKit
+ * Copyright 2026 LiveKit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
+import AVFAudio
 import Combine
 import LiveKit
 import SwiftUI
 
 // This class contains the logic to control behavior of the whole app.
 @MainActor
-final class AppContext: ObservableObject {
+final class AppContext: NSObject, ObservableObject {
     private let store: ValueStore<Preferences>
+
+    private var audioPlayer: AVAudioPlayer?
+    @Published var isSampleAudioPlaying: Bool = false
 
     @Published var videoViewVisible: Bool = true {
         didSet { store.value.videoViewVisible = videoViewVisible }
@@ -95,6 +99,22 @@ final class AppContext: ObservableObject {
         didSet { AudioManager.shared.mixer.appVolume = appVolume }
     }
 
+    @Published var isAdvancedDuckingEnabled: Bool = false {
+        didSet {
+            if #available(iOS 17, macOS 14.0, visionOS 1.0, *) {
+                AudioManager.shared.isAdvancedDuckingEnabled = isAdvancedDuckingEnabled
+            }
+        }
+    }
+
+    @Published var audioDuckingLevel: AudioDuckingLevel = .min {
+        didSet {
+            if #available(iOS 17, macOS 14.0, visionOS 1.0, *) {
+                AudioManager.shared.duckingLevel = audioDuckingLevel
+            }
+        }
+    }
+
     init(store: ValueStore<Preferences>) {
         self.store = store
 
@@ -104,6 +124,8 @@ final class AppContext: ObservableObject {
         videoViewMode = store.value.videoViewMode
         videoViewMirrored = store.value.videoViewMirrored
         connectionHistory = store.value.connectionHistory
+
+        super.init()
 
         AudioManager.shared.onDeviceUpdate = { [weak self] _ in
             guard let self else { return }
@@ -121,5 +143,45 @@ final class AppContext: ObservableObject {
         inputDevices = AudioManager.shared.inputDevices
         outputDevice = AudioManager.shared.outputDevice
         inputDevice = AudioManager.shared.inputDevice
+    }
+}
+
+// MARK: - AudioClips
+
+extension AppContext {
+    func playSampleAudio() {
+        do {
+            if let prevPlayer = audioPlayer {
+                prevPlayer.stop()
+            }
+
+            guard let url = Bundle.main.url(forResource: "livekit_clip01", withExtension: "m4a") else {
+                print("Audio file not found")
+                return
+            }
+
+            let player = try AVAudioPlayer(contentsOf: url)
+            player.delegate = self
+            player.play()
+            audioPlayer = player
+            isSampleAudioPlaying = true
+        } catch {
+            print("Failed to sample audio clip")
+        }
+    }
+
+    func stopSampleAudio() {
+        if let prevPlayer = audioPlayer {
+            prevPlayer.stop()
+        }
+
+        audioPlayer = nil
+        isSampleAudioPlaying = false
+    }
+}
+
+extension AppContext: @MainActor AVAudioPlayerDelegate {
+    func audioPlayerDidFinishPlaying(_: AVAudioPlayer, successfully _: Bool) {
+        isSampleAudioPlaying = false
     }
 }

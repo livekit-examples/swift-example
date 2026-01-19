@@ -29,6 +29,7 @@
 		68A50EED2C4C1ED500D2DE17 /* ConnectionHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ECD2C4C1ED500D2DE17 /* ConnectionHistory.swift */; };
 		68A50EEF2C4C1ED500D2DE17 /* Bundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ECC2C4C1ED500D2DE17 /* Bundle.swift */; };
 		68A50EF02C4C1ED500D2DE17 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50EC82C4C1ED500D2DE17 /* AppContext.swift */; };
+		68EEB1B02F1EA10C00FAB6D8 /* livekit_clip01.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 68EEB1AE2F1EA10C00FAB6D8 /* livekit_clip01.m4a */; };
 		7BBEBA7A2D79103800586EC4 /* RoomContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBEBA792D79103800586EC4 /* RoomContextView.swift */; };
 		7BBEBA7C2D79104D00586EC4 /* RoomSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBEBA7B2D79104D00586EC4 /* RoomSwitchView.swift */; };
 		7BBEBA832D791CB300586EC4 /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBEBA822D791CAF00586EC4 /* CIImage.swift */; };
@@ -92,6 +93,7 @@
 		68A50EDB2C4C1ED500D2DE17 /* RoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomView.swift; sourceTree = "<group>"; };
 		68A50EDC2C4C1ED500D2DE17 /* SwiftSDK_1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftSDK_1.entitlements; sourceTree = "<group>"; };
 		68DEF27E2919EEFA00258494 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.1.sdk/System/Library/Frameworks/ReplayKit.framework; sourceTree = DEVELOPER_DIR; };
+		68EEB1AE2F1EA10C00FAB6D8 /* livekit_clip01.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = livekit_clip01.m4a; sourceTree = "<group>"; };
 		7BBEBA792D79103800586EC4 /* RoomContextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomContextView.swift; sourceTree = "<group>"; };
 		7BBEBA7B2D79104D00586EC4 /* RoomSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSwitchView.swift; sourceTree = "<group>"; };
 		7BBEBA822D791CAF00586EC4 /* CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImage.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 		68A50EDE2C4C1ED500D2DE17 /* Multiplatform */ = {
 			isa = PBXGroup;
 			children = (
+				68EEB1AF2F1EA10C00FAB6D8 /* AudioClips */,
 				68A50ED92C4C1ED500D2DE17 /* LiveKitExample.swift */,
 				68A50ED42C4C1ED500D2DE17 /* Views */,
 				68A50ECA2C4C1ED500D2DE17 /* Controllers */,
@@ -225,6 +228,14 @@
 				68A50E8F2C4C1C4C00D2DE17 /* LiveKitExample.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		68EEB1AF2F1EA10C00FAB6D8 /* AudioClips */ = {
+			isa = PBXGroup;
+			children = (
+				68EEB1AE2F1EA10C00FAB6D8 /* livekit_clip01.m4a */,
+			);
+			path = AudioClips;
 			sourceTree = "<group>";
 		};
 		7BBEBA802D791BDD00586EC4 /* Extensions */ = {
@@ -350,6 +361,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68EEB1B02F1EA10C00FAB6D8 /* livekit_clip01.m4a in Resources */,
 				68A50EDF2C4C1ED500D2DE17 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -516,11 +528,11 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -573,11 +585,11 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.livekit.example.SwiftSDK.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;

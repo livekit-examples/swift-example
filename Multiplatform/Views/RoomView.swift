@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 LiveKit
+ * Copyright 2026 LiveKit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,6 @@ struct RoomView: View {
 
     @State private var screenPickerPresented = false
     @State private var publishOptionsPickerPresented = false
-    @State private var audioMixerOptionsPresented = false
 
     @State private var cameraPublishOptions = VideoPublishOptions()
 
@@ -248,6 +247,15 @@ struct RoomView: View {
                 // Show messages view if enabled
                 if roomCtx.showMessagesView {
                     messagesView(geometry: geometry)
+                }
+                if roomCtx.showAudioPanel {
+                    AudioMixerView()
+                        .background(Color.lkGray1)
+                        .cornerRadius(8)
+                        .frame(
+                            minWidth: 0,
+                            maxWidth: geometry.isTall ? .infinity : 320
+                        )
                 }
             }
         }
@@ -418,17 +426,13 @@ struct RoomView: View {
                    .disabled(isMicrophonePublishingBusy)
 
             Button {
-                audioMixerOptionsPresented = true
+                withAnimation {
+                    roomCtx.showAudioPanel.toggle()
+                }
             } label: {
                 Image(systemSymbol: .switch2)
+                    .renderingMode(roomCtx.showAudioPanel ? .original : .template)
             }
-            .disabled(!isMicrophoneEnabled)
-            #if !os(tvOS)
-                .popover(isPresented: $audioMixerOptionsPresented) {
-                    AudioMixerView()
-                        .padding()
-                }
-            #endif
 
             #if os(iOS)
             Button(action: {
