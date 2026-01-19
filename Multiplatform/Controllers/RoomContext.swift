@@ -75,12 +75,21 @@ final class RoomContext: ObservableObject {
 
     @Published var focusParticipant: Participant?
 
-    @Published var showMessagesView: Bool = false
+    @Published var showMessagesPanel: Bool = false {
+        didSet {
+            if showMessagesPanel { showAudioPanel = false }
+        }
+    }
+
     @Published var messages: [ExampleRoomMessage] = []
 
     @Published var textFieldString: String = ""
 
-    @Published var showAudioPanel: Bool = false
+    @Published var showAudioPanel: Bool = false {
+        didSet {
+            if showAudioPanel { showMessagesPanel = false }
+        }
+    }
 
     @Published var isVideoProcessingEnabled: Bool = false {
         didSet {
@@ -261,7 +270,7 @@ extension RoomContext: RoomDelegate {
                 shouldShowDisconnectReason = true
                 // Reset state
                 focusParticipant = nil
-                showMessagesView = false
+                showMessagesPanel = false
                 showAudioPanel = false
                 textFieldString = ""
                 messages.removeAll()
@@ -291,7 +300,7 @@ extension RoomContext: RoomDelegate {
                     // which will trigger the UI to update
                     self.messages.append(roomMessage)
                     // Show the messages view when new messages arrive
-                    self.showMessagesView = true
+                    self.showMessagesPanel = true
                 }
             }
 

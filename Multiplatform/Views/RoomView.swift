@@ -89,95 +89,24 @@ struct RoomView: View {
     @State private var showConnectionTime = true
     @State private var canSwitchCameraPosition = false
 
-    func messageView(_ message: ExampleRoomMessage) -> some View {
-        let isMe = message.senderSid == room.localParticipant.sid
-
-        return HStack {
-            if isMe {
-                Spacer()
-            }
-
-            //            VStack(alignment: isMe ? .trailing : .leading) {
-            //                Text(message.identity)
-            Text(message.text)
-                .padding(8)
-                .background(isMe ? Color.lkRed : Color.lkGray3)
-                .foregroundColor(Color.white)
-                .cornerRadius(18)
-            //            }
-            if !isMe {
-                Spacer()
-            }
-        }.padding(.vertical, 5)
-            .padding(.horizontal, 10)
+    func messagesPanel(geometry: GeometryProxy) -> some View {
+        MessagesPanel()
+            .background(Color.lkGray1)
+            .cornerRadius(8)
+            .frame(
+                minWidth: 0,
+                maxWidth: geometry.isTall ? .infinity : 320
+            )
     }
 
-    func scrollToBottom(_ scrollView: ScrollViewProxy) {
-        guard let last = roomCtx.messages.last else { return }
-        withAnimation {
-            scrollView.scrollTo(last.id)
-        }
-    }
-
-    func messagesView(geometry: GeometryProxy) -> some View {
-        VStack(spacing: 0) {
-            ScrollViewReader { scrollView in
-                ScrollView(.vertical, showsIndicators: true) {
-                    LazyVStack(alignment: .center, spacing: 0) {
-                        ForEach(roomCtx.messages) {
-                            messageView($0)
-                        }
-                    }
-                    .padding(.vertical, 12)
-                    .padding(.horizontal, 7)
-                }
-                .onAppear(perform: {
-                    // Scroll to bottom when first showing the messages list
-                    scrollToBottom(scrollView)
-                })
-                .onChange(of: roomCtx.messages, perform: { _ in
-                    // Scroll to bottom when there is a new message
-                    scrollToBottom(scrollView)
-                })
-                .frame(
-                    minWidth: 0,
-                    maxWidth: .infinity,
-                    minHeight: 0,
-                    maxHeight: .infinity,
-                    alignment: .topLeading
-                )
-            }
-            HStack(spacing: 0) {
-                TextField("Enter message", text: $roomCtx.textFieldString)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .disableAutocorrection(true)
-                // TODO: add iOS unique view modifiers
-                // #if os(iOS)
-                // .autocapitalization(.none)
-                // .keyboardType(type.toiOSType())
-                // #endif
-
-                //                    .overlay(RoundedRectangle(cornerRadius: 10.0)
-                //                                .strokeBorder(Color.white.opacity(0.3),
-                //                                              style: StrokeStyle(lineWidth: 1.0)))
-
-                Button {
-                    roomCtx.sendMessage()
-                } label: {
-                    Image(systemSymbol: .paperplaneFill)
-                        .foregroundColor(roomCtx.textFieldString.isEmpty ? nil : Color.lkRed)
-                }
-                .buttonStyle(.borderless)
-            }
-            .padding()
-            .background(Color.lkGray2)
-        }
-        .background(Color.lkGray1)
-        .cornerRadius(8)
-        .frame(
-            minWidth: 0,
-            maxWidth: geometry.isTall ? .infinity : 320
-        )
+    func audioControlsPanel(geometry: GeometryProxy) -> some View {
+        AudioControlsPanel()
+            .background(Color.lkGray1)
+            .cornerRadius(8)
+            .frame(
+                minWidth: 0,
+                maxWidth: geometry.isTall ? .infinity : 320
+            )
     }
 
     func sortedParticipants() -> [Participant] {
@@ -245,17 +174,11 @@ struct RoomView: View {
                     maxHeight: .infinity
                 )
                 // Show messages view if enabled
-                if roomCtx.showMessagesView {
-                    messagesView(geometry: geometry)
+                if roomCtx.showMessagesPanel {
+                    messagesPanel(geometry: geometry)
                 }
                 if roomCtx.showAudioPanel {
-                    AudioMixerView()
-                        .background(Color.lkGray1)
-                        .cornerRadius(8)
-                        .frame(
-                            minWidth: 0,
-                            maxWidth: geometry.isTall ? .infinity : 320
-                        )
+                    audioControlsPanel(geometry: geometry)
                 }
             }
         }
@@ -431,7 +354,7 @@ struct RoomView: View {
                 }
             } label: {
                 Image(systemSymbol: .switch2)
-                    .renderingMode(roomCtx.showAudioPanel ? .original : .template)
+                    .foregroundColor(roomCtx.showAudioPanel ? .accentColor : nil)
             }
 
             #if os(iOS)
@@ -485,12 +408,12 @@ struct RoomView: View {
             // Toggle messages view (chat example)
             Button(action: {
                        withAnimation {
-                           roomCtx.showMessagesView.toggle()
+                           roomCtx.showMessagesPanel.toggle()
                        }
                    },
                    label: {
                        Image(systemSymbol: .messageFill)
-                           .renderingMode(roomCtx.showMessagesView ? .original : .template)
+                           .renderingMode(roomCtx.showMessagesPanel ? .original : .template)
                    })
         }
 
@@ -532,21 +455,6 @@ struct RoomView: View {
             Group {
                 Toggle("Background blur", isOn: $roomCtx.isVideoProcessingEnabled)
             }
-
-            #if os(macOS)
-            Group {
-                Picker("Output device", selection: $appCtx.outputDevice) {
-                    ForEach($appCtx.outputDevices) { device in
-                        Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : "\(device.wrappedValue.name)").tag(device.wrappedValue)
-                    }
-                }
-                Picker("Input device", selection: $appCtx.inputDevice) {
-                    ForEach($appCtx.inputDevices) { device in
-                        Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : "\(device.wrappedValue.name)").tag(device.wrappedValue)
-                    }
-                }
-            }
-            #endif
 
             Group {
                 Divider()
@@ -598,21 +506,6 @@ struct RoomView: View {
                             try await room.localParticipant
                                 .setTrackSubscriptionPermissions(allParticipantsAllowed: false)
                         }
-                    }
-                }
-
-                #if os(iOS) || os(visionOS) || os(tvOS)
-                Toggle("Prefer speaker output", isOn: $appCtx.preferSpeakerOutput)
-                #endif
-
-                Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
-
-                Picker("Mic mute mode", selection: $appCtx.micMuteMode) {
-                    ForEach([MicrophoneMuteMode.voiceProcessing,
-                             MicrophoneMuteMode.restart,
-                             MicrophoneMuteMode.inputMixer], id: \.self)
-                    { mode in
-                        Text("Mute: \(String(describing: mode))").tag(mode)
                     }
                 }
 

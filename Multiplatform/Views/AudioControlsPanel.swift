@@ -18,14 +18,12 @@ import LiveKit
 import SwiftUI
 
 #if !os(tvOS)
-struct AudioMixerView: View {
+struct AudioControlsPanel: View {
     @EnvironmentObject var appCtx: AppContext
 
     var body: some View {
         Form {
             Section(header: Text("Audio Mixer")) {
-//        Text("Audio controls")
-//            .fontWeight(.bold)
                 HStack {
                     Text("Mic")
                     Slider(value: $appCtx.micVolume, in: 0.0 ... 1.0)
@@ -33,6 +31,40 @@ struct AudioMixerView: View {
                 HStack {
                     Text("App")
                     Slider(value: $appCtx.appVolume, in: 0.0 ... 1.0)
+                }
+            }
+
+            Section(header: Text("Audio Devices")) {
+                if !appCtx.inputDevices.isEmpty {
+                    Picker("Input", selection: $appCtx.inputDevice) {
+                        ForEach($appCtx.inputDevices) { device in
+                            Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : device.wrappedValue.name)
+                                .tag(device.wrappedValue)
+                        }
+                    }
+                }
+                if !appCtx.outputDevices.isEmpty {
+                    Picker("Output", selection: $appCtx.outputDevice) {
+                        ForEach($appCtx.outputDevices) { device in
+                            Text(device.wrappedValue.isDefault ? "Default (\(device.wrappedValue.name))" : device.wrappedValue.name)
+                                .tag(device.wrappedValue)
+                        }
+                    }
+                }
+                #if os(iOS) || os(visionOS) || os(tvOS)
+                Toggle("Prefer speaker", isOn: $appCtx.preferSpeakerOutput)
+                #endif
+            }
+
+            Section(header: Text("Voice Processing")) {
+                Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
+                Picker("Mic mute mode", selection: $appCtx.micMuteMode) {
+                    ForEach([MicrophoneMuteMode.voiceProcessing,
+                             MicrophoneMuteMode.restart,
+                             MicrophoneMuteMode.inputMixer], id: \.self)
+                    { mode in
+                        Text("\(String(describing: mode))").tag(mode)
+                    }
                 }
             }
 

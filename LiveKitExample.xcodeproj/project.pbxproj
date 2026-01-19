@@ -10,7 +10,8 @@
 		68019B9C2D00343700721481 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 68698E612C4C218B00221782 /* LiveKit */; };
 		681A0AB727D888D80097E3F4 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = 681A0AB627D888D80097E3F4 /* LiveKit */; };
 		681A0AB827D88B190097E3F4 /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 683F05F4273F96B20080C7AC /* ReplayKit.framework */; platformFilter = maccatalyst; };
-		6830E6BE2D5BE5E2001C5E83 /* AudioMixerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6830E6BD2D5BE5DF001C5E83 /* AudioMixerView.swift */; };
+		6830E6BE2D5BE5E2001C5E83 /* AudioControlsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6830E6BD2D5BE5DF001C5E83 /* AudioControlsPanel.swift */; };
+		6830E6BF2D5BE5E3001C5E83 /* MessagesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6830E6C02D5BE5E0001C5E83 /* MessagesPanel.swift */; };
 		68698E642C4C219500221782 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 68698E632C4C219500221782 /* KeychainAccess */; };
 		68698E662C4C219A00221782 /* SFSafeSymbols in Frameworks */ = {isa = PBXBuildFile; productRef = 68698E652C4C219A00221782 /* SFSafeSymbols */; };
 		6888FBE12C66B7B400AB93C1 /* ImmersiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6888FBE02C66B7B100AB93C1 /* ImmersiveView.swift */; };
@@ -66,7 +67,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6830E6BD2D5BE5DF001C5E83 /* AudioMixerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMixerView.swift; sourceTree = "<group>"; };
+		6830E6BD2D5BE5DF001C5E83 /* AudioControlsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioControlsPanel.swift; sourceTree = "<group>"; };
+		6830E6C02D5BE5E0001C5E83 /* MessagesPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesPanel.swift; sourceTree = "<group>"; };
 		683F05F3273F96B20080C7AC /* BroadcastExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BroadcastExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		683F05F4273F96B20080C7AC /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		683F05F9273F96B20080C7AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -184,7 +186,8 @@
 				7BBEBA842D79213900586EC4 /* Shared */,
 				7BBEBA7B2D79104D00586EC4 /* RoomSwitchView.swift */,
 				7BBEBA792D79103800586EC4 /* RoomContextView.swift */,
-				6830E6BD2D5BE5DF001C5E83 /* AudioMixerView.swift */,
+				6830E6BD2D5BE5DF001C5E83 /* AudioControlsPanel.swift */,
+				6830E6C02D5BE5E0001C5E83 /* MessagesPanel.swift */,
 				68A50ED22C4C1ED500D2DE17 /* PublishOptionsView.swift */,
 				68A50ED32C4C1ED500D2DE17 /* ScreenShareSourcePickerView.swift */,
 				6888FBE02C66B7B100AB93C1 /* ImmersiveView.swift */,
@@ -382,7 +385,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				68A50EE02C4C1ED500D2DE17 /* LiveKitExample.swift in Sources */,
-				6830E6BE2D5BE5E2001C5E83 /* AudioMixerView.swift in Sources */,
+				6830E6BE2D5BE5E2001C5E83 /* AudioControlsPanel.swift in Sources */,
+				6830E6BF2D5BE5E3001C5E83 /* MessagesPanel.swift in Sources */,
 				7BBEBA7A2D79103800586EC4 /* RoomContextView.swift in Sources */,
 				68A50EE22C4C1ED500D2DE17 /* RoomView.swift in Sources */,
 				68A50EE32C4C1ED500D2DE17 /* PublishOptionsView.swift in Sources */,
