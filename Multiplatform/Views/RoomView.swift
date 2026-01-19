@@ -348,15 +348,6 @@ struct RoomView: View {
                    // disable while publishing/un-publishing
                    .disabled(isMicrophonePublishingBusy)
 
-            Button {
-                withAnimation {
-                    roomCtx.showAudioPanel.toggle()
-                }
-            } label: {
-                Image(systemSymbol: .switch2)
-                    .foregroundColor(roomCtx.showAudioPanel ? .accentColor : nil)
-            }
-
             #if os(iOS)
             Button(action: {
                        Task {
@@ -404,6 +395,15 @@ struct RoomView: View {
             }
             .disabled(isScreenSharePublishingBusy)
             #endif
+
+            Button {
+                withAnimation {
+                    roomCtx.showAudioPanel.toggle()
+                }
+            } label: {
+                Image(systemSymbol: .switch2)
+                    .foregroundColor(roomCtx.showAudioPanel ? .accentColor : nil)
+            }
 
             // Toggle messages view (chat example)
             Button(action: {
