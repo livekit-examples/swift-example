@@ -414,6 +414,7 @@ struct RoomView: View {
                    label: {
                        Image(systemSymbol: .messageFill)
                            .renderingMode(roomCtx.showMessagesPanel ? .original : .template)
+                           .foregroundColor(roomCtx.showMessagesPanel ? .accentColor : nil)
                    })
         }
 
