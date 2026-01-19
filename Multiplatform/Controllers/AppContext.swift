@@ -81,6 +81,17 @@ final class AppContext: NSObject, ObservableObject {
         didSet { AudioManager.shared.isVoiceProcessingBypassed = isVoiceProcessingBypassed }
     }
 
+    @Published var isVoiceProcessingEnabled: Bool = true {
+        didSet {
+            guard oldValue != isVoiceProcessingEnabled else { return }
+            do {
+                try AudioManager.shared.setVoiceProcessingEnabled(isVoiceProcessingEnabled)
+            } catch {
+                print("Failed to set voice processing enabled: \(error)")
+            }
+        }
+    }
+
     @Published var micMuteMode: MicrophoneMuteMode = .voiceProcessing {
         didSet {
             do {
@@ -144,6 +155,7 @@ final class AppContext: NSObject, ObservableObject {
         inputDevices = AudioManager.shared.inputDevices
         outputDevice = AudioManager.shared.outputDevice
         inputDevice = AudioManager.shared.inputDevice
+        isVoiceProcessingEnabled = AudioManager.shared.isVoiceProcessingEnabled
         updateAudioDeviceSelections()
     }
 }

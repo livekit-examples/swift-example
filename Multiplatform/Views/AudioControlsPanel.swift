@@ -79,21 +79,22 @@ struct AudioControlsPanel: View {
             }
 
             Section(header: Text("Voice Processing")) {
+                Toggle("Voice processing enabled", isOn: $appCtx.isVoiceProcessingEnabled)
                 Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
+            }
+
+            Section(header: Text("Mic mute mode")) {
                 Picker("Mic mute mode", selection: $appCtx.micMuteMode) {
                     ForEach([MicrophoneMuteMode.voiceProcessing,
                              MicrophoneMuteMode.restart,
                              MicrophoneMuteMode.inputMixer], id: \.self)
                     { mode in
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("\(String(describing: mode))")
-                            Text(micMuteModeDescription(for: mode))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                        .tag(mode)
+                        Text("\(String(describing: mode))").tag(mode)
                     }
                 }
+                Text(micMuteModeDescription(for: appCtx.micMuteMode))
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
 
             Section(header: Text("Audio Ducking")) {
