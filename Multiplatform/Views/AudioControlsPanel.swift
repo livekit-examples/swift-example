@@ -85,7 +85,13 @@ struct AudioControlsPanel: View {
                              MicrophoneMuteMode.restart,
                              MicrophoneMuteMode.inputMixer], id: \.self)
                     { mode in
-                        Text("\(String(describing: mode))").tag(mode)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("\(String(describing: mode))")
+                            Text(micMuteModeDescription(for: mode))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .tag(mode)
                     }
                 }
             }
@@ -120,6 +126,21 @@ struct AudioControlsPanel: View {
                 }
             }
         }.formStyle(.grouped)
+    }
+}
+
+private extension AudioControlsPanel {
+    func micMuteModeDescription(for mode: MicrophoneMuteMode) -> String {
+        switch mode {
+        case .voiceProcessing:
+            return "Fast and turns mic indicator off, iOS plays a short beep."
+        case .restart:
+            return "Slow and reconfigures the audio session, no iOS beep."
+        case .inputMixer:
+            return "Fast but mic indicator stays on, no iOS beep."
+        @unknown default:
+            return "Uses default mute handling."
+        }
     }
 }
 #endif
