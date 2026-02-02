@@ -126,6 +126,28 @@ final class AppContext: NSObject, ObservableObject {
         }
     }
 
+    @Published var isAudioEngineInputAvailable: Bool = true {
+        didSet {
+            do {
+                try AudioManager.shared.setEngineAvailability(.init(isInputAvailable: isAudioEngineInputAvailable,
+                                                                    isOutputAvailable: isAudioEngineOutputAvailable))
+            } catch {
+                print("Failed to set audio engine availability: \(error)")
+            }
+        }
+    }
+
+    @Published var isAudioEngineOutputAvailable: Bool = true {
+        didSet {
+            do {
+                try AudioManager.shared.setEngineAvailability(.init(isInputAvailable: isAudioEngineInputAvailable,
+                                                                    isOutputAvailable: isAudioEngineOutputAvailable))
+            } catch {
+                print("Failed to set audio engine availability: \(error)")
+            }
+        }
+    }
+
     init(store: ValueStore<Preferences>) {
         self.store = store
 

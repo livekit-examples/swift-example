@@ -126,6 +126,11 @@ struct AudioControlsPanel: View {
                     }
                 }
             }
+
+            Section(header: Text("Audio Engine Availability")) {
+                Toggle("Input available", isOn: $appCtx.isAudioEngineInputAvailable)
+                Toggle("Output available", isOn: $appCtx.isAudioEngineOutputAvailable)
+            }
         }.formStyle(.grouped)
     }
 }
