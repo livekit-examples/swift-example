@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 LiveKit
+ * Copyright 2026 LiveKit
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,10 +75,21 @@ final class RoomContext: ObservableObject {
 
     @Published var focusParticipant: Participant?
 
-    @Published var showMessagesView: Bool = false
+    @Published var showMessagesPanel: Bool = false {
+        didSet {
+            if showMessagesPanel { showAudioPanel = false }
+        }
+    }
+
     @Published var messages: [ExampleRoomMessage] = []
 
     @Published var textFieldString: String = ""
+
+    @Published var showAudioPanel: Bool = false {
+        didSet {
+            if showAudioPanel { showMessagesPanel = false }
+        }
+    }
 
     @Published var isVideoProcessingEnabled: Bool = false {
         didSet {
@@ -259,7 +270,8 @@ extension RoomContext: RoomDelegate {
                 shouldShowDisconnectReason = true
                 // Reset state
                 focusParticipant = nil
-                showMessagesView = false
+                showMessagesPanel = false
+                showAudioPanel = false
                 textFieldString = ""
                 messages.removeAll()
                 // self.objectWillChange.send()
@@ -288,7 +300,7 @@ extension RoomContext: RoomDelegate {
                     // which will trigger the UI to update
                     self.messages.append(roomMessage)
                     // Show the messages view when new messages arrive
-                    self.showMessagesView = true
+                    self.showMessagesPanel = true
                 }
             }
 
