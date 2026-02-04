@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build (iOS/macOS)
+    runs-on: macos-26
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: "iOS Simulator,name=iPhone 17 Pro,OS=26.1"
+          - platform: "macOS"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 26.1
+
+      - name: Resolve Packages
+        run: |
+          set -o pipefail
+          xcodebuild -resolvePackageDependencies \
+            -project LiveKitExample.xcodeproj \
+            -scheme SwiftSDK.1
+
+      - name: Build
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project LiveKitExample.xcodeproj \
+            -scheme SwiftSDK.1 \
+            -destination 'platform=${{ matrix.platform }}' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_IDENTITY=
