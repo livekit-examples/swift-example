@@ -117,20 +117,20 @@ struct AudioControlsPanel: View {
 
             Section(header: Text("Sample audio clip")) {
                 Button {
-        appCtx.prepareSampleAudio()
-                    } label: {
-                        Text("Prepare")
-                    }
-                    Button {
-                        appCtx.stopSampleAudio()
-                    } label: {
-                        Text("Stop")
-                    }
+                    appCtx.prepareSampleAudio()
+                } label: {
+                    Text("Prepare")
+                }
                 Button {
-                        appCtx.releaseSampleAudio()
-                    } label: {
-                        Text("Release")
-                    }
+                    appCtx.stopSampleAudio()
+                } label: {
+                    Text("Stop")
+                }
+                Button {
+                    appCtx.releaseSampleAudio()
+                } label: {
+                    Text("Release")
+                }
             }
 
             Section(header: Text("Audio Engine Availability")) {

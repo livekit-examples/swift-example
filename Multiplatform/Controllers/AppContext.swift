@@ -208,19 +208,17 @@ private extension AppContext {
 // MARK: - AudioClips
 
 extension AppContext {
-
-func prepareSampleAudio() {
-
-            guard let url = Bundle.main.url(forResource: "livekit_clip01", withExtension: "m4a") else {
-                print("Audio file not found")
-                return
-            }
-do {
-  try SoundPlayer.shared.prepare(url: url, withId: "sample01")
-    } catch {
+    func prepareSampleAudio() {
+        guard let url = Bundle.main.url(forResource: "livekit_clip01", withExtension: "m4a") else {
+            print("Audio file not found")
+            return
+        }
+        do {
+            try SoundPlayer.shared.prepare(url: url, withId: "sample01")
+        } catch {
             print("Failed to prepare sample audio clip")
         }
-}
+    }
 
     func playSampleAudio() {
         do {
@@ -235,10 +233,10 @@ do {
         SoundPlayer.shared.stop(id: "sample01")
         isSampleAudioPlaying = false
     }
-    
+
     func releaseSampleAudio() {
-      SoundPlayer.shared.release(id: "sample01")
-  }
+        SoundPlayer.shared.release(id: "sample01")
+    }
 }
 
 extension AppContext: @MainActor AVAudioPlayerDelegate {
