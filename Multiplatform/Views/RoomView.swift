@@ -196,6 +196,7 @@ struct RoomView: View {
                 .background(Color.black.opacity(0.85))
                 .cornerRadius(14)
                 .transition(.opacity)
+                .allowsHitTesting(false)
             }
         }
         .animation(.easeInOut, value: appCtx.showMutedSpeechToast)
