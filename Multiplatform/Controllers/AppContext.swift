@@ -24,7 +24,6 @@ import SwiftUI
 final class AppContext: NSObject, ObservableObject {
     private let store: ValueStore<Preferences>
 
-    private var audioPlayer: AVAudioPlayer?
     @Published var isSampleAudioPlaying: Bool = false
 
     @Published var videoViewVisible: Bool = true {
@@ -108,6 +107,10 @@ final class AppContext: NSObject, ObservableObject {
 
     @Published var appVolume: Float = 1.0 {
         didSet { AudioManager.shared.mixer.appVolume = appVolume }
+    }
+
+    @Published var soundPlayerVolume: Float = 1.0 {
+        didSet { AudioManager.shared.mixer.soundPlayerVolume = soundPlayerVolume }
     }
 
     @Published var isAdvancedDuckingEnabled: Bool = false {
@@ -205,35 +208,37 @@ private extension AppContext {
 // MARK: - AudioClips
 
 extension AppContext {
-    func playSampleAudio() {
-        do {
-            if let prevPlayer = audioPlayer {
-                prevPlayer.stop()
-            }
+
+func prepareSampleAudio() {
 
             guard let url = Bundle.main.url(forResource: "livekit_clip01", withExtension: "m4a") else {
                 print("Audio file not found")
                 return
             }
+do {
+  try SoundPlayer.shared.prepare(url: url, withId: "sample01")
+    } catch {
+            print("Failed to prepare sample audio clip")
+        }
+}
 
-            let player = try AVAudioPlayer(contentsOf: url)
-            player.delegate = self
-            player.play()
-            audioPlayer = player
+    func playSampleAudio() {
+        do {
             isSampleAudioPlaying = true
+            try SoundPlayer.shared.play(id: "sample01")
         } catch {
             print("Failed to sample audio clip")
         }
     }
 
     func stopSampleAudio() {
-        if let prevPlayer = audioPlayer {
-            prevPlayer.stop()
-        }
-
-        audioPlayer = nil
+        SoundPlayer.shared.stop(id: "sample01")
         isSampleAudioPlaying = false
     }
+    
+    func releaseSampleAudio() {
+      SoundPlayer.shared.release(id: "sample01")
+  }
 }
 
 extension AppContext: @MainActor AVAudioPlayerDelegate {
