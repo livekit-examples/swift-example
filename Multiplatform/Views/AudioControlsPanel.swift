@@ -85,6 +85,14 @@ struct AudioControlsPanel: View {
             Section(header: Text("Voice Processing")) {
                 Toggle("Voice processing enabled", isOn: $appCtx.isVoiceProcessingEnabled)
                 Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
+                Toggle("Auto gain control (AGC)", isOn: $appCtx.isVoiceProcessingAGCEnabled)
+            }
+
+            Section(header: Text("Recording")) {
+                Toggle("Always prepared", isOn: $appCtx.isRecordingAlwaysPreparedMode)
+                Text("Keeps mic pipeline warmed for low-latency publish.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
 
             Section(header: Text("Mic mute mode")) {

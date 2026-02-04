@@ -182,6 +182,24 @@ struct RoomView: View {
                 }
             }
         }
+        .overlay {
+            if appCtx.showMutedSpeechToast {
+                HStack(spacing: 10) {
+                    Image(systemSymbol: .infoCircleFill)
+                        .font(.headline)
+                    Text("Your mic is muted")
+                        .font(.headline)
+                }
+                .foregroundColor(.white)
+                .padding(.horizontal, 22)
+                .padding(.vertical, 16)
+                .background(Color.black.opacity(0.85))
+                .cornerRadius(14)
+                .transition(.opacity)
+                .allowsHitTesting(false)
+            }
+        }
+        .animation(.easeInOut, value: appCtx.showMutedSpeechToast)
         .padding(5)
         .onAppear {
             Task { @MainActor in
