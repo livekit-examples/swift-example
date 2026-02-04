@@ -122,6 +122,11 @@ struct AudioControlsPanel: View {
                     Text("Prepare")
                 }
                 Button {
+                    appCtx.playSampleAudio()
+                } label: {
+                    Text("Play")
+                }
+                Button {
                     appCtx.stopSampleAudio()
                 } label: {
                     Text("Stop")
