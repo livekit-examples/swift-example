@@ -26,6 +26,7 @@ final class AppContext: NSObject, ObservableObject {
 
     private var audioPlayer: AVAudioPlayer?
     @Published var isSampleAudioPlaying: Bool = false
+    private var mutedSpeechToastHideTask: Task<Void, Never>?
 
     @Published var videoViewVisible: Bool = true {
         didSet { store.value.videoViewVisible = videoViewVisible }
@@ -81,6 +82,10 @@ final class AppContext: NSObject, ObservableObject {
         didSet { AudioManager.shared.isVoiceProcessingBypassed = isVoiceProcessingBypassed }
     }
 
+    @Published var isVoiceProcessingAGCEnabled: Bool = false {
+        didSet { AudioManager.shared.isVoiceProcessingAGCEnabled = isVoiceProcessingAGCEnabled }
+    }
+
     @Published var isVoiceProcessingEnabled: Bool = true {
         didSet {
             guard oldValue != isVoiceProcessingEnabled else { return }
@@ -108,6 +113,18 @@ final class AppContext: NSObject, ObservableObject {
 
     @Published var appVolume: Float = 1.0 {
         didSet { AudioManager.shared.mixer.appVolume = appVolume }
+    }
+
+    @Published var isRecordingAlwaysPreparedMode: Bool = false {
+        didSet {
+            Task {
+                do {
+                    try await AudioManager.shared.setRecordingAlwaysPreparedMode(isRecordingAlwaysPreparedMode)
+                } catch {
+                    print("Failed to set recording always prepared mode: \(error)")
+                }
+            }
+        }
     }
 
     @Published var isAdvancedDuckingEnabled: Bool = false {
@@ -148,6 +165,8 @@ final class AppContext: NSObject, ObservableObject {
         }
     }
 
+    @Published var showMutedSpeechToast: Bool = false
+
     init(store: ValueStore<Preferences>) {
         self.store = store
 
@@ -173,11 +192,32 @@ final class AppContext: NSObject, ObservableObject {
             }
         }
 
+        AudioManager.shared.onMutedSpeechActivity = { [weak self] _, event in
+            guard let self else { return }
+            guard case .started = event else { return }
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                withAnimation {
+                    showMutedSpeechToast = true
+                }
+                mutedSpeechToastHideTask?.cancel()
+                mutedSpeechToastHideTask = Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    withAnimation {
+                        showMutedSpeechToast = false
+                    }
+                }
+            }
+        }
+
         outputDevices = AudioManager.shared.outputDevices
         inputDevices = AudioManager.shared.inputDevices
         outputDevice = AudioManager.shared.outputDevice
         inputDevice = AudioManager.shared.inputDevice
         isVoiceProcessingEnabled = AudioManager.shared.isVoiceProcessingEnabled
+        isVoiceProcessingAGCEnabled = AudioManager.shared.isVoiceProcessingAGCEnabled
+        isRecordingAlwaysPreparedMode = AudioManager.shared.isRecordingAlwaysPreparedMode
         updateAudioDeviceSelections()
     }
 }
