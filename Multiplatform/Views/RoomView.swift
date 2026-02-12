@@ -99,6 +99,7 @@ struct RoomView: View {
             )
     }
 
+    #if !os(tvOS)
     func audioControlsPanel(geometry: GeometryProxy) -> some View {
         AudioControlsPanel()
             .background(Color.lkGray1)
@@ -108,6 +109,7 @@ struct RoomView: View {
                 maxWidth: geometry.isTall ? .infinity : 320
             )
     }
+    #endif
 
     func sortedParticipants() -> [Participant] {
         room.allParticipants.values.sorted { p1, p2 in
@@ -177,9 +179,11 @@ struct RoomView: View {
                 if roomCtx.showMessagesPanel {
                     messagesPanel(geometry: geometry)
                 }
+                #if !os(tvOS)
                 if roomCtx.showAudioPanel {
                     audioControlsPanel(geometry: geometry)
                 }
+                #endif
             }
         }
         .overlay {
@@ -414,6 +418,7 @@ struct RoomView: View {
             .disabled(isScreenSharePublishingBusy)
             #endif
 
+            #if !os(tvOS)
             Button {
                 withAnimation {
                     roomCtx.showAudioPanel.toggle()
@@ -422,6 +427,7 @@ struct RoomView: View {
                 Image(systemSymbol: .switch2)
                     .foregroundColor(roomCtx.showAudioPanel ? .accentColor : nil)
             }
+            #endif
 
             // Toggle messages view (chat example)
             Button(action: {
