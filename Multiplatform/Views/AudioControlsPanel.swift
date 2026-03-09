@@ -54,6 +54,10 @@ struct AudioControlsPanel: View {
                     Text("App")
                     Slider(value: $appCtx.appVolume, in: 0.0 ... 1.0)
                 }
+                HStack {
+                    Text("Sound player")
+                    Slider(value: $appCtx.soundPlayerVolume, in: 0.0 ... 1.0)
+                }
             }
 
             Section(header: Text("Audio Devices")) {
@@ -120,18 +124,25 @@ struct AudioControlsPanel: View {
             }
 
             Section(header: Text("Sample audio clip")) {
-                if appCtx.isSampleAudioPlaying {
-                    Button {
-                        appCtx.stopSampleAudio()
-                    } label: {
-                        Text("Stop")
-                    }
-                } else {
-                    Button {
-                        appCtx.playSampleAudio()
-                    } label: {
-                        Text("Play")
-                    }
+                Button {
+                    appCtx.prepareSampleAudio()
+                } label: {
+                    Text("Prepare")
+                }
+                Button {
+                    appCtx.playSampleAudio()
+                } label: {
+                    Text("Play")
+                }
+                Button {
+                    appCtx.stopSampleAudio()
+                } label: {
+                    Text("Stop")
+                }
+                Button {
+                    appCtx.releaseSampleAudio()
+                } label: {
+                    Text("Release")
                 }
             }
 
