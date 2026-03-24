@@ -25,6 +25,10 @@ final class AppContext: NSObject, ObservableObject {
     private let store: ValueStore<Preferences>
 
     @Published var isSampleAudioPlaying: Bool = false
+    @Published var isSampleAudioPrepared: Bool = false
+    @Published var playbackMode: PlaybackOptions.Mode = .concurrent
+    @Published var playbackLoop: Bool = false
+    @Published var playbackDestination: PlaybackOptions.Destination = .localAndRemote
     private var mutedSpeechToastHideTask: Task<Void, Never>?
 
     @Published var videoViewVisible: Bool = true {
@@ -255,17 +259,21 @@ extension AppContext {
         }
         do {
             try SoundPlayer.shared.prepare(url: url, withId: "sample01")
+            isSampleAudioPrepared = true
         } catch {
-            print("Failed to prepare sample audio clip")
+            print("Failed to prepare sample audio clip: \(error)")
         }
     }
 
     func playSampleAudio() {
+        let options = PlaybackOptions(mode: playbackMode,
+                                      loop: playbackLoop,
+                                      destination: playbackDestination)
         do {
+            try SoundPlayer.shared.play(id: "sample01", options: options)
             isSampleAudioPlaying = true
-            try SoundPlayer.shared.play(id: "sample01")
         } catch {
-            print("Failed to sample audio clip")
+            print("Failed to play sample audio clip: \(error)")
         }
     }
 
@@ -276,11 +284,7 @@ extension AppContext {
 
     func releaseSampleAudio() {
         SoundPlayer.shared.release(id: "sample01")
-    }
-}
-
-extension AppContext: @MainActor AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(_: AVAudioPlayer, successfully _: Bool) {
+        isSampleAudioPrepared = false
         isSampleAudioPlaying = false
     }
 }

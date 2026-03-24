@@ -123,27 +123,42 @@ struct AudioControlsPanel: View {
                 }
             }
 
-            Section(header: Text("Sample audio clip")) {
-                Button {
-                    appCtx.prepareSampleAudio()
-                } label: {
-                    Text("Prepare")
+            Section(header: Text("Sound Player")) {
+                Picker("Mode", selection: $appCtx.playbackMode) {
+                    Text("Concurrent").tag(PlaybackOptions.Mode.concurrent)
+                    Text("Replace").tag(PlaybackOptions.Mode.replace)
                 }
-                Button {
-                    appCtx.playSampleAudio()
-                } label: {
-                    Text("Play")
+
+                Picker("Destination", selection: $appCtx.playbackDestination) {
+                    Text("Local").tag(PlaybackOptions.Destination.local)
+                    Text("Remote").tag(PlaybackOptions.Destination.remote)
+                    Text("Local + Remote").tag(PlaybackOptions.Destination.localAndRemote)
                 }
-                Button {
-                    appCtx.stopSampleAudio()
-                } label: {
-                    Text("Stop")
+
+                Toggle("Loop", isOn: $appCtx.playbackLoop)
+
+                HStack {
+                    Button("Prepare") {
+                        appCtx.prepareSampleAudio()
+                    }
+                    .disabled(appCtx.isSampleAudioPrepared)
+
+                    Button("Play") {
+                        appCtx.playSampleAudio()
+                    }
+                    .disabled(!appCtx.isSampleAudioPrepared)
+
+                    Button("Stop") {
+                        appCtx.stopSampleAudio()
+                    }
+                    .disabled(!appCtx.isSampleAudioPlaying)
+
+                    Button("Release") {
+                        appCtx.releaseSampleAudio()
+                    }
+                    .disabled(!appCtx.isSampleAudioPrepared)
                 }
-                Button {
-                    appCtx.releaseSampleAudio()
-                } label: {
-                    Text("Release")
-                }
+                .buttonStyle(.bordered)
             }
 
             Section(header: Text("Audio Engine Availability")) {
