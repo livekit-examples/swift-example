@@ -139,22 +139,30 @@ struct AudioControlsPanel: View {
 
                 HStack {
                     Button("Prepare") {
-                        appCtx.prepareSampleAudio()
+                        Task {
+                            await appCtx.prepareSampleAudio()
+                        }
                     }
                     .disabled(appCtx.isSampleAudioPrepared)
 
                     Button("Play") {
-                        appCtx.playSampleAudio()
+                        Task {
+                            await appCtx.playSampleAudio()
+                        }
                     }
                     .disabled(!appCtx.isSampleAudioPrepared)
 
                     Button("Stop") {
-                        appCtx.stopSampleAudio()
+                        Task {
+                            await appCtx.stopSampleAudio()
+                        }
                     }
                     .disabled(!appCtx.isSampleAudioPlaying)
 
                     Button("Release") {
-                        appCtx.releaseSampleAudio()
+                        Task {
+                            await appCtx.releaseSampleAudio()
+                        }
                     }
                     .disabled(!appCtx.isSampleAudioPrepared)
                 }

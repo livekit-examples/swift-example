@@ -251,39 +251,43 @@ private extension AppContext {
 
 // MARK: - AudioClips
 
+@MainActor
 extension AppContext {
-    func prepareSampleAudio() {
+    func prepareSampleAudio() async {
         guard let url = Bundle.main.url(forResource: "livekit_clip01", withExtension: "m4a") else {
             print("Audio file not found")
             return
         }
+
         do {
-            try SoundPlayer.shared.prepare(url: url, withId: "sample01")
+            try await SoundPlayer.shared.prepare(url: url, withId: "sample01")
             isSampleAudioPrepared = true
         } catch {
             print("Failed to prepare sample audio clip: \(error)")
         }
     }
 
-    func playSampleAudio() {
+    func playSampleAudio() async {
         let options = PlaybackOptions(mode: playbackMode,
                                       loop: playbackLoop,
                                       destination: playbackDestination)
-        do {
-            try SoundPlayer.shared.play(id: "sample01", options: options)
-            isSampleAudioPlaying = true
-        } catch {
-            print("Failed to play sample audio clip: \(error)")
+        Task {
+            do {
+                try await SoundPlayer.shared.play(id: "sample01", options: options)
+                isSampleAudioPlaying = true
+            } catch {
+                print("Failed to play sample audio clip: \(error)")
+            }
         }
     }
 
-    func stopSampleAudio() {
-        SoundPlayer.shared.stop(id: "sample01")
+    func stopSampleAudio() async {
+        await SoundPlayer.shared.stop(id: "sample01")
         isSampleAudioPlaying = false
     }
 
-    func releaseSampleAudio() {
-        SoundPlayer.shared.release(id: "sample01")
+    func releaseSampleAudio() async {
+        await SoundPlayer.shared.release(id: "sample01")
         isSampleAudioPrepared = false
         isSampleAudioPlaying = false
     }
