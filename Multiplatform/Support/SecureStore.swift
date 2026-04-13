@@ -33,6 +33,7 @@ struct Preferences: Codable, Equatable {
     var adaptiveStream = true
     var dynacast = true
     var reportStats = true
+    var singlePeerConnection = false
 
     // Settings
     var videoViewVisible = true

@@ -67,6 +67,7 @@ struct ConnectView: View {
                                 Toggle("AdaptiveStream", isOn: $roomCtx.adaptiveStream)
                                 Toggle("Dynacast", isOn: $roomCtx.dynacast)
                                 Toggle("Report stats", isOn: $roomCtx.reportStats)
+                                Toggle("Single peer connection", isOn: $roomCtx.singlePeerConnection)
                             } label: {
                                 Image(systemSymbol: .gear)
                                     .renderingMode(.original)

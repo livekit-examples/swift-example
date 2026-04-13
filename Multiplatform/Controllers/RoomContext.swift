@@ -68,6 +68,10 @@ final class RoomContext: ObservableObject {
         didSet { store.value.reportStats = reportStats }
     }
 
+    @Published var singlePeerConnection: Bool = false {
+        didSet { store.value.singlePeerConnection = singlePeerConnection }
+    }
+
     // ConnectOptions
     @Published var autoSubscribe: Bool = true {
         didSet { store.value.autoSubscribe = autoSubscribe }
@@ -119,6 +123,7 @@ final class RoomContext: ObservableObject {
         adaptiveStream = store.value.adaptiveStream
         dynacast = store.value.dynacast
         reportStats = store.value.reportStats
+        singlePeerConnection = store.value.singlePeerConnection
         autoSubscribe = store.value.autoSubscribe
 
         #if os(iOS)
@@ -173,7 +178,8 @@ final class RoomContext: ObservableObject {
             adaptiveStream: true,
             dynacast: dynacast,
             encryptionOptions: encryptionOptions,
-            reportRemoteTrackStatistics: true
+            reportRemoteTrackStatistics: true,
+            singlePeerConnection: singlePeerConnection
         )
 
         let connectTask = Task.detached { [weak self] in
