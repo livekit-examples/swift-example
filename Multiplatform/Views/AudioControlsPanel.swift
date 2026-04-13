@@ -54,6 +54,10 @@ struct AudioControlsPanel: View {
                     Text("App")
                     Slider(value: $appCtx.appVolume, in: 0.0 ... 1.0)
                 }
+                HStack {
+                    Text("Sound player")
+                    Slider(value: $appCtx.soundPlayerVolume, in: 0.0 ... 1.0)
+                }
             }
 
             Section(header: Text("Audio Devices")) {
@@ -119,20 +123,50 @@ struct AudioControlsPanel: View {
                 }
             }
 
-            Section(header: Text("Sample audio clip")) {
-                if appCtx.isSampleAudioPlaying {
-                    Button {
-                        appCtx.stopSampleAudio()
-                    } label: {
-                        Text("Stop")
-                    }
-                } else {
-                    Button {
-                        appCtx.playSampleAudio()
-                    } label: {
-                        Text("Play")
-                    }
+            Section(header: Text("Sound Player")) {
+                Picker("Mode", selection: $appCtx.playbackMode) {
+                    Text("Concurrent").tag(SoundPlaybackOptions.Mode.concurrent)
+                    Text("Replace").tag(SoundPlaybackOptions.Mode.replace)
                 }
+
+                Picker("Destination", selection: $appCtx.playbackDestination) {
+                    Text("Local").tag(SoundPlaybackOptions.Destination.local)
+                    Text("Remote").tag(SoundPlaybackOptions.Destination.remote)
+                    Text("Local + Remote").tag(SoundPlaybackOptions.Destination.localAndRemote)
+                }
+
+                Toggle("Loop", isOn: $appCtx.playbackLoop)
+
+                HStack {
+                    Button("Prepare") {
+                        Task {
+                            await appCtx.prepareSampleAudio()
+                        }
+                    }
+                    .disabled(appCtx.isSampleAudioPrepared)
+
+                    Button("Play") {
+                        Task {
+                            await appCtx.playSampleAudio()
+                        }
+                    }
+                    .disabled(!appCtx.isSampleAudioPrepared)
+
+                    Button("Stop") {
+                        Task {
+                            await appCtx.stopSampleAudio()
+                        }
+                    }
+                    .disabled(!appCtx.isSampleAudioPlaying)
+
+                    Button("Release") {
+                        Task {
+                            await appCtx.releaseSampleAudio()
+                        }
+                    }
+                    .disabled(!appCtx.isSampleAudioPrepared)
+                }
+                .buttonStyle(.bordered)
             }
 
             Section(header: Text("Audio Engine Availability")) {

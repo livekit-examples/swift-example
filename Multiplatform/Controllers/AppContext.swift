@@ -24,8 +24,12 @@ import SwiftUI
 final class AppContext: NSObject, ObservableObject {
     private let store: ValueStore<Preferences>
 
-    private var audioPlayer: AVAudioPlayer?
     @Published var isSampleAudioPlaying: Bool = false
+    @Published var isSampleAudioPrepared: Bool = false
+    @Published var playbackMode: SoundPlaybackOptions.Mode = .concurrent
+    @Published var playbackLoop: Bool = false
+    @Published var playbackDestination: SoundPlaybackOptions.Destination = .localAndRemote
+    private var sampleAudio: SoundHandle?
     private var mutedSpeechToastHideTask: Task<Void, Never>?
 
     @Published var videoViewVisible: Bool = true {
@@ -113,6 +117,10 @@ final class AppContext: NSObject, ObservableObject {
 
     @Published var appVolume: Float = 1.0 {
         didSet { AudioManager.shared.mixer.appVolume = appVolume }
+    }
+
+    @Published var soundPlayerVolume: Float = 1.0 {
+        didSet { AudioManager.shared.mixer.soundPlayerVolume = soundPlayerVolume }
     }
 
     @Published var isRecordingAlwaysPreparedMode: Bool = false {
@@ -244,40 +252,49 @@ private extension AppContext {
 
 // MARK: - AudioClips
 
+@MainActor
 extension AppContext {
-    func playSampleAudio() {
+    func prepareSampleAudio() async {
+        guard let url = Bundle.main.url(forResource: "livekit_clip01", withExtension: "m4a") else {
+            print("Audio file not found")
+            return
+        }
+
         do {
-            if let prevPlayer = audioPlayer {
-                prevPlayer.stop()
-            }
+            sampleAudio = try await SoundPlayer.shared.prepare(fileURL: url, named: "sample01")
+            isSampleAudioPrepared = true
+        } catch {
+            print("Failed to prepare sample audio clip: \(error)")
+        }
+    }
 
-            guard let url = Bundle.main.url(forResource: "livekit_clip01", withExtension: "m4a") else {
-                print("Audio file not found")
-                return
-            }
+    func playSampleAudio() async {
+        guard let sampleAudio else {
+            print("Sample audio clip is not prepared")
+            return
+        }
 
-            let player = try AVAudioPlayer(contentsOf: url)
-            player.delegate = self
-            player.play()
-            audioPlayer = player
+        let options = SoundPlaybackOptions(mode: playbackMode,
+                                           loop: playbackLoop,
+                                           destination: playbackDestination)
+
+        do {
+            try await sampleAudio.play(options: options)
             isSampleAudioPlaying = true
         } catch {
-            print("Failed to sample audio clip")
+            print("Failed to play sample audio clip: \(error)")
         }
     }
 
-    func stopSampleAudio() {
-        if let prevPlayer = audioPlayer {
-            prevPlayer.stop()
-        }
-
-        audioPlayer = nil
+    func stopSampleAudio() async {
+        await sampleAudio?.stop()
         isSampleAudioPlaying = false
     }
-}
 
-extension AppContext: @MainActor AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(_: AVAudioPlayer, successfully _: Bool) {
+    func releaseSampleAudio() async {
+        await sampleAudio?.release()
+        sampleAudio = nil
+        isSampleAudioPrepared = false
         isSampleAudioPlaying = false
     }
 }

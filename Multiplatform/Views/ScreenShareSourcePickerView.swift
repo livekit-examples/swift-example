@@ -78,7 +78,7 @@ typealias OnPickScreenShareSource = (MacOSScreenCaptureSource) -> Void
 
 @available(macOS 12.3, *)
 struct ScreenShareSourcePickerView: View {
-    enum Mode: Sendable {
+    enum Mode {
         case display
         case window
     }

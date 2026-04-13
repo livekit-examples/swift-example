@@ -197,6 +197,7 @@ final class RoomContext: ObservableObject {
     }
 
     func disconnect() async {
+        await SoundPlayer.shared.stopAll()
         await room.disconnect()
     }
 
