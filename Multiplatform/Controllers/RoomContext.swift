@@ -175,10 +175,10 @@ final class RoomContext: ObservableObject {
             defaultVideoPublishOptions: VideoPublishOptions(
                 simulcast: simulcast
             ),
-            adaptiveStream: true,
+            adaptiveStream: adaptiveStream,
             dynacast: dynacast,
             encryptionOptions: encryptionOptions,
-            reportRemoteTrackStatistics: true,
+            reportRemoteTrackStatistics: reportStats,
             singlePeerConnection: singlePeerConnection
         )
 
