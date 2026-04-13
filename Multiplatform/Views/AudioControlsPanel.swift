@@ -186,6 +186,8 @@ private extension AudioControlsPanel {
             return "Slow and reconfigures the audio session, no iOS beep."
         case .inputMixer:
             return "Fast but mic indicator stays on, no iOS beep."
+        case .unknown:
+            return "Uses default mute handling."
         @unknown default:
             return "Uses default mute handling."
         }
