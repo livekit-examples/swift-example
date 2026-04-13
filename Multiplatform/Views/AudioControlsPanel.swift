@@ -125,14 +125,14 @@ struct AudioControlsPanel: View {
 
             Section(header: Text("Sound Player")) {
                 Picker("Mode", selection: $appCtx.playbackMode) {
-                    Text("Concurrent").tag(PlaybackOptions.Mode.concurrent)
-                    Text("Replace").tag(PlaybackOptions.Mode.replace)
+                    Text("Concurrent").tag(SoundPlaybackOptions.Mode.concurrent)
+                    Text("Replace").tag(SoundPlaybackOptions.Mode.replace)
                 }
 
                 Picker("Destination", selection: $appCtx.playbackDestination) {
-                    Text("Local").tag(PlaybackOptions.Destination.local)
-                    Text("Remote").tag(PlaybackOptions.Destination.remote)
-                    Text("Local + Remote").tag(PlaybackOptions.Destination.localAndRemote)
+                    Text("Local").tag(SoundPlaybackOptions.Destination.local)
+                    Text("Remote").tag(SoundPlaybackOptions.Destination.remote)
+                    Text("Local + Remote").tag(SoundPlaybackOptions.Destination.localAndRemote)
                 }
 
                 Toggle("Loop", isOn: $appCtx.playbackLoop)

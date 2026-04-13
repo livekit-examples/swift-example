@@ -26,9 +26,10 @@ final class AppContext: NSObject, ObservableObject {
 
     @Published var isSampleAudioPlaying: Bool = false
     @Published var isSampleAudioPrepared: Bool = false
-    @Published var playbackMode: PlaybackOptions.Mode = .concurrent
+    @Published var playbackMode: SoundPlaybackOptions.Mode = .concurrent
     @Published var playbackLoop: Bool = false
-    @Published var playbackDestination: PlaybackOptions.Destination = .localAndRemote
+    @Published var playbackDestination: SoundPlaybackOptions.Destination = .localAndRemote
+    private var sampleAudio: SoundHandle?
     private var mutedSpeechToastHideTask: Task<Void, Never>?
 
     @Published var videoViewVisible: Bool = true {
@@ -260,7 +261,7 @@ extension AppContext {
         }
 
         do {
-            try await SoundPlayer.shared.prepare(url: url, withId: "sample01")
+            sampleAudio = try await SoundPlayer.shared.prepare(fileURL: url, named: "sample01")
             isSampleAudioPrepared = true
         } catch {
             print("Failed to prepare sample audio clip: \(error)")
@@ -268,26 +269,31 @@ extension AppContext {
     }
 
     func playSampleAudio() async {
-        let options = PlaybackOptions(mode: playbackMode,
-                                      loop: playbackLoop,
-                                      destination: playbackDestination)
-        Task {
-            do {
-                try await SoundPlayer.shared.play(id: "sample01", options: options)
-                isSampleAudioPlaying = true
-            } catch {
-                print("Failed to play sample audio clip: \(error)")
-            }
+        guard let sampleAudio else {
+            print("Sample audio clip is not prepared")
+            return
+        }
+
+        let options = SoundPlaybackOptions(mode: playbackMode,
+                                           loop: playbackLoop,
+                                           destination: playbackDestination)
+
+        do {
+            try await sampleAudio.play(options: options)
+            isSampleAudioPlaying = true
+        } catch {
+            print("Failed to play sample audio clip: \(error)")
         }
     }
 
     func stopSampleAudio() async {
-        await SoundPlayer.shared.stop(id: "sample01")
+        await sampleAudio?.stop()
         isSampleAudioPlaying = false
     }
 
     func releaseSampleAudio() async {
-        await SoundPlayer.shared.release(id: "sample01")
+        await sampleAudio?.release()
+        sampleAudio = nil
         isSampleAudioPrepared = false
         isSampleAudioPlaying = false
     }
