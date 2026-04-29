@@ -542,6 +542,38 @@ struct RoomView: View {
                 }
             }
 
+            Button("Send short RPC (1k bytes)") {
+                Task {
+                    print("Rpc handler start")
+                    guard let firstRemoteParticipantIdentity = room.remoteParticipants.keys.first else {
+                        return
+                    }
+                    print("Rpc handler participant: \(firstRemoteParticipantIdentity)")
+                    let result = try await room.localParticipant.performRpc(
+                        destinationIdentity: firstRemoteParticipantIdentity,
+                        method: "test",
+                        payload: String(repeating: "a", count: 1_000)
+                    )
+                    print("Rpc result (\(result.count) chars): \(result)")
+                }
+            }
+
+            Button("Send large RPC (20k bytes)") {
+                Task {
+                    print("Rpc handler start")
+                    guard let firstRemoteParticipantIdentity = room.remoteParticipants.keys.first else {
+                        return
+                    }
+                    print("Rpc handler participant: \(firstRemoteParticipantIdentity)")
+                    let result = try await room.localParticipant.performRpc(
+                        destinationIdentity: firstRemoteParticipantIdentity,
+                        method: "test",
+                        payload: String(repeating: "a", count: 20_000)
+                    )
+                    print("Rpc result (\(result.count) chars): \(result)")
+                }
+            }
+
         } label: {
             Image(systemSymbol: .gear)
                 .renderingMode(.original)
