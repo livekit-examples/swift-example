@@ -79,6 +79,7 @@ struct RoomView: View {
 
     @State private var screenPickerPresented = false
     @State private var publishOptionsPickerPresented = false
+    @State private var rpcTesterPresented = false
 
     @State private var cameraPublishOptions = VideoPublishOptions()
 
@@ -542,9 +543,18 @@ struct RoomView: View {
                 }
             }
 
+            Button("RPC Tester...") {
+                rpcTesterPresented = true
+            }
+
         } label: {
             Image(systemSymbol: .gear)
                 .renderingMode(.original)
+        }
+        .sheet(isPresented: $rpcTesterPresented) {
+            RpcTesterView(room: room) {
+                rpcTesterPresented = false
+            }
         }
 
         // Disconnect
