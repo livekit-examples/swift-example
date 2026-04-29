@@ -79,6 +79,7 @@ struct RoomView: View {
 
     @State private var screenPickerPresented = false
     @State private var publishOptionsPickerPresented = false
+    @State private var rpcTesterPresented = false
 
     @State private var cameraPublishOptions = VideoPublishOptions()
 
@@ -542,41 +543,18 @@ struct RoomView: View {
                 }
             }
 
-            Button("Send short RPC (1k bytes)") {
-                Task {
-                    print("Rpc handler start")
-                    guard let firstRemoteParticipantIdentity = room.remoteParticipants.keys.first else {
-                        return
-                    }
-                    print("Rpc handler participant: \(firstRemoteParticipantIdentity)")
-                    let result = try await room.localParticipant.performRpc(
-                        destinationIdentity: firstRemoteParticipantIdentity,
-                        method: "test",
-                        payload: String(repeating: "a", count: 1_000)
-                    )
-                    print("Rpc result (\(result.count) chars): \(result)")
-                }
-            }
-
-            Button("Send large RPC (20k bytes)") {
-                Task {
-                    print("Rpc handler start")
-                    guard let firstRemoteParticipantIdentity = room.remoteParticipants.keys.first else {
-                        return
-                    }
-                    print("Rpc handler participant: \(firstRemoteParticipantIdentity)")
-                    let result = try await room.localParticipant.performRpc(
-                        destinationIdentity: firstRemoteParticipantIdentity,
-                        method: "test",
-                        payload: String(repeating: "a", count: 20_000)
-                    )
-                    print("Rpc result (\(result.count) chars): \(result)")
-                }
+            Button("RPC Tester...") {
+                rpcTesterPresented = true
             }
 
         } label: {
             Image(systemSymbol: .gear)
                 .renderingMode(.original)
+        }
+        .sheet(isPresented: $rpcTesterPresented) {
+            RpcTesterView(room: room) {
+                rpcTesterPresented = false
+            }
         }
 
         // Disconnect
