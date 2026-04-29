@@ -50,11 +50,13 @@ struct RpcTesterView: View {
                 destinationSection
                 methodSection
                 payloadSection
-                sendSection
                 if let result {
                     resultSection(for: result)
                 }
             }
+            #if os(iOS)
+            .listSectionSpacing(24)
+            #endif
             .navigationTitle("RPC Tester")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
@@ -63,6 +65,18 @@ struct RpcTesterView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Close", action: onClose)
                 }
+                #if os(iOS)
+                ToolbarItem(placement: .bottomBar) {
+                    HStack {
+                        Spacer()
+                        sendButton
+                    }
+                }
+                #else
+                ToolbarItem(placement: .confirmationAction) {
+                    sendButton
+                }
+                #endif
             }
         }
         .onAppear {
@@ -70,6 +84,25 @@ struct RpcTesterView: View {
                 identity = first
             }
         }
+    }
+
+    private var sendButton: some View {
+        Button(action: sendRpc) {
+            HStack(spacing: 6) {
+                if isSending {
+                    ProgressView()
+                        #if os(macOS)
+                        .scaleEffect(0.6)
+                        #endif
+                    Text("Sending…")
+                } else {
+                    Image(systemName: "paperplane.fill")
+                    Text("Send")
+                }
+            }
+        }
+        .buttonStyle(.borderedProminent)
+        .disabled(!canSend)
     }
 
     // MARK: - Sections
@@ -80,6 +113,7 @@ struct RpcTesterView: View {
             TextField("", text: $identity)
                 .textFieldStyle(.automatic)
                 .autocorrectionDisabled()
+                .padding(.vertical, 4)
                 #if os(iOS)
                 .textInputAutocapitalization(.never)
                 #endif
@@ -93,10 +127,12 @@ struct RpcTesterView: View {
                     Label("Pick from room (\(remoteIdentities.count))", systemImage: "person.2")
                         .font(.caption)
                 }
+                .padding(.vertical, 4)
             } else {
                 Text("No remote participants in room")
                     .font(.caption)
                     .foregroundColor(.secondary)
+                    .padding(.vertical, 4)
             }
         } header: {
             Text("Destination participant")
@@ -108,6 +144,7 @@ struct RpcTesterView: View {
         Section("Method") {
             TextField("", text: $method)
                 .autocorrectionDisabled()
+                .padding(.vertical, 4)
                 #if os(iOS)
                 .textInputAutocapitalization(.never)
                 #endif
@@ -121,6 +158,7 @@ struct RpcTesterView: View {
                 .font(.system(.body, design: .monospaced))
                 .frame(minHeight: 120, maxHeight: 240)
                 .autocorrectionDisabled()
+                .padding(.vertical, 4)
                 #if os(iOS)
                 .textInputAutocapitalization(.never)
                 #endif
@@ -136,31 +174,10 @@ struct RpcTesterView: View {
                     Button("Clear") { payload = "" }
                 }
                 .font(.caption)
+                .padding(.vertical, 4)
             }
         } header: {
             Text("Payload")
-        }
-    }
-
-    @ViewBuilder
-    private var sendSection: some View {
-        Section {
-            Button(action: sendRpc) {
-                HStack {
-                    if isSending {
-                        ProgressView()
-                            #if os(macOS)
-                            .scaleEffect(0.6)
-                            #endif
-                        Text("Sending…")
-                    } else {
-                        Image(systemName: "paperplane.fill")
-                        Text("Send")
-                    }
-                    Spacer()
-                }
-            }
-            .disabled(!canSend)
         }
     }
 
