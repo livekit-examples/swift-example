@@ -276,14 +276,13 @@ struct RemoteAudioVolumeControl: View {
     private static let maxVolume = 2.0
     private static let snapVolume = 1.0
     private static let snapThreshold = 0.04
-    private static let sdkVolumeScale = 10.0
 
     @State private var volume: Double
 
     init(track: RemoteAudioTrack, showsPercentage: Bool) {
         self.track = track
         self.showsPercentage = showsPercentage
-        _volume = State(initialValue: Self.defaultVolume)
+        _volume = State(initialValue: Self.clamped(track.volume))
     }
 
     var body: some View {
@@ -308,8 +307,7 @@ struct RemoteAudioVolumeControl: View {
         .background(Color.black.opacity(0.5))
         .cornerRadius(8)
         .onAppear {
-            let currentVolume = Self.displayVolume(from: track.volume)
-            setVolume(currentVolume > Self.maxVolume ? Self.defaultVolume : currentVolume)
+            setVolume(track.volume)
         }
     }
 
@@ -326,7 +324,7 @@ struct RemoteAudioVolumeControl: View {
     private func setVolume(_ newValue: Double) {
         let clampedVolume = Self.clamped(newValue)
         volume = clampedVolume
-        track.volume = clampedVolume / Self.sdkVolumeScale
+        track.volume = clampedVolume
     }
 
     private static func clamped(_ volume: Double) -> Double {
@@ -335,10 +333,6 @@ struct RemoteAudioVolumeControl: View {
 
     private static func snapped(_ volume: Double) -> Double {
         abs(volume - snapVolume) < snapThreshold ? defaultVolume : volume
-    }
-
-    private static func displayVolume(from sdkVolume: Double) -> Double {
-        sdkVolume * sdkVolumeScale
     }
 }
 
