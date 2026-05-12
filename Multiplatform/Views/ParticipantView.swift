@@ -28,6 +28,12 @@ struct ParticipantView: View {
 
     @State private var isRendering: Bool = false
 
+    private var remoteAudioTracks: [RemoteAudioTrack] {
+        participant.audioTracks
+            .compactMap { $0.track as? RemoteAudioTrack }
+            .sorted { $0.id < $1.id }
+    }
+
     func bgView(systemSymbol: SFSymbol, geometry: GeometryProxy) -> some View {
         Image(systemSymbol: systemSymbol)
             .resizable()
@@ -117,6 +123,13 @@ struct ParticipantView: View {
                             .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
                             .cornerRadius(8)
                             .padding()
+                    }
+
+                    ForEach(remoteAudioTracks) { remoteAudioTrack in
+                        RemoteAudioVolumeControl(track: remoteAudioTrack,
+                                                 showsPercentage: geometry.size.width > 180)
+                            .padding(.horizontal, 8)
+                            .padding(.bottom, 6)
                     }
 
                     // Bottom user info bar
@@ -252,6 +265,80 @@ struct ParticipantView: View {
                 // Pass the tap event
                 onTap?(participant)
             })
+    }
+}
+
+struct RemoteAudioVolumeControl: View {
+    let track: RemoteAudioTrack
+    let showsPercentage: Bool
+
+    private static let defaultVolume = 1.0
+    private static let maxVolume = 2.0
+    private static let snapVolume = 1.0
+    private static let snapThreshold = 0.04
+    private static let sdkVolumeScale = 10.0
+
+    @State private var volume: Double
+
+    init(track: RemoteAudioTrack, showsPercentage: Bool) {
+        self.track = track
+        self.showsPercentage = showsPercentage
+        _volume = State(initialValue: Self.defaultVolume)
+    }
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemSymbol: volume == 0 ? .speakerSlashFill : .speakerWave2Fill)
+                .foregroundColor(.white)
+                .frame(width: 18)
+
+            Slider(value: volumeBinding, in: 0.0 ... Self.maxVolume)
+                .tint(Color.orange)
+
+            if showsPercentage {
+                Text("\(Int((Self.clamped(volume) * 100).rounded()))%")
+                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                    .foregroundColor(.white)
+                    .frame(width: 42, alignment: .trailing)
+            }
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .frame(maxWidth: 280)
+        .background(Color.black.opacity(0.5))
+        .cornerRadius(8)
+        .onAppear {
+            let currentVolume = Self.displayVolume(from: track.volume)
+            setVolume(currentVolume > Self.maxVolume ? Self.defaultVolume : currentVolume)
+        }
+    }
+
+    private var volumeBinding: Binding<Double> {
+        Binding(
+            get: { volume },
+            set: { newValue in
+                let snappedVolume = Self.snapped(Self.clamped(newValue))
+                setVolume(snappedVolume)
+            }
+        )
+    }
+
+    private func setVolume(_ newValue: Double) {
+        let clampedVolume = Self.clamped(newValue)
+        volume = clampedVolume
+        track.volume = clampedVolume / Self.sdkVolumeScale
+    }
+
+    private static func clamped(_ volume: Double) -> Double {
+        min(max(volume, 0.0), maxVolume)
+    }
+
+    private static func snapped(_ volume: Double) -> Double {
+        abs(volume - snapVolume) < snapThreshold ? defaultVolume : volume
+    }
+
+    private static func displayVolume(from sdkVolume: Double) -> Double {
+        sdkVolume * sdkVolumeScale
     }
 }
 
