@@ -299,9 +299,6 @@ struct RemoteAudioVolumeControl: View {
             volumePopover
                 .remoteAudioVolumePopoverStyle()
         }
-        .onAppear {
-            setVolume(track.volume)
-        }
     }
 
     private var volumePopover: some View {
