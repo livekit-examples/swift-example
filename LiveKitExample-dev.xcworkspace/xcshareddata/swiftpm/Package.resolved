@@ -1,5 +1,5 @@
 {
-  "originHash" : "fc0950f1832ca45dc3170b94ec97b2189c6b9ddb96acae64bf8148847c58d6f9",
+  "originHash" : "aea8f28b98f95e948f09d2d3f56fa02d451e94fb164d44b0b7fa44e15cf7fae5",
   "pins" : [
     {
       "identity" : "keychainaccess",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/livekit-uniffi-xcframework.git",
       "state" : {
-        "revision" : "61229f4032131311b997ddb1bc1cb8f5afbe30c8",
-        "version" : "0.0.5"
+        "revision" : "7c161254ce7cd55debc48023f69a917076b12a26",
+        "version" : "0.0.6"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/webrtc-xcframework.git",
       "state" : {
-        "revision" : "f6017e189972b86f90e0ec406b1629828bc75748",
-        "version" : "144.7559.3"
+        "revision" : "6a5f458cf55a598e4590cb30b739ab545fdbfcb1",
+        "version" : "144.7559.6"
       }
     }
   ],
