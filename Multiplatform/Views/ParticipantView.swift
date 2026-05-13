@@ -125,13 +125,6 @@ struct ParticipantView: View {
                             .padding()
                     }
 
-                    ForEach(remoteAudioTracks) { remoteAudioTrack in
-                        RemoteAudioVolumeControl(track: remoteAudioTrack,
-                                                 showsPercentage: geometry.size.width > 180)
-                            .padding(.horizontal, 8)
-                            .padding(.bottom, 6)
-                    }
-
                     // Bottom user info bar
                     HStack {
                         if let identity = participant.identity {
@@ -228,6 +221,12 @@ struct ParticipantView: View {
                                 .foregroundColor(Color.white)
                         }
 
+                        ForEach(remoteAudioTracks) { remoteAudioTrack in
+                            RemoteAudioVolumeControl(track: remoteAudioTrack,
+                                                     showsPercentage: geometry.size.width > 180)
+                                .fixedSize()
+                        }
+
                         if participant.connectionQuality == .excellent {
                             Image(systemSymbol: .wifi)
                                 .foregroundColor(.green)
@@ -278,6 +277,7 @@ struct RemoteAudioVolumeControl: View {
     private static let snapThreshold = 0.04
 
     @State private var volume: Double
+    @State private var isSliderPresented = false
 
     init(track: RemoteAudioTrack, showsPercentage: Bool) {
         self.track = track
@@ -286,29 +286,57 @@ struct RemoteAudioVolumeControl: View {
     }
 
     var body: some View {
-        HStack(spacing: 8) {
-            Image(systemSymbol: volume == 0 ? .speakerSlashFill : .speakerWave2Fill)
-                .foregroundColor(.white)
-                .frame(width: 18)
-
-            Slider(value: volumeBinding, in: 0.0 ... Self.maxVolume)
-                .tint(Color.orange)
-
-            if showsPercentage {
-                Text("\(Int((Self.clamped(volume) * 100).rounded()))%")
-                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
-                    .foregroundColor(.white)
-                    .frame(width: 42, alignment: .trailing)
-            }
+        Button {
+            isSliderPresented.toggle()
+        } label: {
+            Image(systemSymbol: volumeSymbol)
+                .foregroundColor(isSliderPresented ? Color.orange : .white)
         }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
-        .frame(maxWidth: 280)
-        .background(Color.black.opacity(0.5))
-        .cornerRadius(8)
+        .buttonStyle(.plain)
+        .accessibilityLabel("Remote audio volume")
+        .accessibilityValue(volumePercentageText)
+        .popover(isPresented: $isSliderPresented, arrowEdge: .bottom) {
+            volumePopover
+                .remoteAudioVolumePopoverStyle()
+        }
         .onAppear {
             setVolume(track.volume)
         }
+    }
+
+    private var volumePopover: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                Image(systemSymbol: volumeSymbol)
+                    .foregroundColor(Color.orange)
+
+                Text("Volume")
+                    .font(.headline)
+
+                Spacer()
+
+                Text(volumePercentageText)
+                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                    .foregroundColor(.secondary)
+            }
+
+            Slider(value: volumeBinding, in: 0.0 ... Self.maxVolume)
+                .tint(Color.orange)
+        }
+        .padding()
+        .frame(width: sliderWidth)
+    }
+
+    private var sliderWidth: CGFloat {
+        showsPercentage ? 240 : 196
+    }
+
+    private var volumeSymbol: SFSymbol {
+        volume == 0 ? .speakerSlashFill : .speakerWave2Fill
+    }
+
+    private var volumePercentageText: String {
+        "\(Int((Self.clamped(volume) * 100).rounded()))%"
     }
 
     private var volumeBinding: Binding<Double> {
@@ -333,6 +361,21 @@ struct RemoteAudioVolumeControl: View {
 
     private static func snapped(_ volume: Double) -> Double {
         abs(volume - snapVolume) < snapThreshold ? defaultVolume : volume
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func remoteAudioVolumePopoverStyle() -> some View {
+        #if os(iOS)
+        if #available(iOS 16.4, *) {
+            presentationCompactAdaptation(.popover)
+        } else {
+            self
+        }
+        #else
+        self
+        #endif
     }
 }
 
