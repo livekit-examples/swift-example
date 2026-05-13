@@ -28,6 +28,12 @@ struct ParticipantView: View {
 
     @State private var isRendering: Bool = false
 
+    private var remoteAudioTracks: [RemoteAudioTrack] {
+        participant.audioTracks
+            .compactMap { $0.track as? RemoteAudioTrack }
+            .sorted { $0.id < $1.id }
+    }
+
     func bgView(systemSymbol: SFSymbol, geometry: GeometryProxy) -> some View {
         Image(systemSymbol: systemSymbol)
             .resizable()
@@ -215,6 +221,12 @@ struct ParticipantView: View {
                                 .foregroundColor(Color.white)
                         }
 
+                        ForEach(remoteAudioTracks) { remoteAudioTrack in
+                            RemoteAudioVolumeControl(track: remoteAudioTrack,
+                                                     showsPercentage: geometry.size.width > 180)
+                                .fixedSize()
+                        }
+
                         if participant.connectionQuality == .excellent {
                             Image(systemSymbol: .wifi)
                                 .foregroundColor(.green)
@@ -252,6 +264,115 @@ struct ParticipantView: View {
                 // Pass the tap event
                 onTap?(participant)
             })
+    }
+}
+
+struct RemoteAudioVolumeControl: View {
+    let track: RemoteAudioTrack
+    let showsPercentage: Bool
+
+    private static let defaultVolume = 1.0
+    private static let maxVolume = 2.0
+    private static let snapVolume = 1.0
+    private static let snapThreshold = 0.04
+
+    @State private var volume: Double
+    @State private var isSliderPresented = false
+
+    init(track: RemoteAudioTrack, showsPercentage: Bool) {
+        self.track = track
+        self.showsPercentage = showsPercentage
+        _volume = State(initialValue: Self.clamped(track.volume))
+    }
+
+    var body: some View {
+        Button {
+            isSliderPresented.toggle()
+        } label: {
+            Image(systemSymbol: volumeSymbol)
+                .foregroundColor(isSliderPresented ? Color.orange : .white)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Remote audio volume")
+        .accessibilityValue(volumePercentageText)
+        .popover(isPresented: $isSliderPresented, arrowEdge: .bottom) {
+            volumePopover
+                .remoteAudioVolumePopoverStyle()
+        }
+    }
+
+    private var volumePopover: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                Image(systemSymbol: volumeSymbol)
+                    .foregroundColor(Color.orange)
+
+                Text("Volume")
+                    .font(.headline)
+
+                Spacer()
+
+                Text(volumePercentageText)
+                    .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                    .foregroundColor(.secondary)
+            }
+
+            Slider(value: volumeBinding, in: 0.0 ... Self.maxVolume)
+                .tint(Color.orange)
+        }
+        .padding()
+        .frame(width: sliderWidth)
+    }
+
+    private var sliderWidth: CGFloat {
+        showsPercentage ? 240 : 196
+    }
+
+    private var volumeSymbol: SFSymbol {
+        volume == 0 ? .speakerSlashFill : .speakerWave2Fill
+    }
+
+    private var volumePercentageText: String {
+        "\(Int((Self.clamped(volume) * 100).rounded()))%"
+    }
+
+    private var volumeBinding: Binding<Double> {
+        Binding(
+            get: { volume },
+            set: { newValue in
+                let snappedVolume = Self.snapped(Self.clamped(newValue))
+                setVolume(snappedVolume)
+            }
+        )
+    }
+
+    private func setVolume(_ newValue: Double) {
+        let clampedVolume = Self.clamped(newValue)
+        volume = clampedVolume
+        track.volume = clampedVolume
+    }
+
+    private static func clamped(_ volume: Double) -> Double {
+        min(max(volume, 0.0), maxVolume)
+    }
+
+    private static func snapped(_ volume: Double) -> Double {
+        abs(volume - snapVolume) < snapThreshold ? defaultVolume : volume
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func remoteAudioVolumePopoverStyle() -> some View {
+        #if os(iOS)
+        if #available(iOS 16.4, *) {
+            presentationCompactAdaptation(.popover)
+        } else {
+            self
+        }
+        #else
+        self
+        #endif
     }
 }
 
