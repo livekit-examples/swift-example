@@ -19,6 +19,7 @@
 		68A50EE02C4C1ED500D2DE17 /* LiveKitExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ED92C4C1ED500D2DE17 /* LiveKitExample.swift */; };
 		68A50EE22C4C1ED500D2DE17 /* RoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50EDB2C4C1ED500D2DE17 /* RoomView.swift */; };
 		68A50EE32C4C1ED500D2DE17 /* PublishOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ED22C4C1ED500D2DE17 /* PublishOptionsView.swift */; };
+		RPC1234567890ABCDEF000001 /* RpcTesterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = RPC1234567890ABCDEF000002 /* RpcTesterView.swift */; };
 		68A50EE42C4C1ED500D2DE17 /* SecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ED02C4C1ED500D2DE17 /* SecureStore.swift */; };
 		68A50EE52C4C1ED500D2DE17 /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ED62C4C1ED500D2DE17 /* ConnectView.swift */; };
 		68A50EE62C4C1ED500D2DE17 /* ExampleRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A50ECE2C4C1ED500D2DE17 /* ExampleRoomMessage.swift */; };
@@ -87,6 +88,7 @@
 		68A50ECF2C4C1ED500D2DE17 /* Participant+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Participant+Helpers.swift"; sourceTree = "<group>"; };
 		68A50ED02C4C1ED500D2DE17 /* SecureStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureStore.swift; sourceTree = "<group>"; };
 		68A50ED22C4C1ED500D2DE17 /* PublishOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublishOptionsView.swift; sourceTree = "<group>"; };
+		RPC1234567890ABCDEF000002 /* RpcTesterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RpcTesterView.swift; sourceTree = "<group>"; };
 		68A50ED32C4C1ED500D2DE17 /* ScreenShareSourcePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenShareSourcePickerView.swift; sourceTree = "<group>"; };
 		68A50ED52C4C1ED500D2DE17 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		68A50ED62C4C1ED500D2DE17 /* ConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				6830E6BD2D5BE5DF001C5E83 /* AudioControlsPanel.swift */,
 				6830E6C02D5BE5E0001C5E83 /* MessagesPanel.swift */,
 				68A50ED22C4C1ED500D2DE17 /* PublishOptionsView.swift */,
+				RPC1234567890ABCDEF000002 /* RpcTesterView.swift */,
 				68A50ED32C4C1ED500D2DE17 /* ScreenShareSourcePickerView.swift */,
 				6888FBE02C66B7B100AB93C1 /* ImmersiveView.swift */,
 				68A50ED62C4C1ED500D2DE17 /* ConnectView.swift */,
@@ -390,6 +393,7 @@
 				7BBEBA7A2D79103800586EC4 /* RoomContextView.swift in Sources */,
 				68A50EE22C4C1ED500D2DE17 /* RoomView.swift in Sources */,
 				68A50EE32C4C1ED500D2DE17 /* PublishOptionsView.swift in Sources */,
+				RPC1234567890ABCDEF000001 /* RpcTesterView.swift in Sources */,
 				68A50EE42C4C1ED500D2DE17 /* SecureStore.swift in Sources */,
 				68A50EE52C4C1ED500D2DE17 /* ConnectView.swift in Sources */,
 				7BBEBA8B2D7921AA00586EC4 /* LKTextField.swift in Sources */,
