@@ -111,6 +111,12 @@ final class RoomContext: ObservableObject {
 
     var _connectTask: Task<Void, Error>?
 
+    private var _rpcTestTask: Task<Void, Never>?
+    private var _rpcHandlerRegistered = false
+    private static let rpcTestTopics = (0 ..< 20).map { "test-\($0)" }
+    private static let rpcTestSizeRange = (1 * 1024) ... (1000 * 1024)
+    private static let rpcTestInterval: TimeInterval = 0.5
+
     init(store: ValueStore<Preferences>) {
         self.store = store
         room.add(delegate: self)
@@ -201,6 +207,69 @@ final class RoomContext: ObservableObject {
         await room.disconnect()
     }
 
+    private func startRpcTest() {
+        guard _rpcTestTask == nil else { return }
+        _rpcTestTask = Task { [weak self] in
+            guard let self else { return }
+            if !_rpcHandlerRegistered {
+                do {
+                    for topic in Self.rpcTestTopics {
+                        try await room.registerRpcMethod(topic) { data in
+                            data.payload
+                        }
+                    }
+                    _rpcHandlerRegistered = true
+                } catch {
+                    print("🔴 RPC test: failed to register handler: \(error)")
+                }
+            }
+
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: UInt64(Self.rpcTestInterval * 1_000_000_000))
+                if Task.isCancelled { return }
+
+                guard let target = room.remoteParticipants.values.first,
+                      let identity = target.identity
+                else {
+                    print("⚪ RPC test: no remote participant to call")
+                    continue
+                }
+
+                let sizeRange = Self.rpcTestSizeRange
+                await withTaskGroup(of: Void.self) { group in
+                    for topic in Self.rpcTestTopics {
+                        group.addTask { [room] in
+                            let size = Int.random(in: sizeRange)
+                            let payload = String(repeating: "a", count: size)
+                            let sizeKB = Double(size) / 1024.0
+
+                            do {
+                                let response = try await room.localParticipant.performRpc(
+                                    destinationIdentity: identity,
+                                    method: topic,
+                                    payload: payload
+                                )
+                                if response == payload {
+                                    print(String(format: "🟢 [\(topic)] OK: %.2f KB → \(identity)", sizeKB))
+                                } else {
+                                    let respKB = Double(response.count) / 1024.0
+                                    print(String(format: "🔴 [\(topic)] FAIL: sent=%.2f KB received=%.2f KB", sizeKB, respKB))
+                                }
+                            } catch {
+                                print(String(format: "🔴 [\(topic)] error (%.2f KB): \(error)", sizeKB))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func stopRpcTest() {
+        _rpcTestTask?.cancel()
+        _rpcTestTask = nil
+    }
+
     func sendMessage() {
         // Make sure the message is not empty
         guard !textFieldString.isEmpty else { return }
@@ -266,6 +335,18 @@ extension RoomContext: RoomDelegate {
 
     nonisolated func room(_ room: Room, didUpdateConnectionState connectionState: ConnectionState, from oldValue: ConnectionState) {
         print("Did update connectionState \(oldValue) -> \(connectionState)")
+
+        if case .connected = connectionState {
+            Task { @MainActor [weak self] in
+                self?.startRpcTest()
+            }
+        }
+
+        if case .disconnected = connectionState {
+            Task { @MainActor [weak self] in
+                self?.stopRpcTest()
+            }
+        }
 
         if case .disconnected = connectionState,
            let error = room.disconnectError,
