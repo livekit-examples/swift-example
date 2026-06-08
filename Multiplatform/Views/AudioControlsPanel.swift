@@ -96,17 +96,21 @@ struct AudioControlsPanel: View {
             }
 
             Section(header: Text("Runtime Audio Processing")) {
-                Toggle("Echo cancellation", isOn: $appCtx.runtimeEchoCancellation)
-                modePicker("Echo mode", selection: $appCtx.runtimeEchoCancellationMode)
+                processingRow("Echo cancellation",
+                              isOn: $appCtx.runtimeEchoCancellation,
+                              mode: $appCtx.runtimeEchoCancellationMode)
 
-                Toggle("Noise suppression", isOn: $appCtx.runtimeNoiseSuppression)
-                modePicker("Noise mode", selection: $appCtx.runtimeNoiseSuppressionMode)
+                processingRow("Noise suppression",
+                              isOn: $appCtx.runtimeNoiseSuppression,
+                              mode: $appCtx.runtimeNoiseSuppressionMode)
 
-                Toggle("Auto gain control", isOn: $appCtx.runtimeAutoGainControl)
-                modePicker("Gain mode", selection: $appCtx.runtimeAutoGainControlMode)
+                processingRow("Auto gain control",
+                              isOn: $appCtx.runtimeAutoGainControl,
+                              mode: $appCtx.runtimeAutoGainControlMode)
 
-                Toggle("High-pass filter", isOn: $appCtx.runtimeHighPassFilter)
-                modePicker("HPF mode", selection: $appCtx.runtimeHighPassFilterMode)
+                processingRow("High-pass filter",
+                              isOn: $appCtx.runtimeHighPassFilter,
+                              mode: $appCtx.runtimeHighPassFilterMode)
 
                 HStack {
                     Button("Apply to local mic") {
@@ -125,6 +129,10 @@ struct AudioControlsPanel: View {
                     Text(appCtx.runtimeAudioProcessingStatus)
                         .font(.caption)
                         .foregroundColor(.secondary)
+                }
+
+                if !appCtx.runtimeAudioProcessingEffectiveStates.isEmpty {
+                    AudioProcessingEffectiveStateBox(states: appCtx.runtimeAudioProcessingEffectiveStates)
                 }
 
                 if !appCtx.builtInAudioProcessingSummary.isEmpty {
@@ -228,6 +236,81 @@ struct AudioControlsPanel: View {
     }
 }
 
+private struct AudioProcessingEffectiveStateBox: View {
+    let states: [AudioProcessingEffectiveState]
+
+    private var columns: [GridItem] {
+        [GridItem(.adaptive(minimum: 120), spacing: 8, alignment: .top)]
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Current effective state")
+                .font(.caption.weight(.semibold))
+                .foregroundColor(.secondary)
+
+            LazyVGrid(columns: columns, alignment: .leading, spacing: 8) {
+                ForEach(states) { state in
+                    AudioProcessingEffectiveStateItem(state: state)
+                }
+            }
+        }
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.secondary.opacity(0.08))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.secondary.opacity(0.18))
+        )
+    }
+}
+
+private struct AudioProcessingEffectiveStateItem: View {
+    let state: AudioProcessingEffectiveState
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 8) {
+            Circle()
+                .fill(state.result.tintColor)
+                .frame(width: 10, height: 10)
+                .padding(.top, 4)
+
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 4) {
+                    Text(state.title)
+                        .font(.caption.weight(.semibold))
+                    Text(state.result.rawValue)
+                        .font(.caption)
+                        .foregroundColor(.primary)
+                }
+                Text(state.detail)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private extension AudioProcessingEffectiveResult {
+    var tintColor: Color {
+        switch self {
+        case .platform, .software:
+            return .green
+        case .disabled:
+            return .gray
+        case .unavailable:
+            return .red
+        case .unknown:
+            return .secondary
+        }
+    }
+}
+
 private extension AudioControlsPanel {
     var localMicrophoneTrack: LocalAudioTrack? {
         room.localParticipant.audioTracks
@@ -235,11 +318,21 @@ private extension AudioControlsPanel {
             .track as? LocalAudioTrack
     }
 
-    func modePicker(_ title: String, selection: Binding<AudioProcessingMode>) -> some View {
-        Picker(title, selection: selection) {
-            ForEach(AudioProcessingMode.allCases, id: \.self) { mode in
-                Text(mode.description).tag(mode)
+    func processingRow(_ title: String, isOn: Binding<Bool>, mode: Binding<AudioProcessingMode>) -> some View {
+        HStack(spacing: 12) {
+            Toggle(title, isOn: isOn)
+                .lineLimit(1)
+
+            Spacer(minLength: 8)
+
+            Picker("Mode", selection: mode) {
+                ForEach(AudioProcessingMode.allCases, id: \.self) { mode in
+                    Text(mode.description).tag(mode)
+                }
             }
+            .labelsHidden()
+            .pickerStyle(.menu)
+            .frame(minWidth: 110, maxWidth: 150, alignment: .trailing)
         }
     }
 
@@ -252,6 +345,7 @@ private extension AudioControlsPanel {
 
         do {
             let result = try localMicrophoneTrack.setAudioProcessingOptions(appCtx.runtimeAudioProcessingOptions)
+            appCtx.markRuntimeAudioProcessingOptionsApplied()
             appCtx.runtimeAudioProcessingStatus = if result.message.isEmpty {
                 "Audio processing options: \(result.code)"
             } else {

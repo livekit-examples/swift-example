@@ -411,9 +411,14 @@ struct RoomView: View {
                        Task {
                            isMicrophonePublishingBusy = true
                            defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
-                           let options = AudioCaptureOptions(audioProcessingOptions: appCtx.runtimeAudioProcessingOptions)
-                           _ = try? await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled,
+                           let isEnablingMicrophone = !isMicrophoneEnabled
+                           let audioProcessingOptions = appCtx.runtimeAudioProcessingOptions
+                           let options = AudioCaptureOptions(audioProcessingOptions: audioProcessingOptions)
+                           _ = try? await room.localParticipant.setMicrophone(enabled: isEnablingMicrophone,
                                                                               captureOptions: options)
+                           if isEnablingMicrophone {
+                               appCtx.markRuntimeAudioProcessingOptionsApplied(audioProcessingOptions)
+                           }
                            appCtx.refreshBuiltInAudioProcessingState()
                        }
                    },
