@@ -299,12 +299,10 @@ private struct AudioProcessingEffectiveStateItem: View {
 private extension AudioProcessingEffectiveResult {
     var tintColor: Color {
         switch self {
-        case .platform, .software:
+        case .platform, .software, .softwareAndPlatform:
             return .green
         case .disabled:
             return .gray
-        case .unavailable:
-            return .red
         case .unknown:
             return .secondary
         }
@@ -345,7 +343,6 @@ private extension AudioControlsPanel {
 
         do {
             let result = try localMicrophoneTrack.setAudioProcessingOptions(appCtx.runtimeAudioProcessingOptions)
-            appCtx.markRuntimeAudioProcessingOptionsApplied()
             appCtx.runtimeAudioProcessingStatus = if result.message.isEmpty {
                 "Audio processing options: \(result.code)"
             } else {

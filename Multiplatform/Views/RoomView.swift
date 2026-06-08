@@ -416,9 +416,6 @@ struct RoomView: View {
                            let options = AudioCaptureOptions(audioProcessingOptions: audioProcessingOptions)
                            _ = try? await room.localParticipant.setMicrophone(enabled: isEnablingMicrophone,
                                                                               captureOptions: options)
-                           if isEnablingMicrophone {
-                               appCtx.markRuntimeAudioProcessingOptionsApplied(audioProcessingOptions)
-                           }
                            appCtx.refreshBuiltInAudioProcessingState()
                        }
                    },
