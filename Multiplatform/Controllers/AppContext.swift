@@ -101,6 +101,30 @@ final class AppContext: NSObject, ObservableObject {
         }
     }
 
+    @Published var runtimeEchoCancellation: Bool = true
+    @Published var runtimeNoiseSuppression: Bool = true
+    @Published var runtimeAutoGainControl: Bool = true
+    @Published var runtimeHighPassFilter: Bool = false
+    @Published var runtimeEchoCancellationMode: AudioProcessingMode = .automatic
+    @Published var runtimeNoiseSuppressionMode: AudioProcessingMode = .automatic
+    @Published var runtimeAutoGainControlMode: AudioProcessingMode = .automatic
+    @Published var runtimeHighPassFilterMode: AudioProcessingMode = .automatic
+    @Published var runtimeAudioProcessingStatus: String = ""
+    @Published var builtInAudioProcessingSummary: String = ""
+
+    var runtimeAudioProcessingOptions: AudioProcessingOptions {
+        AudioProcessingOptions(
+            echoCancellation: runtimeEchoCancellation,
+            autoGainControl: runtimeAutoGainControl,
+            noiseSuppression: runtimeNoiseSuppression,
+            highPassFilter: runtimeHighPassFilter,
+            echoCancellationMode: runtimeEchoCancellationMode,
+            autoGainControlMode: runtimeAutoGainControlMode,
+            noiseSuppressionMode: runtimeNoiseSuppressionMode,
+            highPassFilterMode: runtimeHighPassFilterMode
+        )
+    }
+
     @Published var micMuteMode: MicrophoneMuteMode = .voiceProcessing {
         didSet {
             do {
@@ -127,7 +151,10 @@ final class AppContext: NSObject, ObservableObject {
         didSet {
             Task {
                 do {
-                    try await AudioManager.shared.setRecordingAlwaysPreparedMode(isRecordingAlwaysPreparedMode)
+                    try await AudioManager.shared.setRecordingAlwaysPreparedMode(
+                        isRecordingAlwaysPreparedMode,
+                        audioProcessingOptions: runtimeAudioProcessingOptions
+                    )
                 } catch {
                     print("Failed to set recording always prepared mode: \(error)")
                 }
@@ -226,11 +253,12 @@ final class AppContext: NSObject, ObservableObject {
         isVoiceProcessingEnabled = AudioManager.shared.isVoiceProcessingEnabled
         isVoiceProcessingAGCEnabled = AudioManager.shared.isVoiceProcessingAGCEnabled
         isRecordingAlwaysPreparedMode = AudioManager.shared.isRecordingAlwaysPreparedMode
+        refreshBuiltInAudioProcessingState()
         updateAudioDeviceSelections()
     }
 }
 
-private extension AppContext {
+extension AppContext {
     func updateAudioDeviceSelections() {
         if !inputDevices.contains(where: { $0.id == inputDevice.id }) {
             if let defaultInput = inputDevices.first(where: { $0.isDefault }) {
@@ -247,6 +275,91 @@ private extension AppContext {
                 outputDevice = firstOutput
             }
         }
+    }
+
+    func refreshBuiltInAudioProcessingState() {
+        let state = AudioManager.shared.builtInAudioProcessingState
+        let engineAvailability = AudioManager.shared.engineAvailability
+        let topology = switch state.topology {
+        case .independent: "independent"
+        case .echoCancellationAndNoiseSuppressionCoupled: "AEC/NS coupled"
+        }
+        let audioProcessingOptions = runtimeAudioProcessingOptions
+        builtInAudioProcessingSummary = [
+            "LiveKit audio processing diagnostics",
+            "generatedAt: \(ISO8601DateFormatter().string(from: Date()))",
+            "platform: \(platformName)",
+            "",
+            "App voice processing controls",
+            "  voiceProcessingEnabled: \(boolSummary(AudioManager.shared.isVoiceProcessingEnabled))",
+            "  voiceProcessingBypassed: \(boolSummary(AudioManager.shared.isVoiceProcessingBypassed))",
+            "  voiceProcessingAGCEnabled: \(boolSummary(AudioManager.shared.isVoiceProcessingAGCEnabled))",
+            "",
+            "Runtime AudioProcessingOptions request",
+            "  echoCancellation: \(componentRequest(audioProcessingOptions.echoCancellation, audioProcessingOptions.echoCancellationMode))",
+            "  noiseSuppression: \(componentRequest(audioProcessingOptions.noiseSuppression, audioProcessingOptions.noiseSuppressionMode))",
+            "  autoGainControl: \(componentRequest(audioProcessingOptions.autoGainControl, audioProcessingOptions.autoGainControlMode))",
+            "  highPassFilter: \(componentRequest(audioProcessingOptions.highPassFilter, audioProcessingOptions.highPassFilterMode))",
+            "",
+            "Audio engine",
+            "  engineRunning: \(boolSummary(AudioManager.shared.isEngineRunning))",
+            "  inputAvailable requested: \(boolSummary(isAudioEngineInputAvailable))",
+            "  inputAvailable effective: \(boolSummary(engineAvailability.isInputAvailable))",
+            "  outputAvailable requested: \(boolSummary(isAudioEngineOutputAvailable))",
+            "  outputAvailable effective: \(boolSummary(engineAvailability.isOutputAvailable))",
+            "",
+            "Built-in audio processing topology",
+            "  topology: \(topology)",
+            "  echoCancellation: \(componentSummary(state.echoCancellation))",
+            "  noiseSuppression: \(componentSummary(state.noiseSuppression))",
+            "  autoGainControl: \(componentSummary(state.autoGainControl))",
+            "",
+            "Apple Voice Processing I/O state",
+            "  voiceProcessingEnabled requested: \(optionalSummary(state.isVoiceProcessingEnabledRequested))",
+            "  voiceProcessingEnabled active: \(optionalSummary(state.isVoiceProcessingEnabledActive))",
+            "  voiceProcessingBypassed requested: \(optionalSummary(state.isVoiceProcessingBypassedRequested))",
+            "  voiceProcessingBypassed active: \(optionalSummary(state.isVoiceProcessingBypassedActive))",
+            "  voiceProcessingAGC requested: \(optionalSummary(state.isVoiceProcessingAGCEnabledRequested))",
+            "  voiceProcessingAGC active: \(optionalSummary(state.isVoiceProcessingAGCEnabledActive))",
+            "",
+            "Notes",
+            "  requested values come from the ADM state.",
+            "  active values come from the platform input node when available.",
+            "  active values can be unknown before the input path is configured.",
+            "  subscribe-only playback does not configure the input path.",
+        ].joined(separator: "\n")
+    }
+
+    func componentSummary(_ state: BuiltInAudioProcessingComponentState) -> String {
+        "available: \(boolSummary(state.isAvailable)), " +
+            "requested: \(optionalSummary(state.isRequested)), " +
+            "active: \(optionalSummary(state.isActive))"
+    }
+
+    func optionalSummary(_ value: Bool?) -> String {
+        value.map { $0 ? "on" : "off" } ?? "unknown"
+    }
+
+    func boolSummary(_ value: Bool) -> String {
+        value ? "on" : "off"
+    }
+
+    func componentRequest(_ enabled: Bool, _ mode: AudioProcessingMode) -> String {
+        "enabled: \(boolSummary(enabled)), mode: \(mode.description)"
+    }
+
+    var platformName: String {
+        #if os(iOS)
+        "iOS"
+        #elseif os(macOS)
+        "macOS"
+        #elseif os(visionOS)
+        "visionOS"
+        #elseif os(tvOS)
+        "tvOS"
+        #else
+        "unknown"
+        #endif
     }
 }
 

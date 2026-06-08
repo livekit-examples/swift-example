@@ -17,9 +17,16 @@
 import LiveKit
 import SwiftUI
 
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
+
 #if !os(tvOS)
 struct AudioControlsPanel: View {
     @EnvironmentObject var appCtx: AppContext
+    @EnvironmentObject var room: Room
 
     private var inputDeviceSelection: Binding<AudioDevice.ID> {
         Binding(
@@ -86,6 +93,50 @@ struct AudioControlsPanel: View {
                 Toggle("Voice processing enabled", isOn: $appCtx.isVoiceProcessingEnabled)
                 Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
                 Toggle("Auto gain control (AGC)", isOn: $appCtx.isVoiceProcessingAGCEnabled)
+            }
+
+            Section(header: Text("Runtime Audio Processing")) {
+                Toggle("Echo cancellation", isOn: $appCtx.runtimeEchoCancellation)
+                modePicker("Echo mode", selection: $appCtx.runtimeEchoCancellationMode)
+
+                Toggle("Noise suppression", isOn: $appCtx.runtimeNoiseSuppression)
+                modePicker("Noise mode", selection: $appCtx.runtimeNoiseSuppressionMode)
+
+                Toggle("Auto gain control", isOn: $appCtx.runtimeAutoGainControl)
+                modePicker("Gain mode", selection: $appCtx.runtimeAutoGainControlMode)
+
+                Toggle("High-pass filter", isOn: $appCtx.runtimeHighPassFilter)
+                modePicker("HPF mode", selection: $appCtx.runtimeHighPassFilterMode)
+
+                HStack {
+                    Button("Apply to local mic") {
+                        applyRuntimeAudioProcessingOptions()
+                    }
+                    Button("Get diagnostics") {
+                        appCtx.refreshBuiltInAudioProcessingState()
+                    }
+                    Button("Copy diagnostics") {
+                        copyAudioProcessingDiagnostics()
+                    }
+                }
+                .buttonStyle(.bordered)
+
+                if !appCtx.runtimeAudioProcessingStatus.isEmpty {
+                    Text(appCtx.runtimeAudioProcessingStatus)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+
+                if !appCtx.builtInAudioProcessingSummary.isEmpty {
+                    ScrollView {
+                        Text(appCtx.builtInAudioProcessingSummary)
+                            .font(.caption2.monospaced())
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .textSelection(.enabled)
+                    }
+                    .frame(minHeight: 180, maxHeight: 260)
+                }
             }
 
             Section(header: Text("Recording")) {
@@ -178,6 +229,52 @@ struct AudioControlsPanel: View {
 }
 
 private extension AudioControlsPanel {
+    var localMicrophoneTrack: LocalAudioTrack? {
+        room.localParticipant.audioTracks
+            .first(where: { $0.source == .microphone })?
+            .track as? LocalAudioTrack
+    }
+
+    func modePicker(_ title: String, selection: Binding<AudioProcessingMode>) -> some View {
+        Picker(title, selection: selection) {
+            ForEach(AudioProcessingMode.allCases, id: \.self) { mode in
+                Text(mode.description).tag(mode)
+            }
+        }
+    }
+
+    func applyRuntimeAudioProcessingOptions() {
+        guard let localMicrophoneTrack else {
+            appCtx.runtimeAudioProcessingStatus = "Publish the microphone first."
+            appCtx.refreshBuiltInAudioProcessingState()
+            return
+        }
+
+        do {
+            let result = try localMicrophoneTrack.setAudioProcessingOptions(appCtx.runtimeAudioProcessingOptions)
+            appCtx.runtimeAudioProcessingStatus = if result.message.isEmpty {
+                "Audio processing options: \(result.code)"
+            } else {
+                "Audio processing options: \(result.code): \(result.message)"
+            }
+        } catch {
+            appCtx.runtimeAudioProcessingStatus = "Failed: \(error)"
+        }
+        appCtx.refreshBuiltInAudioProcessingState()
+    }
+
+    func copyAudioProcessingDiagnostics() {
+        appCtx.refreshBuiltInAudioProcessingState()
+        let diagnostics = appCtx.builtInAudioProcessingSummary
+        #if canImport(UIKit)
+        UIPasteboard.general.string = diagnostics
+        #elseif canImport(AppKit)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(diagnostics, forType: .string)
+        #endif
+        appCtx.runtimeAudioProcessingStatus = "Diagnostics copied."
+    }
+
     func micMuteModeDescription(for mode: MicrophoneMuteMode) -> String {
         switch mode {
         case .voiceProcessing:
