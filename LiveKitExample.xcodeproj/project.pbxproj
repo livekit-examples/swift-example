@@ -36,6 +36,7 @@
 		7BBEBA832D791CB300586EC4 /* CIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBEBA822D791CAF00586EC4 /* CIImage.swift */; };
 		7BBEBA892D79219600586EC4 /* LKButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBEBA882D79219600586EC4 /* LKButton.swift */; };
 		7BBEBA8B2D7921AA00586EC4 /* LKTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBEBA8A2D7921AA00586EC4 /* LKTextField.swift */; };
+		7BBEBA9A2D79219600586EC4 /* View+OnChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBEBA9B2D79219600586EC4 /* View+OnChange.swift */; };
 		B5BCF77E2CFE7FDE00BCD4D8 /* BroadcastExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 683F05F3273F96B20080C7AC /* BroadcastExt.appex */; platformFilters = (ios, tvos, xros, ); settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B5BCF7842CFE859A00BCD4D8 /* LiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = B5BCF7832CFE859A00BCD4D8 /* LiveKit */; };
 		B5C2EF162D0114C800FAC766 /* LiveKitComponents in Frameworks */ = {isa = PBXBuildFile; productRef = B5C2EF152D0114C800FAC766 /* LiveKitComponents */; };
@@ -101,6 +102,7 @@
 		7BBEBA822D791CAF00586EC4 /* CIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIImage.swift; sourceTree = "<group>"; };
 		7BBEBA882D79219600586EC4 /* LKButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LKButton.swift; sourceTree = "<group>"; };
 		7BBEBA8A2D7921AA00586EC4 /* LKTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LKTextField.swift; sourceTree = "<group>"; };
+		7BBEBA9B2D79219600586EC4 /* View+OnChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+OnChange.swift"; sourceTree = "<group>"; };
 		9E7835E62751A71500559DEC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		D7AA477A285A0FFC00EB41AE /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -247,6 +249,7 @@
 				7BBEBA822D791CAF00586EC4 /* CIImage.swift */,
 				68A50ECB2C4C1ED500D2DE17 /* Binding+OptionSet.swift */,
 				68A50ECC2C4C1ED500D2DE17 /* Bundle.swift */,
+				7BBEBA9B2D79219600586EC4 /* View+OnChange.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -398,6 +401,7 @@
 				68A50EE82C4C1ED500D2DE17 /* ScreenShareSourcePickerView.swift in Sources */,
 				68A50EEA2C4C1ED500D2DE17 /* Participant+Helpers.swift in Sources */,
 				68A50EEB2C4C1ED500D2DE17 /* Binding+OptionSet.swift in Sources */,
+				7BBEBA9A2D79219600586EC4 /* View+OnChange.swift in Sources */,
 				6888FBE12C66B7B400AB93C1 /* ImmersiveView.swift in Sources */,
 				68A50EEC2C4C1ED500D2DE17 /* ParticipantView.swift in Sources */,
 				7BBEBA832D791CB300586EC4 /* CIImage.swift in Sources */,
@@ -796,8 +800,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
-				kind = revision;
-				revision = 56ce4ed45b040ee939ac49fb559e07959941bb94;
+				kind = exactVersion;
+				version = 2.15.0;
 			};
 		};
 		B5C2EF142D0114C800FAC766 /* XCRemoteSwiftPackageReference "components-swift" */ = {

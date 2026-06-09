@@ -207,7 +207,7 @@ struct RoomView: View {
         .padding(5)
         .onAppear {
             Task { @MainActor in
-                canSwitchCameraPosition = try await CameraCapturer.canSwitchPosition()
+                canSwitchCameraPosition = await (try? CameraCapturer.canSwitchPosition()) ?? false
             }
             Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
                 Task { @MainActor in
@@ -277,7 +277,7 @@ struct RoomView: View {
                            Task {
                                isARCameraPublishingBusy = true
                                defer { Task { @MainActor in isARCameraPublishingBusy = false } }
-                               try await roomCtx.setARCamera(isEnabled: true)
+                               _ = try? await roomCtx.setARCamera(isEnabled: true)
                            }
 
                        },
@@ -298,7 +298,7 @@ struct RoomView: View {
                                 if let track = room.localParticipant.firstCameraVideoTrack as? LocalVideoTrack,
                                    let cameraCapturer = track.capturer as? CameraCapturer
                                 {
-                                    try await cameraCapturer.switchCameraPosition()
+                                    _ = try? await cameraCapturer.switchCameraPosition()
                                 }
                             }
                         }
@@ -307,7 +307,7 @@ struct RoomView: View {
                             Task {
                                 isCameraPublishingBusy = true
                                 defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                                try await room.localParticipant.setCamera(enabled: !isCameraEnabled)
+                                _ = try? await room.localParticipant.setCamera(enabled: !isCameraEnabled)
                             }
                         }
                     } label: {
@@ -323,7 +323,7 @@ struct RoomView: View {
                                    Task {
                                        isCameraPublishingBusy = true
                                        defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                                       try await room.localParticipant.setCamera(enabled: false)
+                                       _ = try? await room.localParticipant.setCamera(enabled: false)
                                    }
                                } else {
                                    publishOptionsPickerPresented = true
@@ -345,9 +345,9 @@ struct RoomView: View {
                     cameraPublishOptions = publishOptions
                     Task {
                         defer { Task { @MainActor in isCameraPublishingBusy = false } }
-                        try await room.localParticipant.setCamera(enabled: true,
-                                                                  captureOptions: captureOptions,
-                                                                  publishOptions: publishOptions)
+                        _ = try? await room.localParticipant.setCamera(enabled: true,
+                                                                       captureOptions: captureOptions,
+                                                                       publishOptions: publishOptions)
                     }
                 }
                 .padding()
@@ -360,7 +360,7 @@ struct RoomView: View {
                            isMicrophonePublishingBusy = true
                            defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
                            let options = AudioCaptureOptions(noiseSuppression: false, highpassFilter: false)
-                           try await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled, captureOptions: options)
+                           _ = try? await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled, captureOptions: options)
                        }
                    },
                    label: {
@@ -375,7 +375,7 @@ struct RoomView: View {
                        Task {
                            isScreenSharePublishingBusy = true
                            defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                           try await room.localParticipant.setScreenShare(enabled: !isScreenShareEnabled)
+                           _ = try? await room.localParticipant.setScreenShare(enabled: !isScreenShareEnabled)
                        }
                    },
                    label: {
@@ -392,7 +392,7 @@ struct RoomView: View {
                                Task {
                                    isScreenSharePublishingBusy = true
                                    defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                   try await roomCtx.setScreenShareMacOS(isEnabled: false)
+                                   try? await roomCtx.setScreenShareMacOS(isEnabled: false)
                                }
                            } else {
                                screenPickerPresented = true
@@ -409,7 +409,7 @@ struct RoomView: View {
                         Task {
                             isScreenSharePublishingBusy = true
                             defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                            try await roomCtx.setScreenShareMacOS(isEnabled: true, screenShareSource: source)
+                            try? await roomCtx.setScreenShareMacOS(isEnabled: true, screenShareSource: source)
                         }
                         screenPickerPresented = false
                     }.padding()
@@ -492,28 +492,28 @@ struct RoomView: View {
 
                 Menu("Simulate scenario") {
                     Button("Quick reconnect") {
-                        Task { try await room.debug_simulate(scenario: .quickReconnect) }
+                        Task { try? await room.debug_simulate(scenario: .quickReconnect) }
                     }
                     Button("Full reconnect") {
-                        Task { try await room.debug_simulate(scenario: .fullReconnect) }
+                        Task { try? await room.debug_simulate(scenario: .fullReconnect) }
                     }
                     Button("Node failure") {
-                        Task { try await room.debug_simulate(scenario: .nodeFailure) }
+                        Task { try? await room.debug_simulate(scenario: .nodeFailure) }
                     }
                     Button("Server leave") {
-                        Task { try await room.debug_simulate(scenario: .serverLeave) }
+                        Task { try? await room.debug_simulate(scenario: .serverLeave) }
                     }
                     Button("Migration") {
-                        Task { try await room.debug_simulate(scenario: .migration) }
+                        Task { try? await room.debug_simulate(scenario: .migration) }
                     }
                     Button("Speaker update") {
-                        Task { try await room.debug_simulate(scenario: .speakerUpdate(seconds: 3)) }
+                        Task { try? await room.debug_simulate(scenario: .speakerUpdate(seconds: 3)) }
                     }
                     Button("Force TCP") {
-                        Task { try await room.debug_simulate(scenario: .forceTCP) }
+                        Task { try? await room.debug_simulate(scenario: .forceTCP) }
                     }
                     Button("Force TLS") {
-                        Task { try await room.debug_simulate(scenario: .forceTLS) }
+                        Task { try? await room.debug_simulate(scenario: .forceTLS) }
                     }
                 }
             }
@@ -522,13 +522,13 @@ struct RoomView: View {
                 Menu("Track permissions") {
                     Button("Allow all") {
                         Task {
-                            try await room.localParticipant
+                            try? await room.localParticipant
                                 .setTrackSubscriptionPermissions(allParticipantsAllowed: true)
                         }
                     }
                     Button("Disallow all") {
                         Task {
-                            try await room.localParticipant
+                            try? await room.localParticipant
                                 .setTrackSubscriptionPermissions(allParticipantsAllowed: false)
                         }
                     }

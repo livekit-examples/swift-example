@@ -97,8 +97,12 @@ struct ConnectView: View {
 
                             LKButton(title: "Connect") {
                                 Task { @MainActor in
-                                    let room = try await roomCtx.connect()
-                                    appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
+                                    do {
+                                        let room = try await roomCtx.connect()
+                                        appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
+                                    } catch {
+                                        print("Failed to connect: \(error)")
+                                    }
                                 }
                             }
 
@@ -107,8 +111,12 @@ struct ConnectView: View {
                                     ForEach(appCtx.connectionHistory.sortedByUpdated) { entry in
                                         Button {
                                             Task { @MainActor in
-                                                let room = try await roomCtx.connect(entry: entry)
-                                                appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
+                                                do {
+                                                    let room = try await roomCtx.connect(entry: entry)
+                                                    appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
+                                                } catch {
+                                                    print("Failed to connect: \(error)")
+                                                }
                                             }
                                         } label: {
                                             Image(systemSymbol: .boltFill)

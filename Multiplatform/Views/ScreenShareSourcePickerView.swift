@@ -30,14 +30,14 @@ final class ScreenShareSourcePickerCtrl: ObservableObject {
             guard oldValue != mode else { return }
             Task { [weak self] in
                 guard let self else { return }
-                try await restartTracks()
+                try? await restartTracks()
             }
         }
     }
 
     init() {
         Task {
-            try await restartTracks()
+            try? await restartTracks()
         }
     }
 

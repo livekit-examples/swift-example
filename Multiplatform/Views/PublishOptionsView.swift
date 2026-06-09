@@ -71,8 +71,8 @@ struct PublishOptionsView: View {
                     ForEach(VideoCodec.all) {
                         Text($0.id.uppercased()).tag($0 as VideoCodec?)
                     }
-                }.onChange(of: preferredVideoCodec) { newValue in
-                    if newValue?.isSVC ?? false {
+                }.onChange(of: preferredVideoCodec) {
+                    if preferredVideoCodec?.isSVC ?? false {
                         preferredBackupVideoCodec = .vp8
                     } else {
                         preferredBackupVideoCodec = nil
@@ -160,9 +160,11 @@ struct PublishOptionsView: View {
         }
         .onAppear(perform: {
             Task {
-                devices = try await CameraCapturer.captureDevices()
-                #if !os(macOS)
-                    .singleDeviceforEachPosition()
+                let all = await (try? CameraCapturer.captureDevices()) ?? []
+                #if os(macOS)
+                devices = all
+                #else
+                devices = all.singleDeviceforEachPosition()
                 #endif
             }
         })

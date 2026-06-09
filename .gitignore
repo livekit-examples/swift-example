@@ -92,3 +92,6 @@ iOSInjectionProject/
 
 # Ignore license files
 *.license
+
+# Claude Code
+.claude/

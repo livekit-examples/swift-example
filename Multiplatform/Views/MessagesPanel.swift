@@ -37,9 +37,9 @@ struct MessagesPanel: View {
                 .onAppear(perform: {
                     scrollToBottom(scrollView)
                 })
-                .onChange(of: roomCtx.messages, perform: { _ in
+                .onChange(of: roomCtx.messages) {
                     scrollToBottom(scrollView)
-                })
+                }
                 .frame(
                     minWidth: 0,
                     maxWidth: .infinity,
