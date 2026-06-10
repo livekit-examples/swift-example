@@ -55,16 +55,14 @@ struct RoomSwitchView: View {
         }
         .preferredColorScheme(.dark)
         .navigationTitle(navigatonTitle)
-        .onChange(of: shouldShowRoomView) { newValue in
-            #if os(visionOS)
-            Task {
-                if newValue {
+        #if os(visionOS)
+            .task(id: shouldShowRoomView) {
+                if shouldShowRoomView {
                     await openImmersiveSpace(id: "ImmersiveSpace")
                 } else {
                     await dismissImmersiveSpace()
                 }
             }
-            #endif
-        }
+        #endif
     }
 }

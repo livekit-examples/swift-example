@@ -59,8 +59,12 @@ struct RoomContextView: View {
                     roomCtx.isE2eeEnabled = e2ee
                     roomCtx.e2eeKey = e2eeKey
                     if !roomCtx.token.isEmpty {
-                        let room = try await roomCtx.connect()
-                        appCtx.connectionHistory.update(room: room, e2ee: e2ee, e2eeKey: e2eeKey)
+                        do {
+                            let room = try await roomCtx.connect()
+                            appCtx.connectionHistory.update(room: room, e2ee: e2ee, e2eeKey: e2eeKey)
+                        } catch {
+                            print("Failed to connect: \(error)")
+                        }
                     }
                 }
             })

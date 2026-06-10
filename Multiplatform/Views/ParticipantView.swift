@@ -141,11 +141,11 @@ struct ParticipantView: View {
                                 Menu {
                                     if case .subscribed = remotePub.subscriptionState {
                                         Button("Unsubscribe") {
-                                            Task { try await remotePub.set(subscribed: false) }
+                                            Task { try? await remotePub.set(subscribed: false) }
                                         }
                                     } else if case .unsubscribed = remotePub.subscriptionState {
                                         Button("Subscribe") {
-                                            Task { try await remotePub.set(subscribed: true) }
+                                            Task { try? await remotePub.set(subscribed: true) }
                                         }
                                     }
                                 } label: {
@@ -185,11 +185,11 @@ struct ParticipantView: View {
                                 Menu {
                                     if case .subscribed = remotePub.subscriptionState {
                                         Button("Unsubscribe") {
-                                            Task { try await remotePub.set(subscribed: false) }
+                                            Task { try? await remotePub.set(subscribed: false) }
                                         }
                                     } else if case .unsubscribed = remotePub.subscriptionState {
                                         Button("Subscribe") {
-                                            Task { try await remotePub.set(subscribed: true) }
+                                            Task { try? await remotePub.set(subscribed: true) }
                                         }
                                     }
                                 } label: {
@@ -221,11 +221,13 @@ struct ParticipantView: View {
                                 .foregroundColor(Color.white)
                         }
 
+                        #if !os(tvOS)
                         ForEach(remoteAudioTracks) { remoteAudioTrack in
                             RemoteAudioVolumeControl(track: remoteAudioTrack,
                                                      showsPercentage: geometry.size.width > 180)
                                 .fixedSize()
                         }
+                        #endif
 
                         if participant.connectionQuality == .excellent {
                             Image(systemSymbol: .wifi)
@@ -267,6 +269,7 @@ struct ParticipantView: View {
     }
 }
 
+#if !os(tvOS)
 struct RemoteAudioVolumeControl: View {
     let track: RemoteAudioTrack
     let showsPercentage: Bool
@@ -375,6 +378,7 @@ private extension View {
         #endif
     }
 }
+#endif
 
 struct StatsView: View {
     private let track: Track
