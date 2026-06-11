@@ -110,7 +110,7 @@ final class AppContext: NSObject, ObservableObject {
     @Published var runtimeAutoGainControlMode: AudioProcessingMode = .automatic
     @Published var runtimeHighPassFilterMode: AudioProcessingMode = .automatic
     @Published var runtimeAudioProcessingStatus: String = ""
-    @Published var builtInAudioProcessingSummary: String = ""
+    @Published var audioProcessingSummary: String = ""
     @Published var runtimeAudioProcessingEffectiveStates: [AudioProcessingEffectiveState] = []
 
     var runtimeAudioProcessingOptions: AudioProcessingOptions {
@@ -254,7 +254,7 @@ final class AppContext: NSObject, ObservableObject {
         isVoiceProcessingEnabled = AudioManager.shared.isVoiceProcessingEnabled
         isVoiceProcessingAGCEnabled = AudioManager.shared.isVoiceProcessingAGCEnabled
         isRecordingAlwaysPreparedMode = AudioManager.shared.isRecordingAlwaysPreparedMode
-        refreshBuiltInAudioProcessingState()
+        refreshAudioProcessingState()
         updateAudioDeviceSelections()
     }
 }
@@ -293,22 +293,17 @@ extension AppContext {
         }
     }
 
-    func refreshBuiltInAudioProcessingState() {
-        let runtimeState = AudioManager.shared.audioProcessingRuntimeState
-        let state = runtimeState?.builtIn ?? AudioManager.shared.builtInAudioProcessingState
+    func refreshAudioProcessingState() {
+        let state = AudioManager.shared.audioProcessingState
+        let platformState = AudioManager.shared.platformAudioProcessingState
         let engineAvailability = AudioManager.shared.engineAvailability
-        let topology = switch state.topology {
+        let topology = switch platformState.topology {
         case .independent: "independent"
         case .echoCancellationAndNoiseSuppressionCoupled: "AEC/NS coupled"
         }
         let audioProcessingOptions = runtimeAudioProcessingOptions
-        let effectiveStates: [AudioProcessingEffectiveState] = if let runtimeState {
-            audioProcessingEffectiveStates(for: runtimeState)
-        } else {
-            []
-        }
-        runtimeAudioProcessingEffectiveStates = effectiveStates
-        builtInAudioProcessingSummary = [
+        runtimeAudioProcessingEffectiveStates = audioProcessingEffectiveStates(for: state)
+        audioProcessingSummary = [
             "LiveKit audio processing diagnostics",
             "generatedAt: \(ISO8601DateFormatter().string(from: Date()))",
             "platform: \(platformName)",
@@ -325,22 +320,17 @@ extension AppContext {
             "  highPassFilter: \(componentRequest(audioProcessingOptions.highPassFilter, audioProcessingOptions.highPassFilterMode))",
             "",
             "Current effective processing",
-            "  available: \(boolSummary(runtimeState != nil))",
-            "  echoCancellation: \(effectiveStateSummary(runtimeState?.echoCancellation))",
-            "  noiseSuppression: \(effectiveStateSummary(runtimeState?.noiseSuppression))",
-            "  autoGainControl: \(effectiveStateSummary(runtimeState?.autoGainControl))",
-            "  highPassFilter: \(effectiveStateSummary(runtimeState?.highPassFilter))",
+            "  echoCancellation: \(effectiveStateSummary(state.echoCancellation))",
+            "  noiseSuppression: \(effectiveStateSummary(state.noiseSuppression))",
+            "  autoGainControl: \(effectiveStateSummary(state.autoGainControl))",
+            "  highPassFilter: \(effectiveStateSummary(state.highPassFilter))",
             "",
-            "Publisher WebRTC runtime state",
-            "  available: \(boolSummary(runtimeState != nil))",
-            "  hasAudioProcessingModule: \(boolSummary(runtimeState?.hasAudioProcessingModule ?? false))",
-            "  hasAudioProcessingConfig: \(boolSummary(runtimeState?.hasAudioProcessingConfig ?? false))",
-            "  hasRequestedAudioProcessingOptions: \(boolSummary(runtimeState?.hasRequestedAudioProcessingOptions ?? false))",
-            "  hasResolvedAudioProcessingOptions: \(boolSummary(runtimeState?.hasResolvedAudioProcessingOptions ?? false))",
-            "  echoCancellation: \(runtimeComponentSummary(runtimeState?.echoCancellation))",
-            "  noiseSuppression: \(runtimeComponentSummary(runtimeState?.noiseSuppression))",
-            "  autoGainControl: \(runtimeComponentSummary(runtimeState?.autoGainControl))",
-            "  highPassFilter: \(runtimeComponentSummary(runtimeState?.highPassFilter))",
+            "Engine audio processing state",
+            "  hasAudioProcessingModule: \(boolSummary(state.hasAudioProcessingModule))",
+            "  echoCancellation: \(runtimeComponentSummary(state.echoCancellation))",
+            "  noiseSuppression: \(runtimeComponentSummary(state.noiseSuppression))",
+            "  autoGainControl: \(runtimeComponentSummary(state.autoGainControl))",
+            "  highPassFilter: \(runtimeComponentSummary(state.highPassFilter))",
             "",
             "Audio engine",
             "  engineRunning: \(boolSummary(AudioManager.shared.isEngineRunning))",
@@ -349,30 +339,30 @@ extension AppContext {
             "  outputAvailable requested: \(boolSummary(isAudioEngineOutputAvailable))",
             "  outputAvailable effective: \(boolSummary(engineAvailability.isOutputAvailable))",
             "",
-            "Built-in audio processing topology",
+            "Platform audio processing topology",
             "  topology: \(topology)",
-            "  echoCancellation: \(componentSummary(state.echoCancellation))",
-            "  noiseSuppression: \(componentSummary(state.noiseSuppression))",
-            "  autoGainControl: \(componentSummary(state.autoGainControl))",
+            "  echoCancellation: \(componentSummary(platformState.echoCancellation))",
+            "  noiseSuppression: \(componentSummary(platformState.noiseSuppression))",
+            "  autoGainControl: \(componentSummary(platformState.autoGainControl))",
             "",
             "Apple Voice Processing I/O state",
-            "  voiceProcessingEnabled requested: \(optionalSummary(state.isVoiceProcessingEnabledRequested))",
-            "  voiceProcessingEnabled active: \(optionalSummary(state.isVoiceProcessingEnabledActive))",
-            "  voiceProcessingBypassed requested: \(optionalSummary(state.isVoiceProcessingBypassedRequested))",
-            "  voiceProcessingBypassed active: \(optionalSummary(state.isVoiceProcessingBypassedActive))",
-            "  voiceProcessingAGC requested: \(optionalSummary(state.isVoiceProcessingAGCEnabledRequested))",
-            "  voiceProcessingAGC active: \(optionalSummary(state.isVoiceProcessingAGCEnabledActive))",
+            "  voiceProcessingEnabled requested: \(boolSummary(platformState.isVoiceProcessingEnabledRequested))",
+            "  voiceProcessingEnabled active: \(boolSummary(platformState.isVoiceProcessingEnabledActive))",
+            "  voiceProcessingBypassed requested: \(boolSummary(platformState.isVoiceProcessingBypassedRequested))",
+            "  voiceProcessingBypassed active: \(boolSummary(platformState.isVoiceProcessingBypassedActive))",
+            "  voiceProcessingAGC requested: \(boolSummary(platformState.isVoiceProcessingAGCEnabledRequested))",
+            "  voiceProcessingAGC active: \(boolSummary(platformState.isVoiceProcessingAGCEnabledActive))",
             "",
             "Notes",
+            "  engine state comes from the factory-owned audio processing module.",
             "  requested values come from the ADM state.",
             "  active values come from the platform input node when available.",
-            "  current effective state comes from publisher WebRTC runtime state.",
-            "  active values can be unknown before the input path is configured.",
+            "  active values read off before the input path is configured.",
             "  subscribe-only playback does not configure the input path.",
         ].joined(separator: "\n")
     }
 
-    func audioProcessingEffectiveStates(for state: AudioProcessingRuntimeState) -> [AudioProcessingEffectiveState] {
+    func audioProcessingEffectiveStates(for state: AudioProcessingState) -> [AudioProcessingEffectiveState] {
         [
             audioProcessingEffectiveState(id: "aec", title: "AEC", component: state.echoCancellation),
             audioProcessingEffectiveState(id: "ns", title: "NS", component: state.noiseSuppression),
@@ -384,7 +374,7 @@ extension AppContext {
     func audioProcessingEffectiveState(
         id: String,
         title: String,
-        component: AudioProcessingComponentRuntimeState
+        component: AudioProcessingComponentState
     ) -> AudioProcessingEffectiveState {
         AudioProcessingEffectiveState(
             id: id,
@@ -394,32 +384,30 @@ extension AppContext {
         )
     }
 
-    func componentSummary(_ state: BuiltInAudioProcessingComponentState) -> String {
+    func componentSummary(_ state: PlatformAudioProcessingComponentState) -> String {
         "available: \(boolSummary(state.isAvailable)), " +
-            "requested: \(optionalSummary(state.isRequested)), " +
-            "active: \(optionalSummary(state.isActive))"
+            "requested: \(boolSummary(state.isRequested)), " +
+            "active: \(boolSummary(state.isActive))"
     }
 
-    func effectiveStateSummary(_ component: AudioProcessingComponentRuntimeState?) -> String {
-        guard let component else { return "runtime state unavailable" }
-        return "result: \(component.effective.description), \(runtimeComponentDetail(component))"
+    func effectiveStateSummary(_ component: AudioProcessingComponentState) -> String {
+        "result: \(component.effective.description), \(runtimeComponentDetail(component))"
     }
 
-    func runtimeComponentSummary(_ component: AudioProcessingComponentRuntimeState?) -> String {
-        guard let component else { return "unknown" }
+    func runtimeComponentSummary(_ component: AudioProcessingComponentState) -> String {
+        let requested = component.requested
+            .map { "\(boolSummary($0.isEnabled)) / \($0.mode.description)" } ?? "none"
         return "effective: \(component.effective.description), " +
-            "requested: \(optionalSummary(component.isRequestedEnabled)) / \(component.requestedMode?.description ?? "unknown"), " +
-            "resolvedSoftwareEnabled: \(optionalSummary(component.isResolvedSoftwareEnabled)), " +
-            "softwareEnabled: \(optionalSummary(component.isSoftwareEnabled)), " +
+            "requested: \(requested), " +
+            "softwareResolved: \(boolSummary(component.isSoftwareResolved)), " +
+            "softwareActive: \(boolSummary(component.isSoftwareActive)), " +
             "platform: available: \(boolSummary(component.isPlatformAvailable)), " +
-            "requested: \(optionalSummary(component.isPlatformRequested)), " +
-            "active: \(optionalSummary(component.isPlatformActive))"
+            "resolved: \(boolSummary(component.isPlatformResolved)), " +
+            "active: \(boolSummary(component.isPlatformActive))"
     }
 
-    func runtimeComponentDetail(_ component: AudioProcessingComponentRuntimeState) -> String {
-        let software = optionalSummary(component.isSoftwareEnabled)
-        let platform = optionalSummary(component.isPlatformActive)
-        return "software: \(software), platform: \(platform)"
+    func runtimeComponentDetail(_ component: AudioProcessingComponentState) -> String {
+        "software: \(boolSummary(component.isSoftwareActive)), platform: \(boolSummary(component.isPlatformActive))"
     }
 
     func effectiveResult(_ implementation: AudioProcessingImplementation) -> AudioProcessingEffectiveResult {
@@ -430,10 +418,6 @@ extension AppContext {
         case .platform: .platform
         case .softwareAndPlatform: .softwareAndPlatform
         }
-    }
-
-    func optionalSummary(_ value: Bool?) -> String {
-        value.map { $0 ? "on" : "off" } ?? "unknown"
     }
 
     func boolSummary(_ value: Bool) -> String {

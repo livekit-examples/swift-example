@@ -117,7 +117,7 @@ struct AudioControlsPanel: View {
                         applyRuntimeAudioProcessingOptions()
                     }
                     Button("Get diagnostics") {
-                        appCtx.refreshBuiltInAudioProcessingState()
+                        appCtx.refreshAudioProcessingState()
                     }
                     Button("Copy diagnostics") {
                         copyAudioProcessingDiagnostics()
@@ -135,9 +135,9 @@ struct AudioControlsPanel: View {
                     AudioProcessingEffectiveStateBox(states: appCtx.runtimeAudioProcessingEffectiveStates)
                 }
 
-                if !appCtx.builtInAudioProcessingSummary.isEmpty {
+                if !appCtx.audioProcessingSummary.isEmpty {
                     ScrollView {
-                        Text(appCtx.builtInAudioProcessingSummary)
+                        Text(appCtx.audioProcessingSummary)
                             .font(.caption2.monospaced())
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -337,7 +337,7 @@ private extension AudioControlsPanel {
     func applyRuntimeAudioProcessingOptions() {
         guard let localMicrophoneTrack else {
             appCtx.runtimeAudioProcessingStatus = "Publish the microphone first."
-            appCtx.refreshBuiltInAudioProcessingState()
+            appCtx.refreshAudioProcessingState()
             return
         }
 
@@ -351,12 +351,12 @@ private extension AudioControlsPanel {
         } catch {
             appCtx.runtimeAudioProcessingStatus = "Failed: \(error)"
         }
-        appCtx.refreshBuiltInAudioProcessingState()
+        appCtx.refreshAudioProcessingState()
     }
 
     func copyAudioProcessingDiagnostics() {
-        appCtx.refreshBuiltInAudioProcessingState()
-        let diagnostics = appCtx.builtInAudioProcessingSummary
+        appCtx.refreshAudioProcessingState()
+        let diagnostics = appCtx.audioProcessingSummary
         #if canImport(UIKit)
         UIPasteboard.general.string = diagnostics
         #elseif canImport(AppKit)
