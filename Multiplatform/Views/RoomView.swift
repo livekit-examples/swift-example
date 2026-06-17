@@ -359,8 +359,7 @@ struct RoomView: View {
                        Task {
                            isMicrophonePublishingBusy = true
                            defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
-                           let options = AudioCaptureOptions(noiseSuppression: false, highpassFilter: false)
-                           _ = try? await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled, captureOptions: options)
+                           _ = try? await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled)
                        }
                    },
                    label: {
