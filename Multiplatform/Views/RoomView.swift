@@ -412,8 +412,7 @@ struct RoomView: View {
                            isMicrophonePublishingBusy = true
                            defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
                            let isEnablingMicrophone = !isMicrophoneEnabled
-                           let audioProcessingOptions = appCtx.runtimeAudioProcessingOptions
-                           let options = AudioCaptureOptions(audioProcessingOptions: audioProcessingOptions)
+                           let options = appCtx.runtimeAudioCaptureOptions
                            _ = try? await room.localParticipant.setMicrophone(enabled: isEnablingMicrophone,
                                                                               captureOptions: options)
                            appCtx.refreshAudioProcessingState()

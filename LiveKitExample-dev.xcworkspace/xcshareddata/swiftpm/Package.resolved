@@ -1,5 +1,5 @@
 {
-  "originHash" : "c463e7964fb36769bfc0bd7b81beb1ce595d027d7d6558ff4e0ce259cb7f680f",
+  "originHash" : "f359d3fa1879b25a103ae805c292948c78bffefec51dbd204406f0bdf71dacc7",
   "pins" : [
     {
       "identity" : "keychainaccess",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/livekit/webrtc-xcframework.git",
       "state" : {
-        "revision" : "883f7f39f0733be564eb033d7fa6ce10960f7b7e",
-        "version" : "144.7559.10"
+        "revision" : "46f2af86f06b9a8a9158d37cadda5cb5a214e4c4",
+        "version" : "144.7559.11"
       }
     }
   ],

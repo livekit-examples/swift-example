@@ -90,7 +90,7 @@ struct AudioControlsPanel: View {
             }
 
             Section(header: Text("Voice Processing")) {
-                Toggle("Voice processing enabled", isOn: $appCtx.isVoiceProcessingEnabled)
+                Toggle("Platform voice processing allowed", isOn: $appCtx.isPlatformVoiceProcessingAllowed)
                 Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
                 Toggle("Auto gain control (AGC)", isOn: $appCtx.isVoiceProcessingAGCEnabled)
             }
@@ -316,7 +316,11 @@ private extension AudioControlsPanel {
             .track as? LocalAudioTrack
     }
 
-    func processingRow(_ title: String, isOn: Binding<Bool>, mode: Binding<AudioProcessingMode>) -> some View {
+    func processingRow<Mode: CaseIterable & Hashable>(
+        _ title: String,
+        isOn: Binding<Bool>,
+        mode: Binding<Mode>
+    ) -> some View where Mode.AllCases: RandomAccessCollection {
         HStack(spacing: 12) {
             Toggle(title, isOn: isOn)
                 .lineLimit(1)
@@ -324,8 +328,8 @@ private extension AudioControlsPanel {
             Spacer(minLength: 8)
 
             Picker("Mode", selection: mode) {
-                ForEach(AudioProcessingMode.allCases, id: \.self) { mode in
-                    Text(mode.description).tag(mode)
+                ForEach(Mode.allCases, id: \.self) { mode in
+                    Text(String(describing: mode)).tag(mode)
                 }
             }
             .labelsHidden()
@@ -343,11 +347,7 @@ private extension AudioControlsPanel {
 
         do {
             let result = try localMicrophoneTrack.setAudioProcessingOptions(appCtx.runtimeAudioProcessingOptions)
-            appCtx.runtimeAudioProcessingStatus = if result.message.isEmpty {
-                "Audio processing options: \(result.code)"
-            } else {
-                "Audio processing options: \(result.code): \(result.message)"
-            }
+            appCtx.runtimeAudioProcessingStatus = "Audio processing options: \(result)"
         } catch {
             appCtx.runtimeAudioProcessingStatus = "Failed: \(error)"
         }
