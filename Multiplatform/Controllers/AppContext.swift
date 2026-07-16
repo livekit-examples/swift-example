@@ -339,7 +339,6 @@ extension AppContext {
             "  highPassFilter: \(effectiveStateSummary(state.highpassFilter))",
             "",
             "Engine audio processing state",
-            "  hasAudioProcessingModule: \(boolSummary(state.hasAudioProcessingModule))",
             "  echoCancellation: \(runtimeComponentSummary(state.echoCancellation))",
             "  noiseSuppression: \(runtimeComponentSummary(state.noiseSuppression))",
             "  autoGainControl: \(runtimeComponentSummary(state.autoGainControl))",
