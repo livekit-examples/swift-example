@@ -139,6 +139,17 @@ final class AppContext: NSObject, ObservableObject {
         )
     }
 
+    func setRuntimeProcessingControls(_ options: AudioProcessingOptions) {
+        runtimeEchoCancellation = options.echoCancellation
+        runtimeAutoGainControl = options.autoGainControl
+        runtimeNoiseSuppression = options.noiseSuppression
+        runtimeHighPassFilter = options.highpassFilter
+        runtimeEchoCancellationMode = options.echoCancellationMode
+        runtimeAutoGainControlMode = options.autoGainControlMode
+        runtimeNoiseSuppressionMode = options.noiseSuppressionMode
+        runtimeHighPassFilterMode = options.highpassFilterMode
+    }
+
     @Published var micMuteMode: MicrophoneMuteMode = .voiceProcessing {
         didSet {
             do {

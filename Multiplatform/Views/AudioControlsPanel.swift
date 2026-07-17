@@ -113,6 +113,18 @@ struct AudioControlsPanel: View {
                               mode: $appCtx.runtimeHighPassFilterMode)
 
                 HStack {
+                    Text("Presets")
+                        .foregroundColor(.secondary)
+                    Button("Default") {
+                        appCtx.setRuntimeProcessingControls(AudioProcessingOptions())
+                    }
+                    Button("No processing") {
+                        appCtx.setRuntimeProcessingControls(.noProcessing)
+                    }
+                }
+                .buttonStyle(.bordered)
+
+                HStack {
                     Button("Apply to local mic") {
                         applyRuntimeAudioProcessingOptions()
                     }
