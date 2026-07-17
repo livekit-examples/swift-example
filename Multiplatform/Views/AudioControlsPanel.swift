@@ -334,6 +334,7 @@ private extension AudioControlsPanel {
             }
             .labelsHidden()
             .pickerStyle(.menu)
+            .disabled(!isOn.wrappedValue)
             .frame(minWidth: 110, maxWidth: 150, alignment: .trailing)
         }
     }
