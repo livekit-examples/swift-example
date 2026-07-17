@@ -348,7 +348,10 @@ private extension AudioControlsPanel {
 
         do {
             let result = try localMicrophoneTrack.setAudioProcessingOptions(appCtx.runtimeAudioProcessingOptions)
-            appCtx.runtimeAudioProcessingStatus = "Audio processing options: \(result)"
+            appCtx.runtimeAudioProcessingStatus = switch result {
+            case .applied: "Audio processing options: applied"
+            case .stored: "Audio processing options: stored — applies when the mic is sending"
+            }
         } catch {
             appCtx.runtimeAudioProcessingStatus = "Failed: \(error)"
         }
