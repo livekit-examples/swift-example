@@ -60,7 +60,7 @@ struct RoomContextView: View {
                     roomCtx.e2eeKey = e2eeKey
                     if !roomCtx.token.isEmpty {
                         do {
-                            let room = try await roomCtx.connect()
+                            let room = try await roomCtx.connect(audioCaptureOptions: appCtx.runtimeAudioCaptureOptions)
                             appCtx.connectionHistory.update(room: room, e2ee: e2ee, e2eeKey: e2eeKey)
                         } catch {
                             print("Failed to connect: \(error)")

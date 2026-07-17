@@ -412,6 +412,8 @@ struct RoomView: View {
                            isMicrophonePublishingBusy = true
                            defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
                            let isEnablingMicrophone = !isMicrophoneEnabled
+                           // Passing options here overrides the room default set at connect,
+                           // picking up panel changes made after connecting.
                            let options = appCtx.runtimeAudioCaptureOptions
                            _ = try? await room.localParticipant.setMicrophone(enabled: isEnablingMicrophone,
                                                                               captureOptions: options)
