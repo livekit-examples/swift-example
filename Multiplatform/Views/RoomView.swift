@@ -18,10 +18,6 @@ import LiveKit
 import SFSafeSymbols
 import SwiftUI
 
-#if os(macOS)
-import AppKit
-#endif
-
 #if !os(macOS) && !os(tvOS)
 let adaptiveMin = 170.0
 let toolbarPlacement: ToolbarItemPlacement = .bottomBar
@@ -80,10 +76,6 @@ struct RoomView: View {
     @State var isMicrophonePublishingBusy = false
     @State var isScreenSharePublishingBusy = false
     @State var isARCameraPublishingBusy = false
-    #if os(macOS)
-    @State private var audioPanelWidth: CGFloat = 420
-    @State private var audioPanelDragStartWidth: CGFloat?
-    #endif
 
     @State private var screenPickerPresented = false
     @State private var publishOptionsPickerPresented = false
@@ -109,22 +101,6 @@ struct RoomView: View {
 
     #if !os(tvOS)
     func audioControlsPanel(geometry: GeometryProxy) -> some View {
-        #if os(macOS)
-        let maxPanelWidth = min(760, max(320, geometry.size.width * 0.65))
-        return HStack(spacing: 0) {
-            if !geometry.isTall {
-                audioPanelResizeHandle(maxWidth: maxPanelWidth)
-            }
-            AudioControlsPanel()
-                .background(Color.lkGray1)
-                .cornerRadius(8)
-                .frame(
-                    minWidth: 0,
-                    maxWidth: geometry.isTall ? .infinity : min(audioPanelWidth, maxPanelWidth)
-                )
-                .frame(width: geometry.isTall ? nil : min(audioPanelWidth, maxPanelWidth))
-        }
-        #else
         AudioControlsPanel()
             .background(Color.lkGray1)
             .cornerRadius(8)
@@ -132,34 +108,6 @@ struct RoomView: View {
                 minWidth: 0,
                 maxWidth: geometry.isTall ? .infinity : 320
             )
-        #endif
-    }
-    #endif
-
-    #if os(macOS)
-    func audioPanelResizeHandle(maxWidth: CGFloat) -> some View {
-        Rectangle()
-            .fill(Color.secondary.opacity(0.18))
-            .frame(width: 6)
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture()
-                    .onChanged { value in
-                        let startWidth = audioPanelDragStartWidth ?? audioPanelWidth
-                        audioPanelDragStartWidth = startWidth
-                        audioPanelWidth = min(max(startWidth - value.translation.width, 320), maxWidth)
-                    }
-                    .onEnded { _ in
-                        audioPanelDragStartWidth = nil
-                    }
-            )
-            .onHover { hovering in
-                if hovering {
-                    NSCursor.resizeLeftRight.push()
-                } else {
-                    NSCursor.pop()
-                }
-            }
     }
     #endif
 
@@ -411,13 +359,7 @@ struct RoomView: View {
                        Task {
                            isMicrophonePublishingBusy = true
                            defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
-                           let isEnablingMicrophone = !isMicrophoneEnabled
-                           // Passing options here overrides the room default set at connect,
-                           // picking up panel changes made after connecting.
-                           let options = appCtx.runtimeAudioCaptureOptions
-                           _ = try? await room.localParticipant.setMicrophone(enabled: isEnablingMicrophone,
-                                                                              captureOptions: options)
-                           appCtx.refreshAudioProcessingState()
+                           _ = try? await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled)
                        }
                    },
                    label: {
