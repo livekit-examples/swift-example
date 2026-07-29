@@ -424,7 +424,7 @@ extension AppContext {
     }
 
     func runtimeComponentDetail<Mode>(_ component: AudioProcessingComponentState<Mode>) -> String {
-        "software: \(boolSummary(component.software.isActive)), platform: \(boolSummary(component.platform?.isActive ?? false))"
+        "Software: \(boolSummary(component.software.isActive)), Platform: \(boolSummary(component.platform?.isActive ?? false))"
     }
 
     func boolSummary(_ value: Bool) -> String {

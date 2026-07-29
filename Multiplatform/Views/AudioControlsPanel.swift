@@ -341,7 +341,7 @@ private extension AudioControlsPanel {
 
             Picker("Mode", selection: mode) {
                 ForEach(Mode.allCases, id: \.self) { mode in
-                    Text(String(describing: mode)).tag(mode)
+                    Text(String(describing: mode).capitalized).tag(mode)
                 }
             }
             .labelsHidden()
