@@ -90,15 +90,65 @@ final class AppContext: NSObject, ObservableObject {
         didSet { AudioManager.shared.isVoiceProcessingAGCEnabled = isVoiceProcessingAGCEnabled }
     }
 
-    @Published var isVoiceProcessingEnabled: Bool = true {
+    @Published var isPlatformVoiceProcessingAllowed: Bool = true {
         didSet {
-            guard oldValue != isVoiceProcessingEnabled else { return }
+            guard oldValue != isPlatformVoiceProcessingAllowed else { return }
             do {
-                try AudioManager.shared.setVoiceProcessingEnabled(isVoiceProcessingEnabled)
+                try AudioManager.shared.setPlatformVoiceProcessingAllowed(isPlatformVoiceProcessingAllowed)
             } catch {
-                print("Failed to set voice processing enabled: \(error)")
+                print("Failed to set platform voice processing allowed: \(error)")
             }
         }
+    }
+
+    @Published var runtimeEchoCancellation: Bool = true
+    @Published var runtimeNoiseSuppression: Bool = true
+    @Published var runtimeAutoGainControl: Bool = true
+    @Published var runtimeHighPassFilter: Bool = false
+    @Published var runtimeEchoCancellationMode: EchoCancellationMode = .automatic
+    @Published var runtimeNoiseSuppressionMode: NoiseSuppressionMode = .automatic
+    @Published var runtimeAutoGainControlMode: AutoGainControlMode = .automatic
+    @Published var runtimeHighPassFilterMode: HighpassFilterMode = .automatic
+    @Published var runtimeAudioProcessingStatus: String = ""
+    @Published var audioProcessingSummary: String = ""
+    @Published var runtimeAudioProcessingEffectiveStates: [AudioProcessingEffectiveState] = []
+
+    var runtimeAudioProcessingOptions: AudioProcessingOptions {
+        AudioProcessingOptions(
+            echoCancellation: runtimeEchoCancellation,
+            autoGainControl: runtimeAutoGainControl,
+            noiseSuppression: runtimeNoiseSuppression,
+            highpassFilter: runtimeHighPassFilter,
+            echoCancellationMode: runtimeEchoCancellationMode,
+            autoGainControlMode: runtimeAutoGainControlMode,
+            noiseSuppressionMode: runtimeNoiseSuppressionMode,
+            highpassFilterMode: runtimeHighPassFilterMode
+        )
+    }
+
+    var runtimeAudioCaptureOptions: AudioCaptureOptions {
+        let options = runtimeAudioProcessingOptions
+        return AudioCaptureOptions(
+            echoCancellation: options.echoCancellation,
+            autoGainControl: options.autoGainControl,
+            noiseSuppression: options.noiseSuppression,
+            highpassFilter: options.highpassFilter,
+            echoCancellationMode: options.echoCancellationMode,
+            autoGainControlMode: options.autoGainControlMode,
+            noiseSuppressionMode: options.noiseSuppressionMode,
+            highpassFilterMode: options.highpassFilterMode
+        )
+    }
+
+    func setRuntimeProcessingControls(_ options: AudioProcessingOptions) {
+        runtimeEchoCancellation = options.echoCancellation
+        runtimeAutoGainControl = options.autoGainControl
+        runtimeNoiseSuppression = options.noiseSuppression
+        runtimeHighPassFilter = options.highpassFilter
+        runtimeEchoCancellationMode = options.echoCancellationMode
+        runtimeAutoGainControlMode = options.autoGainControlMode
+        runtimeNoiseSuppressionMode = options.noiseSuppressionMode
+        runtimeHighPassFilterMode = options.highpassFilterMode
     }
 
     @Published var micMuteMode: MicrophoneMuteMode = .voiceProcessing {
@@ -127,7 +177,10 @@ final class AppContext: NSObject, ObservableObject {
         didSet {
             Task {
                 do {
-                    try await AudioManager.shared.setRecordingAlwaysPreparedMode(isRecordingAlwaysPreparedMode)
+                    try await AudioManager.shared.setRecordingAlwaysPreparedMode(
+                        isRecordingAlwaysPreparedMode,
+                        audioProcessingOptions: runtimeAudioProcessingOptions
+                    )
                 } catch {
                     print("Failed to set recording always prepared mode: \(error)")
                 }
@@ -223,14 +276,22 @@ final class AppContext: NSObject, ObservableObject {
         inputDevices = AudioManager.shared.inputDevices
         outputDevice = AudioManager.shared.outputDevice
         inputDevice = AudioManager.shared.inputDevice
-        isVoiceProcessingEnabled = AudioManager.shared.isVoiceProcessingEnabled
+        isPlatformVoiceProcessingAllowed = AudioManager.shared.isPlatformVoiceProcessingAllowed
         isVoiceProcessingAGCEnabled = AudioManager.shared.isVoiceProcessingAGCEnabled
         isRecordingAlwaysPreparedMode = AudioManager.shared.isRecordingAlwaysPreparedMode
+        refreshAudioProcessingState()
         updateAudioDeviceSelections()
     }
 }
 
-private extension AppContext {
+struct AudioProcessingEffectiveState: Identifiable, Sendable {
+    let id: String
+    let title: String
+    let result: AudioProcessingImplementation
+    let detail: String
+}
+
+extension AppContext {
     func updateAudioDeviceSelections() {
         if !inputDevices.contains(where: { $0.id == inputDevice.id }) {
             if let defaultInput = inputDevices.first(where: { $0.isDefault }) {
@@ -247,6 +308,145 @@ private extension AppContext {
                 outputDevice = firstOutput
             }
         }
+    }
+
+    func refreshAudioProcessingState() {
+        let state = AudioManager.shared.audioProcessingState
+        let platformState = AudioManager.shared.platformVoiceProcessingState
+        let engineAvailability = AudioManager.shared.engineAvailability
+        let topology = switch platformState.topology {
+        case .independent: "independent"
+        case .echoCancellationAndNoiseSuppressionCoupled: "AEC/NS coupled"
+        }
+        let audioProcessingOptions = runtimeAudioProcessingOptions
+        runtimeAudioProcessingEffectiveStates = audioProcessingEffectiveStates(for: state)
+        audioProcessingSummary = [
+            "LiveKit audio processing diagnostics",
+            "generatedAt: \(ISO8601DateFormatter().string(from: Date()))",
+            "platform: \(platformName)",
+            "",
+            "App voice processing controls",
+            "  platformVoiceProcessingAllowed: \(boolSummary(AudioManager.shared.isPlatformVoiceProcessingAllowed))",
+            "  voiceProcessingBypassed: \(boolSummary(AudioManager.shared.isVoiceProcessingBypassed))",
+            "  voiceProcessingAGCEnabled: \(boolSummary(AudioManager.shared.isVoiceProcessingAGCEnabled))",
+            "",
+            "Runtime AudioProcessingOptions controls",
+            "  echoCancellation: \(componentRequest(audioProcessingOptions.echoCancellation, audioProcessingOptions.echoCancellationMode))",
+            "  noiseSuppression: \(componentRequest(audioProcessingOptions.noiseSuppression, audioProcessingOptions.noiseSuppressionMode))",
+            "  autoGainControl: \(componentRequest(audioProcessingOptions.autoGainControl, audioProcessingOptions.autoGainControlMode))",
+            "  highPassFilter: \(componentRequest(audioProcessingOptions.highpassFilter, audioProcessingOptions.highpassFilterMode))",
+            "",
+            "Current effective processing",
+            "  echoCancellation: \(effectiveStateSummary(state.echoCancellation))",
+            "  noiseSuppression: \(effectiveStateSummary(state.noiseSuppression))",
+            "  autoGainControl: \(effectiveStateSummary(state.autoGainControl))",
+            "  highPassFilter: \(effectiveStateSummary(state.highpassFilter))",
+            "",
+            "Engine audio processing state",
+            "  echoCancellation: \(runtimeComponentSummary(state.echoCancellation))",
+            "  noiseSuppression: \(runtimeComponentSummary(state.noiseSuppression))",
+            "  autoGainControl: \(runtimeComponentSummary(state.autoGainControl))",
+            "  highPassFilter: \(runtimeComponentSummary(state.highpassFilter))",
+            "",
+            "Audio engine",
+            "  engineRunning: \(boolSummary(AudioManager.shared.isEngineRunning))",
+            "  inputAvailable requested: \(boolSummary(isAudioEngineInputAvailable))",
+            "  inputAvailable effective: \(boolSummary(engineAvailability.isInputAvailable))",
+            "  outputAvailable requested: \(boolSummary(isAudioEngineOutputAvailable))",
+            "  outputAvailable effective: \(boolSummary(engineAvailability.isOutputAvailable))",
+            "",
+            "Platform audio processing topology",
+            "  topology: \(topology)",
+            "  echoCancellation: \(componentSummary(platformState.echoCancellation))",
+            "  noiseSuppression: \(componentSummary(platformState.noiseSuppression))",
+            "  autoGainControl: \(componentSummary(platformState.autoGainControl))",
+            "",
+            "Apple Voice Processing I/O state",
+            "  voiceProcessingEnabled requested: \(boolSummary(platformState.voiceProcessingEnabled.isRequested))",
+            "  voiceProcessingEnabled active: \(boolSummary(platformState.voiceProcessingEnabled.isActive))",
+            "  voiceProcessingBypassed requested: \(boolSummary(platformState.voiceProcessingBypassed.isRequested))",
+            "  voiceProcessingBypassed active: \(boolSummary(platformState.voiceProcessingBypassed.isActive))",
+            "  voiceProcessingAGC requested: \(boolSummary(platformState.voiceProcessingAGCEnabled.isRequested))",
+            "  voiceProcessingAGC active: \(boolSummary(platformState.voiceProcessingAGCEnabled.isActive))",
+            "",
+            "Notes",
+            "  engine state comes from the factory-owned audio processing module.",
+            "  requested values come from the ADM state.",
+            "  active values come from the platform input node when available.",
+            "  active values read off before the input path is configured.",
+            "  subscribe-only playback does not configure the input path.",
+        ].joined(separator: "\n")
+    }
+
+    func audioProcessingEffectiveStates(for state: AudioProcessingState) -> [AudioProcessingEffectiveState] {
+        [
+            audioProcessingEffectiveState(id: "aec", title: "AEC", component: state.echoCancellation),
+            audioProcessingEffectiveState(id: "ns", title: "NS", component: state.noiseSuppression),
+            audioProcessingEffectiveState(id: "agc", title: "AGC", component: state.autoGainControl),
+            audioProcessingEffectiveState(id: "hpf", title: "HPF", component: state.highpassFilter),
+        ]
+    }
+
+    func audioProcessingEffectiveState<Mode>(
+        id: String,
+        title: String,
+        component: AudioProcessingComponentState<Mode>
+    ) -> AudioProcessingEffectiveState {
+        AudioProcessingEffectiveState(
+            id: id,
+            title: title,
+            result: component.effective,
+            detail: runtimeComponentDetail(component)
+        )
+    }
+
+    func componentSummary(_ state: PlatformVoiceProcessingComponentState) -> String {
+        "available: \(boolSummary(state.isAvailable)), " +
+            "requested: \(boolSummary(state.isRequested)), " +
+            "active: \(boolSummary(state.isActive))"
+    }
+
+    func effectiveStateSummary<Mode>(_ component: AudioProcessingComponentState<Mode>) -> String {
+        "result: \(component.effective.description), \(runtimeComponentDetail(component))"
+    }
+
+    func runtimeComponentSummary<Mode>(_ component: AudioProcessingComponentState<Mode>) -> String {
+        let requested = component.requested
+            .map { "\(boolSummary($0.isEnabled)) / \($0.mode)" } ?? "none"
+        let platform = component.platform
+            .map { "available: On, resolved: \(boolSummary($0.isResolved)), active: \(boolSummary($0.isActive))" }
+            ?? "available: Off"
+        return "effective: \(component.effective.description), " +
+            "requested: \(requested), " +
+            "softwareResolved: \(boolSummary(component.software.isResolved)), " +
+            "softwareActive: \(boolSummary(component.software.isActive)), " +
+            "platform: \(platform)"
+    }
+
+    func runtimeComponentDetail<Mode>(_ component: AudioProcessingComponentState<Mode>) -> String {
+        "Software: \(boolSummary(component.software.isActive)), Platform: \(boolSummary(component.platform?.isActive ?? false))"
+    }
+
+    func boolSummary(_ value: Bool) -> String {
+        value ? "On" : "Off"
+    }
+
+    func componentRequest<Mode>(_ enabled: Bool, _ mode: Mode) -> String {
+        "enabled: \(boolSummary(enabled)), mode: \(mode)"
+    }
+
+    var platformName: String {
+        #if os(iOS)
+        "iOS"
+        #elseif os(macOS)
+        "macOS"
+        #elseif os(visionOS)
+        "visionOS"
+        #elseif os(tvOS)
+        "tvOS"
+        #else
+        "unknown"
+        #endif
     }
 }
 

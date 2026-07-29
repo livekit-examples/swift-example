@@ -144,7 +144,9 @@ final class RoomContext: ObservableObject {
         _connectTask?.cancel()
     }
 
-    func connect(entry: ConnectionHistory? = nil) async throws -> Room {
+    func connect(entry: ConnectionHistory? = nil,
+                 audioCaptureOptions: AudioCaptureOptions? = nil) async throws -> Room
+    {
         if let entry {
             url = entry.url
             token = entry.token
@@ -172,6 +174,7 @@ final class RoomContext: ObservableObject {
                 appAudio: true,
                 useBroadcastExtension: true
             ),
+            defaultAudioCaptureOptions: audioCaptureOptions ?? AudioCaptureOptions(),
             defaultVideoPublishOptions: VideoPublishOptions(
                 simulcast: simulcast
             ),

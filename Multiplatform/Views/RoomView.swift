@@ -359,7 +359,9 @@ struct RoomView: View {
                        Task {
                            isMicrophonePublishingBusy = true
                            defer { Task { @MainActor in isMicrophonePublishingBusy = false } }
-                           _ = try? await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled)
+                           // Use the audio processing options stored in the controls panel when publishing
+                           _ = try? await room.localParticipant.setMicrophone(enabled: !isMicrophoneEnabled,
+                                                                              captureOptions: isMicrophoneEnabled ? nil : appCtx.runtimeAudioCaptureOptions)
                        }
                    },
                    label: {

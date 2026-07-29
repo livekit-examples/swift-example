@@ -98,7 +98,7 @@ struct ConnectView: View {
                             LKButton(title: "Connect") {
                                 Task { @MainActor in
                                     do {
-                                        let room = try await roomCtx.connect()
+                                        let room = try await roomCtx.connect(audioCaptureOptions: appCtx.runtimeAudioCaptureOptions)
                                         appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
                                     } catch {
                                         print("Failed to connect: \(error)")
@@ -112,7 +112,8 @@ struct ConnectView: View {
                                         Button {
                                             Task { @MainActor in
                                                 do {
-                                                    let room = try await roomCtx.connect(entry: entry)
+                                                    let room = try await roomCtx.connect(entry: entry,
+                                                                                         audioCaptureOptions: appCtx.runtimeAudioCaptureOptions)
                                                     appCtx.connectionHistory.update(room: room, e2ee: roomCtx.isE2eeEnabled, e2eeKey: roomCtx.e2eeKey)
                                                 } catch {
                                                     print("Failed to connect: \(error)")
