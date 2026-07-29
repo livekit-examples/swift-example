@@ -414,8 +414,8 @@ extension AppContext {
         let requested = component.requested
             .map { "\(boolSummary($0.isEnabled)) / \($0.mode)" } ?? "none"
         let platform = component.platform
-            .map { "available: on, resolved: \(boolSummary($0.isResolved)), active: \(boolSummary($0.isActive))" }
-            ?? "available: off"
+            .map { "available: On, resolved: \(boolSummary($0.isResolved)), active: \(boolSummary($0.isActive))" }
+            ?? "available: Off"
         return "effective: \(component.effective.description), " +
             "requested: \(requested), " +
             "softwareResolved: \(boolSummary(component.software.isResolved)), " +
@@ -428,7 +428,7 @@ extension AppContext {
     }
 
     func boolSummary(_ value: Bool) -> String {
-        value ? "on" : "off"
+        value ? "On" : "Off"
     }
 
     func componentRequest<Mode>(_ enabled: Bool, _ mode: Mode) -> String {
