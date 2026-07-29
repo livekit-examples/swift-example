@@ -75,7 +75,6 @@
 		683F05F9273F96B20080C7AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		683F0603273FAD690080C7AC /* iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS.entitlements; sourceTree = "<group>"; };
 		683F0604273FADC20080C7AC /* BroadcastExt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BroadcastExt.entitlements; sourceTree = "<group>"; };
-		6865EA2527513B4500FFAFC3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		68698E602C4C204800221782 /* Multiplatform-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Multiplatform-Info.plist"; sourceTree = "<group>"; };
 		6888FBE02C66B7B100AB93C1 /* ImmersiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImmersiveView.swift; sourceTree = "<group>"; };
 		68A50E8F2C4C1C4C00D2DE17 /* LiveKitExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveKitExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,7 +155,6 @@
 			isa = PBXGroup;
 			children = (
 				683F05F6273F96B20080C7AC /* BroadcastExt */,
-				6865EA2527513B4500FFAFC3 /* Info.plist */,
 				683F0603273FAD690080C7AC /* iOS.entitlements */,
 			);
 			path = iOS;
