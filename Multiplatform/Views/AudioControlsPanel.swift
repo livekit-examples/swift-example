@@ -293,7 +293,7 @@ private struct AudioProcessingEffectiveStateItem: View {
                 HStack(spacing: 4) {
                     Text(state.title)
                         .font(.caption.weight(.semibold))
-                    Text(state.result.rawValue)
+                    Text(state.result.description)
                         .font(.caption)
                         .foregroundColor(.primary)
                 }
@@ -308,7 +308,7 @@ private struct AudioProcessingEffectiveStateItem: View {
     }
 }
 
-private extension AudioProcessingEffectiveResult {
+private extension AudioProcessingImplementation {
     var tintColor: Color {
         switch self {
         case .platform, .software, .softwareAndPlatform:
@@ -353,7 +353,7 @@ private extension AudioControlsPanel {
 
     func applyRuntimeAudioProcessingOptions() {
         guard let localMicrophoneTrack else {
-            appCtx.runtimeAudioProcessingStatus = "Publish the microphone first."
+            appCtx.runtimeAudioProcessingStatus = "Audio processing options: stored — applies when the mic is published"
             appCtx.refreshAudioProcessingState()
             return
         }

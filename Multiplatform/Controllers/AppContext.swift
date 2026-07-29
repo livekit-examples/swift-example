@@ -127,15 +127,16 @@ final class AppContext: NSObject, ObservableObject {
     }
 
     var runtimeAudioCaptureOptions: AudioCaptureOptions {
-        AudioCaptureOptions(
-            echoCancellation: runtimeEchoCancellation,
-            autoGainControl: runtimeAutoGainControl,
-            noiseSuppression: runtimeNoiseSuppression,
-            highpassFilter: runtimeHighPassFilter,
-            echoCancellationMode: runtimeEchoCancellationMode,
-            autoGainControlMode: runtimeAutoGainControlMode,
-            noiseSuppressionMode: runtimeNoiseSuppressionMode,
-            highpassFilterMode: runtimeHighPassFilterMode
+        let options = runtimeAudioProcessingOptions
+        return AudioCaptureOptions(
+            echoCancellation: options.echoCancellation,
+            autoGainControl: options.autoGainControl,
+            noiseSuppression: options.noiseSuppression,
+            highpassFilter: options.highpassFilter,
+            echoCancellationMode: options.echoCancellationMode,
+            autoGainControlMode: options.autoGainControlMode,
+            noiseSuppressionMode: options.noiseSuppressionMode,
+            highpassFilterMode: options.highpassFilterMode
         )
     }
 
@@ -286,16 +287,8 @@ final class AppContext: NSObject, ObservableObject {
 struct AudioProcessingEffectiveState: Identifiable, Sendable {
     let id: String
     let title: String
-    let result: AudioProcessingEffectiveResult
+    let result: AudioProcessingImplementation
     let detail: String
-}
-
-enum AudioProcessingEffectiveResult: String, Sendable {
-    case platform = "Platform"
-    case software = "Software"
-    case softwareAndPlatform = "Software + Platform"
-    case disabled = "Disabled"
-    case unknown = "Unknown"
 }
 
 extension AppContext {
@@ -402,7 +395,7 @@ extension AppContext {
         AudioProcessingEffectiveState(
             id: id,
             title: title,
-            result: effectiveResult(component.effective),
+            result: component.effective,
             detail: runtimeComponentDetail(component)
         )
     }
@@ -432,16 +425,6 @@ extension AppContext {
 
     func runtimeComponentDetail<Mode>(_ component: AudioProcessingComponentState<Mode>) -> String {
         "software: \(boolSummary(component.software.isActive)), platform: \(boolSummary(component.platform?.isActive ?? false))"
-    }
-
-    func effectiveResult(_ implementation: AudioProcessingImplementation) -> AudioProcessingEffectiveResult {
-        switch implementation {
-        case .unknown: .unknown
-        case .disabled: .disabled
-        case .software: .software
-        case .platform: .platform
-        case .softwareAndPlatform: .softwareAndPlatform
-        }
     }
 
     func boolSummary(_ value: Bool) -> String {
