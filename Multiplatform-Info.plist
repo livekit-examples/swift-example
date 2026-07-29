@@ -4,6 +4,8 @@
 <dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>RTCScreenSharingExtension</key>
+	<string>io.livekit.example.SwiftSDK.1.broadcast-ext</string>
 	<key>NSEnterpriseMCAMUsageDescription</key>
 	<string>Please allow for main camera access</string>
 	<key>NSHandsTrackingUsageDescription</key>
