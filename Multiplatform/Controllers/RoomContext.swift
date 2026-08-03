@@ -32,6 +32,8 @@ final class RoomContext: ObservableObject {
 
     let room = Room()
 
+    let dataStreamsCtx: DataStreamsContext
+
     @Published var url: String = "" {
         didSet { store.value.url = url }
     }
@@ -81,7 +83,10 @@ final class RoomContext: ObservableObject {
 
     @Published var showMessagesPanel: Bool = false {
         didSet {
-            if showMessagesPanel { showAudioPanel = false }
+            if showMessagesPanel {
+                showAudioPanel = false
+                showDataStreamsPanel = false
+            }
         }
     }
 
@@ -91,7 +96,19 @@ final class RoomContext: ObservableObject {
 
     @Published var showAudioPanel: Bool = false {
         didSet {
-            if showAudioPanel { showMessagesPanel = false }
+            if showAudioPanel {
+                showMessagesPanel = false
+                showDataStreamsPanel = false
+            }
+        }
+    }
+
+    @Published var showDataStreamsPanel: Bool = false {
+        didSet {
+            if showDataStreamsPanel {
+                showMessagesPanel = false
+                showAudioPanel = false
+            }
         }
     }
 
@@ -113,6 +130,7 @@ final class RoomContext: ObservableObject {
 
     init(store: ValueStore<Preferences>) {
         self.store = store
+        dataStreamsCtx = DataStreamsContext(room: room)
         room.add(delegate: self)
 
         url = store.value.url
@@ -266,6 +284,16 @@ extension RoomContext: RoomDelegate {
 
     nonisolated func room(_ room: Room, didUpdateConnectionState connectionState: ConnectionState, from oldValue: ConnectionState) {
         print("Did update connectionState \(oldValue) -> \(connectionState)")
+
+        // Runs on every disconnect, unlike the reset below which is limited to
+        // abnormal ones.
+        if case .disconnected = connectionState {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                showDataStreamsPanel = false
+                dataStreamsCtx.roomDidDisconnect()
+            }
+        }
 
         if case .disconnected = connectionState,
            let error = room.disconnectError,

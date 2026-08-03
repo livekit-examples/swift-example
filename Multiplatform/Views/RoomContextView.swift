@@ -25,6 +25,7 @@ struct RoomContextView: View {
         RoomSwitchView()
             .environmentObject(roomCtx)
             .environmentObject(roomCtx.room)
+            .environmentObject(roomCtx.dataStreamsCtx)
             .foregroundColor(Color.white)
             .onDisappear {
                 print("\(String(describing: type(of: self))) onDisappear")
