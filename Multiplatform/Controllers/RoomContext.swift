@@ -229,7 +229,9 @@ final class RoomContext: ObservableObject {
     @available(macOS 12.3, *)
     func setScreenShareMacOS(isEnabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
         if isEnabled, let screenShareSource {
-            let track = LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource, options: ScreenShareCaptureOptions(appAudio: true))
+            // The capturer takes sole ownership of the source on the RTC executor (see SDK docs).
+            nonisolated(unsafe) let source = screenShareSource
+            let track = await LocalVideoTrack.createMacOSScreenShareTrack(source: source, options: ScreenShareCaptureOptions(appAudio: true))
             let options = VideoPublishOptions(preferredCodec: VideoCodec.h264)
             screenShareTrack = try await room.localParticipant.publish(videoTrack: track, options: options)
         }
