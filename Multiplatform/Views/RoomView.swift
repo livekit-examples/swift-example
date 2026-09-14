@@ -109,6 +109,16 @@ struct RoomView: View {
                 maxWidth: geometry.isTall ? .infinity : 320
             )
     }
+
+    func dataStreamsPanel(geometry: GeometryProxy) -> some View {
+        DataStreamsPanel()
+            .background(Color.lkGray1)
+            .cornerRadius(8)
+            .frame(
+                minWidth: 0,
+                maxWidth: geometry.isTall ? .infinity : 320
+            )
+    }
     #endif
 
     func sortedParticipants() -> [Participant] {
@@ -182,6 +192,9 @@ struct RoomView: View {
                 #if !os(tvOS)
                 if roomCtx.showAudioPanel {
                     audioControlsPanel(geometry: geometry)
+                }
+                if roomCtx.showDataStreamsPanel {
+                    dataStreamsPanel(geometry: geometry)
                 }
                 #endif
             }
@@ -425,6 +438,16 @@ struct RoomView: View {
             } label: {
                 Image(systemSymbol: .switch2)
                     .foregroundColor(roomCtx.showAudioPanel ? .accentColor : nil)
+            }
+
+            // Toggle data streams view
+            Button {
+                withAnimation {
+                    roomCtx.showDataStreamsPanel.toggle()
+                }
+            } label: {
+                Image(systemSymbol: .arrowUpArrowDown)
+                    .foregroundColor(roomCtx.showDataStreamsPanel ? .accentColor : nil)
             }
             #endif
 
