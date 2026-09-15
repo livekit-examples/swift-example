@@ -51,6 +51,14 @@ final class RoomContext: ObservableObject {
         }
     }
 
+    // Process-global, applies to rooms connected after it is set.
+    @Published var isWARPEnabled: Bool = false {
+        didSet {
+            store.value.isWARPEnabled = isWARPEnabled
+            LiveKitSDK.setWARPEnabled(isWARPEnabled)
+        }
+    }
+
     // RoomOptions
     @Published var simulcast: Bool = true {
         didSet { store.value.simulcast = simulcast }
@@ -118,6 +126,7 @@ final class RoomContext: ObservableObject {
         url = store.value.url
         token = store.value.token
         isE2eeEnabled = store.value.isE2eeEnabled
+        isWARPEnabled = store.value.isWARPEnabled
         e2eeKey = store.value.e2eeKey
         simulcast = store.value.simulcast
         adaptiveStream = store.value.adaptiveStream

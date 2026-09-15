@@ -49,6 +49,7 @@ struct ConnectView: View {
                             Menu {
                                 Toggle("Auto-Subscribe", isOn: $roomCtx.autoSubscribe)
                                 Toggle("Enable E2EE", isOn: $roomCtx.isE2eeEnabled)
+                                Toggle("Enable WARP", isOn: $roomCtx.isWARPEnabled)
                             } label: {
                                 Image(systemSymbol: .boltFill)
                                     .renderingMode(.original)
