@@ -81,7 +81,9 @@ final class RoomContext: ObservableObject {
 
     @Published var showMessagesPanel: Bool = false {
         didSet {
-            if showMessagesPanel { showAudioPanel = false }
+            if showMessagesPanel {
+                showAudioPanel = false
+            }
         }
     }
 
@@ -91,7 +93,9 @@ final class RoomContext: ObservableObject {
 
     @Published var showAudioPanel: Bool = false {
         didSet {
-            if showAudioPanel { showMessagesPanel = false }
+            if showAudioPanel {
+                showMessagesPanel = false
+            }
         }
     }
 
@@ -227,11 +231,9 @@ final class RoomContext: ObservableObject {
     weak var screenShareTrack: LocalTrackPublication?
 
     @available(macOS 12.3, *)
-    func setScreenShareMacOS(isEnabled: Bool, screenShareSource: MacOSScreenCaptureSource? = nil) async throws {
+    func setScreenShareMacOS(isEnabled: Bool, screenShareSource: sending MacOSScreenCaptureSource? = nil) async throws {
         if isEnabled, let screenShareSource {
-            // The capturer takes sole ownership of the source on the RTC executor (see SDK docs).
-            nonisolated(unsafe) let source = screenShareSource
-            let track = await LocalVideoTrack.createMacOSScreenShareTrack(source: source, options: ScreenShareCaptureOptions(appAudio: true))
+            let track = await LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource, options: ScreenShareCaptureOptions(appAudio: true))
             let options = VideoPublishOptions(preferredCodec: VideoCodec.h264)
             screenShareTrack = try await room.localParticipant.publish(videoTrack: track, options: options)
         }
