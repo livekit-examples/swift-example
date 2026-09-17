@@ -24,6 +24,7 @@ struct Preferences: Codable, Equatable {
     var token = ""
     var e2eeKey = ""
     var isE2eeEnabled = false
+    var isWARPEnabled = false
 
     // Connect options
     var autoSubscribe = true
