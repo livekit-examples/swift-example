@@ -77,8 +77,8 @@ struct MessagesPanel: View {
             Text(message.text)
                 .padding(8)
                 .background(isMe ? Color.lkRed : Color.lkGray3)
-                .foregroundColor(Color.white)
-                .cornerRadius(18)
+                .foregroundStyle(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 18))
 
             if !isMe {
                 Spacer()

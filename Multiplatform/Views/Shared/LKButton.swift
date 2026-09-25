@@ -30,6 +30,6 @@ struct LKButton: View {
                        .padding(.vertical, 10)
                })
                .background(Color.lkRed)
-               .cornerRadius(8)
+               .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }

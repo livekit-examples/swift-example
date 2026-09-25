@@ -47,7 +47,7 @@ struct LKTextField: View {
                 .strokeBorder(Color.white.opacity(0.3),
                               style: StrokeStyle(lineWidth: 1.0)))
             #if os(iOS)
-                .autocapitalization(.none)
+                .textInputAutocapitalization(.never)
                 .keyboardType(type.toiOSType())
             #endif
 

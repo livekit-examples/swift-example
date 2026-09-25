@@ -38,7 +38,7 @@ struct ParticipantView: View {
         Image(systemSymbol: systemSymbol)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .foregroundColor(Color.lkGray2)
+            .foregroundStyle(Color.lkGray2)
             .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
             .frame(
                 maxWidth: .infinity,
@@ -121,7 +121,7 @@ struct ParticipantView: View {
                             .background(Color.black)
                             .aspectRatio(contentMode: .fit)
                             .frame(width: min(geometry.size.width, geometry.size.height) * 0.3)
-                            .cornerRadius(8)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
                             .padding()
                     }
 
@@ -151,10 +151,10 @@ struct ParticipantView: View {
                                 } label: {
                                     if case .subscribed = remotePub.subscriptionState {
                                         Image(systemSymbol: .videoFill)
-                                            .foregroundColor(Color.green)
+                                            .foregroundStyle(Color.green)
                                     } else if case .notAllowed = remotePub.subscriptionState {
                                         Image(systemSymbol: .exclamationmarkCircle)
-                                            .foregroundColor(Color.red)
+                                            .foregroundStyle(Color.red)
                                     } else {
                                         Image(systemSymbol: .videoSlashFill)
                                     }
@@ -169,12 +169,12 @@ struct ParticipantView: View {
                             } else {
                                 // local
                                 Image(systemSymbol: .videoFill)
-                                    .foregroundColor(Color.green)
+                                    .foregroundStyle(Color.green)
                             }
 
                         } else {
                             Image(systemSymbol: .videoSlashFill)
-                                .foregroundColor(Color.white)
+                                .foregroundStyle(Color.white)
                         }
 
                         if let publication = participant.firstAudioPublication,
@@ -195,10 +195,10 @@ struct ParticipantView: View {
                                 } label: {
                                     if case .subscribed = remotePub.subscriptionState {
                                         Image(systemSymbol: .micFill)
-                                            .foregroundColor(Color.orange)
+                                            .foregroundStyle(Color.orange)
                                     } else if case .notAllowed = remotePub.subscriptionState {
                                         Image(systemSymbol: .exclamationmarkCircle)
-                                            .foregroundColor(Color.red)
+                                            .foregroundStyle(Color.red)
                                     } else {
                                         Image(systemSymbol: .micSlashFill)
                                     }
@@ -213,12 +213,12 @@ struct ParticipantView: View {
                             } else {
                                 // local
                                 Image(systemSymbol: .micFill)
-                                    .foregroundColor(Color.orange)
+                                    .foregroundStyle(Color.orange)
                             }
 
                         } else {
                             Image(systemSymbol: .micSlashFill)
-                                .foregroundColor(Color.white)
+                                .foregroundStyle(Color.white)
                         }
 
                         #if !os(tvOS)
@@ -231,21 +231,21 @@ struct ParticipantView: View {
 
                         if participant.connectionQuality == .excellent {
                             Image(systemSymbol: .wifi)
-                                .foregroundColor(.green)
+                                .foregroundStyle(.green)
                         } else if participant.connectionQuality == .good {
                             Image(systemSymbol: .wifi)
-                                .foregroundColor(Color.orange)
+                                .foregroundStyle(Color.orange)
                         } else if participant.connectionQuality == .poor {
                             Image(systemSymbol: .wifiExclamationmark)
-                                .foregroundColor(Color.red)
+                                .foregroundStyle(Color.red)
                         }
 
                         if participant.firstTrackEncryptionType == .none {
                             Image(systemSymbol: .lockOpenFill)
-                                .foregroundColor(.red)
+                                .foregroundStyle(.red)
                         } else {
                             Image(systemSymbol: .lockFill)
-                                .foregroundColor(.green)
+                                .foregroundStyle(.green)
                         }
 
                     }.padding(5)
@@ -253,7 +253,7 @@ struct ParticipantView: View {
                         .background(Color.black.opacity(0.5))
                 }
             }
-            .cornerRadius(8)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
             // Glow the border when the participant is speaking
             .overlay(
                 participant.isSpeaking ?
@@ -293,7 +293,7 @@ struct RemoteAudioVolumeControl: View {
             isSliderPresented.toggle()
         } label: {
             Image(systemSymbol: volumeSymbol)
-                .foregroundColor(isSliderPresented ? Color.orange : .white)
+                .foregroundStyle(isSliderPresented ? Color.orange : .white)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Remote audio volume")
@@ -308,7 +308,7 @@ struct RemoteAudioVolumeControl: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
                 Image(systemSymbol: volumeSymbol)
-                    .foregroundColor(Color.orange)
+                    .foregroundStyle(Color.orange)
 
                 Text("Volume")
                     .font(.headline)
@@ -317,7 +317,7 @@ struct RemoteAudioVolumeControl: View {
 
                 Text(volumePercentageText)
                     .font(.system(size: 12, weight: .semibold, design: .monospaced))
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             Slider(value: volumeBinding, in: 0.0 ... Self.maxVolume)
@@ -445,10 +445,10 @@ struct StatsView: View {
                 }
             }
             .font(.system(size: 10))
-            .foregroundColor(Color.white)
+            .foregroundStyle(Color.white)
             .padding(5)
             .background(Color.black.opacity(0.5))
-            .cornerRadius(8)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
         }
     }
 }

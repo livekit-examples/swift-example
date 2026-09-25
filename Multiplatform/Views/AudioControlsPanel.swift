@@ -92,7 +92,7 @@ struct AudioControlsPanel: View {
                 Toggle("Always prepared", isOn: $appCtx.isRecordingAlwaysPreparedMode)
                 Text("Keeps mic pipeline warmed for low-latency publish.")
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             Section(header: Text("Mic mute mode")) {
@@ -106,7 +106,7 @@ struct AudioControlsPanel: View {
                 }
                 Text(micMuteModeDescription(for: appCtx.micMuteMode))
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundStyle(.secondary)
             }
 
             Section(header: Text("Audio Ducking")) {

@@ -92,7 +92,7 @@ struct RoomView: View {
     func messagesPanel(geometry: GeometryProxy) -> some View {
         MessagesPanel()
             .background(Color.lkGray1)
-            .cornerRadius(8)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
             .frame(
                 minWidth: 0,
                 maxWidth: geometry.isTall ? .infinity : 320
@@ -103,7 +103,7 @@ struct RoomView: View {
     func audioControlsPanel(geometry: GeometryProxy) -> some View {
         AudioControlsPanel()
             .background(Color.lkGray1)
-            .cornerRadius(8)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
             .frame(
                 minWidth: 0,
                 maxWidth: geometry.isTall ? .infinity : 320
@@ -124,14 +124,14 @@ struct RoomView: View {
             if showConnectionTime {
                 Text("Connected (\([room.serverRegion, room.serverNodeId, "\(String(describing: room.connectSpan?.total().rounded(to: 2)))s"].compactMap { $0 }.joined(separator: ", ")))")
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .padding()
             }
 
             if case .connecting = room.connectionState {
                 Text("Re-connecting...")
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .padding()
             }
 
@@ -149,11 +149,11 @@ struct RoomView: View {
                             Text("SELECTED")
                                 .font(.system(size: 10))
                                 .fontWeight(.bold)
-                                .foregroundColor(Color.white)
+                                .foregroundStyle(Color.white)
                                 .padding(.horizontal, 5)
                                 .padding(.vertical, 2)
                                 .background(Color.lkRed.opacity(0.7))
-                                .cornerRadius(8)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
                                 .padding(.vertical, 35)
                                 .padding(.horizontal, 10)
                         }
@@ -194,11 +194,11 @@ struct RoomView: View {
                     Text("Your mic is muted")
                         .font(.headline)
                 }
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
                 .padding(.horizontal, 22)
                 .padding(.vertical, 16)
                 .background(Color.black.opacity(0.85))
-                .cornerRadius(14)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
                 .transition(.opacity)
                 .allowsHitTesting(false)
             }
@@ -399,7 +399,7 @@ struct RoomView: View {
                    label: {
                        Image(systemSymbol: .rectangleFillOnRectangleFill)
                            .renderingMode(isScreenShareEnabled ? .original : .template)
-                           .foregroundColor(isScreenShareEnabled ? Color.green : Color.white)
+                           .foregroundStyle(isScreenShareEnabled ? Color.green : Color.white)
                    }).popover(isPresented: $screenPickerPresented) {
                 ScreenShareSourcePickerView { source in
                     Task {
