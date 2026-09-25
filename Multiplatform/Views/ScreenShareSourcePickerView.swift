@@ -22,7 +22,6 @@ import SwiftUI
 #if os(macOS)
 
 @MainActor
-@available(macOS 12.3, *)
 final class ScreenShareSourcePickerCtrl: ObservableObject {
     @Published var tracks = [LocalVideoTrack]()
     @Published var mode: ScreenShareSourcePickerView.Mode = .display {
@@ -57,7 +56,11 @@ final class ScreenShareSourcePickerCtrl: ObservableObject {
 
         let sources = try await MacOSScreenCapturer.sources(for: mode == .display ? .display : .window)
         let options = ScreenShareCaptureOptions(dimensions: .h360_43, fps: 5)
-        let _newTracks = sources.map { LocalVideoTrack.createMacOSScreenShareTrack(source: $0, options: options) }
+        var tracks = [LocalVideoTrack]()
+        for source in sources {
+            await tracks.append(LocalVideoTrack.createMacOSScreenShareTrack(source: source, options: options))
+        }
+        let _newTracks = tracks
 
         Task { @MainActor in
             self.tracks = _newTracks
@@ -76,7 +79,6 @@ final class ScreenShareSourcePickerCtrl: ObservableObject {
 
 typealias OnPickScreenShareSource = (MacOSScreenCaptureSource) -> Void
 
-@available(macOS 12.3, *)
 struct ScreenShareSourcePickerView: View {
     enum Mode {
         case display
