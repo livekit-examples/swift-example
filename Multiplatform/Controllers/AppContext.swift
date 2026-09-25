@@ -90,13 +90,13 @@ final class AppContext: NSObject, ObservableObject {
         didSet { AudioManager.shared.isVoiceProcessingAGCEnabled = isVoiceProcessingAGCEnabled }
     }
 
-    @Published var isVoiceProcessingEnabled: Bool = true {
+    @Published var isPlatformVoiceProcessingAllowed: Bool = true {
         didSet {
-            guard oldValue != isVoiceProcessingEnabled else { return }
+            guard oldValue != isPlatformVoiceProcessingAllowed else { return }
             do {
-                try AudioManager.shared.setVoiceProcessingEnabled(isVoiceProcessingEnabled)
+                try AudioManager.shared.setPlatformVoiceProcessingAllowed(isPlatformVoiceProcessingAllowed)
             } catch {
-                print("Failed to set voice processing enabled: \(error)")
+                print("Failed to set platform voice processing allowed: \(error)")
             }
         }
     }
@@ -223,7 +223,7 @@ final class AppContext: NSObject, ObservableObject {
         inputDevices = AudioManager.shared.inputDevices
         outputDevice = AudioManager.shared.outputDevice
         inputDevice = AudioManager.shared.inputDevice
-        isVoiceProcessingEnabled = AudioManager.shared.isVoiceProcessingEnabled
+        isPlatformVoiceProcessingAllowed = AudioManager.shared.isPlatformVoiceProcessingAllowed
         isVoiceProcessingAGCEnabled = AudioManager.shared.isVoiceProcessingAGCEnabled
         isRecordingAlwaysPreparedMode = AudioManager.shared.isRecordingAlwaysPreparedMode
         updateAudioDeviceSelections()

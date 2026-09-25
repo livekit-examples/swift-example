@@ -83,7 +83,7 @@ struct AudioControlsPanel: View {
             }
 
             Section(header: Text("Voice Processing")) {
-                Toggle("Voice processing enabled", isOn: $appCtx.isVoiceProcessingEnabled)
+                Toggle("Platform voice processing allowed", isOn: $appCtx.isPlatformVoiceProcessingAllowed)
                 Toggle("Bypass voice processing", isOn: $appCtx.isVoiceProcessingBypassed)
                 Toggle("Auto gain control (AGC)", isOn: $appCtx.isVoiceProcessingAGCEnabled)
             }
