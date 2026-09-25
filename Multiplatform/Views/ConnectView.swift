@@ -161,9 +161,10 @@ struct ConnectView: View {
         #if os(macOS)
         .frame(minWidth: 500, minHeight: 500)
         #endif
-        .alert(isPresented: $roomCtx.shouldShowDisconnectReason) {
-            Alert(title: Text("Disconnected"),
-                  message: Text("Reason: " + String(describing: roomCtx.latestError)))
+        .alert("Disconnected", isPresented: $roomCtx.shouldShowDisconnectReason) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Reason: " + String(describing: roomCtx.latestError))
         }
     }
 }
