@@ -798,8 +798,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/livekit/client-sdk-swift";
 			requirement = {
-				kind = revision;
-				revision = ef3dd798de0b702ffa19cb89da913a7b1b69d70e;
+				kind = exactVersion;
+				version = 2.18.0;
 			};
 		};
 		B5C2EF142D0114C800FAC766 /* XCRemoteSwiftPackageReference "components-swift" */ = {
