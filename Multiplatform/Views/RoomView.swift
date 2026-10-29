@@ -385,17 +385,15 @@ struct RoomView: View {
                    .disabled(isScreenSharePublishingBusy)
             #elseif os(macOS)
             Button(action: {
-                       if #available(macOS 12.3, *) {
-                           if isScreenShareEnabled {
-                               // Turn off screen share
-                               Task {
-                                   isScreenSharePublishingBusy = true
-                                   defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                                   try? await roomCtx.setScreenShareMacOS(isEnabled: false)
-                               }
-                           } else {
-                               screenPickerPresented = true
+                       if isScreenShareEnabled {
+                           // Turn off screen share
+                           Task {
+                               isScreenSharePublishingBusy = true
+                               defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
+                               try? await roomCtx.setScreenShareMacOS(isEnabled: false)
                            }
+                       } else {
+                           screenPickerPresented = true
                        }
                    },
                    label: {
@@ -403,16 +401,14 @@ struct RoomView: View {
                            .renderingMode(isScreenShareEnabled ? .original : .template)
                            .foregroundColor(isScreenShareEnabled ? Color.green : Color.white)
                    }).popover(isPresented: $screenPickerPresented) {
-                if #available(macOS 12.3, *) {
-                    ScreenShareSourcePickerView { source in
-                        Task {
-                            isScreenSharePublishingBusy = true
-                            defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
-                            try? await roomCtx.setScreenShareMacOS(isEnabled: true, screenShareSource: source)
-                        }
-                        screenPickerPresented = false
-                    }.padding()
-                }
+                ScreenShareSourcePickerView { source in
+                    Task {
+                        isScreenSharePublishingBusy = true
+                        defer { Task { @MainActor in isScreenSharePublishingBusy = false } }
+                        try? await roomCtx.setScreenShareMacOS(isEnabled: true, screenShareSource: source)
+                    }
+                    screenPickerPresented = false
+                }.padding()
             }
             .disabled(isScreenSharePublishingBusy)
             #endif

@@ -107,11 +107,7 @@ final class RoomContext: ObservableObject {
         }
     }
 
-    private lazy var backgroundBlurProcessor: (some VideoProcessor)? = if #available(iOS 15.0, *) {
-        BackgroundBlurVideoProcessor()
-    } else {
-        nil
-    }
+    private lazy var backgroundBlurProcessor = BackgroundBlurVideoProcessor()
 
     var _connectTask: Task<Void, Error>?
 
@@ -230,7 +226,6 @@ final class RoomContext: ObservableObject {
     #if os(macOS)
     weak var screenShareTrack: LocalTrackPublication?
 
-    @available(macOS 12.3, *)
     func setScreenShareMacOS(isEnabled: Bool, screenShareSource: sending MacOSScreenCaptureSource? = nil) async throws {
         if isEnabled, let screenShareSource {
             let track = await LocalVideoTrack.createMacOSScreenShareTrack(source: screenShareSource, options: ScreenShareCaptureOptions(appAudio: true))
@@ -248,11 +243,9 @@ final class RoomContext: ObservableObject {
     weak var arCameraTrack: LocalTrackPublication?
 
     func setARCamera(isEnabled: Bool) async throws {
-        if #available(visionOS 2.0, *) {
-            if isEnabled {
-                let track = LocalVideoTrack.createARCameraTrack()
-                arCameraTrack = try await room.localParticipant.publish(videoTrack: track)
-            }
+        if isEnabled {
+            let track = await LocalVideoTrack.createARCameraTrack()
+            arCameraTrack = try await room.localParticipant.publish(videoTrack: track)
         }
 
         if !isEnabled, let arCameraTrack {
