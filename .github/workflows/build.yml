@@ -14,19 +14,19 @@ concurrency:
 jobs:
   build:
     name: Build (iOS/macOS)
-    runs-on: macos-26
+    runs-on: xcode-27
     strategy:
       fail-fast: false
       matrix:
         include:
-          - platform: "iOS Simulator,name=iPhone 17 Pro,OS=26.5"
+          - platform: "iOS Simulator,name=iPhone 18 Pro,OS=27.0"
           - platform: "macOS"
     steps:
       - uses: actions/checkout@v6
 
       - uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: 26.5
+          xcode-version: latest
 
       - name: Resolve Packages
         run: |
